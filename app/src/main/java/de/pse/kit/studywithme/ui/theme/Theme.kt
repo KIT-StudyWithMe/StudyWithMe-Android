@@ -38,10 +38,10 @@ private val LightColorPalette3 = ColorScheme(
 )
 
 private val LightColorPalette = Colors(
-    primary = Green700,
+    primary = Grey200,
     primaryVariant = Green200,
     onPrimary = Color.Black,
-    secondary = Green500,
+    secondary = Green100,
     secondaryVariant = Green700,
     onSecondary = Color.Black,
     background = White200,
