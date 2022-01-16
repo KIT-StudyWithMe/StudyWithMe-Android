@@ -5,11 +5,11 @@ import androidx.compose.material3.ButtonDefaults.buttonColors
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import de.pse.kit.myapplication.ui.theme.MyApplicationTheme
+import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
 
 @Composable
 fun Button(onClick: (() -> Unit), text: String, primary: Boolean = true) {
-    MyApplicationTheme {
+    MyApplicationTheme3 {
         if (primary) {
             Button_(
                 onClick = {onClick()},

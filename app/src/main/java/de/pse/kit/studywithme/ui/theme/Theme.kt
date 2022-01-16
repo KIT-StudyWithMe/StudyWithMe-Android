@@ -1,12 +1,14 @@
 package de.pse.kit.myapplication.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material.Colors
 import androidx.compose.material3.ColorScheme
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MaterialTheme as MaterialTheme3
+import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.graphics.Color
 import androidx.compose.runtime.Composable
 
-private val LightColorPalette = ColorScheme(
+private val LightColorPalette3 = ColorScheme(
     primary = Grey200,
     onPrimary = Color.Black,
     primaryContainer = Green200,
@@ -35,6 +37,36 @@ private val LightColorPalette = ColorScheme(
     outline = Green700
 )
 
+private val LightColorPalette = Colors(
+    primary = Green700,
+    primaryVariant = Green200,
+    onPrimary = Color.Black,
+    secondary = Green500,
+    secondaryVariant = Green700,
+    onSecondary = Color.Black,
+    background = White200,
+    onBackground = Color.Black,
+    surface = White200,
+    onSurface = Color.Black,
+    error = Color.Red,
+    onError = Color.Black,
+    isLight = true
+)
+
+@Composable
+fun MyApplicationTheme3(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    content: @Composable() () -> Unit
+) {
+    val colors = LightColorPalette3
+
+    MaterialTheme3(
+        colorScheme = colors,
+        typography = Typography3,
+        content = content
+    )
+}
+
 @Composable
 fun MyApplicationTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -43,7 +75,7 @@ fun MyApplicationTheme(
     val colors = LightColorPalette
 
     MaterialTheme(
-        colorScheme = colors,
+        colors = colors,
         typography = Typography,
         content = content
     )
