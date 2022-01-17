@@ -12,12 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.tooling.preview.Preview
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme
 
 @Composable
-fun Search(text: String = "", label: String, onChange: (String) -> Unit = {}) {
+fun Search(text: String = "", label: String = "Suche Gruppen", onChange: (String) -> Unit = {}) {
     val input = remember { mutableStateOf(text) }
 
     MyApplicationTheme {
@@ -54,5 +53,5 @@ fun Search(text: String = "", label: String, onChange: (String) -> Unit = {}) {
 @Preview
 @Composable
 fun SearchPreview() {
-    Search(label = "Suche Gruppen")
+    Search()
 }
