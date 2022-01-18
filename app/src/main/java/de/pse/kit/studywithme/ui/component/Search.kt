@@ -14,16 +14,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 
 @Composable
 fun Search(text: String = "", label: String = "Suche Gruppen", onChange: (String) -> Unit = {}) {
-    val input = remember { mutableStateOf(text) }
+    var input by remember { mutableStateOf(text) }
 
     MyApplicationTheme {
         TextField(
-            value = input.value,
+            value = input,
             onValueChange = {
-                input.value = it
+                input = it
                 onChange(it)
             },
             label = { Text(label) },

@@ -26,12 +26,12 @@ fun TopBar(title: String, subtitle: String? = null, isTab: Boolean = false, acti
                 }},
             navigationIcon = {
                 if (isTab == false) {
-                IconButton(onClick = { /* doSomething() */ }) {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = "Back Button"
-                    )
-                }
+                    IconButton(onClick = { /* doSomething() */ }) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "Back Button"
+                        )
+                    }
                 }
             },
             actions = actions,
