@@ -19,7 +19,7 @@ fun TopBar(title: String, subtitle: String? = null, isTab: Boolean = false, acti
         SmallTopAppBar(
             title = {
                 Column {
-                    Text(title)
+                    Text(title, fontSize = MaterialTheme.typography.titleLarge.fontSize)
                     if (subtitle != null) {
                         Text(subtitle, fontSize = MaterialTheme.typography.titleSmall.fontSize)
                     }

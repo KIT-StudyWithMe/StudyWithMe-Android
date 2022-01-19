@@ -1,5 +1,6 @@
 package de.pse.kit.studywithme.ui.component
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExposedDropdownMenuDefaults.outlinedTextFieldColors
 import androidx.compose.material.MaterialTheme
@@ -10,9 +11,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme
+import androidx.compose.ui.Modifier
 
 @Composable
-fun FormTextField(text: String = "", label: String, onChange: (String) -> Unit = {}, singleLine: Boolean = true) {
+fun FormTextField(modifier: Modifier = Modifier, text: String = "", label: String, onChange: (String) -> Unit = {}, singleLine: Boolean = true) {
     val input = remember { mutableStateOf(text) }
 
     MyApplicationTheme {
@@ -22,6 +24,7 @@ fun FormTextField(text: String = "", label: String, onChange: (String) -> Unit =
                 input.value = it
                 onChange(it)
             },
+            modifier = modifier.fillMaxWidth(),
             colors = outlinedTextFieldColors(
                 textColor = MaterialTheme.colors.onSurface,
                 backgroundColor = MaterialTheme.colors.surface,
@@ -38,7 +41,7 @@ fun FormTextField(text: String = "", label: String, onChange: (String) -> Unit =
 }
 
 @Composable
-fun TextField(text: String = "", label: String, onChange: (String) -> Unit = {}) {
+fun TextField(modifier: Modifier = Modifier, text: String = "", label: String, onChange: (String) -> Unit = {}) {
     val input = remember { mutableStateOf(text) }
 
     MyApplicationTheme {
@@ -48,6 +51,7 @@ fun TextField(text: String = "", label: String, onChange: (String) -> Unit = {})
                 input.value = it
                 onChange(it)
             },
+            modifier = modifier.fillMaxWidth(),
             label = { androidx.compose.material.Text(label) },
             colors = outlinedTextFieldColors(
                 textColor = MaterialTheme.colors.onSurface,
@@ -67,11 +71,11 @@ fun TextField(text: String = "", label: String, onChange: (String) -> Unit = {})
 @Preview
 @Composable
 fun FormTextFieldPreview() {
-    FormTextField("", "Gruppenname")
+    FormTextField(text = "", label = "Gruppenname")
 }
 
 @Preview
 @Composable
 fun TextFieldPreview() {
-    TextField("", "Nutzername")
+    TextField(text = "", label = "Nutzername")
 }
