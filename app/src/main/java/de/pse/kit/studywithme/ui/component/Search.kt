@@ -21,7 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 
 @Composable
-fun Search(modifier: Modifier = Modifier, text: String = "", label: String = "Suche Gruppen", onChange: (String) -> Unit = {}) {
+fun Search(modifier: Modifier = Modifier, text: String = "", label: String = "Suche Gruppen", onChange: (String) -> Unit) {
     var input by remember { mutableStateOf(text) }
 
     MyApplicationTheme {
@@ -32,7 +32,7 @@ fun Search(modifier: Modifier = Modifier, text: String = "", label: String = "Su
                 input = it
                 onChange(it)
             },
-            label = { Text(label, fontSize = MaterialTheme.typography.subtitle1.fontSize) },
+            placeholder = { Text(label, fontSize = MaterialTheme.typography.h6.fontSize) },
             textStyle = TextStyle(fontSize = MaterialTheme.typography.h6.fontSize),
             trailingIcon = { Icon(Icons.Outlined.Search, contentDescription = "", tint = MaterialTheme.colors.secondaryVariant) }, // decorative
             colors = textFieldColors(
@@ -60,5 +60,5 @@ fun Search(modifier: Modifier = Modifier, text: String = "", label: String = "Su
 @Preview
 @Composable
 fun SearchPreview() {
-    Search()
+    Search(onChange = {})
 }
