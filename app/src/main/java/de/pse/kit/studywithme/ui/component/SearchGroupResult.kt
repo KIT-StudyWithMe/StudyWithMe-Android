@@ -22,25 +22,37 @@ import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
 
 @ExperimentalMaterialApi
 @Composable
-fun SearchGroupResult(modifier: Modifier= Modifier, groupName: String, lecture: String, major: String, imgURL: String? = null, live: Boolean = false, onClick: () -> Unit = { }) {
+fun SearchGroupResult(
+    modifier: Modifier = Modifier,
+    groupName: String,
+    lecture: String,
+    major: String,
+    imgURL: String? = null,
+    live: Boolean = false,
+    onClick: () -> Unit = { }
+) {
     MyApplicationTheme3 {
-        Card(modifier = modifier.fillMaxWidth(),
+        Card(
+            modifier = modifier.fillMaxWidth(),
             onClick = onClick,
             shape = RoundedCornerShape(12.dp),
             border = BorderStroke(Dp.Hairline, color = MaterialTheme.colorScheme.tertiary),
             backgroundColor = MaterialTheme.colorScheme.primary
         ) {
-            Row(modifier = Modifier.padding(8.dp, 15.dp),
+            Row(
+                modifier = Modifier.padding(8.dp, 15.dp),
                 horizontalArrangement = Arrangement.spacedBy(15.dp)
             ) {
-                Box(modifier = Modifier
-                    .padding(start = 5.dp)
-                    .size(42.dp)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.secondary)
-                    .align(Alignment.CenterVertically)
+                Box(
+                    modifier = Modifier
+                        .padding(start = 5.dp)
+                        .size(42.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.secondary)
+                        .align(Alignment.CenterVertically)
                 ) {
-                    Text(text = major.take(3),
+                    Text(
+                        text = major.take(3),
                         modifier = Modifier.align(Alignment.Center),
                         fontSize = MaterialTheme.typography.titleLarge.fontSize,
                         color = MaterialTheme.colorScheme.onSecondary
@@ -48,11 +60,13 @@ fun SearchGroupResult(modifier: Modifier= Modifier, groupName: String, lecture: 
                 }
 
                 Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Text(text = groupName,
+                    Text(
+                        text = groupName,
                         fontSize = MaterialTheme.typography.titleMedium.fontSize,
                         fontWeight = FontWeight.Medium
                     )
-                    Text(text = lecture,
+                    Text(
+                        text = lecture,
                         fontSize = MaterialTheme.typography.labelLarge.fontSize,
                         color = MaterialTheme.colorScheme.tertiary
                     )
@@ -60,18 +74,23 @@ fun SearchGroupResult(modifier: Modifier= Modifier, groupName: String, lecture: 
                 Spacer(modifier = Modifier.weight(1.0f))
 
                 if (live) {
-                    Row(modifier = Modifier.align(Alignment.Top),
+                    Row(
+                        modifier = Modifier.align(Alignment.Top),
                         horizontalArrangement = Arrangement.spacedBy(1.5.dp)
                     ) {
-                        Text(text = "LIVE",
+                        Text(
+                            text = "LIVE",
                             modifier = Modifier.align(Alignment.CenterVertically),
                             fontSize = MaterialTheme.typography.labelSmall.fontSize,
-                            fontWeight = FontWeight.Bold)
-                        Box(modifier = Modifier
-                            .size(8.dp)
-                            .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.tertiaryContainer)
-                            .align(Alignment.CenterVertically))
+                            fontWeight = FontWeight.Bold
+                        )
+                        Box(
+                            modifier = Modifier
+                                .size(8.dp)
+                                .clip(CircleShape)
+                                .background(MaterialTheme.colorScheme.tertiaryContainer)
+                                .align(Alignment.CenterVertically)
+                        )
                     }
                 }
             }
@@ -90,5 +109,10 @@ fun SearchGroupResultPreview() {
 @Preview
 @Composable
 fun SearchGroupResultLivePreview() {
-    SearchGroupResult(groupName = "Gruppe 2", lecture = "Rechnerorganisation", major = "Inf", live = true)
+    SearchGroupResult(
+        groupName = "Gruppe 2",
+        lecture = "Rechnerorganisation",
+        major = "Inf",
+        live = true
+    )
 }

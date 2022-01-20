@@ -16,7 +16,12 @@ import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
 
 @ExperimentalMaterial3Api
 @Composable
-fun TopBar(title: String, subtitle: String? = null, isTab: Boolean = false, actions: (@Composable @ExtensionFunctionType RowScope.() -> Unit) = {}) {
+fun TopBar(
+    title: String,
+    subtitle: String? = null,
+    isTab: Boolean = false,
+    actions: (@Composable @ExtensionFunctionType RowScope.() -> Unit) = {}
+) {
     MyApplicationTheme3 {
         SmallTopAppBar(
             title = {
@@ -25,7 +30,8 @@ fun TopBar(title: String, subtitle: String? = null, isTab: Boolean = false, acti
                     if (subtitle != null) {
                         Text(subtitle, fontSize = MaterialTheme.typography.titleSmall.fontSize)
                     }
-                }},
+                }
+            },
             navigationIcon = {
                 if (isTab == false) {
                     IconButton(onClick = { /* doSomething() */ }) {
@@ -37,13 +43,14 @@ fun TopBar(title: String, subtitle: String? = null, isTab: Boolean = false, acti
                 }
             },
             actions = actions,
-        colors = smallTopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primary,
-            scrolledContainerColor = MaterialTheme.colorScheme.primary,
-            navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
-            titleContentColor = MaterialTheme.colorScheme.onPrimary,
-            actionIconContentColor = MaterialTheme.colorScheme.onPrimary
-        ))
+            colors = smallTopAppBarColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                scrolledContainerColor = MaterialTheme.colorScheme.primary,
+                navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
+                titleContentColor = MaterialTheme.colorScheme.onPrimary,
+                actionIconContentColor = MaterialTheme.colorScheme.onPrimary
+            )
+        )
     }
 }
 
@@ -75,7 +82,10 @@ fun TopBarPreview() {
         subtitle = "Lineare Algebra II",
         actions = {
             IconButton(onClick = { /*Gruppe melden*/ }) {
-                Icon(Icons.Rounded.Warning, contentDescription = "Knopf um ein Freitextfeld der Gruppe zu melden.")
+                Icon(
+                    Icons.Rounded.Warning,
+                    contentDescription = "Knopf um ein Freitextfeld der Gruppe zu melden."
+                )
             }
             IconButton(onClick = { /*Gruppe editieren*/ }) {
                 Icon(Icons.Rounded.Edit, contentDescription = "Knopf um die Gruppe zu editieren.")

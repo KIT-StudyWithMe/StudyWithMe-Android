@@ -27,20 +27,53 @@ fun NavigationBar() {
     MyApplicationTheme3 {
         NavigationBar_(containerColor = MaterialTheme.colorScheme.primary) {
             NavigationBarItem(
-                icon = { Icon(if (selectedItem == 0) Icons.Rounded.Home else Icons.Outlined.Home, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimary) },
-                label = { Text(" Meine Gruppen", fontWeight = if (selectedItem == 0) FontWeight.Bold else FontWeight.Medium) },
+                icon = {
+                    Icon(
+                        if (selectedItem == 0) Icons.Rounded.Home else Icons.Outlined.Home,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onPrimary
+                    )
+                },
+                label = {
+                    Text(
+                        " Meine Gruppen",
+                        fontWeight = if (selectedItem == 0) FontWeight.Bold else FontWeight.Medium
+                    )
+                },
                 selected = selectedItem == 0,
                 onClick = { selectedItem = 0 }
             )
             NavigationBarItem(
-                icon = { Icon(if (selectedItem == 1) Icons.Rounded.Search else Icons.Outlined.Search, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimary) },
-                label = { Text("Weitere Gruppen", fontWeight = if (selectedItem == 1) FontWeight.Bold else FontWeight.Medium) },
+                icon = {
+                    Icon(
+                        if (selectedItem == 1) Icons.Rounded.Search else Icons.Outlined.Search,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onPrimary
+                    )
+                },
+                label = {
+                    Text(
+                        "Weitere Gruppen",
+                        fontWeight = if (selectedItem == 1) FontWeight.Bold else FontWeight.Medium
+                    )
+                },
                 selected = selectedItem == 1,
                 onClick = { selectedItem = 1 }
             )
             NavigationBarItem(
-                icon = { Icon(if (selectedItem == 2) Icons.Rounded.Person else Icons.Outlined.Person, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimary) },
-                label = { Text("Profil", fontWeight = if (selectedItem == 2) FontWeight.Bold else FontWeight.Medium) },
+                icon = {
+                    Icon(
+                        if (selectedItem == 2) Icons.Rounded.Person else Icons.Outlined.Person,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onPrimary
+                    )
+                },
+                label = {
+                    Text(
+                        "Profil",
+                        fontWeight = if (selectedItem == 2) FontWeight.Bold else FontWeight.Medium
+                    )
+                },
                 selected = selectedItem == 2,
                 onClick = { selectedItem = 2 }
             )

@@ -11,14 +11,22 @@ import androidx.compose.ui.unit.dp
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
 
 @Composable
-fun Button(modifier: Modifier = Modifier, onClick: (() -> Unit), text: String, primary: Boolean = true) {
+fun Button(
+    modifier: Modifier = Modifier,
+    onClick: (() -> Unit),
+    text: String,
+    primary: Boolean = true
+) {
     MyApplicationTheme3 {
         if (primary) {
             Button_(
                 onClick = onClick,
                 modifier = modifier.fillMaxWidth(),
                 //contentPadding = PaddingValues(),
-                colors = buttonColors(containerColor = MaterialTheme.colorScheme.primaryContainer, contentColor = MaterialTheme.colorScheme.onPrimaryContainer)
+                colors = buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                )
             ) {
                 Text(text)
             }
@@ -26,7 +34,10 @@ fun Button(modifier: Modifier = Modifier, onClick: (() -> Unit), text: String, p
             OutlinedButton(
                 onClick = onClick,
                 modifier = modifier.fillMaxWidth(),
-                colors = buttonColors(containerColor = MaterialTheme.colorScheme.surface , contentColor = MaterialTheme.colorScheme.onSurface)
+                colors = buttonColors(
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    contentColor = MaterialTheme.colorScheme.onSurface
+                )
             ) {
                 Text(text)
             }
@@ -49,8 +60,13 @@ fun SecondaryButtonPreview() {
 @Composable
 @Preview
 fun ButtonRowPreview() {
-    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)){
-        Button(modifier = Modifier.weight(1.0f), onClick = {}, text = "Passwort vergessen", primary = false)
+    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+        Button(
+            modifier = Modifier.weight(1.0f),
+            onClick = {},
+            text = "Passwort vergessen",
+            primary = false
+        )
         Button(modifier = Modifier.weight(1.0f), onClick = {}, text = "Anmelden")
     }
 }

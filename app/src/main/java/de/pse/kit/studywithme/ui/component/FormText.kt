@@ -23,8 +23,7 @@ fun FormText(
     modifier: Modifier = Modifier,
     text: String = "",
     icon: ImageVector,
-    maxLines: Int = 1,
-    onClick: () -> Unit = { }
+    maxLines: Int = 1
 ) {
     MyApplicationTheme3 {
         Row(

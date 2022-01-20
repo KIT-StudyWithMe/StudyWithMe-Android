@@ -14,7 +14,13 @@ import de.pse.kit.myapplication.ui.theme.MyApplicationTheme
 import androidx.compose.ui.Modifier
 
 @Composable
-fun FormTextField(modifier: Modifier = Modifier, text: String = "", label: String, onChange: (String) -> Unit = {}, singleLine: Boolean = true) {
+fun FormTextField(
+    modifier: Modifier = Modifier,
+    text: String = "",
+    label: String,
+    onChange: (String) -> Unit = {},
+    singleLine: Boolean = true
+) {
     val input = remember { mutableStateOf(text) }
 
     MyApplicationTheme {
@@ -33,7 +39,8 @@ fun FormTextField(modifier: Modifier = Modifier, text: String = "", label: Strin
                 focusedBorderColor = MaterialTheme.colors.secondaryVariant,
                 focusedLabelColor = MaterialTheme.colors.secondaryVariant,
                 unfocusedBorderColor = MaterialTheme.colors.secondaryVariant,
-                unfocusedLabelColor = MaterialTheme.colors.secondaryVariant),
+                unfocusedLabelColor = MaterialTheme.colors.secondaryVariant
+            ),
             label = { androidx.compose.material.Text(label) },
             singleLine = singleLine
         )
@@ -41,7 +48,12 @@ fun FormTextField(modifier: Modifier = Modifier, text: String = "", label: Strin
 }
 
 @Composable
-fun TextField(modifier: Modifier = Modifier, text: String = "", label: String, onChange: (String) -> Unit = {}) {
+fun TextField(
+    modifier: Modifier = Modifier,
+    text: String = "",
+    label: String,
+    onChange: (String) -> Unit = {}
+) {
     val input = remember { mutableStateOf(text) }
 
     MyApplicationTheme {
@@ -61,7 +73,8 @@ fun TextField(modifier: Modifier = Modifier, text: String = "", label: String, o
                 focusedBorderColor = MaterialTheme.colors.secondaryVariant,
                 focusedLabelColor = MaterialTheme.colors.secondaryVariant,
                 unfocusedBorderColor = MaterialTheme.colors.secondaryVariant,
-                unfocusedLabelColor = MaterialTheme.colors.secondaryVariant),
+                unfocusedLabelColor = MaterialTheme.colors.secondaryVariant
+            ),
             shape = RoundedCornerShape(100),
             singleLine = true
         )
