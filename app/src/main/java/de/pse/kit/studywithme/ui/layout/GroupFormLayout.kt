@@ -20,6 +20,10 @@ fun GroupFormLayout(
     lectureChange: (String) -> Unit = {},
     description: String = "",
     descriptionChange: (String) -> Unit = {},
+    groupSessionFrequency: String = "Einmalig",
+    groupSessionFrequencyChange: (String) -> Unit = {},
+    groupSessionType: String = "Präsenz",
+    groupSessionTypeChange: (String) -> Unit = {},
     chapterNumber: String = "",
     chapterNumberChange: (String) -> Unit = {},
     exerciseSheetNumber: String = "",
@@ -49,20 +53,26 @@ fun GroupFormLayout(
                     onChange = descriptionChange
                 )
                 Text(
-                    modifier = Modifier.padding(top = 12.dp),
+                    modifier = Modifier.padding(vertical = 12.dp),
                     text = "Geplante Häufigkeit der Treffen"
                 )
-                Chips(
+                ChipRow(
                     chipNames = listOf(
                         "Einmalig",
                         "Wöchentlich",
                         "Alle 2 Wochen",
                         "Alle 3 Wochen",
                         "Monatlich",
-                    )
+                    ),
+                    selected = groupSessionFrequency,
+                    onChange = groupSessionFrequencyChange
                 )
-                Text(modifier = Modifier.padding(top = 12.dp), text = "Geplante Art der Treffen")
-                Chips(chipNames = listOf("Präsenz", "Online", "Hybrid"))
+                Text(modifier = Modifier.padding(vertical = 12.dp), text = "Geplante Art der Treffen")
+                ChipRow(
+                    chipNames = listOf("Präsenz", "Online", "Hybrid"),
+                    selected = groupSessionType,
+                    onChange = groupSessionTypeChange
+                )
                 Text(modifier = Modifier.padding(top = 12.dp), text = "Lernfortschritt")
                 FormTextField(
                     label = "Vorlesung: Kapitelnummer",
@@ -70,7 +80,7 @@ fun GroupFormLayout(
                     onChange = chapterNumberChange
                 )
                 FormTextField(
-                    label = "Übungsblattnummer",
+                    label = "Übungsblatt Nr.",
                     text = exerciseSheetNumber,
                     onChange = exerciseSheetNumberChange
                 )
@@ -83,7 +93,7 @@ fun GroupFormLayout(
 @ExperimentalMaterial3Api
 @Composable
 @Preview
-fun GroupFormPreview() {
+fun NewGroupFormPreview() {
     Scaffold(
         topBar = {
             TopBar(
@@ -100,5 +110,29 @@ fun GroupFormPreview() {
         bottomBar = { NavigationBar({}, {}, {}) }
     ) {
         GroupFormLayout()
+    }
+}
+
+@ExperimentalMaterial3Api
+@Composable
+@Preview
+fun EditGroupFormPreview() {
+    Scaffold(
+        topBar = {
+            TopBar(
+                title = "Gruppe 6",
+                subtitle = "Lineare Algebra II",
+                actions = {
+                    IconButton(onClick = { /*Gruppe speichern*/ }) {
+                        Icon(
+                            Icons.Filled.Save,
+                            contentDescription = "Knopf um die Gruppe zu erstellen."
+                        )
+                    }
+                })
+        },
+        bottomBar = { NavigationBar({}, {}, {}) }
+    ) {
+        GroupFormLayout(groupName = "Gruppe 6", lecture = "Lineare Algebra II", description = "Moin Moin!", groupSessionFrequency = "Einmalig", groupSessionType = "Online")
     }
 }

@@ -14,23 +14,37 @@ import androidx.compose.ui.unit.dp
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
 
 @Composable
-fun Chips(chipNames: List<String>) {
+fun ChipRow(chipNames: List<String>, selected: String? = null, onChange: (String) -> Unit) {
     var selectedChipIndex by remember { mutableStateOf(0) }
+    for ((i, name) in chipNames.withIndex()) {
+        if (name == selected) {
+            selectedChipIndex = i
+            break
+        }
+    }
+
     LazyRow {
         items(chipNames.size) {
-            ChipsButton(
-                modifier = Modifier.padding(start = 10.dp, top = 5.dp, bottom = 5.dp, end = 10.dp)
-                    .height(40.dp),
-                onClick = {selectedChipIndex = it
-                    //TODO
-                    },
+            Chip(
+                modifier = Modifier.padding(start = 0.dp, end = 12.dp).height(32.dp),
+                onClick = {
+                    selectedChipIndex = it
+                    onChange(chipNames[it])
+                },
                 chosen = selectedChipIndex == it,
-                text = chipNames[it])
+                text = chipNames[it]
+            )
         }
     }
 }
+
 @Composable
-fun ChipsButton(modifier: Modifier = Modifier, onClick: (() -> Unit), text: String, chosen: Boolean = true) {
+fun Chip(
+    modifier: Modifier = Modifier,
+    onClick: (() -> Unit),
+    text: String,
+    chosen: Boolean = true
+) {
     MyApplicationTheme3 {
         if (chosen) {
             TextButton(
@@ -44,7 +58,7 @@ fun ChipsButton(modifier: Modifier = Modifier, onClick: (() -> Unit), text: Stri
             ) {
                 Icon(
                     Icons.Outlined.Check,
-                contentDescription = "",
+                    contentDescription = "",
                 )
                 Text(text = text)
             }
@@ -53,21 +67,26 @@ fun ChipsButton(modifier: Modifier = Modifier, onClick: (() -> Unit), text: Stri
                 modifier = modifier,
                 shape = RoundedCornerShape(25),
                 onClick = onClick,
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.surface , contentColor = MaterialTheme.colorScheme.onSurface),
-            border = BorderStroke(1.dp, MaterialTheme.colorScheme.onSurface)
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    contentColor = MaterialTheme.colorScheme.onSurface
+                ),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.onSurface)
             ) {
                 Text(text)
             }
         }
     }
 }
+
 @Composable
 @Preview
 fun ChipsButtonPreview() {
-    ChipsButton(onClick = {}, text = "Einmalig", chosen = true)
+    Chip(onClick = {}, text = "Einmalig", chosen = true)
 }
+
 @Preview
 @Composable
 fun ChipsPreview() {
-    Chips(listOf("Präsenz", "Online", "Hybrid"))
+    ChipRow(listOf("Präsenz", "Online", "Hybrid"), onChange = {})
 }
