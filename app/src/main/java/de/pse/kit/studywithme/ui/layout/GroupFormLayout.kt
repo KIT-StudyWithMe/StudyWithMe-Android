@@ -5,7 +5,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -14,7 +13,7 @@ import de.pse.kit.studywithme.ui.component.*
 
 @ExperimentalMaterial3Api
 @Composable
-fun GroupLayout(
+fun GroupFormLayout(
     groupName: String = "",
     groupNameChange: (String) -> Unit = {},
     lecture: String = "",
@@ -25,46 +24,34 @@ fun GroupLayout(
     chapterNumberChange: (String) -> Unit = {},
     exerciseSheetNumber: String = "",
     exerciseSheetNumberChange: (String) -> Unit = {},
-    ) {
+) {
     MyApplicationTheme3 {
         Scaffold(
-            containerColor = MaterialTheme.colorScheme.surface,
-            topBar = {
-                TopBar(
-                    title = "Neue Gruppe",
-                    actions = {
-                        IconButton(onClick = { /*Gruppe speichern*/ }) {
-                            Icon(
-                                Icons.Filled.Save,
-                                contentDescription = "Knopf um die Gruppe zu erstellen."
-                            )
-                        }
-                    })
-            },
-            bottomBar = { NavigationBar() },
-
-            modifier = Modifier
-                .fillMaxSize()
+            containerColor = MaterialTheme.colorScheme.surface
         ) {
             Column(
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(horizontal = 20.dp, vertical = 5.dp)
+                modifier = Modifier.padding(horizontal = 24.dp, vertical = 0.dp)
             ) {
-                Text(text = "Gruppeninformationen")
+                Text(modifier = Modifier.padding(top = 12.dp), text = "Gruppeninformationen")
                 FormTextField(
                     label = "Gruppenname",
                     text = groupName,
-                    onChange = groupNameChange)
+                    onChange = groupNameChange
+                )
                 FormTextField(
                     label = "Vorlesung",
                     text = lecture,
-                    onChange = lectureChange)
+                    onChange = lectureChange
+                )
                 FormTextField(
                     label = "Beschreibung",
                     text = description,
-                    onChange = descriptionChange)
-                Text(text = "Geplante Häufigkeit der Treffen")
+                    onChange = descriptionChange
+                )
+                Text(
+                    modifier = Modifier.padding(top = 12.dp),
+                    text = "Geplante Häufigkeit der Treffen"
+                )
                 Chips(
                     chipNames = listOf(
                         "Einmalig",
@@ -74,17 +61,19 @@ fun GroupLayout(
                         "Monatlich",
                     )
                 )
-                Text(text = "Geplante Art der Treffen")
+                Text(modifier = Modifier.padding(top = 12.dp), text = "Geplante Art der Treffen")
                 Chips(chipNames = listOf("Präsenz", "Online", "Hybrid"))
-                Text(text = "Lernfortschritt")
+                Text(modifier = Modifier.padding(top = 12.dp), text = "Lernfortschritt")
                 FormTextField(
                     label = "Vorlesung: Kapitelnummer",
                     text = chapterNumber,
-                    onChange = chapterNumberChange)
+                    onChange = chapterNumberChange
+                )
                 FormTextField(
                     label = "Übungsblattnummer",
                     text = exerciseSheetNumber,
-                    onChange = exerciseSheetNumberChange)
+                    onChange = exerciseSheetNumberChange
+                )
             }
 
         }
@@ -94,6 +83,22 @@ fun GroupLayout(
 @ExperimentalMaterial3Api
 @Composable
 @Preview
-fun GroupScreenPreview() {
-    GroupLayout()
+fun GroupFormPreview() {
+    Scaffold(
+        topBar = {
+            TopBar(
+                title = "Neue Gruppe",
+                actions = {
+                    IconButton(onClick = { /*Gruppe speichern*/ }) {
+                        Icon(
+                            Icons.Filled.Save,
+                            contentDescription = "Knopf um die Gruppe zu erstellen."
+                        )
+                    }
+                })
+        },
+        bottomBar = { NavigationBar({}, {}, {}) }
+    ) {
+        GroupFormLayout()
+    }
 }
