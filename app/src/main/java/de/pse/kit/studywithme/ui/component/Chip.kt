@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
 
 @Composable
-fun ChipRow(chipNames: List<String>, selected: String? = null, onChange: (String) -> Unit) {
+fun ChipSelectionRow(modifier: Modifier = Modifier, chipNames: List<String>, selected: String? = null, onChange: (String) -> Unit) {
     var selectedChipIndex by remember { mutableStateOf(0) }
     for ((i, name) in chipNames.withIndex()) {
         if (name == selected) {
@@ -23,10 +23,10 @@ fun ChipRow(chipNames: List<String>, selected: String? = null, onChange: (String
         }
     }
 
-    LazyRow {
+    LazyRow(modifier = modifier) {
         items(chipNames.size) {
             Chip(
-                modifier = Modifier.padding(start = 0.dp, end = 12.dp).height(32.dp),
+                modifier = Modifier.padding(start = 0.dp, end = 12.dp),
                 onClick = {
                     selectedChipIndex = it
                     onChange(chipNames[it])
@@ -39,11 +39,25 @@ fun ChipRow(chipNames: List<String>, selected: String? = null, onChange: (String
 }
 
 @Composable
+fun ChipDisplayRow(modifier: Modifier = Modifier, chipNames: List<String>) {
+    LazyRow(modifier = modifier) {
+        items(chipNames.size) {
+            Chip(
+                modifier = Modifier.padding(start = 0.dp, end = 12.dp),
+                text = chipNames[it],
+                withIcon = false
+            )
+        }
+    }
+}
+
+@Composable
 fun Chip(
     modifier: Modifier = Modifier,
-    onClick: (() -> Unit),
+    onClick: (() -> Unit) = {},
     text: String,
-    chosen: Boolean = true
+    chosen: Boolean = true,
+    withIcon: Boolean = true
 ) {
     MyApplicationTheme3 {
         if (chosen) {
@@ -56,10 +70,12 @@ fun Chip(
                     contentColor = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             ) {
-                Icon(
-                    Icons.Outlined.Check,
-                    contentDescription = "",
-                )
+                if (withIcon) {
+                    Icon(
+                        Icons.Outlined.Check,
+                        contentDescription = "",
+                    )
+                }
                 Text(text = text)
             }
         } else {
@@ -81,12 +97,18 @@ fun Chip(
 
 @Composable
 @Preview
-fun ChipsButtonPreview() {
-    Chip(onClick = {}, text = "Einmalig", chosen = true)
+fun ChipPreview() {
+    Chip(text = "Einmalig", chosen = true)
 }
 
 @Preview
 @Composable
-fun ChipsPreview() {
-    ChipRow(listOf("Präsenz", "Online", "Hybrid"), onChange = {})
+fun ChipSelectionRowPreview() {
+    ChipSelectionRow(chipNames = listOf("Präsenz", "Online", "Hybrid"), onChange = {})
+}
+
+@Preview
+@Composable
+fun ChipDisplayRowPreview() {
+    ChipDisplayRow(chipNames = listOf("Einmalig", "Präsenz"))
 }

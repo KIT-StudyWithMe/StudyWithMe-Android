@@ -56,7 +56,7 @@ fun GroupFormLayout(
                     modifier = Modifier.padding(vertical = 12.dp),
                     text = "Geplante Häufigkeit der Treffen"
                 )
-                ChipRow(
+                ChipSelectionRow(
                     chipNames = listOf(
                         "Einmalig",
                         "Wöchentlich",
@@ -68,7 +68,7 @@ fun GroupFormLayout(
                     onChange = groupSessionFrequencyChange
                 )
                 Text(modifier = Modifier.padding(vertical = 12.dp), text = "Geplante Art der Treffen")
-                ChipRow(
+                ChipSelectionRow(
                     chipNames = listOf("Präsenz", "Online", "Hybrid"),
                     selected = groupSessionType,
                     onChange = groupSessionTypeChange

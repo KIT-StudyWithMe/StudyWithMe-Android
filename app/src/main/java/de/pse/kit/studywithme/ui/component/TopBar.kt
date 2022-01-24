@@ -27,7 +27,7 @@ fun TopBar(
         SmallTopAppBar(
             title = {
                 Column {
-                    Text(title, fontSize = MaterialTheme.typography.titleLarge.fontSize)
+                    Text(title.take(26), fontSize = MaterialTheme.typography.titleLarge.fontSize)
                     if (subtitle != null) {
                         Text(subtitle, fontSize = MaterialTheme.typography.titleSmall.fontSize)
                     }
