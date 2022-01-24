@@ -29,8 +29,6 @@ fun Sessionlayout(
 ) {
     MyApplicationTheme3 {
         Scaffold(
-            topBar = { TopBar(title = "Nächste Lernsession") },
-            bottomBar = { NavigationBar() },
             containerColor = MaterialTheme.colorScheme.surface
         ) {
             Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 5.dp)) {
