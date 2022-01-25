@@ -21,7 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 
 
 @Composable
-fun NavigationBar() {
+fun NavigationBar(clickLeft: () -> Unit, clickMiddle: () -> Unit, clickRight: () -> Unit) {
     var selectedItem by remember { mutableStateOf(0) }
 
     MyApplicationTheme3 {
@@ -41,7 +41,10 @@ fun NavigationBar() {
                     )
                 },
                 selected = selectedItem == 0,
-                onClick = { selectedItem = 0 }
+                onClick = {
+                    selectedItem = 0
+                    clickLeft()
+                }
             )
             NavigationBarItem(
                 icon = {
@@ -58,7 +61,10 @@ fun NavigationBar() {
                     )
                 },
                 selected = selectedItem == 1,
-                onClick = { selectedItem = 1 }
+                onClick = {
+                    selectedItem = 1
+                    clickMiddle()
+                }
             )
             NavigationBarItem(
                 icon = {
@@ -75,7 +81,10 @@ fun NavigationBar() {
                     )
                 },
                 selected = selectedItem == 2,
-                onClick = { selectedItem = 2 }
+                onClick = {
+                    selectedItem = 2
+                    clickRight()
+                }
             )
         }
     }
@@ -85,5 +94,5 @@ fun NavigationBar() {
 @Preview
 @Composable
 fun NavigationBarPreview() {
-    NavigationBar()
+    NavigationBar({}, {}, {})
 }

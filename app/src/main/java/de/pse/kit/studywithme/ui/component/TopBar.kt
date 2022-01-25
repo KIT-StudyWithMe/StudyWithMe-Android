@@ -20,13 +20,14 @@ fun TopBar(
     title: String,
     subtitle: String? = null,
     isTab: Boolean = false,
+    navClick: () -> Unit = {},
     actions: (@Composable @ExtensionFunctionType RowScope.() -> Unit) = {}
 ) {
     MyApplicationTheme3 {
         SmallTopAppBar(
             title = {
                 Column {
-                    Text(title, fontSize = MaterialTheme.typography.titleLarge.fontSize)
+                    Text(title.take(26), fontSize = MaterialTheme.typography.titleLarge.fontSize)
                     if (subtitle != null) {
                         Text(subtitle, fontSize = MaterialTheme.typography.titleSmall.fontSize)
                     }
@@ -34,7 +35,7 @@ fun TopBar(
             },
             navigationIcon = {
                 if (isTab == false) {
-                    IconButton(onClick = { /* doSomething() */ }) {
+                    IconButton(onClick = navClick) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
                             contentDescription = "Back Button"
