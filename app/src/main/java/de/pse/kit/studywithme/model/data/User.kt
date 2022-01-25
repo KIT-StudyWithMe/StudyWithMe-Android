@@ -12,7 +12,7 @@ data class User(
     val userID: Int,
 
     @ColumnInfo(name = "username")
-    val name: String?,
+    val name: String,
 
     @ColumnInfo(name = "college_ID")
     val collegeID: Int,
@@ -24,11 +24,11 @@ data class User(
     val contact: String,
 
     @Ignore
-    val loginUID: Int,
+    val loginUID: Int?,
 
     @Ignore
-    val isBlocked: Boolean,
+    val isBlocked: Boolean?,
 
     @Ignore
-    val isMod: Boolean
+    val isMod: Boolean?
 )
