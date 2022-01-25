@@ -8,16 +8,27 @@ import androidx.room.PrimaryKey
 @Entity
 data class User(
     @PrimaryKey
-    @ColumnInfo(name = "user_ID") val userID: Int,
-    @ColumnInfo(name = "Nutzername") val name: String?,
-    @ColumnInfo(name = "ID-Universität") val collegeID: Int,
-    @ColumnInfo(name = "ID-Studiengang") val major: Int,
-    @ColumnInfo(name = "Kontaktinformation") val contact: String,
+    @ColumnInfo(name = "user_ID")
+    val userID: Int,
+
+    @ColumnInfo(name = "username")
+    val name: String?,
+
+    @ColumnInfo(name = "college_ID")
+    val collegeID: Int,
+
+    @ColumnInfo(name = "major_ID")
+    val major: Int,
+
+    @ColumnInfo(name = "contact")
+    val contact: String,
 
     @Ignore
-    @ColumnInfo(name = "Login-UID") val loginUID: Int,
+    val loginUID: Int,
+
     @Ignore
-    @ColumnInfo(name = "is-gesperrt") val isBlocked: Boolean,
+    val isBlocked: Boolean,
+
     @Ignore
-    @ColumnInfo(name = "moderator") val isMod: Boolean
+    val isMod: Boolean
 )
