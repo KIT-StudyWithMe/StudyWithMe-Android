@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -50,6 +51,10 @@ android {
 }
 
 dependencies {
+    implementation("androidx.room:room-runtime:2.4.1")
+    annotationProcessor("androidx.room:room-compiler:2.4.1")
+    kapt("androidx.room:room-compiler:2.4.1")
+
     implementation "com.google.accompanist:accompanist-systemuicontroller:0.24.0-alpha"
     implementation "androidx.navigation:navigation-compose:2.4.0-rc01"
     implementation 'androidx.core:core-ktx:1.7.0'
