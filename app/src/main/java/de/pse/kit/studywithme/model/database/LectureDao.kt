@@ -9,7 +9,7 @@ import de.pse.kit.studywithme.model.data.Lecture
 @Dao
 interface LectureDao {
     @Query("SELECT * FROM lecture WHERE lecture_name LIKE :prefix || '%'")
-    fun getLectures(prefix: String)
+    fun getLectures(prefix: String): List<Lecture>
 
     @Insert
     fun saveLecture(lecture: Lecture)
