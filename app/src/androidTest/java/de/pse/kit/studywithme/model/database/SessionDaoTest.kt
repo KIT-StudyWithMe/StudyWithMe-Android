@@ -1,4 +1,4 @@
-package de.pse.kit.studywithme
+package de.pse.kit.studywithme.model.database
 
 import android.content.Context
 import androidx.room.Room
@@ -6,8 +6,6 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import de.pse.kit.studywithme.model.data.Session
-import de.pse.kit.studywithme.model.database.AppDatabase
-import de.pse.kit.studywithme.model.database.SessionDao
 import org.junit.*
 import org.junit.runner.RunWith
 import java.io.IOException
@@ -23,7 +21,8 @@ class SessionDaoTest {
     fun createDb() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         db = Room.inMemoryDatabaseBuilder(
-            context, AppDatabase::class.java).build()
+            context, AppDatabase::class.java
+        ).build()
         sessionDao = db.sessionDao()
     }
 
@@ -69,7 +68,7 @@ class SessionDaoTest {
     fun saveAndUpdateSession() {
         val session = Session(0, 0, "Bibliothek KIT", date = Date(), duration = 2)
         sessionDao.saveSession(session)
-        val editedSession = Session(0, 0 , "Bibliothek KIT-Nord", date = Date(), duration = 2)
+        val editedSession = Session(0, 0, "Bibliothek KIT-Nord", date = Date(), duration = 2)
         sessionDao.editSession(editedSession)
         val sessionBySession = sessionDao.getSession(0)
         assertThat(sessionBySession).isEqualTo(editedSession)
