@@ -2,7 +2,6 @@ package de.pse.kit.studywithme.model.data
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.Ignore
 import androidx.room.PrimaryKey
 
 @Entity
@@ -12,7 +11,7 @@ data class User(
     val userID: Int,
 
     @ColumnInfo(name = "username")
-    val name: String?,
+    val name: String,
 
     @ColumnInfo(name = "college_ID")
     val collegeID: Int,
@@ -21,14 +20,5 @@ data class User(
     val major: Int,
 
     @ColumnInfo(name = "contact")
-    val contact: String,
-
-    @Ignore
-    val loginUID: Int,
-
-    @Ignore
-    val isBlocked: Boolean,
-
-    @Ignore
-    val isMod: Boolean
+    val contact: String
 )

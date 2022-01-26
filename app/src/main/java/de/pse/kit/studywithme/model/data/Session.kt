@@ -21,5 +21,5 @@ data class Session(
     val date: Date,
 
     @ColumnInfo(name = "duration")
-    val duration: Int
+    val duration: Int?
 )
