@@ -8,13 +8,13 @@ import androidx.room.PrimaryKey
 data class Group(
     @PrimaryKey
     @ColumnInfo(name = "group_ID")
-    val group_ID: Int,
+    val groupID: Int,
 
     @ColumnInfo(name = "name")
     val name: String,
 
     @ColumnInfo(name = "lecture_ID")
-    val lecture_ID: Int,
+    val lectureID: Int,
 
     @ColumnInfo(name = "description")
     val description: String?,
@@ -32,7 +32,7 @@ data class Group(
     val exercise: Int?,
 
     @ColumnInfo(name = "group_admin_ID")
-    val groupAdmin_ID: Int,
+    val groupAdminID: Int,
 
     @ColumnInfo(name = "participants_sum")
     val participantsSum: Int
