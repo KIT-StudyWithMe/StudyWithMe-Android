@@ -1,0 +1,212 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "a97a1cab08e54ac9fa907ac2b9578015",
+    "entities": [
+      {
+        "tableName": "Session",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`session_ID` INTEGER NOT NULL, `group_ID` INTEGER NOT NULL, `location` TEXT NOT NULL, `date` INTEGER NOT NULL, `duration` INTEGER, PRIMARY KEY(`session_ID`))",
+        "fields": [
+          {
+            "fieldPath": "sessionID",
+            "columnName": "session_ID",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "groupID",
+            "columnName": "group_ID",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "location",
+            "columnName": "location",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "duration",
+            "columnName": "duration",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "session_ID"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Group",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`group_ID` INTEGER NOT NULL, `name` TEXT NOT NULL, `lecture_ID` INTEGER NOT NULL, `description` TEXT, `session_frequency` TEXT, `session_type` TEXT, `lecture_chapter` INTEGER, `exercise` INTEGER, `group_admin_ID` INTEGER NOT NULL, `participants_sum` INTEGER NOT NULL, PRIMARY KEY(`group_ID`))",
+        "fields": [
+          {
+            "fieldPath": "groupID",
+            "columnName": "group_ID",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lectureID",
+            "columnName": "lecture_ID",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sessionFrequency",
+            "columnName": "session_frequency",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sessionType",
+            "columnName": "session_type",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lectureChapter",
+            "columnName": "lecture_chapter",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "exercise",
+            "columnName": "exercise",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "groupAdminID",
+            "columnName": "group_admin_ID",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "participantsSum",
+            "columnName": "participants_sum",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "group_ID"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Lecture",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`lecture_ID` INTEGER NOT NULL, `lecture_name` TEXT NOT NULL, PRIMARY KEY(`lecture_ID`))",
+        "fields": [
+          {
+            "fieldPath": "lectureID",
+            "columnName": "lecture_ID",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lectureName",
+            "columnName": "lecture_name",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "lecture_ID"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_Lecture_lecture_name",
+            "unique": false,
+            "columnNames": [
+              "lecture_name"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_Lecture_lecture_name` ON `${TABLE_NAME}` (`lecture_name`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "User",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`user_ID` INTEGER NOT NULL, `username` TEXT NOT NULL, `college_ID` INTEGER, `major_ID` INTEGER, `contact` TEXT NOT NULL, PRIMARY KEY(`user_ID`))",
+        "fields": [
+          {
+            "fieldPath": "userID",
+            "columnName": "user_ID",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "username",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "collegeID",
+            "columnName": "college_ID",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "majorID",
+            "columnName": "major_ID",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "contact",
+            "columnName": "contact",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "user_ID"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a97a1cab08e54ac9fa907ac2b9578015')"
+    ]
+  }
+}
