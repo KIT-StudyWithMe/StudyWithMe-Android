@@ -7,10 +7,12 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import de.pse.kit.studywithme.model.data.User
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.IOException
+import org.junit.jupiter.api.assertAll
 
 @RunWith(AndroidJUnit4::class)
 class UserDaoTest {
@@ -44,11 +46,11 @@ class UserDaoTest {
         val user0ByUID = userDao.getUser(user0.userID)
         val user1ByUID = userDao.getUser(user1.userID)
         val user2ByUID = userDao.getUser(user2.userID)
-        assertThat(user0ByUID).isEqualTo(user0)
-        assertThat(user1ByUID).isEqualTo(user1)
-        assertThat(user2ByUID).isEqualTo(user2)
-        assertThat(user0ByUID).isNotEqualTo(user1)
-        assertThat(user0ByUID).isNotEqualTo(user2)
+        assertAll(
+            {assertEquals(user0ByUID, user0)},
+            {assertEquals(user1ByUID, user1)},
+            {assertEquals(user2ByUID, user2)}
+        )
     }
 
     @Test
