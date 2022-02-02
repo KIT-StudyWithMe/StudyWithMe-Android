@@ -12,13 +12,13 @@ class UserServiceImpl(private var client: HttpClient) : UserService {
         return try {
             client.get(HttpRoutes.USERS)
         } catch (e: RedirectResponseException) {
-            println("Error: ${e.response.status.description}")
+            println("Redirect Error: ${e.response.status.description}")
             emptyList()
         } catch (e: ClientRequestException) {
-            println("Error: ${e.response.status.description}")
+            println("Request Error: ${e.response.status.description}")
             emptyList()
         } catch (e: ServerResponseException) {
-            println("Error: ${e.response.status.description}")
+            println("Response Error: ${e.response.status.description}")
             emptyList()
         } catch (e: Exception) {
             println("Error: ${e.message}")
@@ -30,13 +30,31 @@ class UserServiceImpl(private var client: HttpClient) : UserService {
         return try {
             client.get(HttpRoutes.USERS + id)
         } catch (e: RedirectResponseException) {
-            println("Error: ${e.response.status.description}")
+            println("Redirect Error: ${e.response.status.description}")
             null
         } catch (e: ClientRequestException) {
-            println("Error: ${e.response.status.description}")
+            println("Request Error: ${e.response.status.description}")
             null
         } catch (e: ServerResponseException) {
-            println("Error: ${e.response.status.description}")
+            println("Response Error: ${e.response.status.description}")
+            null
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+            null
+        }
+    }
+
+    override suspend fun getUser(fbid: String): User? {
+        return try {
+            client.get(HttpRoutes.USERS + fbid)
+        } catch (e: RedirectResponseException) {
+            println("Redirect Error: ${e.response.status.description}")
+            null
+        } catch (e: ClientRequestException) {
+            println("Request Error: ${e.response.status.description}")
+            null
+        } catch (e: ServerResponseException) {
+            println("Response Error: ${e.response.status.description}")
             null
         } catch (e: Exception) {
             println("Error: ${e.message}")
@@ -104,11 +122,11 @@ class UserServiceImpl(private var client: HttpClient) : UserService {
         }
     }
 
-    override suspend fun getColleges(authorization: String, prefix: String): List<String> {
+    override suspend fun getColleges(prefix: String): List<String> {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getLectures(prefix: String): List<String> {
+    override suspend fun getMajors(prefix: String): List<String> {
         TODO("Not yet implemented")
     }
 }

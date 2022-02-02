@@ -8,7 +8,7 @@ import org.junit.Test
 
 class UserServiceTest {
 
-    private val service = UserService.create()
+    private val service = UserService.instance
 
     @Test
     fun getUserById(): Unit = runBlocking {

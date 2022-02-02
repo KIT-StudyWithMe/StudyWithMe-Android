@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 @Entity
 data class User(
     @PrimaryKey
-    @SerialName("userId")
+    @SerialName("userID")
     @ColumnInfo(name = "user_ID")
     val userID: Int,
 
@@ -18,15 +18,19 @@ data class User(
     @ColumnInfo(name = "username")
     val name: String,
 
-    @SerialName("collegeId")
+    @SerialName("collegeID")
     @ColumnInfo(name = "college_ID")
     val collegeID: Int? = null,
 
-    @SerialName("majorId")
+    @SerialName("majorID")
     @ColumnInfo(name = "major_ID")
     val majorID: Int? = null,
 
     @SerialName("contact")
     @ColumnInfo(name = "contact")
-    val contact: String
+    val contact: String,
+
+    @SerialName("firebaseUID")
+    @ColumnInfo(name = "firebase_UID")
+    val firebaseUID: Int
 )
