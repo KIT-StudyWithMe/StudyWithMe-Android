@@ -81,5 +81,5 @@ class GroupRepository private constructor(context: Context) {
         }
     }
 
-    companion object: SingletonHolder<GroupRepository, Context>({ GroupRepository(it) })
+    companion object : SingletonHolder<GroupRepository, Context>({ GroupRepository(it) })
 }

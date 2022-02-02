@@ -39,5 +39,5 @@ class SessionRepository private constructor(context: Context) {
         }
     }
 
-    companion object: SingletonHolder<SessionRepository, Context>({ SessionRepository(it) })
+    companion object : SingletonHolder<SessionRepository, Context>({ SessionRepository(it) })
 }
