@@ -10,17 +10,12 @@ interface LectureService {
     suspend fun getLectures(prefix: String): List<Lecture>
 
     companion object{
-        var service: LectureServiceImpl? = null
-
-        fun create(): LectureServiceImpl {
-            if (service == null) {
-                service = LectureServiceImpl(client = HttpClient(Android) {
-                    install(JsonFeature) {
-                        serializer = KotlinxSerializer()
-                    }
-                })
-            }
-            return service!!
+        val instance: LectureServiceImpl? by lazy {
+            LectureServiceImpl(client = HttpClient(Android) {
+                install(JsonFeature) {
+                    serializer = KotlinxSerializer()
+                }
+            })
         }
     }
 }

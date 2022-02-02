@@ -19,18 +19,13 @@ interface ReportService {
     suspend fun blockUser(uid: Int)
     suspend fun unblockUser(uid: Int)
 
-    companion object{
-        var service: ReportServiceImpl? = null
-
-        fun create(): ReportServiceImpl {
-            if (service == null) {
-                service = ReportServiceImpl(client = HttpClient(Android) {
-                    install(JsonFeature) {
-                        serializer = KotlinxSerializer()
-                    }
-                })
-            }
-            return service!!
+    companion object {
+        val instance: ReportServiceImpl by lazy {
+            ReportServiceImpl(client = HttpClient(Android) {
+                install(JsonFeature) {
+                    serializer = KotlinxSerializer()
+                }
+            })
         }
     }
 }
