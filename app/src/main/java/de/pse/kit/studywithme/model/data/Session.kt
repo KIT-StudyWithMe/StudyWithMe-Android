@@ -3,15 +3,9 @@ package de.pse.kit.studywithme.model.data
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import kotlinx.serialization.KSerializer
+import de.pse.kit.studywithme.model.network.DateSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Serializer
-import kotlinx.serialization.descriptors.PrimitiveKind
-import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
-import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
 import java.util.*
 
 @Serializable
@@ -39,15 +33,3 @@ data class Session(
     @ColumnInfo(name = "duration")
     val duration: Int?
 )
-
-object DateSerializer : KSerializer<Date> {
-    override fun serialize(encoder: Encoder, value: Date) {
-        encoder.encodeLong(value.time)
-    }
-
-    override fun deserialize(decoder: Decoder): Date {
-        return Date(decoder.decodeLong())
-    }
-
-    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("Date", PrimitiveKind.LONG)
-}
