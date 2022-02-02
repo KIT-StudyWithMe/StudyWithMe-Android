@@ -11,7 +11,7 @@ import java.util.*
 
 class SessionServiceTest {
 
-    private val service = SessionService.create()
+    private val service = SessionService.instance
 
     @Test
     fun sessionSerializationTest() {

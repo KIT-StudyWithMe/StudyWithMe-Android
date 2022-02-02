@@ -1,6 +1,7 @@
 package de.pse.kit.studywithme.model.network
 
 import de.pse.kit.studywithme.model.data.Group
+import de.pse.kit.studywithme.model.data.User
 import io.ktor.client.*
 import io.ktor.client.engine.android.*
 import io.ktor.client.features.json.*
@@ -11,6 +12,7 @@ interface GroupService {
     suspend fun getJoinedGroups(uid: Int): List<Group>
     suspend fun getGroupSuggestions(uid: Int): List<Group>
     suspend fun getGroup(groupID: Int): Group
+    suspend fun getGroupMembers(groupID: Int): List<User>?
     suspend fun newGroup(group: Group)
     suspend fun editGroup(groupID: Int, group: Group)
     suspend fun removeGroup(groupID: Int)
@@ -19,17 +21,12 @@ interface GroupService {
     suspend fun removeMember(groupID: Int, uid: Int)
 
     companion object {
-        var service: GroupServiceImpl? = null
-
-        fun create(): GroupServiceImpl {
-            if (service == null) {
-                service = GroupServiceImpl(client = HttpClient(Android) {
-                    install(JsonFeature) {
-                        serializer = KotlinxSerializer()
-                    }
-                })
-            }
-            return service!!
+        val instance: GroupService by lazy {
+            GroupServiceImpl(client = HttpClient(Android) {
+                install(JsonFeature) {
+                    serializer = KotlinxSerializer()
+                }
+            })
         }
     }
 }

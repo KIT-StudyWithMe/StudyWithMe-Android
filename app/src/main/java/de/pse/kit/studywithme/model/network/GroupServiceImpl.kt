@@ -1,6 +1,7 @@
 package de.pse.kit.studywithme.model.network
 
 import de.pse.kit.studywithme.model.data.Group
+import de.pse.kit.studywithme.model.data.User
 import io.ktor.client.*
 
 class GroupServiceImpl(private var client: HttpClient): GroupService {
@@ -17,6 +18,10 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
     }
 
     override suspend fun getGroup(groupID: Int): Group {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getGroupMembers(groupID: Int): List<User>? {
         TODO("Not yet implemented")
     }
 

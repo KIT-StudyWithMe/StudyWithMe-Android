@@ -15,17 +15,12 @@ interface SessionService {
     suspend fun newParticipant(sessionID: Int)
 
     companion object {
-        var service: SessionServiceImpl? = null
-
-        fun create(): SessionServiceImpl {
-            if (service == null) {
-                service = SessionServiceImpl(client = HttpClient(Android) {
-                    install(JsonFeature) {
-                        serializer = KotlinxSerializer()
-                    }
-                })
-            }
-            return service!!
+        val instance: SessionService by lazy {
+            SessionServiceImpl(client = HttpClient(Android) {
+                install(JsonFeature) {
+                    serializer = KotlinxSerializer()
+                }
+            })
         }
     }
 }
