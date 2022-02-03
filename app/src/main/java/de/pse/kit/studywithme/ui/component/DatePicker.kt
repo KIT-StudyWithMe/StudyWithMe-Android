@@ -9,12 +9,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.material.Button
-import androidx.compose.material.DropdownMenu
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.DateRange
@@ -22,6 +20,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,8 +29,13 @@ import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
 import java.util.*
 
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun DatePicker(context: Context) {
+fun DatePicker(
+    context: Context,
+    onChange: (String) -> Unit = {},
+    singleLine: Boolean = true
+) {
     val year: Int
     val month: Int
     val day: Int
@@ -50,29 +54,73 @@ fun DatePicker(context: Context) {
         }, year, month, day
     )
 
+    /**
     MyApplicationTheme3() {
+    var expanded by remember { mutableStateOf(false) }
+    Box(
+    modifier = Modifier
+    .fillMaxSize()
+    .wrapContentSize(Alignment.TopStart)
+    ) {
+    Text(
+    date.value, modifier = Modifier
+    .fillMaxWidth()
+    .clickable(onClick = { datePickerDialog.show() })
+    .background(MaterialTheme.colorScheme.surface)
+    )
+    DropdownMenu(
+    expanded = expanded,
+    onDismissRequest = { expanded = false },
+    modifier = Modifier
+    .fillMaxWidth()
+    .background(MaterialTheme.colorScheme.surface)
+    ) {
+    datePickerDialog.show()
+    }
+    }
+    }
+     */
+
+    MyApplicationTheme {
         var expanded by remember { mutableStateOf(false) }
-        Box(
+        OutlinedTextField(
+            value = date.value,
+            onValueChange = {
+                date.value = it
+                onChange(it)
+            },
             modifier = Modifier
                 .fillMaxSize()
-                .wrapContentSize(Alignment.TopStart)
-        ) {
-            Text(
-                date.value, modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable(onClick = { datePickerDialog.show() })
-                    .background(MaterialTheme.colorScheme.surface)
-            )
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.surface)
-            ) {
-                datePickerDialog.show()
-            }
-        }
+                .wrapContentSize(Alignment.TopStart),
+            colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(
+                textColor = androidx.compose.material.MaterialTheme.colors.onSurface,
+                backgroundColor = androidx.compose.material.MaterialTheme.colors.surface,
+                cursorColor = Color.Black,
+                disabledTextColor = androidx.compose.material.MaterialTheme.colors.secondaryVariant,
+                focusedBorderColor = androidx.compose.material.MaterialTheme.colors.secondaryVariant,
+                focusedLabelColor = androidx.compose.material.MaterialTheme.colors.secondaryVariant,
+                unfocusedBorderColor = androidx.compose.material.MaterialTheme.colors.secondaryVariant,
+                unfocusedLabelColor = androidx.compose.material.MaterialTheme.colors.secondaryVariant
+            ),
+            label = {
+                Text(
+                    date.value, modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable(onClick = { datePickerDialog.show() })
+                        .background(MaterialTheme.colorScheme.surface)
+                )
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.surface)
+                ) {
+                    datePickerDialog.show()
+                }
+            },
+            singleLine = singleLine
+        )
     }
 }
 
