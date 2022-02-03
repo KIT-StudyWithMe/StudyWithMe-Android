@@ -1,6 +1,7 @@
 package de.pse.kit.studywithme.model.network
 
 import de.pse.kit.studywithme.model.data.Session
+import de.pse.kit.studywithme.model.data.SessionAttendee
 import io.ktor.client.*
 
 class SessionServiceImpl(private val client: HttpClient): SessionService {
@@ -20,8 +21,15 @@ class SessionServiceImpl(private val client: HttpClient): SessionService {
         TODO("Not yet implemented")
     }
 
-    override suspend fun newParticipant(sessionID: Int): Session? {
+    override suspend fun newAttendee(userID: Int, sessionID: Int): SessionAttendee? {
         TODO("Not yet implemented")
     }
 
+    override suspend fun getAttendees(sessionID: Int): List<SessionAttendee>? {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun removeAttendee(userID: Int, sessionID: Int) {
+        TODO("Not yet implemented")
+    }
 }

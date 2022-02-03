@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import de.pse.kit.studywithme.SingletonHolder
 import de.pse.kit.studywithme.model.data.Session
+import de.pse.kit.studywithme.model.data.SessionAttendee
 import de.pse.kit.studywithme.model.database.AppDatabase
 import de.pse.kit.studywithme.model.network.SessionService
 import kotlinx.coroutines.flow.Flow
@@ -17,6 +18,8 @@ class SessionRepository private constructor(context: Context) {
     private val sessionService = SessionService.instance
     private val sessionDao = AppDatabase.getInstance(context).sessionDao()
     private val auth = Authenticator
+    // TODO: Local in key value speichern beim anmelden und hier abrufen
+    private val uid: Int?  = null
 
     fun getSessions(groupID: Int): Flow<List<Session>> {
         if (auth.firebaseUID == null) {
@@ -93,22 +96,61 @@ class SessionRepository private constructor(context: Context) {
         }
     }
 
-    fun newParticipant(sessionID: Int): Boolean {
-        if (auth.firebaseUID == null) {
+    fun newAttendee(sessionID: Int): Boolean {
+        if (uid == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
         
         return runBlocking {
-            val remoteSession = sessionService.newParticipant(sessionID)
-            if (remoteSession != null) {
+            val remoteSessionAttendee = sessionService.newAttendee(uid, sessionID)
+            if (remoteSessionAttendee != null) {
                 Log.d(auth.TAG, "Remote Database Session Post:success")
-                sessionDao.saveSession(remoteSession)
+                sessionDao.saveSessionAttendee(remoteSessionAttendee)
                 return@runBlocking true
             } else {
                 return@runBlocking false
             }
         }
+    }
+
+    fun removeAttendee(sessionID: Int) {
+        if (uid == null) {
+            // TODO: Explicit exception class
+            throw Exception("Authentication Error: No local user signed in.")
+        }
+
+        runBlocking {
+            launch {
+                sessionService.removeAttendee(uid, sessionID)
+            }
+            launch {
+                sessionDao.removeSessionAttendee(SessionAttendee(sessionID, uid, true))
+            }
+        }
+    }
+
+    fun getAttendees(sessionID: Int): Flow<List<SessionAttendee>> {
+        if (auth.firebaseUID == null) {
+            // TODO: Explicit exception class
+            throw Exception("Authentication Error: No local user signed in.")
+        }
+
+        return channelFlow {
+            val truthWasSend = AtomicBoolean(false)
+
+            launch {
+                val remoteSessionAttendees = sessionService.getAttendees(sessionID)
+                send(remoteSessionAttendees)
+                truthWasSend.set(true)
+            }
+            launch {
+                val localSessionAttendees = sessionDao.getSessionAttendees(sessionID)
+                if (!truthWasSend.get()) {
+                    send(localSessionAttendees)
+                }
+            }
+        }.filterNotNull()
     }
 
     companion object : SingletonHolder<SessionRepository, Context>({ SessionRepository(it) })
