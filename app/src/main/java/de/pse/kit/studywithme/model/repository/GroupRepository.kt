@@ -3,6 +3,7 @@ package de.pse.kit.studywithme.model.repository
 import android.content.Context
 import de.pse.kit.studywithme.SingletonHolder
 import de.pse.kit.studywithme.model.data.Group
+import de.pse.kit.studywithme.model.data.Lecture
 import de.pse.kit.studywithme.model.data.User
 
 import de.pse.kit.studywithme.model.network.GroupService
@@ -78,6 +79,12 @@ class GroupRepository private constructor(context: Context) {
     fun getGroupMember(groupID: Int): List<User>? {
         return runBlocking {
             return@runBlocking groupService.getGroupMembers(groupID)
+        }
+    }
+
+    fun getLectures(prefix: String): List<Lecture> {
+        return runBlocking {
+            return@runBlocking groupService.getLectures(prefix)
         }
     }
 

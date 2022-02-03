@@ -1,6 +1,7 @@
 package de.pse.kit.studywithme.model.network
 
 import de.pse.kit.studywithme.model.data.Group
+import de.pse.kit.studywithme.model.data.Lecture
 import de.pse.kit.studywithme.model.data.User
 import io.ktor.client.*
 
@@ -46,6 +47,10 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
     }
 
     override suspend fun removeMember(groupID: Int, uid: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getLectures(prefix: String): List<Lecture> {
         TODO("Not yet implemented")
     }
 
