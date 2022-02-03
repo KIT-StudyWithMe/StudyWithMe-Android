@@ -19,6 +19,7 @@ fun JoinedGroupsView(viewModel: JoinedGroupsViewModel) {
     MyApplicationTheme3 {
         Scaffold(
             topBar = { TopBar(title = "Meine Lerngruppen", isTab = true) },
+            bottomBar = { NavigationBar(clickMiddle = { viewModel.navToSearchGroups() }, clickRight = { viewModel.navToProfile() }) },
             containerColor = MaterialTheme.colorScheme.surface
         ) {
         }
@@ -30,7 +31,5 @@ fun JoinedGroupsView(viewModel: JoinedGroupsViewModel) {
 @Preview
 @Composable
 fun JoinedGroupsViewPreview() {
-    Scaffold(bottomBar = { NavigationBar({}, {}, {}) }) {
-        JoinedGroupsView(JoinedGroupsViewModel(rememberNavController()))
-    }
+    JoinedGroupsView(JoinedGroupsViewModel(rememberNavController()))
 }

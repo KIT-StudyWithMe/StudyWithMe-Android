@@ -107,7 +107,7 @@ fun NewGroupFormPreview() {
                     }
                 })
         },
-        bottomBar = { NavigationBar({}, {}, {}) }
+        bottomBar = { NavigationBar(remember { mutableStateOf(1) }) }
     ) {
         GroupFormLayout()
     }
@@ -131,7 +131,7 @@ fun EditGroupFormPreview() {
                     }
                 })
         },
-        bottomBar = { NavigationBar({}, {}, {}) }
+        bottomBar = { NavigationBar(selectedItem = remember { mutableStateOf(1) }) }
     ) {
         GroupFormLayout(groupName = "Gruppe 6", lecture = "Lineare Algebra II", description = "Moin Moin!", groupSessionFrequency = "Einmalig", groupSessionType = "Online")
     }

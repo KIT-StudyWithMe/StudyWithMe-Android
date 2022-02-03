@@ -63,6 +63,7 @@ fun DatePicker(context: Context) {
                     .clickable(onClick = { datePickerDialog.show() })
                     .background(MaterialTheme.colorScheme.surface)
             )
+            /*
             DropdownMenu(
                 expanded = expanded,
                 onDismissRequest = { expanded = false },
@@ -72,6 +73,7 @@ fun DatePicker(context: Context) {
             ) {
                 datePickerDialog.show()
             }
+            */
         }
     }
 }

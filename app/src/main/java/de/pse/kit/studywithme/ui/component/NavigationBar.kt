@@ -9,27 +9,28 @@ import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.material3.NavigationBar as NavigationBar_
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.tooling.preview.Preview
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.font.FontWeight
 
 
 @Composable
-fun NavigationBar(clickLeft: () -> Unit, clickMiddle: () -> Unit, clickRight: () -> Unit) {
-    var selectedItem by remember { mutableStateOf(0) }
+fun NavigationBar(
+    selectedItem: MutableState<Int> = remember { mutableStateOf(0) },
+    clickLeft: () -> Unit = { selectedItem.value = 0 },
+    clickMiddle: () -> Unit = { selectedItem.value = 1 },
+    clickRight: () -> Unit = { selectedItem.value = 2 }
+) {
+    var item by selectedItem
 
     MyApplicationTheme3 {
         NavigationBar_(containerColor = MaterialTheme.colorScheme.primary) {
             NavigationBarItem(
                 icon = {
                     Icon(
-                        if (selectedItem == 0) Icons.Rounded.Home else Icons.Outlined.Home,
+                        if (item == 0) Icons.Rounded.Home else Icons.Outlined.Home,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.onPrimary
                     )
@@ -37,19 +38,18 @@ fun NavigationBar(clickLeft: () -> Unit, clickMiddle: () -> Unit, clickRight: ()
                 label = {
                     Text(
                         " Meine Gruppen",
-                        fontWeight = if (selectedItem == 0) FontWeight.Bold else FontWeight.Medium
+                        fontWeight = if (item == 0) FontWeight.Bold else FontWeight.Medium
                     )
                 },
-                selected = selectedItem == 0,
+                selected = item == 0,
                 onClick = {
-                    selectedItem = 0
                     clickLeft()
                 }
             )
             NavigationBarItem(
                 icon = {
                     Icon(
-                        if (selectedItem == 1) Icons.Rounded.Search else Icons.Outlined.Search,
+                        if (item == 1) Icons.Rounded.Search else Icons.Outlined.Search,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.onPrimary
                     )
@@ -57,19 +57,18 @@ fun NavigationBar(clickLeft: () -> Unit, clickMiddle: () -> Unit, clickRight: ()
                 label = {
                     Text(
                         "Weitere Gruppen",
-                        fontWeight = if (selectedItem == 1) FontWeight.Bold else FontWeight.Medium
+                        fontWeight = if (item == 1) FontWeight.Bold else FontWeight.Medium
                     )
                 },
-                selected = selectedItem == 1,
+                selected = item == 1,
                 onClick = {
-                    selectedItem = 1
                     clickMiddle()
                 }
             )
             NavigationBarItem(
                 icon = {
                     Icon(
-                        if (selectedItem == 2) Icons.Rounded.Person else Icons.Outlined.Person,
+                        if (item == 2) Icons.Rounded.Person else Icons.Outlined.Person,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.onPrimary
                     )
@@ -77,12 +76,12 @@ fun NavigationBar(clickLeft: () -> Unit, clickMiddle: () -> Unit, clickRight: ()
                 label = {
                     Text(
                         "Profil",
-                        fontWeight = if (selectedItem == 2) FontWeight.Bold else FontWeight.Medium
+                        fontWeight = if (item == 2) FontWeight.Bold else FontWeight.Medium
                     )
                 },
-                selected = selectedItem == 2,
+                selected = item == 2,
                 onClick = {
-                    selectedItem = 2
+                    item = 2
                     clickRight()
                 }
             )
@@ -94,5 +93,5 @@ fun NavigationBar(clickLeft: () -> Unit, clickMiddle: () -> Unit, clickRight: ()
 @Preview
 @Composable
 fun NavigationBarPreview() {
-    NavigationBar({}, {}, {})
+    NavigationBar(selectedItem = remember { mutableStateOf(0) })
 }

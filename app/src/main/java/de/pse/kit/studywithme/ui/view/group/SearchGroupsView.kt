@@ -4,6 +4,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
@@ -17,6 +19,7 @@ fun SearchGroupsView(viewModel: SearchGroupsViewModel) {
     MyApplicationTheme3 {
         Scaffold(
             topBar = { SearchBar { viewModel.search(it) } },
+            bottomBar = { NavigationBar(selectedItem = remember { mutableStateOf(1) } ) {  } },
             containerColor = MaterialTheme.colorScheme.surface
         ) {
 
@@ -28,7 +31,5 @@ fun SearchGroupsView(viewModel: SearchGroupsViewModel) {
 @Preview
 @Composable
 fun SearchGroupsViewPreview() {
-    Scaffold(bottomBar = { NavigationBar({}, {}, {}) }) {
-        SearchGroupsView(SearchGroupsViewModel(rememberNavController()))
-    }
+    SearchGroupsView(SearchGroupsViewModel(rememberNavController()))
 }

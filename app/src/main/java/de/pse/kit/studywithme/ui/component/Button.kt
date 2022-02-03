@@ -22,11 +22,11 @@ fun Button(
             Button_(
                 onClick = onClick,
                 modifier = modifier.fillMaxWidth(),
-                //contentPadding = PaddingValues(),
                 colors = buttonColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     contentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                )
+                ),
+                contentPadding = PaddingValues(0.dp)
             ) {
                 Text(text)
             }
@@ -37,7 +37,8 @@ fun Button(
                 colors = buttonColors(
                     containerColor = MaterialTheme.colorScheme.surface,
                     contentColor = MaterialTheme.colorScheme.onSurface
-                )
+                ),
+                contentPadding = PaddingValues(0.dp)
             ) {
                 Text(text)
             }

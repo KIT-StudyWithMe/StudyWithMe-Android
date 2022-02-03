@@ -83,7 +83,7 @@ fun GroupDetailsLayoutPreview() {
                     }
                 })
         },
-        bottomBar = { NavigationBar({}, {}, {}) }
+        bottomBar = { NavigationBar() }
     ) {
         GroupDetailsLayout(
             groupAdmin = "Der coole Daniel",

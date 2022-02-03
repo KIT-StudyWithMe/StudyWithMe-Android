@@ -3,9 +3,11 @@ package de.pse.kit.myapplication.ui.theme
 import androidx.compose.material3.Typography as Typography3
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import de.pse.kit.studywithme.R
 
 // Set of Material typography styles to start with
 val Typography3 = Typography3(
@@ -26,6 +28,10 @@ val Typography3 = Typography3(
         fontSize = 12.sp
     )
     */
+)
+
+val fraunces = FontFamily(
+    Font(R.font.fraunces, weight = FontWeight.Bold)
 )
 
 val Typography = Typography(

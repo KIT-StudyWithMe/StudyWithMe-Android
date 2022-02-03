@@ -26,7 +26,5 @@ fun EditSessionView(viewModel: EditSessionViewModel) {
 @Preview
 @Composable
 fun EditSessionViewPreview() {
-    Scaffold(bottomBar = { NavigationBar({}, {}, {}) }) {
-        EditSessionView(EditSessionViewModel(rememberNavController(), 0))
-    }
+    EditSessionView(EditSessionViewModel(rememberNavController(), 0))
 }

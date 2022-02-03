@@ -4,6 +4,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -11,6 +12,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
+import de.pse.kit.studywithme.model.data.User
+import de.pse.kit.studywithme.model.repository.UserRepository
 import de.pse.kit.studywithme.ui.component.NavigationBar
 import de.pse.kit.studywithme.ui.view.auth.SignInView
 import de.pse.kit.studywithme.ui.view.auth.SignUpView
@@ -32,24 +35,20 @@ import de.pse.kit.studywithme.viewModel.session.NewSessionViewModel
 @Composable
 fun MainView() {
     val navController = rememberNavController()
+    val startRoute = if (UserRepository.getInstance(LocalContext.current).isSignedIn()) NavGraph.JoinedGroupsTab.route
+                    else NavGraph.SignInForm.route
 
-    Scaffold(bottomBar = {
-        NavigationBar(
-            clickLeft = { NavGraph.navigateToTab(navController, NavGraph.JoinedGroupsTab.route) },
-            clickMiddle = { NavGraph.navigateToTab(navController, NavGraph.SearchGroupsTab.route) },
-            clickRight = { NavGraph.navigateToTab(navController, NavGraph.ProfileTab.route) }
-        )
-    }) {
-        NavHost(
-            navController = navController,
-            startDestination = NavGraph.JoinedGroupsTab.route
-        ) {
-            joinedGroupsGraph(navController)
+    NavHost(
+        navController = navController,
+        startDestination = startRoute
+    ) {
+        joinedGroupsGraph(navController)
 
-            searchGroupsGraph(navController)
+        searchGroupsGraph(navController)
 
-            profileGraph(navController)
-        }
+        profileGraph(navController)
+
+        signInGraph(navController)
     }
 }
 
@@ -57,10 +56,10 @@ fun MainView() {
 fun NavGraphBuilder.signInGraph(navController: NavController) {
     navigation(startDestination = NavGraph.SignIn.route, route = NavGraph.SignInForm.route) {
         composable(NavGraph.SignIn.route) {
-            SignInView(SignInViewModel(navController))
+            SignInView(SignInViewModel(navController, UserRepository.getInstance(LocalContext.current)))
         }
         composable(NavGraph.SignUp.route) {
-            SignUpView(SignUpViewModel(navController))
+            SignUpView(SignUpViewModel(navController, UserRepository.getInstance(LocalContext.current)))
         }
     }
 }

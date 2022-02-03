@@ -26,7 +26,5 @@ fun EditGroupView(viewModel: EditGroupViewModel) {
 @Preview
 @Composable
 fun EditGroupViewPreview() {
-    Scaffold(bottomBar = { NavigationBar({}, {}, {}) }) {
-        EditGroupView(EditGroupViewModel(rememberNavController(), groupID = 0))
-    }
+    EditGroupView(EditGroupViewModel(rememberNavController(), groupID = 0))
 }

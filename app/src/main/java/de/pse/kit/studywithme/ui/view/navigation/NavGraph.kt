@@ -14,7 +14,6 @@ const val editSessionName = "editSession"
 const val id = "id"
 
 sealed class NavGraph(val route: String, val arguments: List<NamedNavArgument>? = null) {
-    object Loading : NavGraph("loading")
     object SignUp : NavGraph(signUpName)
     object SignInForm : NavGraph("signInForm")
     object SignIn : NavGraph(signInName)
@@ -98,12 +97,34 @@ sealed class NavGraph(val route: String, val arguments: List<NamedNavArgument>? 
         }
 
         fun navigateToJoinedGroups(navController: NavController) {
-            navController.navigate("joinedGroups") {
-
-            }
+            navigateToTab(navController, JoinedGroupsTab.route)
         }
 
-        fun navigateToTab(navController: NavController, route: String) {
+        fun navigateToSearchGroups(navController: NavController) {
+            navigateToTab(navController, SearchGroupsTab.route)
+        }
+
+        fun navigateToProfile(navController: NavController) {
+            navigateToTab(navController, ProfileTab.route)
+        }
+
+        fun navigateToSignIn(navController: NavController) {
+            navigateToTab(navController, SignInForm.route)
+        }
+
+        fun navigateToSignUp(navController: NavController) {
+            navController.navigate(SignUp.route)
+        }
+
+        fun navigateToEditProfile(navController: NavController) {
+            navController.navigate(EditProfile.route)
+        }
+
+        fun navigateToNewGroup(navController: NavController) {
+            navController.navigate(NewGroup.route)
+        }
+
+        private fun navigateToTab(navController: NavController, route: String) {
             navController.navigate(route) {
                 popUpTo(navController.graph.findStartDestination().id) {
                     saveState = true

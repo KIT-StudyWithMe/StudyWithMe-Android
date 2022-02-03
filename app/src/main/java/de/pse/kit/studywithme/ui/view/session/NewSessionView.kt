@@ -26,7 +26,5 @@ fun NewSessionView(viewModel: NewSessionViewModel) {
 @Preview
 @Composable
 fun NewSessionViewPreview() {
-    Scaffold(bottomBar = { NavigationBar({}, {}, {}) }) {
-        NewSessionView(NewSessionViewModel(rememberNavController(), 0))
-    }
+    NewSessionView(NewSessionViewModel(rememberNavController(), 0))
 }

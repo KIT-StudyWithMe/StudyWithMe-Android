@@ -4,6 +4,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
@@ -26,7 +28,5 @@ fun NonJoinedGroupDetailsView(viewModel: NonJoinedGroupDetailsViewModel) {
 @Preview
 @Composable
 fun NonJoinedGroupDetailsViewPreview() {
-    Scaffold(bottomBar = { NavigationBar({}, {}, {}) }) {
-        NonJoinedGroupDetailsView(NonJoinedGroupDetailsViewModel(rememberNavController(), 0))
-    }
+    NonJoinedGroupDetailsView(NonJoinedGroupDetailsViewModel(rememberNavController(), 0))
 }

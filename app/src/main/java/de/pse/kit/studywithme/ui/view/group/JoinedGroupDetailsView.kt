@@ -28,12 +28,10 @@ fun JoinedGroupDetailsView(viewModel: JoinedGroupDetailsViewModel) {
 @Preview
 @Composable
 fun JoinedGroupDetailsPreview() {
-    Scaffold(bottomBar = { NavigationBar({}, {}, {}) }) {
-        JoinedGroupDetailsView(
-            JoinedGroupDetailsViewModel(
-                navController = rememberNavController(),
-                groupID = 0
-            )
+    JoinedGroupDetailsView(
+        JoinedGroupDetailsViewModel(
+            navController = rememberNavController(),
+            groupID = 0
         )
-    }
+    )
 }
