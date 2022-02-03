@@ -54,33 +54,6 @@ fun DatePicker(
         }, year, month, day
     )
 
-    /**
-    MyApplicationTheme3() {
-    var expanded by remember { mutableStateOf(false) }
-    Box(
-    modifier = Modifier
-    .fillMaxSize()
-    .wrapContentSize(Alignment.TopStart)
-    ) {
-    Text(
-    date.value, modifier = Modifier
-    .fillMaxWidth()
-    .clickable(onClick = { datePickerDialog.show() })
-    .background(MaterialTheme.colorScheme.surface)
-    )
-    DropdownMenu(
-    expanded = expanded,
-    onDismissRequest = { expanded = false },
-    modifier = Modifier
-    .fillMaxWidth()
-    .background(MaterialTheme.colorScheme.surface)
-    ) {
-    datePickerDialog.show()
-    }
-    }
-    }
-     */
-
     MyApplicationTheme {
         var expanded by remember { mutableStateOf(false) }
         OutlinedTextField(
@@ -109,15 +82,6 @@ fun DatePicker(
                         .clickable(onClick = { datePickerDialog.show() })
                         .background(MaterialTheme.colorScheme.surface)
                 )
-                DropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.surface)
-                ) {
-                    datePickerDialog.show()
-                }
             },
             singleLine = singleLine
         )
