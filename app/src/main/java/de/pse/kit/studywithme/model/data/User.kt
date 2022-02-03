@@ -32,5 +32,5 @@ data class User(
 
     @SerialName("firebaseUID")
     @ColumnInfo(name = "firebase_UID")
-    val firebaseUID: Int
+    val firebaseUID: String
 )

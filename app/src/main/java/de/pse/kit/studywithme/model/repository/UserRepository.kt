@@ -120,9 +120,13 @@ class UserRepository private constructor(context: Context) {
         auth.signOut()
     }
 
+    @ExperimentalCoroutinesApi
     fun deleteAccount(email: String, password: String): Boolean {
-        //TODO: Delete all data and leave all groups
+        // TODO: Delete all local data
         return runBlocking {
+            getSignedInUser().collect() {
+                userService.removeUser(it.userID)
+            }
             return@runBlocking auth.deleteFirebaseUser(email, password)
         }
     }
