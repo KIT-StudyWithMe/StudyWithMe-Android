@@ -36,10 +36,10 @@ class UserDaoTest {
 
     @Test
     @Throws(Exception::class)
-    fun saveAndGetUsersByName() {
-        val user0 = User(0, "Olaf", 0, 0, "0152987654321")
-        val user1 = User(1, "Roland", 1, 1, "07662789615")
-        val user2 = User(2, "Johnny", 2, 2, "018054646")
+    fun saveAndGetUsersByUID() {
+        val user0 = User(0, "Olaf", 0, 0, "0152987654321", "0")
+        val user1 = User(1, "Roland", 1, 1, "07662789615", "1")
+        val user2 = User(2, "Johnny", 2, 2, "018054646", "2")
         userDao.saveUser(user0)
         userDao.saveUser(user1)
         userDao.saveUser(user2)
@@ -56,8 +56,8 @@ class UserDaoTest {
     @Test
     @Throws(Exception::class)
     fun saveAndRemoveUser() {
-        val user0 = User(0, "Olaf", 0, 0, "0152987654321")
-        val user1 = User(1, "Roland", 1, 1, "07662789615")
+        val user0 = User(0, "Olaf", 0, 0, "0152987654321", "0")
+        val user1 = User(1, "Roland", 1, 1, "07662789615", "1")
         userDao.saveUser(user0)
         userDao.saveUser(user1)
         userDao.removeUser(user0)
@@ -70,8 +70,8 @@ class UserDaoTest {
     @Test
     @Throws(Exception::class)
     fun saveAndEditUser() {
-        val user0 = User(0, "Olaf", 0, 0, "0152987654321")
-        val user0Edited = User(0, "Roland", 1, 1, "07662789615")
+        val user0 = User(0, "Olaf", 0, 0, "0152987654321", "0")
+        val user0Edited = User(0, "Roland", 1, 1, "07662789615", "1")
         userDao.saveUser(user0)
         userDao.editUser(user0Edited)
         val user0ByUID = userDao.getUser(user0.userID)
