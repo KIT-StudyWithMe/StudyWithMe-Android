@@ -36,6 +36,7 @@ captures/
 # IntelliJ
 *.iml
 .idea/misc.xml
+.idea/deploymentTargetDropDown.xml
 .idea/workspace.xml
 .idea/tasks.xml
 .idea/gradle.xml
@@ -75,3 +76,4 @@ fastlane/readme.md
 
 
 .cxx
+app/schemas/de.pse.kit.studywithme.model.database.AppDatabase/1.json

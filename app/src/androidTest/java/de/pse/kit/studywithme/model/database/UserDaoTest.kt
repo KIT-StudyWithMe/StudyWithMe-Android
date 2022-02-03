@@ -47,9 +47,9 @@ class UserDaoTest {
         val user1ByUID = userDao.getUser(user1.userID)
         val user2ByUID = userDao.getUser(user2.userID)
         assertAll(
-            { assertEquals(user0ByUID,user0) },
-            { assertEquals(user1ByUID,user1) },
-            { assertEquals(user2ByUID,user2) },
+            {assertEquals(user0ByUID, user0)},
+            {assertEquals(user1ByUID, user1)},
+            {assertEquals(user2ByUID, user2)}
         )
     }
 
