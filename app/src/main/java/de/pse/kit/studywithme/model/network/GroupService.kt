@@ -1,6 +1,7 @@
 package de.pse.kit.studywithme.model.network
 
 import de.pse.kit.studywithme.model.data.Group
+import de.pse.kit.studywithme.model.data.Lecture
 import de.pse.kit.studywithme.model.data.User
 import io.ktor.client.*
 import io.ktor.client.engine.android.*
@@ -19,6 +20,7 @@ interface GroupService {
     suspend fun newMember(groupID: Int, uid: Int)
     suspend fun joinRequest(groupID: Int)
     suspend fun removeMember(groupID: Int, uid: Int)
+    suspend fun getLectures(prefix: String): List<Lecture>
 
     companion object {
         val instance: GroupService by lazy {
