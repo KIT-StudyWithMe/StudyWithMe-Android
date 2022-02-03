@@ -110,18 +110,33 @@ class UserRepository private constructor(context: Context) {
     }
 
     fun resetPassword(email: String): Boolean {
+        if (auth.firebaseUID == null) {
+            // TODO: Explicit exception class
+            throw Exception("Authentication Error: No local user signed in.")
+        }
+
         return runBlocking {
             return@runBlocking auth.resetPassword(email)
         }
     }
 
     fun signOut() {
+        if (auth.firebaseUID == null) {
+            // TODO: Explicit exception class
+            throw Exception("Authentication Error: No local user signed in.")
+        }
+
         //TODO: Maye delete all local data
         auth.signOut()
     }
 
     @ExperimentalCoroutinesApi
     fun deleteAccount(email: String, password: String): Boolean {
+        if (auth.firebaseUID == null) {
+            // TODO: Explicit exception class
+            throw Exception("Authentication Error: No local user signed in.")
+        }
+
         // TODO: Delete all local data
         return runBlocking {
             getSignedInUser().collect() {
@@ -132,12 +147,22 @@ class UserRepository private constructor(context: Context) {
     }
 
     fun getMajors(prefix: String): List<String> {
+        if (auth.firebaseUID == null) {
+            // TODO: Explicit exception class
+            throw Exception("Authentication Error: No local user signed in.")
+        }
+
         return runBlocking {
             return@runBlocking userService.getMajors(prefix)
         }
     }
 
     fun getColleges(prefix: String): List<String> {
+        if (auth.firebaseUID == null) {
+            // TODO: Explicit exception class
+            throw Exception("Authentication Error: No local user signed in.")
+        }
+
         return runBlocking {
             return@runBlocking userService.getColleges(prefix)
         }

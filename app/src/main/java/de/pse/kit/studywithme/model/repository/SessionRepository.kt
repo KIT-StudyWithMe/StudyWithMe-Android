@@ -77,14 +77,19 @@ class SessionRepository private constructor(context: Context) {
         }
     }
 
-    fun removeSession(sessionID: Int) {
+    fun removeSession(session: Session) {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
 
-        return runBlocking {
-            return@runBlocking sessionService.removeSession(sessionID)
+        runBlocking {
+            launch {
+                sessionDao.removeSession(session)
+            }
+            launch {
+                sessionService.removeSession(session.sessionID)
+            }
         }
     }
 
