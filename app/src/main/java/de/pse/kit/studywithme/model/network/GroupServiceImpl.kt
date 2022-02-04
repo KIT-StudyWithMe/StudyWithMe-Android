@@ -26,7 +26,7 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
         TODO("Not yet implemented")
     }
 
-    override suspend fun newGroup(group: Group) {
+    override suspend fun newGroup(group: Group): Group? {
         TODO("Not yet implemented")
     }
 
@@ -38,7 +38,7 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
         TODO("Not yet implemented")
     }
 
-    override suspend fun newMember(groupID: Int, uid: Int) {
+    override suspend fun newMember(groupID: Int, uid: Int): Group? {
         TODO("Not yet implemented")
     }
 
