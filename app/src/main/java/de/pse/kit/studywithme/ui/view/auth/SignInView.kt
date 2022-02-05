@@ -1,5 +1,7 @@
 package de.pse.kit.studywithme.ui.view.auth
 
+import android.app.Application
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -16,12 +18,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.navigation.compose.rememberNavController
+import de.pse.kit.myapplication.ui.theme.MyApplicationTheme
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
 import de.pse.kit.myapplication.ui.theme.fraunces
 import de.pse.kit.studywithme.model.repository.UserRepository
 import de.pse.kit.studywithme.ui.component.Button
 import de.pse.kit.studywithme.ui.component.TextField
+import de.pse.kit.studywithme.ui.component.TextFieldType
 import de.pse.kit.studywithme.viewModel.auth.SignInViewModel
+import io.ktor.http.*
 
 @ExperimentalMaterial3Api
 @Composable
@@ -33,7 +38,7 @@ fun SignInView(viewModel: SignInViewModel) {
             Column(modifier = Modifier.padding(24.dp)) {
                 Text(
                     text = "StudyWithMe",
-                    modifier = Modifier.padding(bottom = 112.dp, top = 150.dp)
+                    modifier = Modifier.padding(bottom = 82.dp, top = 150.dp)
                         .align(Alignment.CenterHorizontally),
                     fontFamily = fraunces,
                     fontSize = 12.em,
@@ -48,7 +53,8 @@ fun SignInView(viewModel: SignInViewModel) {
                     onChange = {
                         viewModel.errorMessage.value = ""
                         viewModel.email.value = it
-                    }
+                    },
+                    type = TextFieldType.EMAIL
                 )
                 TextField(
                     label = "Passwort",
@@ -56,7 +62,8 @@ fun SignInView(viewModel: SignInViewModel) {
                     onChange = {
                         viewModel.errorMessage.value = ""
                         viewModel.password.value = it
-                    }
+                    },
+                    type = TextFieldType.PASSWORD
                 )
 
                 Row(
@@ -71,6 +78,16 @@ fun SignInView(viewModel: SignInViewModel) {
                         modifier = Modifier.weight(1.0f),
                         onClick = { viewModel.signIn() },
                         text = "Anmelden"
+                    )
+                }
+                MyApplicationTheme3 {
+                    Text(
+                        text = "Registrieren",
+                        modifier = Modifier.align(Alignment.End).padding(end = 12.dp).clickable {
+                            viewModel.navToSignUp()
+                        },
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.tertiary
                     )
                 }
             }

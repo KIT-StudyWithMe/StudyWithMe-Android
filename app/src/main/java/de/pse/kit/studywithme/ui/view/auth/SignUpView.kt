@@ -1,5 +1,6 @@
 package de.pse.kit.studywithme.ui.view.auth
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -21,6 +22,7 @@ import de.pse.kit.myapplication.ui.theme.fraunces
 import de.pse.kit.studywithme.model.repository.UserRepository
 import de.pse.kit.studywithme.ui.component.Button
 import de.pse.kit.studywithme.ui.component.TextField
+import de.pse.kit.studywithme.ui.component.TextFieldType
 import de.pse.kit.studywithme.viewModel.auth.SignUpViewModel
 
 @ExperimentalMaterial3Api
@@ -33,7 +35,7 @@ fun SignUpView(viewModel: SignUpViewModel) {
             Column(modifier = Modifier.padding(24.dp)) {
                 Text(
                     text = "StudyWithMe",
-                    modifier = Modifier.padding(bottom = 112.dp, top = 150.dp)
+                    modifier = Modifier.padding(bottom = 82.dp, top = 150.dp)
                         .align(Alignment.CenterHorizontally),
                     fontFamily = fraunces,
                     fontSize = 12.em,
@@ -48,7 +50,8 @@ fun SignUpView(viewModel: SignUpViewModel) {
                     onChange = {
                         viewModel.errorMessage.value = ""
                         viewModel.email.value = it
-                    }
+                    },
+                    type = TextFieldType.EMAIL
                 )
                 TextField(
                     label = "Universität/ Hochschule",
@@ -72,7 +75,8 @@ fun SignUpView(viewModel: SignUpViewModel) {
                     onChange = {
                         viewModel.errorMessage.value = ""
                         viewModel.password.value = it
-                    }
+                    },
+                    type = TextFieldType.PASSWORD
                 )
 
                 Row(
@@ -83,6 +87,16 @@ fun SignUpView(viewModel: SignUpViewModel) {
                         modifier = Modifier.weight(1.0f),
                         onClick = { viewModel.signUp() },
                         text = "Registrieren"
+                    )
+                }
+                MyApplicationTheme3 {
+                    Text(
+                        text = "Anmelden",
+                        modifier = Modifier.align(Alignment.End).padding(end = 12.dp).clickable {
+                            viewModel.navToSignIn()
+                        },
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.tertiary
                     )
                 }
             }
