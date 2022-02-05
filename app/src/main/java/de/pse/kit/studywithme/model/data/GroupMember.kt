@@ -5,6 +5,7 @@ import androidx.room.Entity
 
 @Entity(primaryKeys = ["group_ID", "user_ID"])
 data class GroupMember(
+
     @ColumnInfo(name = "group_ID")
     val groupID: Int,
 

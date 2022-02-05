@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import de.pse.kit.studywithme.SingletonHolder
 import de.pse.kit.studywithme.model.data.Group
+import de.pse.kit.studywithme.model.data.GroupMember
 import de.pse.kit.studywithme.model.data.Lecture
 import de.pse.kit.studywithme.model.data.User
 import de.pse.kit.studywithme.model.database.AppDatabase
@@ -19,7 +20,6 @@ import java.util.concurrent.atomic.AtomicBoolean
 class GroupRepository private constructor(context: Context) {
     private val groupService = GroupService.instance
     private val groupDao = AppDatabase.getInstance(context).groupDao()
-    private val userDao = AppDatabase.getInstance(context).userDao()
     private val auth = Authenticator
 
     fun getGroups(search: String): List<Group> {
@@ -153,7 +153,7 @@ class GroupRepository private constructor(context: Context) {
             val remoteGroup = groupService.newMember(groupID, uid)
             if (remoteGroup != null) {
                 Log.d(auth.TAG, "Remote Database Session Post:success")
-                groupDao.newMember(groupID, uid)
+                groupDao.newMember(GroupMember(groupID, uid, false, true))
                 return@runBlocking true
             } else {
                 return@runBlocking false

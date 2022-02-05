@@ -30,21 +30,20 @@ interface GroupDao {
     @Delete
     fun removeGroup(group: Group)
 
-    @Query("")
-    fun newMember(groupID: Int, uid: Int)
-    //TODO(query)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun newMember(groupMember: GroupMember)
 
-    @Query("DELETE FROM GroupMember WHERE group_ID == :groupID AND user_ID == :uid")
+    @Query("DELETE FROM groupmember WHERE group_ID == :groupID AND user_ID == :uid")
     fun removeMember(groupID: Int, uid: Int)
 
     @Query("SELECT * FROM user WHERE user_ID in (" +
-            "SELECT u.user_ID FROM user u, GroupMember gm, `group` g " +
+            "SELECT u.user_ID FROM user u, groupmember gm, `group` g " +
             "WHERE u.user_ID == gm.user_ID AND gm.group_ID == :groupID AND g.group_ID == :groupID)")
     fun getGroupMembers(groupID: Int):  List <User>
 
 
     @Query("SELECT * FROM lecture WHERE lecture_ID in (" +
-            "SELECT lecture_ID FROM lecture l, `group` g WHERE l.lecture_ID == g.lecture_ID )" +
+            "SELECT l.lecture_ID FROM lecture l, `group` g WHERE l.lecture_ID == g.lecture_ID )" +
             "AND lecture_name LIKE (:prefix + '%')")
     fun getLectures(prefix: String): List<Lecture>
 
