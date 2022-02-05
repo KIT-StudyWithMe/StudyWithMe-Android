@@ -13,6 +13,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import de.pse.kit.studywithme.model.data.User
+import de.pse.kit.studywithme.model.repository.GroupRepository
 import de.pse.kit.studywithme.model.repository.UserRepository
 import de.pse.kit.studywithme.ui.component.NavigationBar
 import de.pse.kit.studywithme.ui.view.auth.SignInView
@@ -35,8 +36,10 @@ import de.pse.kit.studywithme.viewModel.session.NewSessionViewModel
 @Composable
 fun MainView() {
     val navController = rememberNavController()
-    val startRoute = if (UserRepository.getInstance(LocalContext.current).isSignedIn()) NavGraph.JoinedGroupsTab.route
-                    else NavGraph.SignInForm.route
+    val startRoute = if (UserRepository.getInstance(LocalContext.current)
+            .isSignedIn()
+    ) NavGraph.JoinedGroupsTab.route
+    else NavGraph.SignInForm.route
 
     NavHost(
         navController = navController,
@@ -56,10 +59,20 @@ fun MainView() {
 fun NavGraphBuilder.signInGraph(navController: NavController) {
     navigation(startDestination = NavGraph.SignIn.route, route = NavGraph.SignInForm.route) {
         composable(NavGraph.SignIn.route) {
-            SignInView(SignInViewModel(navController, UserRepository.getInstance(LocalContext.current)))
+            SignInView(
+                SignInViewModel(
+                    navController,
+                    UserRepository.getInstance(LocalContext.current)
+                )
+            )
         }
         composable(NavGraph.SignUp.route) {
-            SignUpView(SignUpViewModel(navController, UserRepository.getInstance(LocalContext.current)))
+            SignUpView(
+                SignUpViewModel(
+                    navController,
+                    UserRepository.getInstance(LocalContext.current)
+                )
+            )
         }
     }
 }
@@ -114,7 +127,8 @@ fun NavGraphBuilder.joinedGroupsGraph(navController: NavController) {
             EditSessionView(
                 EditSessionViewModel(
                     navController,
-                    it.arguments!!.getInt(NavGraph.EditSession.argName)
+                    it.arguments!!.getInt(NavGraph.EditSession.argName),
+                    GroupRepository.getInstance(LocalContext.current)
                 )
             )
         }
