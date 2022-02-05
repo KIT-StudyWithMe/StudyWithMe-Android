@@ -29,14 +29,18 @@ import de.pse.kit.studywithme.viewModel.profile.EditProfileViewModel
 import de.pse.kit.studywithme.viewModel.profile.ProfileViewModel
 import de.pse.kit.studywithme.viewModel.session.EditSessionViewModel
 import de.pse.kit.studywithme.viewModel.session.NewSessionViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalMaterialApi
 @ExperimentalMaterial3Api
+@ExperimentalCoroutinesApi
 @Composable
 fun MainView() {
     val navController = rememberNavController()
-    val startRoute = if (UserRepository.getInstance(LocalContext.current).isSignedIn()) NavGraph.JoinedGroupsTab.route
-                    else NavGraph.SignInForm.route
+    val startRoute = if (UserRepository.getInstance(LocalContext.current)
+            .isSignedIn()
+    ) NavGraph.JoinedGroupsTab.route
+    else NavGraph.SignInForm.route
 
     NavHost(
         navController = navController,
@@ -56,10 +60,20 @@ fun MainView() {
 fun NavGraphBuilder.signInGraph(navController: NavController) {
     navigation(startDestination = NavGraph.SignIn.route, route = NavGraph.SignInForm.route) {
         composable(NavGraph.SignIn.route) {
-            SignInView(SignInViewModel(navController, UserRepository.getInstance(LocalContext.current)))
+            SignInView(
+                SignInViewModel(
+                    navController,
+                    UserRepository.getInstance(LocalContext.current)
+                )
+            )
         }
         composable(NavGraph.SignUp.route) {
-            SignUpView(SignUpViewModel(navController, UserRepository.getInstance(LocalContext.current)))
+            SignUpView(
+                SignUpViewModel(
+                    navController,
+                    UserRepository.getInstance(LocalContext.current)
+                )
+            )
         }
     }
 }
@@ -158,6 +172,8 @@ fun NavGraphBuilder.searchGroupsGraph(navController: NavController) {
     }
 }
 
+@ExperimentalCoroutinesApi
+@ExperimentalMaterialApi
 @ExperimentalMaterial3Api
 fun NavGraphBuilder.profileGraph(navController: NavController) {
     navigation(
@@ -165,10 +181,20 @@ fun NavGraphBuilder.profileGraph(navController: NavController) {
         route = NavGraph.ProfileTab.route
     ) {
         composable(route = NavGraph.Profile.route) {
-            ProfileView(ProfileViewModel(navController))
+            ProfileView(
+                ProfileViewModel(
+                    navController,
+                    UserRepository.getInstance(LocalContext.current)
+                )
+            )
         }
         composable(route = NavGraph.EditProfile.route) {
-            EditProfileView(EditProfileViewModel(navController))
+            EditProfileView(
+                EditProfileViewModel(
+                    navController,
+                    UserRepository.getInstance(LocalContext.current)
+                )
+            )
         }
     }
 }
