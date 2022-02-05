@@ -13,9 +13,11 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import de.pse.kit.myapplication.ui.theme.Grey200
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
 import de.pse.kit.studywithme.ui.view.navigation.MainView
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalMaterialApi
 @ExperimentalMaterial3Api
+@ExperimentalCoroutinesApi
 class MainActivity: ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

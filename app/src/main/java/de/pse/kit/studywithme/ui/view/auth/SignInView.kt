@@ -12,21 +12,18 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.navigation.compose.rememberNavController
-import de.pse.kit.myapplication.ui.theme.MyApplicationTheme
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
 import de.pse.kit.myapplication.ui.theme.fraunces
-import de.pse.kit.studywithme.model.repository.UserRepository
+import de.pse.kit.studywithme.model.repository.FakeUserRepository
 import de.pse.kit.studywithme.ui.component.Button
 import de.pse.kit.studywithme.ui.component.TextField
 import de.pse.kit.studywithme.ui.component.TextFieldType
 import de.pse.kit.studywithme.viewModel.auth.SignInViewModel
-import io.ktor.http.*
 
 @ExperimentalMaterial3Api
 @Composable
@@ -45,7 +42,11 @@ fun SignInView(viewModel: SignInViewModel) {
                     fontWeight = FontWeight.Bold
                 )
                 if (viewModel.errorMessage.collectAsState().value != "") {
-                    Text(viewModel.errorMessage.collectAsState().value, modifier = Modifier.padding(bottom = 4.dp), color = Color.Red)
+                    Text(
+                        viewModel.errorMessage.collectAsState().value,
+                        modifier = Modifier.padding(bottom = 4.dp),
+                        color = Color.Red
+                    )
                 }
                 TextField(
                     label = "Email-Adresse",
@@ -73,7 +74,8 @@ fun SignInView(viewModel: SignInViewModel) {
                     Button(
                         modifier = Modifier.weight(1.0f),
                         onClick = { viewModel.forgotPassword() },
-                        text = "Passwort vergessen", primary = false)
+                        text = "Passwort vergessen", primary = false
+                    )
                     Button(
                         modifier = Modifier.weight(1.0f),
                         onClick = { viewModel.signIn() },
@@ -99,5 +101,5 @@ fun SignInView(viewModel: SignInViewModel) {
 @Preview
 @Composable
 fun SignInViewPreview() {
-    SignInView(SignInViewModel(rememberNavController(), UserRepository.getInstance(LocalContext.current)))
+    SignInView(SignInViewModel(rememberNavController(), FakeUserRepository(signedIn = false)))
 }

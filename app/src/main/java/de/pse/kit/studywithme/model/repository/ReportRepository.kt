@@ -5,9 +5,14 @@ import de.pse.kit.studywithme.SingletonHolder
 import de.pse.kit.studywithme.model.data.Report
 import de.pse.kit.studywithme.model.data.User
 import de.pse.kit.studywithme.model.network.ReportService
+import de.pse.kit.studywithme.model.network.ReportServiceImpl
+import io.ktor.client.*
+import io.ktor.client.engine.android.*
+import io.ktor.client.features.json.*
+import io.ktor.client.features.json.serializer.*
 import kotlinx.coroutines.runBlocking
 
-class ReportRepository private constructor(context: Context) {
+class ReportRepository private constructor() {
     private val reportService = ReportService.instance
 
     fun getReports(): List<Report> {
@@ -18,11 +23,15 @@ class ReportRepository private constructor(context: Context) {
 
     fun deleteUserReport(reportingUserID: Int, reportedUserID: Int, boxID: Int) {
         return runBlocking {
-            return@runBlocking reportService.deleteUserReport(reportedUserID, reportingUserID, boxID)
+            return@runBlocking reportService.deleteUserReport(
+                reportedUserID,
+                reportingUserID,
+                boxID
+            )
         }
     }
 
-    fun deleteGroupReport(reportingUserID: Int, groupID: Int, boxID: Int){
+    fun deleteGroupReport(reportingUserID: Int, groupID: Int, boxID: Int) {
         return runBlocking {
             return@runBlocking reportService.deleteGroupReport(reportingUserID, groupID, boxID)
         }
@@ -70,5 +79,7 @@ class ReportRepository private constructor(context: Context) {
         }
     }
 
-    companion object: SingletonHolder<ReportRepository, Context>({ ReportRepository(it) })
+    companion object {
+        val instance: ReportRepository by lazy { ReportRepository() }
+    }
 }

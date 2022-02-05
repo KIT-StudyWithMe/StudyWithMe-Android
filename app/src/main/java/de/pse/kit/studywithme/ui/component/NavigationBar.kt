@@ -2,12 +2,8 @@ package de.pse.kit.studywithme.ui.component
 
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Home
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material.icons.rounded.Person
-import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.material3.NavigationBar as NavigationBar_
@@ -30,7 +26,7 @@ fun NavigationBar(
             NavigationBarItem(
                 icon = {
                     Icon(
-                        if (item == 0) Icons.Rounded.Home else Icons.Outlined.Home,
+                        if (item == 0) Icons.Rounded.Group else Icons.Outlined.Group,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.onPrimary
                     )
@@ -49,7 +45,7 @@ fun NavigationBar(
             NavigationBarItem(
                 icon = {
                     Icon(
-                        if (item == 1) Icons.Rounded.Search else Icons.Outlined.Search,
+                        if (item == 1) Icons.Rounded.Groups else Icons.Outlined.Groups,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.onPrimary
                     )

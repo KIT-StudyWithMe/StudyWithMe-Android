@@ -12,13 +12,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.concurrent.atomic.AtomicBoolean
 
-class UserRepository private constructor(context: Context) {
+class UserRepository private constructor(context: Context) : UserRepositoryInterface {
     private val userService = UserService.instance
     private val userDao = AppDatabase.getInstance(context).userDao()
     private val auth = Authenticator
     private var userCache: User? = null
 
-    fun isSignedIn(): Boolean {
+    override fun isSignedIn(): Boolean {
         if (auth.firebaseUID == null) {
             return false
         }
@@ -26,10 +26,24 @@ class UserRepository private constructor(context: Context) {
     }
 
     @ExperimentalCoroutinesApi
-    fun getSignedInUser(): Flow<User> {
+    override fun getSignedInUser(): Flow<User> {
+
         if (auth.firebaseUID == null) {
-            // TODO: Explicit exception class
-            throw Exception("Authentication Error: No local user signed in.")
+            return flow {
+                emit(
+                    User(
+                        userID = 0,
+                        name = "max.mustermann2",
+                        contact = "max.mustermann2@gmail.com",
+                        firebaseUID = "0"
+                    )
+                )
+            }
+            /*
+           // TODO: Explicit exception class
+           throw Exception("Authentication Error: No local user signed in.")
+
+             */
         }
 
         return channelFlow {
@@ -50,7 +64,7 @@ class UserRepository private constructor(context: Context) {
         }.filterNotNull()
     }
 
-    fun editSignedInUser(user: User): Boolean {
+    override fun editSignedInUser(user: User): Boolean {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
@@ -70,7 +84,7 @@ class UserRepository private constructor(context: Context) {
         }
     }
 
-    fun signIn(email: String, password: String): Boolean {
+    override fun signIn(email: String, password: String): Boolean {
         return runBlocking {
             if (auth.signIn(email, password)) {
                 val remoteUser = userService.getUser(auth.firebaseUID!!)
@@ -89,27 +103,27 @@ class UserRepository private constructor(context: Context) {
         }
     }
 
-    fun signUp(email: String, password: String, user: User): Boolean {
+    override fun signUp(email: String, password: String, user: User): Boolean {
         return runBlocking {
             if (auth.signUp(email, password)) {
                 val remoteUser = userService.newUser(user)
-                    if (remoteUser != null) {
-                        Log.d(auth.TAG, "Remote Database User Post:success")
-                        userDao.saveUser(remoteUser)
-                        userCache = remoteUser
+                if (remoteUser != null) {
+                    Log.d(auth.TAG, "Remote Database User Post:success")
+                    userDao.saveUser(remoteUser)
+                    userCache = remoteUser
 
-                        return@runBlocking true
-                    } else {
-                        auth.deleteFirebaseUser(email, password)
-                        return@runBlocking false
-                    }
+                    return@runBlocking true
+                } else {
+                    auth.deleteFirebaseUser(email, password)
+                    return@runBlocking false
+                }
             } else {
                 return@runBlocking false
             }
         }
     }
 
-    fun resetPassword(email: String): Boolean {
+    override fun resetPassword(email: String): Boolean {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
@@ -120,7 +134,7 @@ class UserRepository private constructor(context: Context) {
         }
     }
 
-    fun signOut() {
+    override fun signOut() {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
@@ -131,7 +145,7 @@ class UserRepository private constructor(context: Context) {
     }
 
     @ExperimentalCoroutinesApi
-    fun deleteAccount(email: String, password: String): Boolean {
+    override fun deleteAccount(email: String, password: String): Boolean {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
@@ -146,7 +160,7 @@ class UserRepository private constructor(context: Context) {
         }
     }
 
-    fun getMajors(prefix: String): List<String> {
+    override fun getMajors(prefix: String): List<String> {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
@@ -157,7 +171,7 @@ class UserRepository private constructor(context: Context) {
         }
     }
 
-    fun getColleges(prefix: String): List<String> {
+    override fun getColleges(prefix: String): List<String> {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
@@ -168,5 +182,5 @@ class UserRepository private constructor(context: Context) {
         }
     }
 
-    companion object: SingletonHolder<UserRepository, Context>({ UserRepository(it) })
+    companion object : SingletonHolder<UserRepository, Context>({ UserRepository(it) })
 }

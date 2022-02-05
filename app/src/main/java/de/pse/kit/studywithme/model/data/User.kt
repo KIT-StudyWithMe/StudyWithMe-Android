@@ -22,9 +22,17 @@ data class User(
     @ColumnInfo(name = "college_ID")
     val collegeID: Int? = null,
 
+    @SerialName("college")
+    @ColumnInfo(name = "college")
+    val college: String? = null,
+
     @SerialName("majorID")
     @ColumnInfo(name = "major_ID")
     val majorID: Int? = null,
+
+    @SerialName("major")
+    @ColumnInfo(name = "major")
+    val major: String? = null,
 
     @SerialName("contact")
     @ColumnInfo(name = "contact")
