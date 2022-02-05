@@ -43,7 +43,8 @@ fun EditProfileView(viewModel: EditProfileViewModel) {
                                 contentDescription = "Knopf um die Nutzerdaten zu editieren."
                             )
                         }
-                    })
+                    },
+                    navClick = { viewModel.navBack() })
             },
             bottomBar = {
                 NavigationBar(

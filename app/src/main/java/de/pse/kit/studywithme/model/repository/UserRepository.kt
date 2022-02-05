@@ -124,11 +124,6 @@ class UserRepository private constructor(context: Context) : UserRepositoryInter
     }
 
     override fun resetPassword(email: String): Boolean {
-        if (auth.firebaseUID == null) {
-            // TODO: Explicit exception class
-            throw Exception("Authentication Error: No local user signed in.")
-        }
-
         return runBlocking {
             return@runBlocking auth.resetPassword(email)
         }

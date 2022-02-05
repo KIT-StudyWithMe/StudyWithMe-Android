@@ -96,7 +96,7 @@ fun SignUpView(viewModel: SignUpViewModel) {
                     Text(
                         text = "Anmelden",
                         modifier = Modifier.align(Alignment.End).padding(end = 12.dp).clickable {
-                            viewModel.navToSignIn()
+                            viewModel.navBack()
                         },
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.tertiary

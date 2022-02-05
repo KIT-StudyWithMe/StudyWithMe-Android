@@ -19,10 +19,6 @@ class SignUpViewModel(navController: NavController, val userRepo: UserRepository
     val major: MutableStateFlow<String> = MutableStateFlow("")
     val errorMessage: MutableStateFlow<String> = MutableStateFlow("")
 
-    fun navToSignIn() {
-        navController.navigate(NavGraph.SignIn.route)
-    }
-
     fun signUp() {
         val user = User(
             userID = -1,

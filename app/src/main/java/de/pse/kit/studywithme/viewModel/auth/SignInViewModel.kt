@@ -17,7 +17,7 @@ class SignInViewModel(navController: NavController, val userRepo: UserRepository
     val errorMessage: MutableStateFlow<String> = MutableStateFlow("")
 
     fun navToSignUp() {
-        navController.navigate(NavGraph.SignUp.route)
+        NavGraph.navigateToSignUp(navController)
     }
 
     fun signIn() {
@@ -30,6 +30,11 @@ class SignInViewModel(navController: NavController, val userRepo: UserRepository
     }
 
     fun forgotPassword() {
-        //TODO: forgot Password
+        if (userRepo.resetPassword(email = email.value)) {
+            Log.d("Auth-UI", "passwordResetMailSend:completed")
+            errorMessage.value = "Eine Email zum zurücksetzen wurde gesendet"
+        } else {
+            errorMessage.value = "Versuche eine andere Email Adresse"
+        }
     }
 }
