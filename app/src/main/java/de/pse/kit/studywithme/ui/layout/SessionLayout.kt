@@ -41,13 +41,16 @@ fun Sessionlayout(
                         context = LocalContext.current,
                         modifier = Modifier.weight(1.0f)
                     )
-
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
                     TimePicker(
-                        modifier = Modifier,
+                        modifier = Modifier.weight(1.0f),
                         context = LocalContext.current
                     )
                 }
-
                 FormTextField(text = duration, label = "Dauer", onChange = durationChange)
             }
         }

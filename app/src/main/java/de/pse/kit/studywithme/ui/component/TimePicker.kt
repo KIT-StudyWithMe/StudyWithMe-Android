@@ -24,9 +24,10 @@ import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
 import java.util.*
 
 @Composable
-fun TimePicker(modifier: Modifier, context: Context) {
+fun TimePicker(modifier: Modifier = Modifier, context: Context) {
     val hour: Int
     val minute: Int
+    val color = 2
 
     val calendar = Calendar.getInstance()
     hour = calendar.get(Calendar.HOUR_OF_DAY)
@@ -35,12 +36,13 @@ fun TimePicker(modifier: Modifier, context: Context) {
     val time = remember { mutableStateOf("") }
     val timePickerDialog = TimePickerDialog(
         context,
-        {_, hour: Int, minute: Int ->
+        color,
+        { _: TimePicker, hour: Int, minute: Int ->
             time.value = "$hour:$minute"
         },
         hour,
         minute,
-        false
+        true
     )
 
     MyApplicationTheme3 {
@@ -54,11 +56,11 @@ fun TimePicker(modifier: Modifier, context: Context) {
                     .size(50.dp)
             ) {
                 Text(
-                    time.value, modifier = androidx.compose.ui.Modifier
-                        .fillMaxSize()
+                    time.value, modifier = Modifier
+                        .fillMaxWidth()
                         .background(MaterialTheme.colorScheme.background)
                         .clickable { timePickerDialog.show() }
-                        .padding(24.dp), fontSize = 20.sp
+                        .padding(horizontal = 24.dp, vertical = 10.dp), fontSize = 20.sp
                 )
             }
         }
@@ -68,5 +70,5 @@ fun TimePicker(modifier: Modifier, context: Context) {
 @Preview
 @Composable
 fun TimePickerPreview() {
-    TimePicker(LocalContext.current)
+    TimePicker(modifier = Modifier, context = LocalContext.current)
 }

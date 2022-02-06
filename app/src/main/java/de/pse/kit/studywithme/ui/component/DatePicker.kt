@@ -22,11 +22,11 @@ import java.util.*
 
 
 @Composable
-fun DatePicker (modifier: Modifier, context: Context) {
+fun DatePicker (modifier: Modifier = Modifier, context: Context) {
     val year: Int
     val month: Int
     val day: Int
-    val color: Int = 4
+    val color = 4
 
     val calendar = Calendar.getInstance()
     year = calendar.get(Calendar.YEAR)
@@ -61,7 +61,7 @@ fun DatePicker (modifier: Modifier, context: Context) {
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.background)
                         .clickable { datePickerDialog.show() }
-                        .padding(24.dp), fontSize = 20.sp
+                        .padding(horizontal = 24.dp, vertical = 10.dp), fontSize = 20.sp
                 )
             }
         }
@@ -72,5 +72,5 @@ fun DatePicker (modifier: Modifier, context: Context) {
 @Preview
 @Composable
 fun DatePickerPreview() {
-    DatePicker(LocalContext.current)
+    DatePicker(modifier = Modifier, context = LocalContext.current)
 }
