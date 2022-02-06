@@ -7,9 +7,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
+import de.pse.kit.studywithme.ui.component.DatePicker
 import de.pse.kit.studywithme.ui.component.FormTextField
 import de.pse.kit.studywithme.ui.component.NavigationBar
 import de.pse.kit.studywithme.ui.component.TopBar
@@ -38,11 +40,9 @@ fun Sessionlayout(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    FormTextField(
-                        modifier = Modifier.weight(1.0f),
-                        text = date,
-                        label = "Datum",
-                        onChange = dateChange
+                    DatePicker(
+                        context = LocalContext.current,
+                        modifier = Modifier.weight(1.0f)
                     )
 
                     FormTextField(
