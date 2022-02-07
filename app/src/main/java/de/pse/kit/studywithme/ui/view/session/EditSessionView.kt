@@ -26,12 +26,12 @@ fun EditSessionView(viewModel: EditSessionViewModel) {
             containerColor = MaterialTheme.colorScheme.surface
         ) {
             TopBar(title = viewModel.groupName, subtitle = viewModel.groupLecture)
-            Sessionlayout(
+            /*Sessionlayout(
                 place = viewModel.place.collectAsState().value,
                 date = viewModel.date.collectAsState().value,
                 time = viewModel.time.collectAsState().value,
                 duration = viewModel.length.collectAsState().value
-            )
+            )*/
         }
     }
 }

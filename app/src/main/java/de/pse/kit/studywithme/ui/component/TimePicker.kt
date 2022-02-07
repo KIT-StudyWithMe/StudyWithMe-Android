@@ -24,21 +24,32 @@ import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
 import java.util.*
 
 @Composable
-fun TimePicker(modifier: Modifier = Modifier, context: Context) {
+fun TimePicker(
+    modifier: Modifier = Modifier,
+    context: Context,
+    preselectedText: String = "Uhrzeit",
+    preselectedTime: Date? = null,
+    onChange: (Date) -> Unit = { }
+) {
     val hour: Int
     val minute: Int
-    val color = 2
+    val color = 4
 
     val calendar = Calendar.getInstance()
     hour = calendar.get(Calendar.HOUR_OF_DAY)
     minute = calendar.get(Calendar.MINUTE)
+    calendar.time = preselectedTime ?: Date()
 
-    val time = remember { mutableStateOf("") }
+    val time =
+        remember { mutableStateOf(if (preselectedTime != null) "$hour:$minute" else preselectedText) }
     val timePickerDialog = TimePickerDialog(
         context,
         color,
-        { _: TimePicker, hour: Int, minute: Int ->
-            time.value = "$hour:$minute"
+        { _: TimePicker, selectedHour: Int, selectedMinute: Int ->
+            time.value =
+                "${if (selectedHour < 10) "0" else ""}$selectedHour:${if (selectedMinute < 10) "0" else ""}$selectedMinute"
+            calendar.set(selectedHour, selectedMinute)
+            onChange(calendar.time)
         },
         hour,
         minute,
@@ -47,22 +58,23 @@ fun TimePicker(modifier: Modifier = Modifier, context: Context) {
 
     MyApplicationTheme3 {
         Card(
-            border = BorderStroke(color = Color.Black, width = Dp.Hairline)
+            modifier = modifier.fillMaxWidth(),
+            border = BorderStroke(
+                color = MaterialTheme.colorScheme.tertiary,
+                width = 1.dp
+            ),
+            backgroundColor = MaterialTheme.colorScheme.surface
         ) {
-            Row(
+            Text(
+                text = time.value,
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(MaterialTheme.colorScheme.background)
-                    .size(50.dp)
-            ) {
-                Text(
-                    time.value, modifier = Modifier
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.background)
-                        .clickable { timePickerDialog.show() }
-                        .padding(horizontal = 24.dp, vertical = 10.dp), fontSize = 20.sp
-                )
-            }
+                    .clickable { timePickerDialog.show() }
+                    .padding(horizontal = 16.dp, vertical = 16.dp),
+                color = if (time.value == preselectedText) MaterialTheme.colorScheme.tertiary else Color.Black,
+                fontSize = 16.sp
+            )
         }
     }
 }
@@ -71,4 +83,14 @@ fun TimePicker(modifier: Modifier = Modifier, context: Context) {
 @Composable
 fun TimePickerPreview() {
     TimePicker(modifier = Modifier, context = LocalContext.current)
+}
+
+@Preview
+@Composable
+fun PreselectedTimePickerPreview() {
+    TimePicker(
+        modifier = Modifier,
+        context = LocalContext.current,
+        preselectedTime = Date()
+    )
 }
