@@ -14,6 +14,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import de.pse.kit.studywithme.model.data.User
 import de.pse.kit.studywithme.model.repository.GroupRepository
+import de.pse.kit.studywithme.model.repository.SessionRepository
 import de.pse.kit.studywithme.model.repository.UserRepository
 import de.pse.kit.studywithme.ui.component.NavigationBar
 import de.pse.kit.studywithme.ui.view.auth.SignInView
@@ -130,7 +131,7 @@ fun NavGraphBuilder.joinedGroupsGraph(navController: NavController) {
                 EditSessionViewModel(
                     navController,
                     it.arguments!!.getInt(NavGraph.EditSession.argName),
-                    GroupRepository.getInstance(LocalContext.current)
+                    SessionRepository.getInstance(LocalContext.current)
                 )
             )
         }

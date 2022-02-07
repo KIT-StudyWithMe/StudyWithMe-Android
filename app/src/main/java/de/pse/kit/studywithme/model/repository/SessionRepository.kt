@@ -14,14 +14,14 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.concurrent.atomic.AtomicBoolean
 
-class SessionRepository private constructor(context: Context) {
+class SessionRepository private constructor(context: Context) : SessionRepositoryInterface {
     private val sessionService = SessionService.instance
     private val sessionDao = AppDatabase.getInstance(context).sessionDao()
     private val auth = Authenticator
     // TODO: Local in key value speichern beim anmelden und hier abrufen
     private val uid: Int?  = null
 
-    fun getSessions(groupID: Int): Flow<List<Session>> {
+    override fun getSessions(groupID: Int): Flow<List<Session>> {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
@@ -44,7 +44,7 @@ class SessionRepository private constructor(context: Context) {
         }.filterNotNull()
     }
 
-    fun newSession(session: Session): Boolean {
+    override fun newSession(session: Session): Boolean {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
@@ -62,7 +62,7 @@ class SessionRepository private constructor(context: Context) {
         }
     }
 
-    fun editSession(session: Session): Boolean {
+    override fun editSession(session: Session): Boolean {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
@@ -80,7 +80,7 @@ class SessionRepository private constructor(context: Context) {
         }
     }
 
-    fun removeSession(session: Session) {
+    override fun removeSession(session: Session) {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
@@ -96,7 +96,7 @@ class SessionRepository private constructor(context: Context) {
         }
     }
 
-    fun newAttendee(sessionID: Int): Boolean {
+    override fun newAttendee(sessionID: Int): Boolean {
         if (uid == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
@@ -114,7 +114,7 @@ class SessionRepository private constructor(context: Context) {
         }
     }
 
-    fun removeAttendee(sessionID: Int) {
+    override fun removeAttendee(sessionID: Int) {
         if (uid == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
@@ -130,7 +130,7 @@ class SessionRepository private constructor(context: Context) {
         }
     }
 
-    fun getAttendees(sessionID: Int): Flow<List<SessionAttendee>> {
+    override fun getAttendees(sessionID: Int): Flow<List<SessionAttendee>> {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
