@@ -2,6 +2,7 @@ package de.pse.kit.studywithme.ui.component
 
 import android.app.DatePickerDialog
 import android.content.Context
+import android.util.Log
 import android.widget.DatePicker
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -12,6 +13,7 @@ import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -22,7 +24,12 @@ import java.util.*
 
 
 @Composable
-fun DatePicker (modifier: Modifier = Modifier, context: Context) {
+fun DatePicker(
+    modifier: Modifier = Modifier,
+    context: Context,
+    preselectedDate: Date? = null,
+    onChange: (Date) -> Unit = { }
+) {
     val year: Int
     val month: Int
     val day: Int
@@ -32,14 +39,18 @@ fun DatePicker (modifier: Modifier = Modifier, context: Context) {
     year = calendar.get(Calendar.YEAR)
     month = calendar.get(Calendar.MONTH)
     day = calendar.get(Calendar.DAY_OF_MONTH)
-    calendar.time = Date()
+    calendar.time = preselectedDate ?: Date()
 
-    val date = remember { mutableStateOf("") }
+    val date =
+        remember { mutableStateOf(if (preselectedDate != null) "$day.${month + 1}.$year" else "Datum") }
     val datePickerDialog = DatePickerDialog(
         context,
         color,
-        { _: DatePicker, year, month, dayOfMonth ->
-            date.value = "$dayOfMonth.${month + 1}.$year"
+        { _: DatePicker, selectedYear, selectedMonth, selectedDay ->
+            date.value =
+                "${if (selectedDay < 10) "0" else ""}$selectedDay.${if (selectedMonth < 9) "0" else ""}${selectedMonth + 1}.$selectedYear"
+            calendar.set(selectedYear, selectedMonth, selectedDay)
+            onChange(calendar.time)
         },
         year,
         month,
@@ -48,22 +59,23 @@ fun DatePicker (modifier: Modifier = Modifier, context: Context) {
 
     MyApplicationTheme3 {
         Card(
-            border = BorderStroke(color = androidx.compose.ui.graphics.Color.Black, width = Dp.Hairline)
+            modifier = modifier.fillMaxWidth(),
+            backgroundColor = MaterialTheme.colorScheme.surface,
+            border = BorderStroke(
+                color = MaterialTheme.colorScheme.tertiary,
+                width = 1.dp
+            )
         ) {
-            Row(
+            Text(
+                text = date.value,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.background)
-                    .size(50.dp)
-            ) {
-                Text(
-                    date.value, modifier = Modifier
-                        .fillMaxSize()
-                        .background(MaterialTheme.colorScheme.background)
-                        .clickable { datePickerDialog.show() }
-                        .padding(horizontal = 24.dp, vertical = 10.dp), fontSize = 20.sp
-                )
-            }
+                    .background(MaterialTheme.colorScheme.surface)
+                    .clickable { datePickerDialog.show() }
+                    .padding(horizontal = 16.dp, vertical = 16.dp),
+                color = if (date.value == "Datum") MaterialTheme.colorScheme.tertiary else Color.Black,
+                fontSize = 16.sp
+            )
         }
     }
 }
@@ -73,4 +85,10 @@ fun DatePicker (modifier: Modifier = Modifier, context: Context) {
 @Composable
 fun DatePickerPreview() {
     DatePicker(modifier = Modifier, context = LocalContext.current)
+}
+
+@Preview
+@Composable
+fun PreselectedDatePickerPreview() {
+    DatePicker(modifier = Modifier, context = LocalContext.current, Date())
 }
