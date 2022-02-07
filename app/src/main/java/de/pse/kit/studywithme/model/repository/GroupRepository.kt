@@ -17,18 +17,18 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.concurrent.atomic.AtomicBoolean
 
-class GroupRepository private constructor(context: Context) {
+class GroupRepository private constructor(context: Context): GroupRepositoryInterface {
     private val groupService = GroupService.instance
     private val groupDao = AppDatabase.getInstance(context).groupDao()
     private val auth = Authenticator
 
-    fun getGroups(search: String): List<Group> {
+    override fun getGroups(search: String): List<Group> {
         return runBlocking {
             return@runBlocking groupService.getGroups(search)
         }
     }
 
-    fun getJoinedGroups(uid: Int): Flow<List<Group>> {
+    override fun getJoinedGroups(): Flow<List<Group>> {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
@@ -38,12 +38,12 @@ class GroupRepository private constructor(context: Context) {
             val truthWasSend = AtomicBoolean(false)
 
             launch {
-                val remoteGroups = groupService.getJoinedGroups(uid)
+                val remoteGroups = groupService.getJoinedGroups(auth.uid!!)
                 send (remoteGroups)
                 truthWasSend.set(true)
             }
             launch {
-                val localGroups = groupDao.getJoinedGroups(uid)
+                val localGroups = groupDao.getJoinedGroups(auth.uid!!)
                 if (!truthWasSend.get()) {
                     send(localGroups)
                 }
@@ -51,13 +51,13 @@ class GroupRepository private constructor(context: Context) {
         }.filterNotNull()
     }
 
-    fun getGroupSuggestions(uid: Int): List<Group> {
+    override fun getGroupSuggestions(): List<Group> {
         return runBlocking {
-            return@runBlocking groupService.getGroupSuggestions(uid)
+            return@runBlocking groupService.getGroupSuggestions(auth.uid!!)
         }
     }
 
-    fun getGroup(groupID: Int): Flow<Group> {
+    override fun getGroup(groupID: Int): Flow<Group> {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
@@ -80,7 +80,7 @@ class GroupRepository private constructor(context: Context) {
         }.filterNotNull()
     }
 
-    fun newGroup(group: Group): Boolean {
+    override fun newGroup(group: Group): Boolean {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
@@ -97,7 +97,7 @@ class GroupRepository private constructor(context: Context) {
         }
     }
 
-    fun editGroup(group: Group): Boolean {
+    override fun editGroup(group: Group): Boolean {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
@@ -114,7 +114,7 @@ class GroupRepository private constructor(context: Context) {
         }
     }
 
-    fun exitGroup(groupID: Int, uid: Int){
+    override fun exitGroup(groupID: Int, uid: Int){
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
@@ -129,7 +129,7 @@ class GroupRepository private constructor(context: Context) {
         }
     }
 
-    fun deleteGroup(group: Group){
+    override fun deleteGroup(group: Group){
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
@@ -144,7 +144,7 @@ class GroupRepository private constructor(context: Context) {
         }
     }
 
-    fun newMember(groupID: Int, uid: Int): Boolean {
+    override fun newMember(groupID: Int, uid: Int): Boolean {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
@@ -161,13 +161,13 @@ class GroupRepository private constructor(context: Context) {
         }
     }
 
-    fun joinRequest(groupID: Int) {
+    override fun joinRequest(groupID: Int) {
         return runBlocking {
             return@runBlocking groupService.joinRequest(groupID)
         }
     }
 
-    fun removeMember(groupID: Int, uid: Int) {
+    override fun removeMember(groupID: Int, uid: Int) {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
@@ -182,7 +182,7 @@ class GroupRepository private constructor(context: Context) {
         }
     }
 
-    fun getGroupMembers(groupID: Int): Flow<List<User>> {
+    override fun getGroupMembers(groupID: Int): Flow<List<User>> {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
@@ -205,7 +205,7 @@ class GroupRepository private constructor(context: Context) {
         }.filterNotNull()
     }
 
-    fun getLectures(prefix: String): Flow<List<Lecture>> {
+    override fun getLectures(prefix: String): Flow<List<Lecture>> {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")

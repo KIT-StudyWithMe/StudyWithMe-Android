@@ -16,6 +16,9 @@ data class Group(
     @ColumnInfo(name = "lecture_ID")
     val lectureID: Int,
 
+    @ColumnInfo(name = "lecture")
+    val lecture: String,
+
     @ColumnInfo(name = "description")
     val description: String?,
 
