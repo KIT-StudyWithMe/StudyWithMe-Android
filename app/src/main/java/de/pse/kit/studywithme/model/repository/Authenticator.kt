@@ -11,6 +11,7 @@ object Authenticator {
     private val auth = Firebase.auth
     private var firebaseUser = auth.currentUser
     val firebaseUID: String? = firebaseUser?.uid
+    var uid: Int? = null
 
     suspend fun signUp(email: String, password: String): Boolean {
         try {
