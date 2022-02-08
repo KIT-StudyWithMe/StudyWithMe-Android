@@ -31,5 +31,5 @@ data class Session(
 
     @SerialName("duration")
     @ColumnInfo(name = "duration")
-    val duration: Int?
+    val duration: Int
 )

@@ -22,35 +22,28 @@ class EditSessionViewModel(
     var session: Session? = null
     var group: Group? = null //TODO
     val place: MutableStateFlow<String> = MutableStateFlow("")
-    val date: MutableStateFlow<Date> = MutableStateFlow(Date(2022, 12, 13))
-    val time: MutableStateFlow<Int> = MutableStateFlow(0)
-    val duration: MutableStateFlow<Int> = MutableStateFlow(0)
+    val date: MutableStateFlow<Date> = MutableStateFlow(Date())
+    val duration: MutableStateFlow<String> = MutableStateFlow("")
 
     fun navToJoinedGroupDetails(groupID: Int) {
         NavGraph.navigateToJoinedGroup(navController, groupID)
     }
 
-    /**
+
     init {
         runBlocking {
-            sessionRepo.getSessions(group!!.groupID).collect() {
-                session = Session(
-                    location = place.toString(),
-                    date = date.value,
-                    duration = duration.value,
-                    groupID = group!!.groupID,
-                    sessionID = sessionID
-                )
-                place.value = session!!.location
-                date.value = session!!.date
-                duration.value = session!!.duration!!
+            sessionRepo.getSession(sessionID).collect {
+                session = it
+                place.value = it.location
+                date.value = it.date
+                duration.value = it.duration.toString()
             }
         }
     }
-    */
 
 
-    fun save() {
+
+    fun saveSession() {
         if (session != null) {
             sessionRepo.editSession(
                 Session(

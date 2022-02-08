@@ -11,12 +11,11 @@ import java.util.*
 
 class FakeSessionRepository() : SessionRepositoryInterface {
 
-    @RequiresApi(Build.VERSION_CODES.O)
     var session = Session(
         sessionID = 0,
         groupID = 0,
         location = "Bibliothek",
-        date = Date(2022,12,31),
+        date = Date(),
         duration = 2
     )
     var sessionAttendee = SessionAttendee(
@@ -27,7 +26,11 @@ class FakeSessionRepository() : SessionRepositoryInterface {
 
     @ExperimentalCoroutinesApi
     override fun getSessions(groupID: Int): Flow<List<Session>> {
-        return flow { emit(listOf(session)) } //TODO
+        return flow { emit(listOf(session)) }
+    }
+
+    override fun getSession(sessionID: Int): Flow<Session> {
+        return flow { emit(session) }
     }
 
     override fun newSession(session: Session): Boolean {
@@ -55,6 +58,6 @@ class FakeSessionRepository() : SessionRepositoryInterface {
     }
 
     override fun getAttendees(sessionID: Int): Flow<List<SessionAttendee>> {
-        return flow { emit(listOf(sessionAttendee)) } //TODO
+        return flow { emit(listOf(sessionAttendee)) }
     }
 }

@@ -9,7 +9,8 @@ import io.ktor.client.features.json.serializer.*
 
 interface SessionService {
 
-    suspend fun getSessions(groupID: Int): List<Session>
+    suspend fun getSessions(groupID: Int): List<Session>?
+    suspend fun getSession(sessionID: Int): Session?
     suspend fun newSession(session: Session): Session?
     suspend fun editSession(session: Session): Session?
     suspend fun removeSession(sessionID: Int)
