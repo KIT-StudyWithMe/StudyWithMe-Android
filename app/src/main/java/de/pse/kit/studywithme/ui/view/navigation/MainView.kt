@@ -13,9 +13,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import de.pse.kit.studywithme.model.data.User
-import de.pse.kit.studywithme.model.repository.GroupRepository
-import de.pse.kit.studywithme.model.repository.SessionRepository
-import de.pse.kit.studywithme.model.repository.UserRepository
+import de.pse.kit.studywithme.model.repository.*
 import de.pse.kit.studywithme.ui.component.NavigationBar
 import de.pse.kit.studywithme.ui.view.auth.SignInView
 import de.pse.kit.studywithme.ui.view.auth.SignUpView
@@ -37,35 +35,36 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 @ExperimentalMaterial3Api
 @ExperimentalCoroutinesApi
 @Composable
-fun MainView() {
+fun MainView(userRepo: UserRepositoryInterface = UserRepository.getInstance(LocalContext.current),
+             groupRepo: GroupRepositoryInterface = GroupRepository.getInstance(LocalContext.current),
+             sessionRepo: SessionRepositoryInterface = SessionRepository.getInstance(LocalContext.current)) {
     val navController = rememberNavController()
-    val startRoute = if (UserRepository.getInstance(LocalContext.current)
-            .isSignedIn()
-    ) NavGraph.JoinedGroupsTab.route
-    else NavGraph.SignInForm.route
+    val startRoute =
+        if (userRepo.isSignedIn()) NavGraph.JoinedGroupsTab.route
+        else NavGraph.SignInForm.route
 
     NavHost(
         navController = navController,
         startDestination = startRoute
     ) {
-        joinedGroupsGraph(navController)
+        joinedGroupsGraph(navController, groupRepo, sessionRepo)
 
-        searchGroupsGraph(navController)
+        searchGroupsGraph(navController, groupRepo)
 
-        profileGraph(navController)
+        profileGraph(navController, userRepo)
 
-        signInGraph(navController)
+        signInGraph(navController, userRepo)
     }
 }
 
 @ExperimentalMaterial3Api
-fun NavGraphBuilder.signInGraph(navController: NavController) {
+fun NavGraphBuilder.signInGraph(navController: NavController, userRepo: UserRepositoryInterface) {
     navigation(startDestination = NavGraph.SignIn.route, route = NavGraph.SignInForm.route) {
         composable(NavGraph.SignIn.route) {
             SignInView(
                 SignInViewModel(
                     navController,
-                    UserRepository.getInstance(LocalContext.current)
+                    userRepo
                 )
             )
         }
@@ -73,16 +72,17 @@ fun NavGraphBuilder.signInGraph(navController: NavController) {
             SignUpView(
                 SignUpViewModel(
                     navController,
-                    UserRepository.getInstance(LocalContext.current)
+                    userRepo
                 )
             )
         }
     }
 }
 
+@ExperimentalCoroutinesApi
 @ExperimentalMaterialApi
 @ExperimentalMaterial3Api
-fun NavGraphBuilder.joinedGroupsGraph(navController: NavController) {
+fun NavGraphBuilder.joinedGroupsGraph(navController: NavController, groupRepo: GroupRepositoryInterface, sessionRepo: SessionRepositoryInterface) {
     navigation(
         startDestination = NavGraph.JoinedGroups.route,
         route = NavGraph.JoinedGroupsTab.route
@@ -90,9 +90,8 @@ fun NavGraphBuilder.joinedGroupsGraph(navController: NavController) {
         composable(route = NavGraph.JoinedGroups.route) {
             JoinedGroupsView(
                 JoinedGroupsViewModel(
-                    navController, GroupRepository.getInstance(
-                        LocalContext.current
-                    )
+                    navController,
+                    groupRepo
                 )
             )
         }
@@ -103,7 +102,9 @@ fun NavGraphBuilder.joinedGroupsGraph(navController: NavController) {
             JoinedGroupDetailsView(
                 JoinedGroupDetailsViewModel(
                     navController,
-                    it.arguments!!.getInt(NavGraph.JoinedGroupDetails.argName)
+                    it.arguments!!.getInt(NavGraph.JoinedGroupDetails.argName),
+                    groupRepo,
+                    sessionRepo
                 )
             )
         }
@@ -137,7 +138,7 @@ fun NavGraphBuilder.joinedGroupsGraph(navController: NavController) {
                 EditSessionViewModel(
                     navController,
                     it.arguments!!.getInt(NavGraph.EditSession.argName),
-                    SessionRepository.getInstance(LocalContext.current)
+                    sessionRepo
                 )
             )
         }
@@ -146,7 +147,7 @@ fun NavGraphBuilder.joinedGroupsGraph(navController: NavController) {
 
 @ExperimentalMaterialApi
 @ExperimentalMaterial3Api
-fun NavGraphBuilder.searchGroupsGraph(navController: NavController) {
+fun NavGraphBuilder.searchGroupsGraph(navController: NavController, groupRepo: GroupRepositoryInterface) {
     navigation(
         startDestination = NavGraph.SearchGroups.route,
         route = NavGraph.SearchGroupsTab.route
@@ -155,7 +156,7 @@ fun NavGraphBuilder.searchGroupsGraph(navController: NavController) {
             SearchGroupsView(
                 SearchGroupsViewModel(
                     navController,
-                    GroupRepository.getInstance(LocalContext.current)
+                    groupRepo
                 )
             )
         }
@@ -190,7 +191,7 @@ fun NavGraphBuilder.searchGroupsGraph(navController: NavController) {
 @ExperimentalCoroutinesApi
 @ExperimentalMaterialApi
 @ExperimentalMaterial3Api
-fun NavGraphBuilder.profileGraph(navController: NavController) {
+fun NavGraphBuilder.profileGraph(navController: NavController, userRepo: UserRepositoryInterface) {
     navigation(
         startDestination = NavGraph.Profile.route,
         route = NavGraph.ProfileTab.route
@@ -199,7 +200,7 @@ fun NavGraphBuilder.profileGraph(navController: NavController) {
             ProfileView(
                 ProfileViewModel(
                     navController,
-                    UserRepository.getInstance(LocalContext.current)
+                    userRepo
                 )
             )
         }
@@ -207,17 +208,18 @@ fun NavGraphBuilder.profileGraph(navController: NavController) {
             EditProfileView(
                 EditProfileViewModel(
                     navController,
-                    UserRepository.getInstance(LocalContext.current)
+                    userRepo
                 )
             )
         }
     }
 }
 
+@ExperimentalCoroutinesApi
 @ExperimentalMaterialApi
 @ExperimentalMaterial3Api
 @Preview
 @Composable
 fun MainViewPreview() {
-    MainView()
+    MainView(FakeUserRepository(signedIn = true), FakeGroupRepository(), FakeSessionRepository())
 }
