@@ -10,6 +10,8 @@ interface SessionRepositoryInterface {
     @ExperimentalCoroutinesApi
     fun getSessions(groupID: Int): Flow<List<Session>>
 
+    fun getSession(sessionID: Int): Flow<Session>
+
     fun newSession(session: Session): Boolean
 
     fun editSession(session: Session): Boolean

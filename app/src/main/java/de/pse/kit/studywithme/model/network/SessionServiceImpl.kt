@@ -9,6 +9,10 @@ class SessionServiceImpl(private val client: HttpClient): SessionService {
         TODO("Not yet implemented")
     }
 
+    override suspend fun getSession(sessionID: Int): Session? {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun newSession(session: Session): Session? {
         TODO("Not yet implemented")
     }

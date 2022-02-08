@@ -23,8 +23,8 @@ fun Sessionlayout(
     dateChange: (Date) -> Unit = {},
     time: Date? = null,
     timeChange: (Date) -> Unit = {},
-    ending: Date? = null,
-    endingChange: (Date) -> Unit = {}
+    duration: String = "",
+    durationChange: (String) -> Unit = {}
 
 ) {
     MyApplicationTheme3 {
@@ -42,7 +42,9 @@ fun Sessionlayout(
                 )
 
                 Row(
-                    modifier = Modifier.padding(top = 8.dp).fillMaxWidth(),
+                    modifier = Modifier
+                        .padding(top = 8.dp)
+                        .fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
 
@@ -53,16 +55,8 @@ fun Sessionlayout(
                         preselectedTime = time,
                         onChange = timeChange
                     )
-
-                    TimePicker(
-                        modifier = Modifier.weight(1.0f),
-                        context = LocalContext.current,
-                        preselectedText = "Ende",
-                        preselectedTime = ending,
-                        onChange = endingChange
-
-                    )
                 }
+                FormTextField(text = duration, onChange = durationChange, label = "Dauer", type = TextFieldType.NUMBER)
             }
         }
     }

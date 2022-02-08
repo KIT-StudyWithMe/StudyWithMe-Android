@@ -26,7 +26,11 @@ class FakeSessionRepository() : SessionRepositoryInterface {
 
     @ExperimentalCoroutinesApi
     override fun getSessions(groupID: Int): Flow<List<Session>> {
-        return flow { emit(listOf(session)) } //TODO
+        return flow { emit(listOf(session)) }
+    }
+
+    override fun getSession(sessionID: Int): Flow<Session> {
+        return flow { emit(session) }
     }
 
     override fun newSession(session: Session): Boolean {
@@ -54,6 +58,6 @@ class FakeSessionRepository() : SessionRepositoryInterface {
     }
 
     override fun getAttendees(sessionID: Int): Flow<List<SessionAttendee>> {
-        return flow { emit(listOf(sessionAttendee)) } //TODO
+        return flow { emit(listOf(sessionAttendee)) }
     }
 }

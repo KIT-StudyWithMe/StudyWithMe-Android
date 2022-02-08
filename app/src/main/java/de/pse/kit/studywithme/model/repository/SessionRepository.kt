@@ -46,6 +46,29 @@ class SessionRepository private constructor(context: Context) : SessionRepositor
         }.filterNotNull()
     }
 
+    override fun getSession(sessionID: Int): Flow<Session> {
+        if (auth.firebaseUID == null) {
+            // TODO: Explicit exception class
+            throw Exception("Authentication Error: No local user signed in.")
+        }
+
+        return channelFlow {
+            val truthWasSend = AtomicBoolean(false)
+
+            launch {
+                val remoteSession = sessionService.getSession(sessionID)
+                send(remoteSession)
+                truthWasSend.set(true)
+            }
+            launch {
+                val localSession = sessionDao.getSession(sessionID)
+                if (!truthWasSend.get()) {
+                    send(localSession)
+                }
+            }
+        }.filterNotNull()
+    }
+
     override fun newSession(session: Session): Boolean {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class

@@ -1,10 +1,13 @@
 package de.pse.kit.studywithme.ui.view.session
 
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
+import android.util.Log
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Save
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
@@ -26,19 +29,44 @@ import java.util.*
 fun EditSessionView(viewModel: EditSessionViewModel) {
     MyApplicationTheme3 {
         Scaffold(
-            containerColor = MaterialTheme.colorScheme.surface
+                containerColor = MaterialTheme.colorScheme.surface,
+            topBar = {
+                TopBar(
+                    title = "Session bearbeiten",
+                    actions = {
+                        IconButton(onClick = { viewModel.saveSession() }) {
+                            Icon(
+                                Icons.Rounded.Save,
+                                contentDescription = "Knopf um die Nutzerdaten zu editieren."
+                            )
+                        }
+                    },
+                    navClick = { viewModel.navBack() })
+            },
+            bottomBar = {
+                NavigationBar(
+                    selectedItem = remember { mutableStateOf(0) },
+                    clickLeft = { viewModel.navToJoinedGroups() },
+                    clickMiddle = { viewModel.navToSearchGroups() },
+                    clickRight = { viewModel.navToProfile() })
+            }
         ) {
-            TopBar(title = "Session bearbeiten")
 
             Sessionlayout(
                 place = viewModel.place.collectAsState().value,
                 placeChange = {viewModel.place.value = it},
                 date = viewModel.date.collectAsState().value,
-                dateChange = {viewModel.date.value = Date(2022,12,13) }, //TODO
-                time = null, //TODO
-                timeChange = {viewModel.time.value = 0}, //TODO
-                ending = null, //TODO
-                endingChange = {viewModel.duration.value = 0} //TODO
+                dateChange = {
+                    viewModel.date.value = it
+                    Log.d("Test", it.toString())
+                             },
+                time = viewModel.date.collectAsState().value,
+                timeChange = {
+                    viewModel.date.value = it
+                    Log.d("Test", it.toString())
+                             },
+                duration = "",
+                durationChange = {viewModel.duration.value = it}
             )
 
         }
