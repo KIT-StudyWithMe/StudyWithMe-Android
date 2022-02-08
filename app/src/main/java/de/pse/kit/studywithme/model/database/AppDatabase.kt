@@ -9,7 +9,10 @@ import de.pse.kit.studywithme.SingletonHolder
 import de.pse.kit.studywithme.model.data.*
 import de.pse.kit.studywithme.model.database.TypeConverters as TypeConverters_
 
-@Database(entities = [Session::class, Group::class, User::class, SessionAttendee::class, GroupMember::class, Lecture::class], version = 1)
+@Database(
+    entities = [Session::class, RemoteGroup::class, User::class, SessionAttendee::class, GroupMember::class, Lecture::class, Major::class],
+    version = 1
+)
 @TypeConverters(TypeConverters_::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun sessionDao(): SessionDao
@@ -17,8 +20,10 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
 
     companion object : SingletonHolder<AppDatabase, Context>({
-        Room.databaseBuilder(it.applicationContext,
-            AppDatabase::class.java, "SwudyWithMe.db")
+        Room.databaseBuilder(
+            it.applicationContext,
+            AppDatabase::class.java, "StudyWithMe.db"
+        )
             .build()
     })
 }

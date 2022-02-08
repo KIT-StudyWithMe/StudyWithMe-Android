@@ -14,8 +14,13 @@ import androidx.compose.ui.unit.dp
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
 
 @Composable
-fun ChipSelectionRow(modifier: Modifier = Modifier, chipNames: List<String>, selected: String? = null, onChange: (String) -> Unit) {
-    var selectedChipIndex by remember { mutableStateOf(0) }
+fun ChipSelectionRow(
+    modifier: Modifier = Modifier,
+    chipNames: List<String>,
+    selected: String? = null,
+    onChange: (String) -> Unit
+) {
+    var selectedChipIndex by remember { mutableStateOf(-1) }
     for ((i, name) in chipNames.withIndex()) {
         if (name == selected) {
             selectedChipIndex = i
@@ -28,7 +33,8 @@ fun ChipSelectionRow(modifier: Modifier = Modifier, chipNames: List<String>, sel
             Chip(
                 modifier = Modifier.padding(start = 0.dp, end = 12.dp),
                 onClick = {
-                    selectedChipIndex = it
+                    if (selectedChipIndex == it) selectedChipIndex = -1
+                    else selectedChipIndex = it
                     onChange(chipNames[it])
                 },
                 chosen = selectedChipIndex == it,
@@ -105,6 +111,15 @@ fun ChipPreview() {
 @Composable
 fun ChipSelectionRowPreview() {
     ChipSelectionRow(chipNames = listOf("Präsenz", "Online", "Hybrid"), onChange = {})
+}
+
+@Preview
+@Composable
+fun ChipSelection2RowPreview() {
+    ChipSelectionRow(
+        chipNames = listOf("Präsenz", "Online", "Hybrid"),
+        selected = "Online",
+        onChange = {})
 }
 
 @Preview

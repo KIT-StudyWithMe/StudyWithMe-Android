@@ -15,9 +15,9 @@ interface GroupRepositoryInterface {
 
     fun getGroup(groupID: Int): Flow<Group>
 
-    fun newGroup(group: Group): Boolean
+    fun newGroup(group: Group, newLecture: Boolean): Boolean
 
-    fun editGroup(group: Group): Boolean
+    fun editGroup(group: Group, newLecture: Boolean): Boolean
 
     fun exitGroup(groupID: Int, uid: Int)
 

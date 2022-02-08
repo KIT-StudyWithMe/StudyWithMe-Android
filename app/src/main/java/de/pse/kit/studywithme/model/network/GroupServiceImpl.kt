@@ -1,36 +1,34 @@
 package de.pse.kit.studywithme.model.network
 
-import de.pse.kit.studywithme.model.data.Group
-import de.pse.kit.studywithme.model.data.Lecture
-import de.pse.kit.studywithme.model.data.User
+import de.pse.kit.studywithme.model.data.*
 import io.ktor.client.*
 
 class GroupServiceImpl(private var client: HttpClient): GroupService {
-    override suspend fun getGroups(search: String): List<Group> {
+    override suspend fun getGroups(search: String): List<RemoteGroup> {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getJoinedGroups(uid: Int): List<Group> {
+    override suspend fun getJoinedGroups(uid: Int): List<RemoteGroup> {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getGroupSuggestions(uid: Int): List<Group> {
+    override suspend fun getGroupSuggestions(uid: Int): List<RemoteGroup> {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getGroup(groupID: Int): Group {
+    override suspend fun getGroup(groupID: Int): RemoteGroup? {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getGroupMembers(groupID: Int): List<User>? {
+    override suspend fun getGroupMembers(groupID: Int): List<GroupMember>? {
         TODO("Not yet implemented")
     }
 
-    override suspend fun newGroup(group: Group): Group? {
+    override suspend fun newGroup(group: RemoteGroup): RemoteGroup? {
         TODO("Not yet implemented")
     }
 
-    override suspend fun editGroup(groupID: Int, group: Group) {
+    override suspend fun editGroup(groupID: Int, group: RemoteGroup): RemoteGroup {
         TODO("Not yet implemented")
     }
 
@@ -38,7 +36,7 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
         TODO("Not yet implemented")
     }
 
-    override suspend fun newMember(groupID: Int, uid: Int): Group? {
+    override suspend fun newMember(groupID: Int, uid: Int): GroupMember? {
         TODO("Not yet implemented")
     }
 
@@ -51,6 +49,18 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
     }
 
     override suspend fun getLectures(prefix: String): List<Lecture> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getLecture(lectureID: Int): Lecture? {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun newLecture(lecture: Lecture): Lecture? {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getMajor(majorID: Int): Major? {
         TODO("Not yet implemented")
     }
 

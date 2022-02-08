@@ -1,42 +1,25 @@
 package de.pse.kit.studywithme.model.data
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-
-@Entity
-data class Group(
-    @PrimaryKey
-    @ColumnInfo(name = "group_ID")
+data class Group (
     val groupID: Int,
 
-    @ColumnInfo(name = "name")
     val name: String,
 
-    @ColumnInfo(name = "lecture_ID")
-    val lectureID: Int,
+    var lectureID: Int,
 
-    @ColumnInfo(name = "lecture")
-    val lecture: String,
+    val lecture: Lecture? = null,
 
-    @ColumnInfo(name = "description")
-    val description: String?,
+    val major: Major? = null,
 
-    @ColumnInfo(name = "session_frequency")
-    val sessionFrequency: SessionFrequency?,
+    val description: String,
 
-    @ColumnInfo(name = "session_type")
-    val sessionType: SessionType?,
+    val sessionFrequency: SessionFrequency,
 
-    @ColumnInfo(name = "lecture_chapter")
-    val lectureChapter: Int?,
+    val sessionType: SessionType,
 
-    @ColumnInfo(name = "exercise")
-    val exercise: Int?,
+    val lectureChapter: Int,
 
-    @ColumnInfo(name = "group_admin_ID")
-    val groupAdminID: Int,
+    val exercise: Int,
 
-    @ColumnInfo(name = "participants_sum")
-    val participantsSum: Int
+    val hidden: Boolean
 )
