@@ -168,8 +168,7 @@ fun NavGraphBuilder.searchGroupsGraph(navController: NavController, groupRepo: G
             NonJoinedGroupDetailsView(
                 NonJoinedGroupDetailsViewModel(
                     navController,
-                    it.arguments!!.getInt(NavGraph.JoinedGroupDetails.argName),
-                    groupRepo
+                    it.arguments!!.getInt(NavGraph.NonJoinedGroupDetails.argName)
                 )
             )
         }
