@@ -125,7 +125,8 @@ fun NavGraphBuilder.joinedGroupsGraph(navController: NavController) {
             NewSessionView(
                 NewSessionViewModel(
                     navController,
-                    it.arguments!!.getInt(NavGraph.NewSession.argName)
+                    it.arguments!!.getInt(NavGraph.NewSession.argName),
+                    SessionRepository.getInstance(LocalContext.current)
                 )
             )
         }

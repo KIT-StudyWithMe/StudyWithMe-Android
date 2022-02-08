@@ -1,23 +1,60 @@
 package de.pse.kit.studywithme.ui.view.session
 
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
+import android.util.Log
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
+import de.pse.kit.studywithme.model.repository.FakeSessionRepository
+import de.pse.kit.studywithme.model.repository.SessionRepository
 import de.pse.kit.studywithme.ui.component.NavigationBar
+import de.pse.kit.studywithme.ui.component.TopBar
+import de.pse.kit.studywithme.ui.layout.Sessionlayout
 import de.pse.kit.studywithme.viewModel.session.NewSessionViewModel
+import java.util.*
 
 @ExperimentalMaterial3Api
 @Composable
 fun NewSessionView(viewModel: NewSessionViewModel) {
     MyApplicationTheme3 {
         Scaffold(
-            containerColor = MaterialTheme.colorScheme.surface
+            containerColor = MaterialTheme.colorScheme.surface,
+            topBar = {
+                TopBar(
+                    title = "Nächste Lernsession",
+                    isTab = true,
+                    actions = {
+                        IconButton(onClick = { viewModel.saveNewSession() }) {
+                            Icon(
+                                Icons.Rounded.Edit,
+                                contentDescription = "Knopf um die Nutzerdaten zu editieren."
+                            )
+                        }
+                    })
+            },
+            bottomBar = {
+                NavigationBar(
+                    selectedItem = remember { mutableStateOf(0) },
+                    clickLeft = { viewModel.navToJoinedGroups() },
+                    clickMiddle = { viewModel.navToSearchGroups() })
+            }
         ) {
-
+            Sessionlayout(
+                place = "",
+                placeChange = { viewModel.place.value = it },
+                date = null,
+                dateChange = { viewModel.date.value = it },
+                time = null,
+                timeChange = { viewModel.date.value = it },
+                duration = "",
+                durationChange = { viewModel.duration.value = it }
+            )
         }
     }
 }
@@ -26,5 +63,9 @@ fun NewSessionView(viewModel: NewSessionViewModel) {
 @Preview
 @Composable
 fun NewSessionViewPreview() {
-    NewSessionView(NewSessionViewModel(rememberNavController(), 0))
+    NewSessionView(
+        NewSessionViewModel(
+            rememberNavController(), 0, FakeSessionRepository()
+        )
+    )
 }
