@@ -174,7 +174,7 @@ fun NavGraphBuilder.searchGroupsGraph(navController: NavController, groupRepo: G
             )
         }
         composable(NavGraph.NewGroup.route) {
-            NewGroupView(NewGroupViewModel(navController))
+            NewGroupView(NewGroupViewModel(navController, GroupRepository.getInstance(LocalContext.current)))
         }
         composable(
             route = NavGraph.EditGroup.route,
