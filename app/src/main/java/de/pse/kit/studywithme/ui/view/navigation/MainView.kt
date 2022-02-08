@@ -88,7 +88,13 @@ fun NavGraphBuilder.joinedGroupsGraph(navController: NavController) {
         route = NavGraph.JoinedGroupsTab.route
     ) {
         composable(route = NavGraph.JoinedGroups.route) {
-            JoinedGroupsView(JoinedGroupsViewModel(navController))
+            JoinedGroupsView(
+                JoinedGroupsViewModel(
+                    navController, GroupRepository.getInstance(
+                        LocalContext.current
+                    )
+                )
+            )
         }
         composable(
             route = NavGraph.JoinedGroupDetails.route,

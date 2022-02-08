@@ -26,6 +26,7 @@ class SignUpViewModel(navController: NavController, val userRepo: UserRepository
             contact = email.value,
             college = college.value,
             major = major.value,
+            majorID = -1, // TODO() noch ändern
             firebaseUID = "-1"
         )
         Log.d("Auth-UI", "signUp:started")

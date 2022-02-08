@@ -41,7 +41,7 @@ class UserRepository private constructor(context: Context) : UserRepositoryInter
 
             launch {
                 val remoteUser = userService.getUser(auth.firebaseUID)
-                auth.uid = remoteUser?.userID ?: auth.uid
+                auth.user = remoteUser ?: auth.user
                 send(remoteUser)
                 truthWasSend.set(true)
             }
@@ -82,7 +82,7 @@ class UserRepository private constructor(context: Context) : UserRepositoryInter
                     Log.d(auth.TAG, "Remote Database User Post:success")
                     userDao.saveUser(remoteUser)
                     userCache = remoteUser
-                    auth.uid = remoteUser.userID
+                    auth.user = remoteUser
 
                     return@runBlocking true
                 } else {
@@ -102,7 +102,7 @@ class UserRepository private constructor(context: Context) : UserRepositoryInter
                     Log.d(auth.TAG, "Remote Database User Post:success")
                     userDao.saveUser(remoteUser)
                     userCache = remoteUser
-                    auth.uid = remoteUser.userID
+                    auth.user = remoteUser
 
                     return@runBlocking true
                 } else {

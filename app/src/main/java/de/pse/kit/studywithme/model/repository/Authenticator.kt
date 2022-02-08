@@ -4,6 +4,7 @@ import android.util.Log
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import de.pse.kit.studywithme.model.data.User
 import kotlinx.coroutines.tasks.await
 
 object Authenticator {
@@ -11,7 +12,7 @@ object Authenticator {
     private val auth = Firebase.auth
     private var firebaseUser = auth.currentUser
     val firebaseUID: String? = firebaseUser?.uid
-    var uid: Int? = null
+    var user: User? = null
 
     suspend fun signUp(email: String, password: String): Boolean {
         try {

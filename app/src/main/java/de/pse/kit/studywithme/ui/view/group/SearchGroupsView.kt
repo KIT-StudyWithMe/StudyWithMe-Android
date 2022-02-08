@@ -43,12 +43,12 @@ fun SearchGroupsView(viewModel: SearchGroupsViewModel) {
                     modifier = Modifier.padding(top = 12.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    items(viewModel.groups.size) {
-                        val group = viewModel.groups.get(it)
+                    items(viewModel.groups.value.size) {
+                        val group = viewModel.groups.value.get(it)
                         SearchGroupResult(
                             groupName = group.name,
-                            lecture = group.lecture,
-                            major = "Informatik", // TODO()
+                            lecture = group.lecture?.lectureName ?: "",
+                            major = group.major?.name ?: "", // TODO()
                             onClick = { viewModel.navToGroup(group) }
                         )
                     }

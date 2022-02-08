@@ -16,27 +16,61 @@ class FakeGroupRepository() : GroupRepositoryInterface {
             groupID = 1,
             name = "Die lahmen Coder",
             lectureID = 0,
-            lecture = "Programmieren",
+            lecture = Lecture(
+                lectureID = 0,
+                lectureName = "Programmieren",
+                majorID = 0
+            ),
+            major = Major(
+                majorID = 0,
+                name = "Informatik"
+            ),
             description = "Cool bleiben.",
             sessionFrequency = SessionFrequency.MONTHLY,
             sessionType = SessionType.ONLINE,
-            lectureChapter = null,
-            exercise = null,
-            groupAdminID = 1,
-            participantsSum = 1,
+            lectureChapter = 1,
+            exercise = 1,
+            hidden = false
+        ),
+        Group(
+            groupID = 2,
+            name = "Die sehr lahmen Coder",
+            lectureID = 0,
+            lecture = Lecture(
+                lectureID = 0,
+                lectureName = "Lineare Algebra II",
+                majorID = 0
+            ),
+            major = Major(
+                majorID = 1,
+                name = "Mathematik"
+            ),
+            description = "Cool bleiben.",
+            sessionFrequency = SessionFrequency.MONTHLY,
+            sessionType = SessionType.ONLINE,
+            lectureChapter = 1,
+            exercise = 1,
+            hidden = false
         ),
         Group(
             groupID = 0,
             name = "Die wilden Coder",
             lectureID = 0,
-            lecture = "Programmieren",
+            lecture = Lecture(
+                lectureID = 0,
+                lectureName = "Programmieren",
+                majorID = 0
+            ),
+            major = Major(
+                majorID = 0,
+                name = "Informatik"
+            ),
             description = "",
             sessionFrequency = SessionFrequency.WEEKLY,
             sessionType = SessionType.HYBRID,
             lectureChapter = 8,
             exercise = 8,
-            groupAdminID = 0,
-            participantsSum = 5,
+            hidden = false
         )
     )
 
@@ -63,12 +97,12 @@ class FakeGroupRepository() : GroupRepositoryInterface {
         }
     }
 
-    override fun newGroup(group: Group): Boolean {
+    override fun newGroup(group: Group, newLecture: Boolean): Boolean {
         groups.plus(group)
         return true
     }
 
-    override fun editGroup(group: Group): Boolean {
+    override fun editGroup(group: Group, newLecture: Boolean): Boolean {
         groups.minus(groups.filter {
             it.groupID == group.groupID
         }.get(0))

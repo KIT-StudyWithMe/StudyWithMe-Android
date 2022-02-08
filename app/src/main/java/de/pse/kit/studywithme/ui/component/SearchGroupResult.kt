@@ -52,7 +52,7 @@ fun SearchGroupResult(
                         .align(Alignment.CenterVertically)
                 ) {
                     Text(
-                        text = major.take(3),
+                        text = major.take(2),
                         modifier = Modifier.align(Alignment.Center),
                         fontSize = MaterialTheme.typography.titleLarge.fontSize,
                         color = MaterialTheme.colorScheme.onSecondary
