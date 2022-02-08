@@ -65,7 +65,7 @@ class FakeGroupRepository() : GroupRepositoryInterface {
                 majorID = 0,
                 name = "Informatik"
             ),
-            description = "",
+            description = "wir sind die coolsten wenn wir cruisen, wenn wir durch die city cruisen. djfg djhgjfngjfngjnfjngjfngjnfjgnfjngjfngjnfjnj",
             sessionFrequency = SessionFrequency.WEEKLY,
             sessionType = SessionType.HYBRID,
             lectureChapter = 8,
@@ -73,6 +73,31 @@ class FakeGroupRepository() : GroupRepositoryInterface {
             hidden = false
         )
     )
+
+    private var groupMembers = listOf(
+        User(
+            userID = 1,
+            name = "max.fake",
+            contact = "max.fake@mustermail.com",
+            college = "Karlsruher Institut für Technologie",
+            majorID = 0,
+            major = "Informatik B.Sc.",
+            firebaseUID = "1"
+        )
+    )
+
+    private var groupAdmins = listOf(
+        User(
+            userID = 0,
+            name = "max.mustermann",
+            contact = "max.mustermann@mustermail.com",
+            college = "Karlsruher Institut für Technologie",
+            majorID = 0,
+            major = "Informatik B.Sc.",
+            firebaseUID = "0"
+        )
+    )
+
 
     override fun getGroups(search: String): List<Group> {
         return groups.filter {
@@ -132,7 +157,15 @@ class FakeGroupRepository() : GroupRepositoryInterface {
     }
 
     override fun getGroupMembers(groupID: Int): Flow<List<User>> {
-        TODO("Not yet implemented")
+        return flow {
+            emit(groupMembers)
+        }
+    }
+
+    override fun getGroupAdmins(groupID: Int): Flow<List<User>> {
+        return flow {
+            emit(groupAdmins)
+        }
     }
 
     override fun getLectures(prefix: String): Flow<List<Lecture>> {
