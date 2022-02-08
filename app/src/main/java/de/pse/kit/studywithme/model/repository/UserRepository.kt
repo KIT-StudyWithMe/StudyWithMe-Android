@@ -18,10 +18,12 @@ class UserRepository private constructor(context: Context) : UserRepositoryInter
     private val auth = Authenticator
     private var userCache: User? = null
 
+    @ExperimentalCoroutinesApi
     override fun isSignedIn(): Boolean {
         if (auth.firebaseUID == null) {
             return false
         }
+        getSignedInUser()
         return true
     }
 
@@ -29,21 +31,8 @@ class UserRepository private constructor(context: Context) : UserRepositoryInter
     override fun getSignedInUser(): Flow<User> {
 
         if (auth.firebaseUID == null) {
-            return flow {
-                emit(
-                    User(
-                        userID = 0,
-                        name = "max.mustermann2",
-                        contact = "max.mustermann2@gmail.com",
-                        firebaseUID = "0"
-                    )
-                )
-            }
-            /*
            // TODO: Explicit exception class
            throw Exception("Authentication Error: No local user signed in.")
-
-             */
         }
 
         return channelFlow {
@@ -52,6 +41,7 @@ class UserRepository private constructor(context: Context) : UserRepositoryInter
 
             launch {
                 val remoteUser = userService.getUser(auth.firebaseUID)
+                auth.uid = remoteUser?.userID ?: auth.uid
                 send(remoteUser)
                 truthWasSend.set(true)
             }
@@ -92,6 +82,7 @@ class UserRepository private constructor(context: Context) : UserRepositoryInter
                     Log.d(auth.TAG, "Remote Database User Post:success")
                     userDao.saveUser(remoteUser)
                     userCache = remoteUser
+                    auth.uid = remoteUser.userID
 
                     return@runBlocking true
                 } else {
@@ -111,6 +102,7 @@ class UserRepository private constructor(context: Context) : UserRepositoryInter
                     Log.d(auth.TAG, "Remote Database User Post:success")
                     userDao.saveUser(remoteUser)
                     userCache = remoteUser
+                    auth.uid = remoteUser.userID
 
                     return@runBlocking true
                 } else {

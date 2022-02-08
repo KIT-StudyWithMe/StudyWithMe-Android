@@ -16,6 +16,7 @@ class FakeUserRepository(var signedIn: Boolean) : UserRepositoryInterface {
         firebaseUID = "0"
     )
 
+    @ExperimentalCoroutinesApi
     override fun isSignedIn(): Boolean {
         return signedIn
     }

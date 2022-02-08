@@ -29,6 +29,7 @@ fun EditSessionView(viewModel: EditSessionViewModel) {
             containerColor = MaterialTheme.colorScheme.surface
         ) {
             TopBar(title = "Session bearbeiten")
+            /*
             Sessionlayout(
                 place = viewModel.place.collectAsState().value,
                 placeChange = {viewModel.place.value = it},
@@ -39,6 +40,7 @@ fun EditSessionView(viewModel: EditSessionViewModel) {
                 ending = null, //TODO
                 endingChange = {viewModel.duration.value = 0} //TODO
             )
+            */
         }
     }
 }

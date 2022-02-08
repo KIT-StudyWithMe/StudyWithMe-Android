@@ -138,6 +138,7 @@ fun NavGraphBuilder.joinedGroupsGraph(navController: NavController) {
     }
 }
 
+@ExperimentalMaterialApi
 @ExperimentalMaterial3Api
 fun NavGraphBuilder.searchGroupsGraph(navController: NavController) {
     navigation(
@@ -145,7 +146,12 @@ fun NavGraphBuilder.searchGroupsGraph(navController: NavController) {
         route = NavGraph.SearchGroupsTab.route
     ) {
         composable(route = NavGraph.SearchGroups.route) {
-            SearchGroupsView(SearchGroupsViewModel(navController))
+            SearchGroupsView(
+                SearchGroupsViewModel(
+                    navController,
+                    GroupRepository.getInstance(LocalContext.current)
+                )
+            )
         }
         composable(
             route = NavGraph.NonJoinedGroupDetails.route,

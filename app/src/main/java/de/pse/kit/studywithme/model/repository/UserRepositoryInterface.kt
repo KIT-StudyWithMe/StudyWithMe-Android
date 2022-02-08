@@ -6,6 +6,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepositoryInterface {
+    @ExperimentalCoroutinesApi
     fun isSignedIn(): Boolean
 
     @ExperimentalCoroutinesApi

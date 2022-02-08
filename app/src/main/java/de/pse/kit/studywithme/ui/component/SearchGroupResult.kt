@@ -36,7 +36,7 @@ fun SearchGroupResult(
             modifier = modifier.fillMaxWidth(),
             onClick = onClick,
             shape = RoundedCornerShape(12.dp),
-            border = BorderStroke(Dp.Hairline, color = MaterialTheme.colorScheme.tertiary),
+            border = BorderStroke(1.dp, color = MaterialTheme.colorScheme.tertiary),
             backgroundColor = MaterialTheme.colorScheme.primary
         ) {
             Row(
