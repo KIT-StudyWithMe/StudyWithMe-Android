@@ -32,12 +32,12 @@ fun EditSessionView(viewModel: EditSessionViewModel) {
             Sessionlayout(
                 place = viewModel.place.collectAsState().value,
                 placeChange = {viewModel.place.value = it},
-                date = viewModel.date.collectAsState().value.toString(),
+                date = viewModel.date.collectAsState().value,
                 dateChange = {viewModel.date.value = Date(2022,12,13) }, //TODO
-                time = viewModel.time.collectAsState().value.toString(),
+                time = null, //TODO
                 timeChange = {viewModel.time.value = 0}, //TODO
-                duration = viewModel.duration.collectAsState().value.toString(),
-                durationChange = {viewModel.duration.value = 0} //TODO
+                ending = null, //TODO
+                endingChange = {viewModel.duration.value = 0} //TODO
             )
         }
     }
