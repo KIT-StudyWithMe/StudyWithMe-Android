@@ -7,6 +7,7 @@ import de.pse.kit.studywithme.model.data.Session
 import de.pse.kit.studywithme.model.data.SessionAttendee
 import de.pse.kit.studywithme.model.database.AppDatabase
 import de.pse.kit.studywithme.model.network.SessionService
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.filterNotNull
@@ -21,6 +22,7 @@ class SessionRepository private constructor(context: Context) : SessionRepositor
     // TODO: Local in key value speichern beim anmelden und hier abrufen
     private val uid: Int?  = null
 
+    @ExperimentalCoroutinesApi
     override fun getSessions(groupID: Int): Flow<List<Session>> {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class

@@ -17,7 +17,7 @@ import de.pse.kit.studywithme.ui.component.*
 @ExperimentalMaterial3Api
 @Composable
 fun GroupDetailsLayout(
-    groupAdmin: String = "",
+    groupAdmin: List<String>,
     groupMember: List<String>,
     description: String = "",
     place: String? = "",
@@ -32,7 +32,9 @@ fun GroupDetailsLayout(
         ) {
             Column(modifier = Modifier.padding(horizontal = 24.dp, vertical = 0.dp)) {
                 Text(text = "Gruppeninformationen", modifier = Modifier.padding(top = 12.dp))
-                FormText(icon = Icons.Filled.Person, text = groupAdmin)
+                for (element in groupAdmin) {
+                    FormText(icon = Icons.Filled.Person, text = element)
+                }
                 for (element in groupMember) {
                     FormText(icon = Icons.Outlined.Person, text = element)
                 }
@@ -86,7 +88,7 @@ fun GroupDetailsLayoutPreview() {
         bottomBar = { NavigationBar() }
     ) {
         GroupDetailsLayout(
-            groupAdmin = "Der coole Daniel",
+            groupAdmin = listOf("Der coole Daniel"),
             groupMember = listOf("Joe", "Maria", "Joachim"),
             description = "Wir sind voll die coole Truppe",
             place = "Engelbertstraße 21, 76227 Karlsruhe",

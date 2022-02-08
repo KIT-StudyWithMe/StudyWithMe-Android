@@ -262,7 +262,9 @@ class GroupRepository private constructor(context: Context): GroupRepositoryInte
 
             launch {
                 val remoteGroupMembers = groupService.getGroupMembers(groupID)
-                val groupMembers = remoteGroupMembers?.map {
+                val groupMembers = remoteGroupMembers?.filter{
+                    !it.isAdmin
+                }?.map {
                     userService.getUser(it.userID)
                 }?.filterNotNull()
                 send(groupMembers)
@@ -270,7 +272,43 @@ class GroupRepository private constructor(context: Context): GroupRepositoryInte
             }
             launch {
                 val localGroupMembers = groupDao.getGroupMembers(groupID)
-                val groupMembers = localGroupMembers.map {
+                val groupMembers = localGroupMembers.filter{
+                    !it.isAdmin
+                }.map {
+                    userService.getUser(it.userID)
+                }.filterNotNull()
+
+                if (!truthWasSend.get()) {
+                    send(groupMembers)
+                }
+            }
+        }.filterNotNull()
+    }
+
+    override fun getGroupAdmins(groupID: Int): Flow<List<User>> {
+        if (auth.firebaseUID == null) {
+            // TODO: Explicit exception class
+            throw Exception("Authentication Error: No local user signed in.")
+        }
+
+        return channelFlow {
+            val truthWasSend = AtomicBoolean(false)
+
+            launch {
+                val remoteGroupMembers = groupService.getGroupMembers(groupID)
+                val groupMembers = remoteGroupMembers?.filter{
+                    it.isAdmin
+                }?.map {
+                    userService.getUser(it.userID)
+                }?.filterNotNull()
+                send(groupMembers)
+                truthWasSend.set(true)
+            }
+            launch {
+                val localGroupMembers = groupDao.getGroupMembers(groupID)
+                val groupMembers = localGroupMembers.filter{
+                    it.isAdmin
+                }.map {
                     userService.getUser(it.userID)
                 }.filterNotNull()
 

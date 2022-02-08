@@ -11,12 +11,11 @@ import java.util.*
 
 class FakeSessionRepository() : SessionRepositoryInterface {
 
-    @RequiresApi(Build.VERSION_CODES.O)
     var session = Session(
         sessionID = 0,
         groupID = 0,
         location = "Bibliothek",
-        date = Date(2022,12,31),
+        date = Date(),
         duration = 2
     )
     var sessionAttendee = SessionAttendee(
