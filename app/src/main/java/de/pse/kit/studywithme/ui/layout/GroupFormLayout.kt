@@ -28,6 +28,8 @@ fun GroupFormLayout(
     chapterNumberChange: (String) -> Unit = {},
     exerciseSheetNumber: String = "",
     exerciseSheetNumberChange: (String) -> Unit = {},
+    sessionFrequencyStrings: List<String>,
+    groupSessionTypeStrings: List<String>
 ) {
     MyApplicationTheme3 {
         Scaffold(
@@ -57,19 +59,13 @@ fun GroupFormLayout(
                     text = "Geplante Häufigkeit der Treffen"
                 )
                 ChipSelectionRow(
-                    chipNames = listOf(
-                        "Einmalig",
-                        "Wöchentlich",
-                        "Alle 2 Wochen",
-                        "Alle 3 Wochen",
-                        "Monatlich",
-                    ),
+                    chipNames = sessionFrequencyStrings,
                     selected = groupSessionFrequency,
                     onChange = groupSessionFrequencyChange
                 )
                 Text(modifier = Modifier.padding(vertical = 12.dp), text = "Geplante Art der Treffen")
                 ChipSelectionRow(
-                    chipNames = listOf("Präsenz", "Online", "Hybrid"),
+                    chipNames = groupSessionTypeStrings,
                     selected = groupSessionType,
                     onChange = groupSessionTypeChange
                 )
@@ -109,7 +105,16 @@ fun NewGroupFormPreview() {
         },
         bottomBar = { NavigationBar(remember { mutableStateOf(1) }) }
     ) {
-        GroupFormLayout()
+        GroupFormLayout(
+            sessionFrequencyStrings = listOf(
+                "Einmalig",
+                "Wöchentlich",
+                "Alle 2 Wochen",
+                "Alle 3 Wochen",
+                "Monatlich",
+            ),
+            groupSessionTypeStrings = listOf("Präsenz", "Online", "Hybrid")
+        )
     }
 }
 
@@ -133,6 +138,14 @@ fun EditGroupFormPreview() {
         },
         bottomBar = { NavigationBar(selectedItem = remember { mutableStateOf(1) }) }
     ) {
-        GroupFormLayout(groupName = "Gruppe 6", lecture = "Lineare Algebra II", description = "Moin Moin!", groupSessionFrequency = "Einmalig", groupSessionType = "Online")
+        GroupFormLayout(groupName = "Gruppe 6", lecture = "Lineare Algebra II", description = "Moin Moin!", groupSessionFrequency = "Einmalig", groupSessionType = "Online",
+        sessionFrequencyStrings = listOf(
+            "Einmalig",
+            "Wöchentlich",
+            "Alle 2 Wochen",
+            "Alle 3 Wochen",
+            "Monatlich",
+        ),
+        groupSessionTypeStrings = listOf("Präsenz", "Online", "Hybrid"))
     }
 }
