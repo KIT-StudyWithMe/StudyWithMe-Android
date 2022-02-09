@@ -3,11 +3,14 @@ package de.pse.kit.studywithme.model.network
 import de.pse.kit.studywithme.model.data.Session
 import de.pse.kit.studywithme.model.data.SessionAttendee
 import io.ktor.client.*
+import io.ktor.client.call.*
 import io.ktor.client.features.*
 import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.http.*
+import io.ktor.client.statement.request
 
-class SessionServiceImpl(private val client: HttpClient): SessionService {
+class SessionServiceImpl(private val client: HttpClient) : SessionService {
     override suspend fun getSessions(groupID: Int): List<Session> {
         return try {
             client.get(HttpRoutes.GROUPS + groupID + "/detail/sessions")
@@ -46,10 +49,13 @@ class SessionServiceImpl(private val client: HttpClient): SessionService {
 
     override suspend fun newSession(session: Session): Session? {
         return try {
-            client.post(HttpRoutes.GROUPS + session.groupID + "/detail/sessions") {
-                contentType(ContentType.Application.Json)
-                body = session
-            }
+            val httpResponse: HttpResponse =
+                client.post(HttpRoutes.GROUPS + session.groupID + "/detail/sessions") {
+                    contentType(ContentType.Application.Json)
+                    body = session
+                }
+            val session: Session? = httpResponse.receive()
+            return session
         } catch (e: RedirectResponseException) {
             println("Redirect Error: ${e.response.status.description}")
             null
@@ -57,6 +63,7 @@ class SessionServiceImpl(private val client: HttpClient): SessionService {
             println("Request Error: ${e.response.status.description}")
             null
         } catch (e: ServerResponseException) {
+            println("Response Error: ${e.response.status}")
             println("Response Error: ${e.response.status.description}")
             null
         } catch (e: Exception) {

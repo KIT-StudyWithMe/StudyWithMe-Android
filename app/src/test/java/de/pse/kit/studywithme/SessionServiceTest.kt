@@ -3,6 +3,9 @@ package de.pse.kit.studywithme
 import com.google.common.truth.Truth.assertThat
 import de.pse.kit.studywithme.model.data.Session
 import de.pse.kit.studywithme.model.network.SessionService
+import de.pse.kit.studywithme.model.network.SessionServiceImpl
+import io.ktor.client.*
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -21,5 +24,15 @@ class SessionServiceTest {
 
         val decodedSession = Json.decodeFromString<Session>(encodedSession)
         assertThat(decodedSession).isEqualTo(session)
+    }
+
+    @Test
+     fun createSession() {
+        val session = Session(0, 0, "Bibliothek", Date(1608336000000), 2)
+
+        runBlocking {
+            val saveSession = service.newSession(session)
+            println(saveSession)
+        }
     }
 }
