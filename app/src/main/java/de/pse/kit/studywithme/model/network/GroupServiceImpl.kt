@@ -8,7 +8,23 @@ import io.ktor.http.*
 
 class GroupServiceImpl(private var client: HttpClient): GroupService {
     override suspend fun getGroups(search: String): List<RemoteGroup> {
-        TODO("Not yet implemented")
+        return try {
+            client.get(HttpRoutes.GROUPS) {
+                parameter("text", search)
+            }
+        } catch (e: RedirectResponseException) {
+            println("Redirect Error: ${e.response.status.description}")
+            emptyList<RemoteGroup>()
+        } catch (e: ClientRequestException) {
+            println("Request Error: ${e.response.status.description}")
+            emptyList<RemoteGroup>()
+        } catch (e: ServerResponseException) {
+            println("Response Error: ${e.response.status.description}")
+            emptyList<RemoteGroup>()
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+            emptyList<RemoteGroup>()
+        }
     }
 
     override suspend fun getJoinedGroups(uid: Int): List<RemoteGroup> {
