@@ -251,7 +251,7 @@ class GroupRepository private constructor(context: Context): GroupRepositoryInte
         }
     }
 
-    override fun getGroupMembers(groupID: Int): Flow<List<User>> {
+    override fun getGroupMembers(groupID: Int): Flow<List<GroupMember>> {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
@@ -262,30 +262,19 @@ class GroupRepository private constructor(context: Context): GroupRepositoryInte
 
             launch {
                 val remoteGroupMembers = groupService.getGroupMembers(groupID)
-                val groupMembers = remoteGroupMembers?.filter{
-                    !it.isAdmin
-                }?.map {
-                    userService.getUser(it.userID)
-                }?.filterNotNull()
-                send(groupMembers)
+                send(remoteGroupMembers)
                 truthWasSend.set(true)
             }
             launch {
                 val localGroupMembers = groupDao.getGroupMembers(groupID)
-                val groupMembers = localGroupMembers.filter{
-                    !it.isAdmin
-                }.map {
-                    userService.getUser(it.userID)
-                }.filterNotNull()
-
                 if (!truthWasSend.get()) {
-                    send(groupMembers)
+                    send(localGroupMembers)
                 }
             }
         }.filterNotNull()
     }
 
-    override fun getGroupAdmins(groupID: Int): Flow<List<User>> {
+    override fun getGroupAdmins(groupID: Int): Flow<List<GroupMember>> {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
@@ -296,24 +285,17 @@ class GroupRepository private constructor(context: Context): GroupRepositoryInte
 
             launch {
                 val remoteGroupMembers = groupService.getGroupMembers(groupID)
-                val groupMembers = remoteGroupMembers?.filter{
+                send(remoteGroupMembers?.filter {
                     it.isAdmin
-                }?.map {
-                    userService.getUser(it.userID)
-                }?.filterNotNull()
-                send(groupMembers)
+                })
                 truthWasSend.set(true)
             }
             launch {
                 val localGroupMembers = groupDao.getGroupMembers(groupID)
-                val groupMembers = localGroupMembers.filter{
-                    it.isAdmin
-                }.map {
-                    userService.getUser(it.userID)
-                }.filterNotNull()
-
                 if (!truthWasSend.get()) {
-                    send(groupMembers)
+                    send(localGroupMembers.filter {
+                        it.isAdmin
+                    })
                 }
             }
         }.filterNotNull()

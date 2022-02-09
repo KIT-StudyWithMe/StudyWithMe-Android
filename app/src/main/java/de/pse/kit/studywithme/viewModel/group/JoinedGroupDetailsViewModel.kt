@@ -5,11 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.navigation.NavController
 import de.pse.kit.studywithme.model.data.*
 import de.pse.kit.studywithme.ui.view.navigation.NavGraph
-import de.pse.kit.studywithme.model.repository.GroupRepository
 import de.pse.kit.studywithme.model.repository.GroupRepositoryInterface
 import de.pse.kit.studywithme.model.repository.SessionRepositoryInterface
 import de.pse.kit.studywithme.viewModel.SignedInViewModel
-import de.pse.kit.studywithme.viewModel.ViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -23,8 +21,7 @@ class JoinedGroupDetailsViewModel(
 ) : SignedInViewModel(navController) {
 
     val group: MutableState<Group?> = mutableStateOf(null)
-    val members: MutableState<List<User>> = mutableStateOf(emptyList())
-    val admins: MutableState<List<User>> = mutableStateOf(emptyList())
+    val members: MutableState<List<GroupMember>> = mutableStateOf(emptyList())
     val sessions: MutableState<List<Session>> = mutableStateOf(emptyList())
 
 
@@ -38,11 +35,6 @@ class JoinedGroupDetailsViewModel(
             launch {
                 groupRepo.getGroupMembers(groupID).collect {
                     members.value = it
-                }
-            }
-            launch {
-                groupRepo.getGroupAdmins(groupID).collect {
-                    admins.value = it
                 }
             }
             launch {

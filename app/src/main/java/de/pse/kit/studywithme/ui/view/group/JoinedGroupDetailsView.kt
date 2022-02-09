@@ -37,7 +37,6 @@ fun JoinedGroupDetailsView(viewModel: JoinedGroupDetailsViewModel) {
         val group by viewModel.group
         val sessions by viewModel.sessions
         val groupMembers by viewModel.members
-        val groupAdmins by viewModel.admins
 
         Scaffold(
             topBar = {
@@ -67,10 +66,14 @@ fun JoinedGroupDetailsView(viewModel: JoinedGroupDetailsViewModel) {
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 GroupDetailsLayout(
-                    groupAdmin = groupAdmins.map {
+                    groupAdmin = groupMembers.filter {
+                        it.isAdmin
+                    }.map {
                         it.name
                     },
-                    groupMember = groupMembers.map {
+                    groupMember = groupMembers.filter {
+                        !it.isAdmin
+                    }.map {
                         it.name
                     },
                     description = group?.description ?: "",

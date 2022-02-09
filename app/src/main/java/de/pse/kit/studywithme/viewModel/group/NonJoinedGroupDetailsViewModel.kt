@@ -4,6 +4,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.navigation.NavController
 import de.pse.kit.studywithme.model.data.Group
+import de.pse.kit.studywithme.model.data.GroupMember
 import de.pse.kit.studywithme.model.data.Session
 import de.pse.kit.studywithme.model.data.User
 import de.pse.kit.studywithme.model.repository.GroupRepositoryInterface
@@ -20,7 +21,7 @@ class NonJoinedGroupDetailsViewModel(
     val groupRepo: GroupRepositoryInterface
 ) : SignedInViewModel(navController) {
     val group: MutableState<Group?> = mutableStateOf(null)
-    val admins: MutableState<List<User>> = mutableStateOf(emptyList())
+    val admins: MutableState<List<GroupMember>> = mutableStateOf(emptyList())
 
 
     init {

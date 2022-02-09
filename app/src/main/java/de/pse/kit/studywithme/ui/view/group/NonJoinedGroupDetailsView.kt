@@ -54,7 +54,9 @@ fun NonJoinedGroupDetailsView(viewModel: NonJoinedGroupDetailsViewModel) {
         ) {
             Column(modifier = Modifier.padding(horizontal = 24.dp, vertical = 0.dp)) {
                 GroupDetailsLayout(
-                    groupAdmin = groupAdmins.map {
+                    groupAdmin = groupAdmins.filter {
+                        it.isAdmin
+                    }.map {
                         it.name
                     },
                     groupMember = listOf(),

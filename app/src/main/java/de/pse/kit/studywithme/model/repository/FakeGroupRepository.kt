@@ -75,27 +75,31 @@ class FakeGroupRepository() : GroupRepositoryInterface {
     )
 
     private var groupMembers = listOf(
-        User(
+        GroupMember(
+            groupID = 0,
             userID = 1,
             name = "max.fake",
-            contact = "max.fake@mustermail.com",
-            college = "Karlsruher Institut für Technologie",
-            majorID = 0,
-            major = "Informatik B.Sc.",
-            firebaseUID = "1"
-        )
-    )
-
-    private var groupAdmins = listOf(
-        User(
+            isAdmin = false
+        ),
+        GroupMember(
+            groupID = 0,
             userID = 0,
             name = "max.mustermann",
-            contact = "max.mustermann@mustermail.com",
-            college = "Karlsruher Institut für Technologie",
-            majorID = 0,
-            major = "Informatik B.Sc.",
-            firebaseUID = "0"
+            isAdmin = true
+        ),
+        GroupMember(
+            groupID = 1,
+            userID = 0,
+            name = "max.mustermann",
+            isAdmin = true
+        ),
+        GroupMember(
+            groupID = 2,
+            userID = 0,
+            name = "max.mustermann",
+            isAdmin = true
         )
+
     )
 
 
@@ -156,15 +160,19 @@ class FakeGroupRepository() : GroupRepositoryInterface {
         TODO("Not yet implemented")
     }
 
-    override fun getGroupMembers(groupID: Int): Flow<List<User>> {
+    override fun getGroupMembers(groupID: Int): Flow<List<GroupMember>> {
         return flow {
-            emit(groupMembers)
+            emit(groupMembers.filter {
+                it.groupID == groupID
+            })
         }
     }
-
-    override fun getGroupAdmins(groupID: Int): Flow<List<User>> {
+    override fun getGroupAdmins(groupID: Int): Flow<List<GroupMember>> {
         return flow {
-            emit(groupAdmins)
+            emit(groupMembers.filter {
+                it.isAdmin
+                it.groupID == groupID
+            })
         }
     }
 
