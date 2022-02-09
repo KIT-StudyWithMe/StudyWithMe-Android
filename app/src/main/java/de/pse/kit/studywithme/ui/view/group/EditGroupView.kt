@@ -31,7 +31,9 @@ fun EditGroupView(viewModel: EditGroupViewModel) {
                                 contentDescription = "Knopf um die Gruppe zu bearbeiten."
                             )
                         }
-                    })
+                    },
+                    navClick = {viewModel.navBack()}
+                )
             },
             bottomBar = {
                 NavigationBar(
