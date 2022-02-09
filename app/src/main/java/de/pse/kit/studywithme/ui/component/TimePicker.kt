@@ -47,13 +47,12 @@ fun TimePicker(
         color,
         { _: TimePicker, selectedHour: Int, selectedMinute: Int ->
             time.value =
-                "${if (selectedHour < 10) "0" else ""}$selectedHour:${if (selectedMinute < 10) "0" else ""}$selectedMinute"
-            calendar.set(selectedHour, selectedMinute)
+                "$selectedHour:$selectedMinute"
             onChange(calendar.time)
         },
         hour,
         minute,
-        true
+        false
     )
 
     MyApplicationTheme3 {
