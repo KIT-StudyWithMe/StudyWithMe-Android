@@ -59,8 +59,8 @@ fun EditGroupView(viewModel: EditGroupViewModel) {
                 chapterNumberChange = {viewModel.groupLectureChapter.value = it},
                 exerciseSheetNumber = viewModel.groupExercise.collectAsState().value,
                 exerciseSheetNumberChange = {viewModel.groupExercise.value = it},
-                sessionFrequencyStrings = listOf(group!!.sessionFrequency.toString()),
-                groupSessionTypeStrings = listOf(group!!.sessionType.toString())
+                sessionFrequencyStrings = viewModel.sessionFrequencyStrings,
+                groupSessionTypeStrings = viewModel.sessionTypeStrings
             )
         }
     }
