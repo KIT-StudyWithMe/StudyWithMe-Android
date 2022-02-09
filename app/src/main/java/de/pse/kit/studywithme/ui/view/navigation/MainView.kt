@@ -127,7 +127,9 @@ fun NavGraphBuilder.joinedGroupsGraph(navController: NavController, groupRepo: G
                 NewSessionViewModel(
                     navController,
                     it.arguments!!.getInt(NavGraph.NewSession.argName),
-                    SessionRepository.getInstance(LocalContext.current)
+                    SessionRepository.getInstance(LocalContext.current),
+                    groupRepo,
+                    it.arguments!!.getInt(NavGraph.JoinedGroupDetails.argName)
                 )
             )
         }
@@ -139,7 +141,9 @@ fun NavGraphBuilder.joinedGroupsGraph(navController: NavController, groupRepo: G
                 EditSessionViewModel(
                     navController,
                     it.arguments!!.getInt(NavGraph.EditSession.argName),
-                    sessionRepo
+                    sessionRepo,
+                    groupRepo,
+                    it.arguments!!.getInt(NavGraph.JoinedGroupDetails.argName)
                 )
             )
         }

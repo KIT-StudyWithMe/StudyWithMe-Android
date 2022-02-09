@@ -4,18 +4,12 @@ import android.util.Log
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Save
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
-import de.pse.kit.studywithme.model.repository.FakeSessionRepository
-import de.pse.kit.studywithme.model.repository.GroupRepository
-import de.pse.kit.studywithme.model.repository.SessionRepository
-import de.pse.kit.studywithme.model.repository.UserRepository
+import de.pse.kit.studywithme.model.repository.*
 import de.pse.kit.studywithme.ui.component.NavigationBar
 import de.pse.kit.studywithme.ui.component.TopBar
 import de.pse.kit.studywithme.ui.layout.Sessionlayout
@@ -27,12 +21,15 @@ import java.util.*
 @ExperimentalMaterial3Api
 @Composable
 fun EditSessionView(viewModel: EditSessionViewModel) {
+    val group by viewModel.groupState
+
     MyApplicationTheme3 {
         Scaffold(
                 containerColor = MaterialTheme.colorScheme.surface,
             topBar = {
                 TopBar(
                     title = "Session bearbeiten",
+                    subtitle = group?.name ?: "",
                     actions = {
                         IconButton(onClick = { viewModel.saveSession() }) {
                             Icon(
@@ -79,7 +76,7 @@ fun EditSessionView(viewModel: EditSessionViewModel) {
 fun EditSessionViewPreview() {
     EditSessionView(
         EditSessionViewModel(
-            rememberNavController(), 0, FakeSessionRepository()
+            rememberNavController(), 0, FakeSessionRepository(), FakeGroupRepository(), 0
         )
     )
 }

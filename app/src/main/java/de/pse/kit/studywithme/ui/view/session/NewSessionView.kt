@@ -4,13 +4,11 @@ import android.util.Log
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
+import de.pse.kit.studywithme.model.repository.FakeGroupRepository
 import de.pse.kit.studywithme.model.repository.FakeSessionRepository
 import de.pse.kit.studywithme.model.repository.SessionRepository
 import de.pse.kit.studywithme.ui.component.NavigationBar
@@ -22,12 +20,15 @@ import java.util.*
 @ExperimentalMaterial3Api
 @Composable
 fun NewSessionView(viewModel: NewSessionViewModel) {
+    val group by viewModel.groupState
+
     MyApplicationTheme3 {
         Scaffold(
             containerColor = MaterialTheme.colorScheme.surface,
             topBar = {
                 TopBar(
                     title = "Nächste Lernsession",
+                    subtitle = group?.name ?: "",
                     isTab = true,
                     actions = {
                         IconButton(onClick = { viewModel.saveNewSession() }) {
@@ -65,7 +66,7 @@ fun NewSessionView(viewModel: NewSessionViewModel) {
 fun NewSessionViewPreview() {
     NewSessionView(
         NewSessionViewModel(
-            rememberNavController(), 0, FakeSessionRepository()
+            rememberNavController(), 0, FakeSessionRepository(), FakeGroupRepository(), 0
         )
     )
 }
