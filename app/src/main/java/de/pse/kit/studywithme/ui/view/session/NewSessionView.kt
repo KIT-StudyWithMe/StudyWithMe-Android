@@ -66,7 +66,7 @@ fun NewSessionView(viewModel: NewSessionViewModel) {
 fun NewSessionViewPreview() {
     NewSessionView(
         NewSessionViewModel(
-            rememberNavController(), 0, FakeSessionRepository(), FakeGroupRepository(), 0
+            rememberNavController(), FakeSessionRepository(), FakeGroupRepository(), 0
         )
     )
 }

@@ -66,13 +66,19 @@ sealed class NavGraph(val route: String, val arguments: List<NamedNavArgument>? 
     }
 
     object EditSession : NavGraph(
-        route = "$editSessionName/{$id}",
-        arguments = listOf(navArgument(id) {
-            type = NavType.IntType
-            nullable = false
-        })
+        route = "$editSessionName/{groupID}/{$id}",
+        arguments = listOf(
+            navArgument("groupID") {
+                type = NavType.IntType
+                nullable = false
+            },
+            navArgument(id) {
+                type = NavType.IntType
+                nullable = false
+            })
     ) {
-        const val argName = id
+        const val groupID = "groupID"
+        const val sessionID = id
     }
 
     companion object {
@@ -92,8 +98,8 @@ sealed class NavGraph(val route: String, val arguments: List<NamedNavArgument>? 
             navController.navigate("$newSessionName/$groupID")
         }
 
-        fun navigateToEditSession(navController: NavController, sessionID: Int) {
-            navController.navigate("$editSessionName/$sessionID")
+        fun navigateToEditSession(navController: NavController, groupID: Int, sessionID: Int) {
+            navController.navigate("$editSessionName/$groupID/$sessionID")
         }
 
         fun navigateToJoinedGroups(navController: NavController) {
