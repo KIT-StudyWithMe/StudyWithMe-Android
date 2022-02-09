@@ -115,7 +115,8 @@ fun NavGraphBuilder.joinedGroupsGraph(navController: NavController, groupRepo: G
             EditGroupView(
                 EditGroupViewModel(
                     navController,
-                    it.arguments!!.getInt(NavGraph.EditGroup.argName)
+                    it.arguments!!.getInt(NavGraph.EditGroup.argName),
+                    groupRepo
                 )
             )
         }
@@ -187,7 +188,8 @@ fun NavGraphBuilder.searchGroupsGraph(navController: NavController, groupRepo: G
             EditGroupView(
                 EditGroupViewModel(
                     navController,
-                    it.arguments!!.getInt(NavGraph.EditGroup.argName)
+                    it.arguments!!.getInt(NavGraph.EditGroup.argName),
+                    groupRepo
                 )
             )
         }
