@@ -25,7 +25,7 @@ class JoinedGroupDetailsViewModel(
     val group: MutableState<Group?> = mutableStateOf(null)
     val members: MutableState<List<User>> = mutableStateOf(emptyList())
     val admins: MutableState<List<User>> = mutableStateOf(emptyList())
-    val sesions: MutableState<List<Session>> = mutableStateOf(emptyList())
+    val sessions: MutableState<List<Session>> = mutableStateOf(emptyList())
 
 
     init {
@@ -47,7 +47,7 @@ class JoinedGroupDetailsViewModel(
             }
             launch {
                 sessionRepo.getSessions(groupID).collect {
-                    sesions.value = it
+                    sessions.value = it
                 }
             }
         }
@@ -55,5 +55,20 @@ class JoinedGroupDetailsViewModel(
 
     fun editGroup() {
         NavGraph.navigateToEditGroup(navController, groupID)
+    }
+
+
+    fun planSession() {
+        if (sessions.value.isEmpty()) {
+            NavGraph.navigateToNewSession(navController, groupID)
+        } else {
+            NavGraph.navigateToEditSession(navController, groupID = groupID, sessionID = sessions.value[0].sessionID)
+        }
+    }
+
+    fun participate() {
+        if (!sessions.value.isEmpty()) {
+            sessionRepo.newAttendee(sessions.value[0].sessionID)
+        }
     }
 }

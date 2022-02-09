@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.flow
 import kotlin.streams.toList
 
 class FakeGroupRepository() : GroupRepositoryInterface {
-    private var groups = listOf(
+    private var groups = mutableListOf(
         Group(
             groupID = 1,
             name = "Die lahmen Coder",
@@ -123,7 +123,7 @@ class FakeGroupRepository() : GroupRepositoryInterface {
     }
 
     override fun newGroup(group: Group, newLecture: Boolean): Boolean {
-        groups.plus(group)
+        groups.add(group)
         return true
     }
 
@@ -131,7 +131,7 @@ class FakeGroupRepository() : GroupRepositoryInterface {
         groups.minus(groups.filter {
             it.groupID == group.groupID
         }.get(0))
-        groups.plus(group)
+        groups.add(group)
         return true
     }
 
@@ -139,7 +139,7 @@ class FakeGroupRepository() : GroupRepositoryInterface {
     }
 
     override fun deleteGroup(group: Group) {
-        groups.minus(groups.filter {
+        groups.remove(groups.filter {
             it.groupID == group.groupID
         }.get(0))
     }

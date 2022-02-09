@@ -127,10 +127,10 @@ fun NavGraphBuilder.joinedGroupsGraph(navController: NavController, groupRepo: G
             NewSessionView(
                 NewSessionViewModel(
                     navController,
-                    it.arguments!!.getInt(NavGraph.NewSession.argName),
-                    SessionRepository.getInstance(LocalContext.current),
+                    sessionRepo,
                     groupRepo,
-                    it.arguments!!.getInt(NavGraph.JoinedGroupDetails.argName)
+                    it.arguments!!.getInt(NavGraph.NewSession.argName)
+
                 )
             )
         }
@@ -141,10 +141,10 @@ fun NavGraphBuilder.joinedGroupsGraph(navController: NavController, groupRepo: G
             EditSessionView(
                 EditSessionViewModel(
                     navController,
-                    it.arguments!!.getInt(NavGraph.EditSession.argName),
+                    it.arguments!!.getInt(NavGraph.EditSession.sessionID),
                     sessionRepo,
                     groupRepo,
-                    it.arguments!!.getInt(NavGraph.JoinedGroupDetails.argName)
+                    it.arguments!!.getInt(NavGraph.EditSession.groupID)
                 )
             )
         }
@@ -179,7 +179,7 @@ fun NavGraphBuilder.searchGroupsGraph(navController: NavController, groupRepo: G
             )
         }
         composable(NavGraph.NewGroup.route) {
-            NewGroupView(NewGroupViewModel(navController, GroupRepository.getInstance(LocalContext.current)))
+            NewGroupView(NewGroupViewModel(navController, groupRepo))
         }
         composable(
             route = NavGraph.EditGroup.route,

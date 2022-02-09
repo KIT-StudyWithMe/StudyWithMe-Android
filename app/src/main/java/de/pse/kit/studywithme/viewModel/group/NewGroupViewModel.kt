@@ -1,5 +1,6 @@
 package de.pse.kit.studywithme.viewModel.group
 
+import android.util.Log
 import androidx.navigation.NavController
 import de.pse.kit.studywithme.model.data.Group
 import de.pse.kit.studywithme.model.data.Lecture
@@ -70,7 +71,10 @@ class NewGroupViewModel(navController: NavController, private val groupRepo: Gro
             exercise = groupExerciseInt,
             hidden = false,
         )
-        groupRepo.newGroup(group, true)
+        val saved = groupRepo.newGroup(group, true)
+        if (saved) {
+            navBack()
+        }
     }
     fun cancel() {
        NavGraph.navigateToSearchGroups(navController)

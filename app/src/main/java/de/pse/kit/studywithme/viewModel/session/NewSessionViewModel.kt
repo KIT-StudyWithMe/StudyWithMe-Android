@@ -17,21 +17,14 @@ import java.util.*
 
 class NewSessionViewModel(
     navController: NavController,
-    val sessionID: Int,
     val sessionRepo: SessionRepositoryInterface,
     val groupRepo: GroupRepositoryInterface,
     val groupID: Int
 ) : SignedInViewModel(navController) {
     val groupState: MutableState<Group?> = mutableStateOf(null)
-    var session: Session? = null
-    var group: Group? = null
     val place: MutableStateFlow<String> = MutableStateFlow("")
     val date: MutableStateFlow<Date> = MutableStateFlow(Date())
     val duration: MutableStateFlow<String> = MutableStateFlow("")
-
-    fun navToJoinedGroupDetails(groupID: Int) {
-        NavGraph.navigateToJoinedGroup(navController, groupID)
-    }
 
     init {
         runBlocking {
@@ -44,16 +37,17 @@ class NewSessionViewModel(
     }
 
     fun saveNewSession() {
-        if (session != null) {
-            sessionRepo.editSession(
-                Session(
-                    sessionID = session!!.sessionID,
-                    groupID = group!!.groupID,
-                    location = place.value,
-                    date = session!!.date,
-                    duration = session!!.duration
-                )
+        val saved = sessionRepo.newSession(
+            Session(
+                sessionID = -1,
+                groupID = groupID,
+                location = place.value,
+                date = date.value,
+                duration = duration.value.toInt()
             )
+        )
+        if (saved) {
+            navBack()
         }
     }
 }

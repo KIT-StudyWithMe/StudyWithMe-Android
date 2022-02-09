@@ -41,4 +41,8 @@ class NonJoinedGroupDetailsViewModel(
     fun editGroup() {
         NavGraph.navigateToEditGroup(navController, groupID)
     }
+
+    fun joinRequest() {
+        groupRepo.joinRequest(groupID)
+    }
 }
