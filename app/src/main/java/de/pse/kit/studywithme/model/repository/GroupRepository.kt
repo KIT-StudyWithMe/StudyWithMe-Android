@@ -231,8 +231,12 @@ class GroupRepository private constructor(context: Context): GroupRepositoryInte
     }
 
     override fun joinRequest(groupID: Int) {
+        if (auth.firebaseUID == null) {
+            // TODO: Explicit exception class
+            throw Exception("Authentication Error: No local user signed in.")
+        }
         return runBlocking {
-            return@runBlocking groupService.joinRequest(groupID)
+            return@runBlocking groupService.joinRequest(groupID, auth.user!!.userID)
         }
     }
 

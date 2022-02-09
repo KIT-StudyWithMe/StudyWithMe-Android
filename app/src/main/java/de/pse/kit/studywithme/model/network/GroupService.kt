@@ -16,7 +16,7 @@ interface GroupService {
     suspend fun editGroup(groupID: Int, group: RemoteGroup): RemoteGroup?
     suspend fun removeGroup(groupID: Int)
     suspend fun newMember(groupID: Int, uid: Int): GroupMember?
-    suspend fun joinRequest(groupID: Int)
+    suspend fun joinRequest(groupID: Int, uid:Int)
     suspend fun removeMember(groupID: Int, uid: Int)
     suspend fun getLectures(prefix: String): List<Lecture>
     suspend fun getLecture(lectureID: Int): Lecture?
