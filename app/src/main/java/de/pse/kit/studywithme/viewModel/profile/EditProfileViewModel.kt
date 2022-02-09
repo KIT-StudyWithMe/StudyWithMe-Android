@@ -34,16 +34,18 @@ class EditProfileViewModel(navController: NavController, val userRepo: UserRepos
 
     fun saveProfile() {
         if (user != null) {
-            userRepo.editSignedInUser(
+            val edited = userRepo.editSignedInUser(
                 User(
                     userID = user!!.userID,
                     name = username.value,
                     college = college.value,
                     major = major.value,
+                    majorID = -1, // TODO()
                     contact = contact.value,
                     firebaseUID = user!!.firebaseUID
                 )
             )
+            if (edited) navBack()
         }
     }
 }

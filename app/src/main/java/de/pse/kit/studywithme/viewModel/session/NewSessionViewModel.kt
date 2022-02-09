@@ -37,7 +37,7 @@ class NewSessionViewModel(
     }
 
     fun saveNewSession() {
-        sessionRepo.editSession(
+        val saved = sessionRepo.newSession(
             Session(
                 sessionID = -1,
                 groupID = groupID,
@@ -46,5 +46,8 @@ class NewSessionViewModel(
                 duration = duration.value.toInt()
             )
         )
+        if (saved) {
+            navBack()
+        }
     }
 }

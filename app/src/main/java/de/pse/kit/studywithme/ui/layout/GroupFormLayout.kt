@@ -73,12 +73,14 @@ fun GroupFormLayout(
                 FormTextField(
                     label = "Vorlesung: Kapitelnummer",
                     text = chapterNumber,
-                    onChange = chapterNumberChange
+                    onChange = chapterNumberChange,
+                    type = TextFieldType.NUMBER
                 )
                 FormTextField(
                     label = "Übungsblatt Nr.",
                     text = exerciseSheetNumber,
-                    onChange = exerciseSheetNumberChange
+                    onChange = exerciseSheetNumberChange,
+                    type = TextFieldType.NUMBER
                 )
             }
 

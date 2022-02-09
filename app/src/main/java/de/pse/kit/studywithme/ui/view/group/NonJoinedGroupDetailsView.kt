@@ -32,20 +32,13 @@ fun NonJoinedGroupDetailsView(viewModel: NonJoinedGroupDetailsViewModel) {
                 TopBar(
                     title = group?.name ?: "",
                     subtitle = group?.lecture?.lectureName ?: "",
-                    navClick = { viewModel.navBack() },
-                    actions = {
-                        IconButton(onClick = { viewModel.editGroup() }) {
-                            Icon(
-                                Icons.Rounded.Edit,
-                                contentDescription = "Knopf um die Gruppe zu editieren."
-                            )
-                        }
-                    })
+                    navClick = { viewModel.navBack() })
             },
             bottomBar = {
                 NavigationBar(
-                    clickLeft = { viewModel.navBack() },
-                    clickMiddle = { viewModel.navToSearchGroups() },
+                    selectedItem = remember { mutableStateOf(1) },
+                    clickLeft = { viewModel.navToJoinedGroups() },
+                    clickMiddle = { viewModel.navBack() },
                     clickRight = { viewModel.navToProfile() })
             },
             containerColor = MaterialTheme.colorScheme.surface

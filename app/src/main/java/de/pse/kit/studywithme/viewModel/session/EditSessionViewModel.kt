@@ -51,7 +51,7 @@ class EditSessionViewModel(
 
     fun saveSession() {
         if (session != null) {
-            sessionRepo.editSession(
+            val edited = sessionRepo.editSession(
                 Session(
                     sessionID = session!!.sessionID,
                     groupID = groupState.value!!.groupID,
@@ -60,6 +60,9 @@ class EditSessionViewModel(
                     duration = duration.value.toInt()
                 )
             )
+            if (edited) {
+                navBack()
+            }
         }
     }
 }

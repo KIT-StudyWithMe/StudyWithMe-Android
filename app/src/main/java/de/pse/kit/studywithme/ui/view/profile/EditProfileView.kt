@@ -51,7 +51,7 @@ fun EditProfileView(viewModel: EditProfileViewModel) {
                     selectedItem = remember { mutableStateOf(2) },
                     clickLeft = { viewModel.navToJoinedGroups() },
                     clickMiddle = { viewModel.navToSearchGroups() },
-                    clickRight = { viewModel.navToProfile() })
+                    clickRight = { viewModel.navBack() })
             }
         ) {
             Column(modifier = Modifier.padding(horizontal = 24.dp, vertical = 0.dp)) {

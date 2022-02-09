@@ -37,13 +37,17 @@ fun NewSessionView(viewModel: NewSessionViewModel) {
                                 contentDescription = "Knopf um die Nutzerdaten zu editieren."
                             )
                         }
-                    })
+                    },
+                    navClick = { viewModel.navBack() }
+                )
             },
             bottomBar = {
                 NavigationBar(
                     selectedItem = remember { mutableStateOf(0) },
                     clickLeft = { viewModel.navToJoinedGroups() },
-                    clickMiddle = { viewModel.navToSearchGroups() })
+                    clickMiddle = { viewModel.navToSearchGroups() },
+                    clickRight = { viewModel.navToProfile() }
+                )
             }
         ) {
             Sessionlayout(
