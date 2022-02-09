@@ -34,7 +34,7 @@ fun NewSessionView(viewModel: NewSessionViewModel) {
                         IconButton(onClick = { viewModel.saveNewSession() }) {
                             Icon(
                                 Icons.Rounded.Edit,
-                                contentDescription = "Knopf um die Nutzerdaten zu editieren."
+                                contentDescription = "Knopf um die Nutzerdaten zu speichern."
                             )
                         }
                     },
