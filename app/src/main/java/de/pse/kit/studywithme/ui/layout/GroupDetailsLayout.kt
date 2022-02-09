@@ -27,41 +27,37 @@ fun GroupDetailsLayout(
     exerciseSheetNumber: Int? = null,
 ) {
     MyApplicationTheme3 {
-        Scaffold(
-            containerColor = MaterialTheme.colorScheme.surface
-        ) {
-            Column(modifier = Modifier.padding(horizontal = 24.dp, vertical = 0.dp)) {
-                Text(text = "Gruppeninformationen", modifier = Modifier.padding(top = 12.dp))
-                for (element in groupAdmin) {
-                    FormText(icon = Icons.Filled.Person, text = element)
-                }
-                for (element in groupMember) {
-                    FormText(icon = Icons.Outlined.Person, text = element)
-                }
-                FormText(icon = Icons.Filled.Info, text = description, maxLines = 3)
-
-                if (place != "" && time != "") {
-                    Text(
-                        text = "Nächste geplante Lernsession",
-                        modifier = Modifier.padding(top = 12.dp)
-                    )
-                    FormText(icon = Icons.Filled.LocationOn, text = place!!, maxLines = 2)
-                    FormText(icon = Icons.Filled.Timer, text = time!!, maxLines = 2)
-                }
-
-                Text(text = "Weitere Informationen", modifier = Modifier.padding(top = 12.dp))
-                ChipDisplayRow(modifier = Modifier.padding(start = 12.dp), selectedChips)
-
-                Text(text = "Lernfortschritt", modifier = Modifier.padding(top = 12.dp))
-                FormText(
-                    icon = if (chapterNumber != null) Icons.Outlined.CheckBoxOutlineBlank else Icons.Outlined.IndeterminateCheckBox,
-                    text = "Vorlesung: Kapitel Nr. " + (chapterNumber ?: "")
-                )
-                FormText(
-                    icon = if (exerciseSheetNumber != null) Icons.Outlined.CheckBoxOutlineBlank else Icons.Outlined.IndeterminateCheckBox,
-                    text = "Übungsblatt Nr. " + (exerciseSheetNumber ?: "")
-                )
+        Column {
+            Text(text = "Gruppeninformationen", modifier = Modifier.padding(top = 12.dp))
+            for (element in groupAdmin) {
+                FormText(icon = Icons.Filled.Person, text = element)
             }
+            for (element in groupMember) {
+                FormText(icon = Icons.Outlined.Person, text = element)
+            }
+            FormText(icon = Icons.Filled.Info, text = description, maxLines = 3)
+
+            if (place != "" && time != "") {
+                Text(
+                    text = "Nächste geplante Lernsession",
+                    modifier = Modifier.padding(top = 12.dp)
+                )
+                FormText(icon = Icons.Filled.LocationOn, text = place!!, maxLines = 2)
+                FormText(icon = Icons.Filled.Timer, text = time!!, maxLines = 2)
+            }
+
+            Text(text = "Weitere Informationen", modifier = Modifier.padding(top = 12.dp))
+            ChipDisplayRow(modifier = Modifier.padding(start = 12.dp), selectedChips)
+
+            Text(text = "Lernfortschritt", modifier = Modifier.padding(top = 12.dp))
+            FormText(
+                icon = if (chapterNumber != null) Icons.Outlined.CheckBoxOutlineBlank else Icons.Outlined.IndeterminateCheckBox,
+                text = "Vorlesung: Kapitel Nr. " + (chapterNumber ?: "")
+            )
+            FormText(
+                icon = if (exerciseSheetNumber != null) Icons.Outlined.CheckBoxOutlineBlank else Icons.Outlined.IndeterminateCheckBox,
+                text = "Übungsblatt Nr. " + (exerciseSheetNumber ?: "")
+            )
         }
     }
 }
