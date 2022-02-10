@@ -39,11 +39,7 @@ fun SearchGroupsView(viewModel: SearchGroupsViewModel) {
             containerColor = MaterialTheme.colorScheme.surface
         ) {
             Column(modifier = Modifier
-                .padding(horizontal = 20.dp, vertical = 12.dp)
-                .padding(bottom =80.dp)
-                .verticalScroll(
-                    state = ScrollState(0)
-                ),) {
+                .padding(horizontal = 20.dp, vertical = 12.dp),) {
                 Button(onClick = { viewModel.newGroup() }, text = "Neue Gruppe")
 
                 LazyColumn(

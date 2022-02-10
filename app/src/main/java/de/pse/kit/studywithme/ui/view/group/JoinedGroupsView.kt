@@ -39,11 +39,7 @@ fun JoinedGroupsView(viewModel: JoinedGroupsViewModel) {
             containerColor = MaterialTheme.colorScheme.surface
         ) {
             Column(modifier = Modifier
-                .padding(horizontal = 20.dp, vertical = 6.dp)
-                .padding(bottom =80.dp)
-                .verticalScroll(
-                    state = ScrollState(0)
-                ),) {
+                .padding(horizontal = 20.dp, vertical = 6.dp),) {
                 ChipSelectionRow(chipNames = viewModel.lectures, onChange = { viewModel.filter(it) })
                 Divider(modifier = Modifier.padding(top = 6.dp, bottom = 10.dp), color = MaterialTheme.colorScheme.tertiary, thickness = 1.dp)
 
