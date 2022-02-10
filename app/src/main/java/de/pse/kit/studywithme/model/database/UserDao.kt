@@ -6,17 +6,17 @@ import de.pse.kit.studywithme.model.data.User
 @Dao
 interface UserDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun saveUser(user: User)
+    suspend fun saveUser(user: User)
 
     @Delete
-    fun removeUser(user: User)
+    suspend fun removeUser(user: User)
 
     @Query("SELECT * FROM user WHERE user_ID LIKE :uid")
-    fun getUser(uid: Int): User
+    suspend fun getUser(uid: Int): User
 
     @Query("SELECT * FROM user WHERE firebase_UID LIKE :fuid")
-    fun getUser(fuid: String): User
+    suspend fun getUser(fuid: String): User
 
     @Update
-    fun editUser(user: User)
+    suspend fun editUser(user: User)
 }
