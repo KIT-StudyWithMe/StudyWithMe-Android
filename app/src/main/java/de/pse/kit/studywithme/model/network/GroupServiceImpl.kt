@@ -154,6 +154,11 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
         }
     }
 
+
+    override suspend fun getJoinRequests(groupID: Int): List<UserLight>? {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun removeMember(groupID: Int, uid: Int): Boolean {
         return try {
             client.delete(HttpRoutes.GROUPS + "/users/" + uid)

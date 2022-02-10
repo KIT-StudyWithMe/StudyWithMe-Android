@@ -1,9 +1,6 @@
 package de.pse.kit.studywithme.model.repository
 
-import de.pse.kit.studywithme.model.data.Group
-import de.pse.kit.studywithme.model.data.GroupMember
-import de.pse.kit.studywithme.model.data.Lecture
-import de.pse.kit.studywithme.model.data.User
+import de.pse.kit.studywithme.model.data.*
 import kotlinx.coroutines.flow.Flow
 
 interface GroupRepositoryInterface {
@@ -27,6 +24,8 @@ interface GroupRepositoryInterface {
     fun newMember(groupID: Int, uid: Int): Boolean
 
     fun joinRequest(groupID: Int): Boolean
+
+    fun getJoinRequests(groupID: Int): List<UserLight>
 
     fun removeMember(groupID: Int, uid: Int)
 

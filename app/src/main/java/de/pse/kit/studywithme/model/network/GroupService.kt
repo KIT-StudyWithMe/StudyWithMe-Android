@@ -17,6 +17,7 @@ interface GroupService {
     suspend fun removeGroup(groupID: Int): Boolean
     suspend fun newMember(groupID: Int, uid: Int): GroupMember?
     suspend fun joinRequest(groupID: Int, uid:Int): Boolean
+    suspend fun getJoinRequests(groupID: Int): List<UserLight>?
     suspend fun removeMember(groupID: Int, uid: Int): Boolean
     suspend fun getLectures(prefix: String): List<Lecture>?
     suspend fun getLecture(lectureID: Int): Lecture?

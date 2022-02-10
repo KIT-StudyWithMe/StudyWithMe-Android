@@ -156,6 +156,10 @@ class FakeGroupRepository() : GroupRepositoryInterface {
         TODO("Not yet implemented")
     }
 
+    override fun getJoinRequests(groupID: Int): List<UserLight> {
+        TODO("Not yet implemented")
+    }
+
     override fun removeMember(groupID: Int, uid: Int) {
         TODO("Not yet implemented")
     }

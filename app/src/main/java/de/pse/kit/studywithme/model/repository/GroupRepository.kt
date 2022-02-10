@@ -240,6 +240,10 @@ class GroupRepository private constructor(context: Context): GroupRepositoryInte
         }
     }
 
+    override fun getJoinRequests(groupID: Int): List<UserLight> {
+        TODO("Not yet implemented")
+    }
+
     override fun removeMember(groupID: Int, uid: Int) {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
