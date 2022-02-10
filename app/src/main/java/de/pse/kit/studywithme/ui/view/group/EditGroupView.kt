@@ -38,7 +38,7 @@ fun EditGroupView(viewModel: EditGroupViewModel) {
             bottomBar = {
                 NavigationBar(
                     selectedItem = remember { mutableStateOf(0) },
-                    clickLeft = { viewModel.navToJoinedGroups() },
+                    clickLeft = { viewModel.navBack() },
                     clickMiddle = { viewModel.navToSearchGroups() },
                     clickRight = { viewModel.navToProfile() }
                 )

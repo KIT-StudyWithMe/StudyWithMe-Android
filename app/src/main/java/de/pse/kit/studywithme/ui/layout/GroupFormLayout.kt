@@ -1,6 +1,10 @@
 package de.pse.kit.studywithme.ui.layout
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.*
@@ -36,7 +40,12 @@ fun GroupFormLayout(
             containerColor = MaterialTheme.colorScheme.surface
         ) {
             Column(
-                modifier = Modifier.padding(horizontal = 24.dp, vertical = 0.dp)
+                modifier = Modifier
+                    .padding(horizontal = 24.dp, vertical = 0.dp)
+                    .verticalScroll(
+                        state = ScrollState(0)
+                    )
+
             ) {
                 Text(modifier = Modifier.padding(top = 12.dp), text = "Gruppeninformationen")
                 FormTextField(

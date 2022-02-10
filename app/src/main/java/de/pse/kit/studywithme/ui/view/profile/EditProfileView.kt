@@ -1,7 +1,9 @@
 package de.pse.kit.studywithme.ui.view.profile
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AlternateEmail
 import androidx.compose.material.icons.outlined.School
@@ -54,7 +56,13 @@ fun EditProfileView(viewModel: EditProfileViewModel) {
                     clickRight = { viewModel.navBack() })
             }
         ) {
-            Column(modifier = Modifier.padding(horizontal = 24.dp, vertical = 0.dp)) {
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 24.dp, vertical = 0.dp)
+                    .padding(bottom =80.dp)
+                    .verticalScroll(
+                        state = ScrollState(0)
+                    ),) {
                 Text("Persönliche Informationen", modifier = Modifier.padding(top = 12.dp))
                 FormTextField(
                     text = viewModel.college.collectAsState().value,
