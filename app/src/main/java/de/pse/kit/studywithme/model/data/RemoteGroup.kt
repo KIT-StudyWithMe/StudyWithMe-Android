@@ -42,9 +42,6 @@ data class RemoteGroup(
     @ColumnInfo(name = "exercise")
     val exercise: Int,
 
-    @SerialName(value = "hidden")
-    @ColumnInfo(name = "hidden")
-    val hidden: Boolean
 ) {
     companion object {
         fun toGroup(remoteGroup: RemoteGroup, lecture: Lecture? = null, major: Major? = null): Group {
@@ -59,7 +56,6 @@ data class RemoteGroup(
                 sessionType = remoteGroup.sessionType,
                 lectureChapter = remoteGroup.lectureChapter,
                 exercise = remoteGroup.exercise,
-                hidden = remoteGroup.hidden
             )
         }
 
@@ -73,7 +69,6 @@ data class RemoteGroup(
                 sessionType = group.sessionType,
                 lectureChapter = group.lectureChapter,
                 exercise = group.exercise,
-                hidden = group.hidden
             )
         }
     }

@@ -100,7 +100,6 @@ class EditGroupViewModel(
             sessionType = sessionTypeToSave,
             lectureChapter = lectureChapterInt,
             exercise = groupExerciseInt,
-            hidden = false,
         )
         groupRepo.newGroup(group, true)
     }

@@ -143,7 +143,7 @@ class GroupRepository private constructor(context: Context): GroupRepositoryInte
                 group.lectureID = remoteLecture.lectureID
             }
 
-            val remoteGroup = groupService.newGroup(RemoteGroup.toRemoteGroup(group))
+            val remoteGroup = groupService.newGroup(RemoteGroup.toRemoteGroup(group), group.groupID)
             if (remoteGroup != null) {
                 Log.d(auth.TAG, "Remote Database Group Post:success")
                 groupDao.saveGroup(remoteGroup)
