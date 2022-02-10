@@ -11,6 +11,8 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
         return try {
             client.get(HttpRoutes.GROUPS) {
                 parameter("text", search)
+                parameter("lecture", search)
+                parameter("name", search)
             }
         } catch (e: RedirectResponseException) {
             println("Redirect Error: ${e.response.status.description}")
@@ -156,7 +158,21 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
 
 
     override suspend fun getJoinRequests(groupID: Int): List<UserLight>? {
-        TODO("Not yet implemented")
+        return try {
+            client.get(HttpRoutes.GROUPS + groupID + "/requests")
+        } catch (e: RedirectResponseException) {
+            println("Redirect Error: ${e.response.status.description}")
+            null
+        } catch (e: ClientRequestException) {
+            println("Request Error: ${e.response.status.description}")
+            null
+        } catch (e: ServerResponseException) {
+            println("Response Error: ${e.response.status.description}")
+            null
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+            null
+        }
     }
 
     override suspend fun removeMember(groupID: Int, uid: Int): Boolean {
