@@ -26,7 +26,7 @@ interface GroupRepositoryInterface {
 
     fun newMember(groupID: Int, uid: Int): Boolean
 
-    fun joinRequest(groupID: Int)
+    fun joinRequest(groupID: Int): Boolean
 
     fun removeMember(groupID: Int, uid: Int)
 

@@ -152,7 +152,7 @@ class FakeGroupRepository() : GroupRepositoryInterface {
         TODO("Not yet implemented")
     }
 
-    override fun joinRequest(groupID: Int) {
+    override fun joinRequest(groupID: Int): Boolean {
         TODO("Not yet implemented")
     }
 
