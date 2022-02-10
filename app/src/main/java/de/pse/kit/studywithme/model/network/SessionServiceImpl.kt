@@ -49,13 +49,10 @@ class SessionServiceImpl(private val client: HttpClient) : SessionService {
 
     override suspend fun newSession(session: Session): Session? {
         return try {
-            val httpResponse: HttpResponse =
                 client.post(HttpRoutes.GROUPS + session.groupID + "/detail/sessions") {
                     contentType(ContentType.Application.Json)
                     body = session
                 }
-            val session: Session? = httpResponse.receive()
-            return session
         } catch (e: RedirectResponseException) {
             println("Redirect Error: ${e.response.status.description}")
             null
