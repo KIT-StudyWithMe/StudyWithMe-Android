@@ -1,5 +1,7 @@
 package de.pse.kit.studywithme.model.repository
 
+import de.pse.kit.studywithme.model.data.Institution
+import de.pse.kit.studywithme.model.data.Major
 import de.pse.kit.studywithme.model.data.User
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -38,7 +40,13 @@ class FakeUserRepository(var signedIn: Boolean) : UserRepositoryInterface {
         return true
     }
 
-    override fun signUp(email: String, password: String, user: User): Boolean {
+    override fun signUp(
+        email: String,
+        password: String,
+        username: String,
+        major: String,
+        institution: String
+    ): Boolean {
         signedIn = true
         return true
     }
@@ -61,8 +69,16 @@ class FakeUserRepository(var signedIn: Boolean) : UserRepositoryInterface {
         return listOf("Informatik B.Sc.", "Informatik M.Sc.")
     }
 
+    override fun getMajor(name: String): Major? {
+        TODO("Not yet implemented")
+    }
+
     override fun getColleges(prefix: String): List<String> {
         return listOf("Karlsruher Institut für Technologie")
+    }
+
+    override fun getCollege(name: String): Institution? {
+        TODO("Not yet implemented")
     }
 
 }

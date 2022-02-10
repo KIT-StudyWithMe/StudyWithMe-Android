@@ -8,6 +8,6 @@ object HttpRoutes {
     const val SESSIONS = "$BASE_URL/sessions/"
     const val MAJORS = "$BASE_URL/majors/"
     const val LECTURES = "$BASE_URL/lectures/"
-    const val UNIVERSITIES = "$BASE_URL/universities/"
+    const val INSTITUTIONS = "$BASE_URL/institutions/"
     const val REPORTS = "$BASE_URL/reports/"
 }

@@ -2,6 +2,7 @@ package de.pse.kit.studywithme.model.repository
 
 import android.util.Log
 import com.google.firebase.auth.EmailAuthProvider
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import de.pse.kit.studywithme.model.data.User
@@ -10,13 +11,24 @@ import kotlinx.coroutines.tasks.await
 object Authenticator {
     val TAG = "AUTH"
     private val auth = Firebase.auth
-    private var firebaseUser = auth.currentUser
-    val firebaseUID: String? = firebaseUser?.uid
+    private var firebaseUser: FirebaseUser? = auth.currentUser
+    val firebaseUID: String?
+        get() = firebaseUser?.uid
     var user: User? = null
+
+
+    init {
+        auth.addAuthStateListener {
+            firebaseUser = it.currentUser
+        }
+    }
+
 
     suspend fun signUp(email: String, password: String): Boolean {
         try {
             auth.createUserWithEmailAndPassword(email, password).await()
+            Log.d(TAG, "current auth userid: (${auth.uid})")
+            Log.d(TAG, "current userid: (${firebaseUser?.uid})")
             Log.d(TAG, "createUserWithEmail($firebaseUID):success")
             return true
         } catch (e: Exception) {

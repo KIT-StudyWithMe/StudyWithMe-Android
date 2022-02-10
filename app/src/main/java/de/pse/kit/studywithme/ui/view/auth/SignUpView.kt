@@ -57,6 +57,15 @@ fun SignUpView(viewModel: SignUpViewModel) {
                     type = TextFieldType.EMAIL
                 )
                 TextField(
+                    label = "Username",
+                    text = viewModel.username.collectAsState().value,
+                    onChange = {
+                        viewModel.errorMessage.value = ""
+                        viewModel.username.value = it
+                    },
+                    type = TextFieldType.TEXT
+                )
+                TextField(
                     label = "Universität/Hochschule",
                     text = viewModel.college.collectAsState().value,
                     onChange = {

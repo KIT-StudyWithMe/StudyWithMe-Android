@@ -14,15 +14,15 @@ data class User(
     @ColumnInfo(name = "user_ID")
     val userID: Int,
 
-    @SerialName("userName")
+    @SerialName("name")
     @ColumnInfo(name = "username")
     val name: String,
 
-    @SerialName("collegeID")
+    @SerialName("institutionID")
     @ColumnInfo(name = "college_ID")
     val collegeID: Int? = null,
 
-    @SerialName("college")
+    @SerialName("institutionName")
     @ColumnInfo(name = "college")
     val college: String? = null,
 
@@ -30,7 +30,7 @@ data class User(
     @ColumnInfo(name = "major_ID")
     val majorID: Int? = null,
 
-    @SerialName("major")
+    @SerialName("majorName")
     @ColumnInfo(name = "major")
     val major: String? = null,
 
@@ -40,5 +40,13 @@ data class User(
 
     @SerialName("firebaseUID")
     @ColumnInfo(name = "firebase_UID")
-    val firebaseUID: String
+    val firebaseUID: String,
+
+    @SerialName("isBlocked")
+    @ColumnInfo(name = "is_blocked")
+    val isBLocked: Boolean = false,
+
+    @SerialName("isModerator")
+    @ColumnInfo(name = "is_moderator")
+    val isModerator: Boolean = false
 )

@@ -3,6 +3,8 @@ package de.pse.kit.studywithme.model.repository
 import android.content.Context
 import android.util.Log
 import de.pse.kit.studywithme.SingletonHolder
+import de.pse.kit.studywithme.model.data.Institution
+import de.pse.kit.studywithme.model.data.Major
 import de.pse.kit.studywithme.model.data.User
 import de.pse.kit.studywithme.model.database.AppDatabase
 import de.pse.kit.studywithme.model.network.UserService
@@ -21,18 +23,22 @@ class UserRepository private constructor(context: Context) : UserRepositoryInter
     @ExperimentalCoroutinesApi
     override fun isSignedIn(): Boolean {
         if (auth.firebaseUID == null) {
+            Log.d(auth.TAG, "no user is signed in")
             return false
         }
-        getSignedInUser()
-        return true
+        Log.d(auth.TAG, "user is signed in")
+        return runBlocking {
+            getSignedInUser().collect()
+            return@runBlocking true
+        }
     }
 
     @ExperimentalCoroutinesApi
     override fun getSignedInUser(): Flow<User> {
 
         if (auth.firebaseUID == null) {
-           // TODO: Explicit exception class
-           throw Exception("Authentication Error: No local user signed in.")
+            // TODO: Explicit exception class
+            throw Exception("Authentication Error: No local user signed in.")
         }
 
         return channelFlow {
@@ -40,14 +46,19 @@ class UserRepository private constructor(context: Context) : UserRepositoryInter
             send(userCache)
 
             launch {
-                val remoteUser = userService.getUser(auth.firebaseUID)
-                auth.user = remoteUser ?: auth.user
-                send(remoteUser)
+                val remoteUserLight = userService.getUser(auth.firebaseUID!!)
+                if (remoteUserLight != null) {
+                    val remoteUser = userService.getUser(remoteUserLight.userID.toInt())
+                    auth.user = remoteUser ?: auth.user
+                }
+
+                send(auth.user)
                 truthWasSend.set(true)
             }
             launch {
-                val localUser = userDao.getUser(auth.firebaseUID)
+                val localUser = userDao.getUser(auth.firebaseUID!!)
                 if (!truthWasSend.get()) {
+                    auth.user = localUser
                     send(localUser)
                 }
             }
@@ -77,30 +88,62 @@ class UserRepository private constructor(context: Context) : UserRepositoryInter
     override fun signIn(email: String, password: String): Boolean {
         return runBlocking {
             if (auth.signIn(email, password)) {
-                val remoteUser = userService.getUser(auth.firebaseUID!!)
-                if (remoteUser != null) {
-                    Log.d(auth.TAG, "Remote Database User Post:success")
-                    userDao.saveUser(remoteUser)
-                    userCache = remoteUser
-                    auth.user = remoteUser
+                val remoteUserLight = userService.getUser(auth.firebaseUID!!)
+                if (remoteUserLight != null) {
+                    val remoteUser = userService.getUser(remoteUserLight.userID.toInt())
+                    if (remoteUser != null) {
+                        Log.d(auth.TAG, "Remote Database User Get:success")
+                        userDao.saveUser(remoteUser)
 
-                    return@runBlocking true
-                } else {
-                    return@runBlocking false
+                        userCache = remoteUser
+                        auth.user = remoteUser
+
+                        return@runBlocking true
+                    }
                 }
+                return@runBlocking false
             } else {
                 return@runBlocking false
             }
         }
     }
 
-    override fun signUp(email: String, password: String, user: User): Boolean {
+    override fun signUp(
+        email: String,
+        password: String,
+        username: String,
+        major: String,
+        institution: String
+    ): Boolean {
         return runBlocking {
             if (auth.signUp(email, password)) {
+                val remoteInstitution = getCollege(institution)
+                val remoteMajor = getMajor(major)
+
+                if (remoteInstitution == null || remoteMajor == null) {
+                    auth.deleteFirebaseUser(email, password)
+                    return@runBlocking false
+                }
+
+                val user = User(
+                    userID = -1,
+                    name = username,
+                    contact = email,
+                    college = remoteInstitution.name,
+                    collegeID = remoteInstitution.institutionID.toInt(),
+                    major = remoteMajor.name,
+                    majorID = remoteMajor.majorID.toInt(),
+                    firebaseUID = auth.firebaseUID ?: "error"
+                )
+
+                Log.d(auth.TAG, user.toString() + "local")
                 val remoteUser = userService.newUser(user)
+                Log.d(auth.TAG, remoteUser.toString() + "remote")
                 if (remoteUser != null) {
                     Log.d(auth.TAG, "Remote Database User Post:success")
-                    userDao.saveUser(remoteUser)
+                    launch {
+                        userDao.saveUser(remoteUser)
+                    }
                     userCache = remoteUser
                     auth.user = remoteUser
 
@@ -148,24 +191,48 @@ class UserRepository private constructor(context: Context) : UserRepositoryInter
     }
 
     override fun getMajors(prefix: String): List<String> {
-        if (auth.firebaseUID == null) {
-            // TODO: Explicit exception class
-            throw Exception("Authentication Error: No local user signed in.")
-        }
-
         return runBlocking {
-            return@runBlocking userService.getMajors(prefix)
+            return@runBlocking userService.getMajors(prefix)?.map {
+                it.name
+            } ?: emptyList()
+        }
+    }
+
+    override fun getMajor(name: String): Major? {
+        return runBlocking {
+            val majors = userService.getMajors(name)
+            if (majors?.map {
+                    it.name
+                }?.contains(name) != true) {
+                return@runBlocking userService.newMajor(Major(-1, name))
+            } else {
+                return@runBlocking majors.last {
+                    it.name == name
+                }
+            }
         }
     }
 
     override fun getColleges(prefix: String): List<String> {
-        if (auth.firebaseUID == null) {
-            // TODO: Explicit exception class
-            throw Exception("Authentication Error: No local user signed in.")
-        }
-
         return runBlocking {
-            return@runBlocking userService.getColleges(prefix)
+            return@runBlocking userService.getColleges(prefix)?.map {
+                it.name
+            } ?: emptyList()
+        }
+    }
+
+    override fun getCollege(name: String): Institution? {
+        return runBlocking {
+            val colleges = userService.getColleges(name)
+            if (colleges?.map {
+                    it.name
+                }?.contains(name) != true) {
+                return@runBlocking userService.newCollege(Institution(-1, name))
+            } else {
+                return@runBlocking colleges.last {
+                    it.name == name
+                }
+            }
         }
     }
 

@@ -20,18 +20,16 @@ class SignUpViewModel(navController: NavController, val userRepo: UserRepository
     val errorMessage: MutableStateFlow<String> = MutableStateFlow("")
 
     fun signUp() {
-        val user = User(
-            userID = -1,
-            name = username.value,
-            contact = email.value,
-            college = college.value,
-            major = major.value,
-            majorID = -1, // TODO() noch ändern
-            firebaseUID = "-1"
-        )
         Log.d("Auth-UI", "signUp:started")
 
-        if (userRepo.signUp(email.value, password.value, user)) {
+        if (userRepo.signUp(
+                email = email.value,
+                password = password.value,
+                username = username.value,
+                major = major.value,
+                institution = college.value
+            )
+        ) {
             Log.d("Auth-UI", "signUp:completed")
             NavGraph.navigateToSearchGroups(navController)
         } else {
