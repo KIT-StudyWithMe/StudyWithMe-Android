@@ -69,7 +69,6 @@ class NewGroupViewModel(navController: NavController, private val groupRepo: Gro
             sessionType = sessionTypeToSave,
             lectureChapter = lectureChapterInt,
             exercise = groupExerciseInt,
-            hidden = false,
         )
         val saved = groupRepo.newGroup(group, true)
         if (saved) {

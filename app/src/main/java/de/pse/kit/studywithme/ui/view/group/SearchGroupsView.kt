@@ -1,7 +1,9 @@
 package de.pse.kit.studywithme.ui.view.group
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -36,7 +38,8 @@ fun SearchGroupsView(viewModel: SearchGroupsViewModel) {
             },
             containerColor = MaterialTheme.colorScheme.surface
         ) {
-            Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp)) {
+            Column(modifier = Modifier
+                .padding(horizontal = 20.dp, vertical = 12.dp),) {
                 Button(onClick = { viewModel.newGroup() }, text = "Neue Gruppe")
 
                 LazyColumn(

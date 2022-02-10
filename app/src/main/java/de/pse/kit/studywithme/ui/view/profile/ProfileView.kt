@@ -1,7 +1,9 @@
 package de.pse.kit.studywithme.ui.view.profile
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AlternateEmail
@@ -56,7 +58,12 @@ fun ProfileView(viewModel: ProfileViewModel) {
                     clickMiddle = { viewModel.navToSearchGroups() })
             }
         ) {
-            Column(modifier = Modifier.padding(horizontal = 24.dp, vertical = 0.dp)) {
+            Column(modifier = Modifier
+                .padding(horizontal = 24.dp, vertical = 0.dp)
+                .padding(bottom =80.dp)
+                .verticalScroll(
+                    state = ScrollState(0)
+                ),) {
                 Text("Persönliche Informationen", modifier = Modifier.padding(top = 12.dp))
                 FormText(text = viewModel.college, icon = Icons.Outlined.School)
                 FormText(text = viewModel.major, icon = Icons.Rounded.MenuBook)

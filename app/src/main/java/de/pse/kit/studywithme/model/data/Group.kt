@@ -21,5 +21,4 @@ data class Group (
 
     val exercise: Int,
 
-    val hidden: Boolean
 )

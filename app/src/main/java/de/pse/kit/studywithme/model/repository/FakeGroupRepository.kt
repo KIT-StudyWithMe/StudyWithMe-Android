@@ -30,7 +30,6 @@ class FakeGroupRepository() : GroupRepositoryInterface {
             sessionType = SessionType.ONLINE,
             lectureChapter = 1,
             exercise = 1,
-            hidden = false
         ),
         Group(
             groupID = 2,
@@ -50,7 +49,6 @@ class FakeGroupRepository() : GroupRepositoryInterface {
             sessionType = SessionType.ONLINE,
             lectureChapter = 1,
             exercise = 1,
-            hidden = false
         ),
         Group(
             groupID = 0,
@@ -70,7 +68,6 @@ class FakeGroupRepository() : GroupRepositoryInterface {
             sessionType = SessionType.HYBRID,
             lectureChapter = 8,
             exercise = 8,
-            hidden = false
         )
     )
 
@@ -152,7 +149,11 @@ class FakeGroupRepository() : GroupRepositoryInterface {
         TODO("Not yet implemented")
     }
 
-    override fun joinRequest(groupID: Int) {
+    override fun joinRequest(groupID: Int): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override fun getJoinRequests(groupID: Int): List<UserLight> {
         TODO("Not yet implemented")
     }
 

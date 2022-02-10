@@ -1,7 +1,9 @@
 package de.pse.kit.studywithme.ui.layout
 
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -31,7 +33,12 @@ fun Sessionlayout(
         Scaffold(
             containerColor = MaterialTheme.colorScheme.surface
         ) {
-            Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 5.dp)) {
+            Column(modifier = Modifier
+                .padding(horizontal = 20.dp, vertical = 5.dp)
+                .padding(bottom =80.dp)
+                .verticalScroll(
+                    state = ScrollState(0)
+                ),) {
                 FormTextField(text = place, label = "Lernort", onChange = placeChange)
 
                 DatePicker(

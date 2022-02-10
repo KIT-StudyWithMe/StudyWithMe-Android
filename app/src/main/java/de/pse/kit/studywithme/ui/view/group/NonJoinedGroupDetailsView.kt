@@ -1,7 +1,9 @@
 package de.pse.kit.studywithme.ui.view.group
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Edit
@@ -52,7 +54,12 @@ fun NonJoinedGroupDetailsView(viewModel: NonJoinedGroupDetailsViewModel) {
             },
             containerColor = MaterialTheme.colorScheme.surface
         ) {
-            Column(modifier = Modifier.padding(horizontal = 24.dp, vertical = 0.dp)) {
+            Column(modifier = Modifier
+                .padding(horizontal = 24.dp, vertical = 0.dp)
+                .padding(bottom =80.dp)
+                .verticalScroll(
+                    state = ScrollState(0)
+                ),) {
                 GroupDetailsLayout(
                     groupAdmin = groupAdmins.filter {
                         it.isAdmin

@@ -1,9 +1,11 @@
 package de.pse.kit.studywithme.ui.view.group
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -36,7 +38,8 @@ fun JoinedGroupsView(viewModel: JoinedGroupsViewModel) {
             },
             containerColor = MaterialTheme.colorScheme.surface
         ) {
-            Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 6.dp)) {
+            Column(modifier = Modifier
+                .padding(horizontal = 20.dp, vertical = 6.dp),) {
                 ChipSelectionRow(chipNames = viewModel.lectures, onChange = { viewModel.filter(it) })
                 Divider(modifier = Modifier.padding(top = 6.dp, bottom = 10.dp), color = MaterialTheme.colorScheme.tertiary, thickness = 1.dp)
 
