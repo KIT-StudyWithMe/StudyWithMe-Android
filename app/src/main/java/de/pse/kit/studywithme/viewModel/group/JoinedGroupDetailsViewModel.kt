@@ -23,6 +23,7 @@ class JoinedGroupDetailsViewModel(
     val group: MutableState<Group?> = mutableStateOf(null)
     val members: MutableState<List<GroupMember>> = mutableStateOf(emptyList())
     val sessions: MutableState<List<Session>> = mutableStateOf(emptyList())
+    val isAdmin: MutableState<Boolean> = mutableStateOf(false)
 
 
     init {
@@ -40,6 +41,11 @@ class JoinedGroupDetailsViewModel(
             launch {
                 sessionRepo.getSessions(groupID).collect {
                     sessions.value = it
+                }
+            }
+            launch {
+                groupRepo.isSignedInUserAdmin(groupID).collect {
+                    isAdmin.value = it
                 }
             }
         }

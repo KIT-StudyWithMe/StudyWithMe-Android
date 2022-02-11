@@ -19,6 +19,7 @@ import de.pse.kit.studywithme.ui.component.*
 fun GroupDetailsLayout(
     groupAdmin: List<String>,
     groupMember: List<String>,
+    groupRequests: List<String> = emptyList(),
     description: String = "",
     place: String? = "",
     time: String? = "",
@@ -34,6 +35,9 @@ fun GroupDetailsLayout(
             }
             for (element in groupMember) {
                 FormText(icon = Icons.Outlined.Person, text = element)
+            }
+            for (element in groupRequests) {
+                FormText(icon = Icons.Outlined.PersonAddAlt, text = "Beitrittsanfrage: $element")
             }
             FormText(icon = Icons.Filled.Info, text = description, maxLines = 3)
 
@@ -86,6 +90,7 @@ fun GroupDetailsLayoutPreview() {
         GroupDetailsLayout(
             groupAdmin = listOf("Der coole Daniel"),
             groupMember = listOf("Joe", "Maria", "Joachim"),
+            groupRequests = listOf("Uncooler Daniel"),
             description = "Wir sind voll die coole Truppe",
             place = "Engelbertstraße 21, 76227 Karlsruhe",
             time = "Freitag 19.11.2021, 10:00-12:00 Uhr",

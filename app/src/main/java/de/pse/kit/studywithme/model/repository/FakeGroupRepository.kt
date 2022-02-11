@@ -73,6 +73,12 @@ class FakeGroupRepository() : GroupRepositoryInterface {
 
     private var groupMembers = listOf(
         GroupMember(
+            groupID = 2,
+            userID = 1,
+            name = "max.fake",
+            isAdmin = true
+        ),
+        GroupMember(
             groupID = 0,
             userID = 1,
             name = "max.fake",
@@ -94,7 +100,7 @@ class FakeGroupRepository() : GroupRepositoryInterface {
             groupID = 2,
             userID = 0,
             name = "max.mustermann",
-            isAdmin = true
+            isAdmin = false
         )
 
     )
@@ -178,7 +184,13 @@ class FakeGroupRepository() : GroupRepositoryInterface {
     }
 
     override fun isSignedInUserAdmin(groupID: Int): Flow<Boolean> {
-        TODO("Not yet implemented")
+        return flow {
+            if (groupID == 2) {
+                emit(false)
+            } else {
+                emit(true)
+            }
+        }
     }
 
     override fun getLectures(prefix: String): Flow<List<Lecture>> {

@@ -47,11 +47,13 @@ fun JoinedGroupDetailsView(viewModel: JoinedGroupDetailsViewModel) {
                     subtitle = group?.lecture?.lectureName ?: "",
                     navClick = { viewModel.navBack() },
                     actions = {
-                        IconButton(onClick = { viewModel.editGroup() }) {
-                            Icon(
-                                Icons.Rounded.Edit,
-                                contentDescription = "Knopf um die Gruppe zu editieren."
-                            )
+                        if (viewModel.isAdmin.value) {
+                            IconButton(onClick = { viewModel.editGroup() }) {
+                                Icon(
+                                    Icons.Rounded.Edit,
+                                    contentDescription = "Knopf um die Gruppe zu editieren."
+                                )
+                            }
                         }
                     })
             },
@@ -96,18 +98,20 @@ fun JoinedGroupDetailsView(viewModel: JoinedGroupDetailsViewModel) {
                     chapterNumber = group?.lectureChapter,
                     exerciseSheetNumber = group?.exercise
                 )
-                if (sessions.isEmpty()) {
+                if (sessions.isEmpty() && viewModel.isAdmin.value) {
                     Button(
                         text = "Nächste Lernsesison planen",
                         onClick = { viewModel.planSession() })
                 } else {
                     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                        Button(
-                            modifier = Modifier.weight(1f),
-                            text = "Lernsession bearbeiten",
-                            onClick = { viewModel.planSession() },
-                            primary = false
-                        )
+                        if (viewModel.isAdmin.value) {
+                            Button(
+                                modifier = Modifier.weight(1f),
+                                text = "Lernsession bearbeiten",
+                                onClick = { viewModel.planSession() },
+                                primary = false
+                            )
+                        }
                         Button(modifier = Modifier.weight(1f),
                             text = "Teilnehmen",
                             onClick = { viewModel.participate() }
@@ -129,6 +133,22 @@ fun JoinedGroupDetailsPreview() {
         JoinedGroupDetailsViewModel(
             navController = rememberNavController(),
             groupID = 0,
+            groupRepo = FakeGroupRepository(),
+            sessionRepo = FakeSessionRepository()
+        )
+    )
+}
+
+@ExperimentalCoroutinesApi
+@ExperimentalMaterialApi
+@ExperimentalMaterial3Api
+@Preview
+@Composable
+fun JoinedGroupDetails2Preview() {
+    JoinedGroupDetailsView(
+        JoinedGroupDetailsViewModel(
+            navController = rememberNavController(),
+            groupID = 2,
             groupRepo = FakeGroupRepository(),
             sessionRepo = FakeSessionRepository()
         )
