@@ -151,7 +151,7 @@ class FakeGroupRepository() : GroupRepositoryInterface {
         }.get(0))
     }
 
-    override fun hideGroup(groupID: Int): Boolean {
+    override fun hideGroup(groupID: Int, hidden: Boolean): Boolean {
         TODO("Not yet implemented")
     }
 

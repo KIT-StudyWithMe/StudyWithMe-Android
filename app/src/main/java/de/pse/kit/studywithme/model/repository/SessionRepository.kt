@@ -7,6 +7,7 @@ import de.pse.kit.studywithme.model.data.Session
 import de.pse.kit.studywithme.model.data.SessionAttendee
 import de.pse.kit.studywithme.model.data.SessionField
 import de.pse.kit.studywithme.model.database.AppDatabase
+import de.pse.kit.studywithme.model.network.ReportService
 import de.pse.kit.studywithme.model.network.SessionService
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -18,6 +19,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 class SessionRepository private constructor(context: Context) : SessionRepositoryInterface {
     private val sessionService = SessionService.instance
+    private val reportService = ReportService.instance
     private val sessionDao = AppDatabase.getInstance(context).sessionDao()
     private val auth = Authenticator
     // TODO: Local in key value speichern beim anmelden und hier abrufen
@@ -180,7 +182,13 @@ class SessionRepository private constructor(context: Context) : SessionRepositor
     }
 
     override fun reportSession(sessionID: Int, sessionfield: SessionField) {
-        TODO()
+        if (auth.firebaseUID == null) {
+            // TODO: Explicit exception class
+            throw Exception("Authentication Error: No local user signed in.")
+        }
+        return runBlocking {
+            reportService.reportSession(sessionID, sessionfield, auth.user!!.userID)
+        }
     }
 
     companion object : SingletonHolder<SessionRepository, Context>({ SessionRepository(it) })

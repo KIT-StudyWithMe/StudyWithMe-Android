@@ -148,8 +148,25 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
         }
     }
 
-    override suspend fun hideGroup(groupID: Int): Boolean {
-        TODO("Not yet implemented")
+    override suspend fun hideGroup(groupID: Int, hidden:Boolean): Boolean {
+        return try {
+            client.post(HttpRoutes.GROUPS + groupID + "/hide") {
+                contentType(ContentType.Application.Json)
+                body = hidden
+            }
+        } catch (e: RedirectResponseException) {
+            println("Redirect Error: ${e.response.status.description}")
+            false
+        } catch (e: ClientRequestException) {
+            println("Request Error: ${e.response.status.description}")
+            false
+        } catch (e: ServerResponseException) {
+            println("Response Error: ${e.response.status.description}")
+            false
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+            false
+        }
     }
 
     // Erstmal auslassen
@@ -233,15 +250,60 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
     }
 
     override suspend fun getLecture(lectureID: Int): Lecture? {
-        TODO("Not yet implemented")
+        return try {
+            client.get(HttpRoutes.LECTURES + lectureID)
+        } catch (e: RedirectResponseException) {
+            println("Redirect Error: ${e.response.status.description}")
+            null
+        } catch (e: ClientRequestException) {
+            println("Request Error: ${e.response.status.description}")
+            null
+        } catch (e: ServerResponseException) {
+            println("Response Error: ${e.response.status.description}")
+            null
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+            null
+        }
     }
 
-    override suspend fun newLecture(lecture: Lecture): Lecture? {
-        TODO("Not yet implemented")
+    override suspend fun newLecture(lecture: Lecture, majorID: Int): Lecture? {
+        return try {
+            client.post(HttpRoutes.MAJORS + majorID + "/lectures") {
+                contentType(ContentType.Application.Json)
+                body = lecture
+            }
+        } catch (e: RedirectResponseException) {
+            println("Redirect Error: ${e.response.status.description}")
+            null
+        } catch (e: ClientRequestException) {
+            println("Request Error: ${e.response.status.description}")
+            null
+        } catch (e: ServerResponseException) {
+            println("Response Error: ${e.response.status.description}")
+            null
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+            null
+        }
     }
 
     override suspend fun getMajor(majorID: Int): Major? {
-        TODO("Not yet implemented")
+        return try {
+            client.get(HttpRoutes.MAJORS + majorID)
+        } catch (e: RedirectResponseException) {
+            println("Redirect Error: ${e.response.status.description}")
+            null
+        } catch (e: ClientRequestException) {
+            println("Request Error: ${e.response.status.description}")
+            null
+        } catch (e: ServerResponseException) {
+            println("Response Error: ${e.response.status.description}")
+            null
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+            null
+        }
     }
 
 }
