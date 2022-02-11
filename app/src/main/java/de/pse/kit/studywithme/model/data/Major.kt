@@ -6,6 +6,13 @@ import androidx.room.PrimaryKey
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+/**
+ * Data class for the object major
+ *
+ * @property majorID
+ * @property name
+ * @constructor Create empty Major
+ */
 @Serializable
 @Entity
 data class Major (

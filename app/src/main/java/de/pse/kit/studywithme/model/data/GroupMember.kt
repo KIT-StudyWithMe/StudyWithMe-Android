@@ -5,6 +5,15 @@ import androidx.room.Entity
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+/**
+ * Data class for the object groupmember
+ *
+ * @property groupID
+ * @property userID
+ * @property name
+ * @property isAdmin
+ * @constructor Create empty Group member
+ */
 @Serializable
 @Entity(primaryKeys = ["group_ID", "user_ID"])
 data class GroupMember(

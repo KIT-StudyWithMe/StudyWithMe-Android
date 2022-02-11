@@ -1,5 +1,20 @@
 package de.pse.kit.studywithme.model.data
 
+/**
+ * Data class for the object group
+ *
+ * @property groupID
+ * @property name
+ * @property lectureID
+ * @property lecture
+ * @property major
+ * @property description
+ * @property sessionFrequency
+ * @property sessionType
+ * @property lectureChapter
+ * @property exercise
+ * @constructor Create empty Group
+ */
 data class Group (
     val groupID: Int,
 

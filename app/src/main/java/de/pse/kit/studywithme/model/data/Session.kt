@@ -8,6 +8,16 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.util.*
 
+/**
+ * Data class o fthe object session
+ *
+ * @property sessionID
+ * @property groupID
+ * @property location
+ * @property date
+ * @property duration
+ * @constructor Create empty Session
+ */
 @Serializable
 @Entity
 data class Session(
