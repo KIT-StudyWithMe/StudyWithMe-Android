@@ -8,11 +8,9 @@ import de.pse.kit.studywithme.model.database.AppDatabase
 
 import de.pse.kit.studywithme.model.network.GroupService
 import de.pse.kit.studywithme.model.network.UserService
+import kotlinx.coroutines.async
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.channelFlow
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.concurrent.atomic.AtomicBoolean
@@ -30,13 +28,21 @@ class GroupRepository private constructor(context: Context): GroupRepositoryInte
         }
 
         return runBlocking {
-            val remoteGroups = groupService.getGroups(search) ?: return@runBlocking emptyList()
-            return@runBlocking remoteGroups.map {
+            val remoteGroups = async { groupService.getGroups(search) }
+            val remoteJoinedGroups = async { groupService.getJoinedGroups(auth.user!!.userID) }
+
+            val filteredGroups = remoteGroups.await()?.filter {
+                remoteJoinedGroups.await()?.map {
+                    it.groupID
+                }?.contains(it.groupID) == false
+            }?.map {
                 val lecture = groupService.getLecture(it.lectureID)
                 val major = if (lecture != null) groupService.getMajor(lecture.majorID) else null
                 val group = RemoteGroup.toGroup(it, lecture = lecture, major = major)
                 return@map group
             }
+
+            return@runBlocking filteredGroups ?: emptyList()
         }
     }
 
@@ -309,6 +315,22 @@ class GroupRepository private constructor(context: Context): GroupRepositoryInte
                 }
             }
         }.filterNotNull()
+    }
+
+    override fun isSignedInUserAdmin(groupID: Int): Flow<Boolean> {
+        if (auth.firebaseUID == null) {
+            // TODO: Explicit exception class
+            throw Exception("Authentication Error: No local user signed in.")
+        }
+
+        return flow {
+            getGroupAdmins(groupID).collect {
+                 val admin = it.map {
+                    it.groupID
+                }.contains(groupID)
+                emit(admin)
+            }
+        }
     }
 
     override fun getLectures(prefix: String): Flow<List<Lecture>> {
