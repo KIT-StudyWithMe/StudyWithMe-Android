@@ -6,6 +6,19 @@ import androidx.room.PrimaryKey
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+/**
+ * Data class for return value of group by the server
+ *
+ * @property groupID
+ * @property name
+ * @property lectureID
+ * @property description
+ * @property sessionFrequency
+ * @property sessionType
+ * @property lectureChapter
+ * @property exercise
+ * @constructor Create empty Remote group
+ */
 @Serializable
 @Entity
 data class RemoteGroup(
@@ -43,7 +56,20 @@ data class RemoteGroup(
     val exercise: Int,
 
 ) {
+    /**
+     * Companion
+     *
+     * @constructor Create empty Companion
+     */
     companion object {
+        /**
+         * Transforms a RemoteGroup object into a Group object
+         *
+         * @param remoteGroup
+         * @param lecture
+         * @param major
+         * @return Group object
+         */
         fun toGroup(remoteGroup: RemoteGroup, lecture: Lecture? = null, major: Major? = null): Group {
             return Group(
                 groupID =  remoteGroup.groupID,
@@ -59,6 +85,12 @@ data class RemoteGroup(
             )
         }
 
+        /**
+         * Transforms a Group object into a RemoteGroup object
+         *
+         * @param group
+         * @return RemoteGroup object
+         */
         fun toRemoteGroup(group: Group): RemoteGroup {
             return RemoteGroup(
                 groupID =  group.groupID,
