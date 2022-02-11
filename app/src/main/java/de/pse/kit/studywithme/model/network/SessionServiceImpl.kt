@@ -91,7 +91,7 @@ class SessionServiceImpl(private val client: HttpClient) : SessionService {
     }
 
     override suspend fun removeSession(sessionID: Int) {
-        return try {
+        try {
             client.delete(HttpRoutes.SESSIONS + sessionID)
         } catch (e: RedirectResponseException) {
             println("Redirect Error: ${e.response.status.description}")
@@ -130,6 +130,19 @@ class SessionServiceImpl(private val client: HttpClient) : SessionService {
     }
 
     override suspend fun removeAttendee(userID: Int, sessionID: Int) {
-        TODO("Not yet implemented")
+        try {
+            client.put(HttpRoutes.SESSIONS + sessionID + "/participate/" + userID) {
+                contentType(ContentType.Application.Json)
+                body = false
+            }
+        } catch (e: RedirectResponseException) {
+            println("Redirect Error: ${e.response.status.description}")
+        } catch (e: ClientRequestException) {
+            println("Request Error: ${e.response.status.description}")
+        } catch (e: ServerResponseException) {
+            println("Response Error: ${e.response.status.description}")
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+        }
     }
 }
