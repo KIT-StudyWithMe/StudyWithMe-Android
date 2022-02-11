@@ -22,20 +22,20 @@ import java.util.*
 @Entity
 data class Session(
     @PrimaryKey
-    @SerialName("sessionId")
+    @SerialName("sessionID")
     @ColumnInfo(name = "session_ID")
     val sessionID: Int,
 
-    @SerialName("groupId")
+    @SerialName("groupID")
     @ColumnInfo(name = "group_ID")
     val groupID: Int,
 
-    @SerialName("location")
+    @SerialName("place")
     @ColumnInfo(name = "location")
     val location: String,
 
     @Serializable(with = DateSerializer::class)
-    @SerialName("date")
+    @SerialName("startTime")
     @ColumnInfo(name = "date")
     val date: Date,
 

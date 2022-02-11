@@ -1,5 +1,6 @@
 package de.pse.kit.studywithme.model.network
 
+import android.util.Log
 import de.pse.kit.studywithme.model.data.*
 import io.ktor.client.*
 import io.ktor.client.features.*
@@ -252,34 +253,36 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
                 parameter("name", prefix)
            }
         } catch (e: RedirectResponseException) {
-            println("Redirect Error: ${e.response.status.description}")
+            println("GetLectures Redirect Error: ${e.response.status}")
             null
         } catch (e: ClientRequestException) {
-            println("Request Error: ${e.response.status.description}")
+            println("GetLectures Request Error: ${e.response.status}")
             null
         } catch (e: ServerResponseException) {
-            println("Response Error: ${e.response.status.description}")
+            println("GetLectures Response Error: ${e.response.status}")
             null
         } catch (e: Exception) {
-            println("Error: ${e.message}")
+            println("GetLectures Error: ${e.message}")
             null
         }
     }
 
     override suspend fun getLecture(lectureID: Int): Lecture? {
         return try {
-            client.get(HttpRoutes.LECTURES + lectureID)
+            val lecture: Lecture? = client.get(HttpRoutes.LECTURES + lectureID)
+            println(lecture)
+            return lecture
         } catch (e: RedirectResponseException) {
-            println("Redirect Error: ${e.response.status.description}")
+            println("GetLecture Redirect Error: ${e.response.status}")
             null
         } catch (e: ClientRequestException) {
-            println("Request Error: ${e.response.status.description}")
+            println("GetLecture Request Error: ${e.response.status}")
             null
         } catch (e: ServerResponseException) {
-            println("Response Error: ${e.response.status.description}")
+            println("GetLecture Response Error: ${e.response.status}")
             null
         } catch (e: Exception) {
-            println("Error: ${e.message}")
+            println("GetLecture Error: ${e.message}")
             null
         }
     }
@@ -291,16 +294,16 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
                 body = lecture
             }
         } catch (e: RedirectResponseException) {
-            println("Redirect Error: ${e.response.status.description}")
+            println("NewLecture Redirect Error: ${e.response.status}")
             null
         } catch (e: ClientRequestException) {
-            println("Request Error: ${e.response.status.description}")
+            println("NewLecture Request Error: ${e.response.status}")
             null
         } catch (e: ServerResponseException) {
-            println("Response Error: ${e.response.status.description}")
+            println("NewLecture Response Error: ${e.response.status}")
             null
         } catch (e: Exception) {
-            println("Error: ${e.message}")
+            println("NewLecture Error: ${e.message}")
             null
         }
     }
@@ -309,16 +312,16 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
         return try {
             client.get(HttpRoutes.MAJORS + majorID)
         } catch (e: RedirectResponseException) {
-            println("Redirect Error: ${e.response.status.description}")
+            println("GetMajor Redirect Error: ${e.response.status}")
             null
         } catch (e: ClientRequestException) {
-            println("Request Error: ${e.response.status.description}")
+            println("GetMajor Request Error: ${e.response.status}")
             null
         } catch (e: ServerResponseException) {
-            println("Response Error: ${e.response.status.description}")
+            println("GetMajor Response Error: ${e.response.status}")
             null
         } catch (e: Exception) {
-            println("Error: ${e.message}")
+            println("GetMajor Error: ${e.message}")
             null
         }
     }
