@@ -27,7 +27,6 @@ class EditGroupViewModel(
     val groupName: MutableStateFlow<String> = MutableStateFlow("")
     val groupDescription: MutableStateFlow<String> = MutableStateFlow("")
     val groupLecture: MutableStateFlow<String> = MutableStateFlow("")
-
     // TODO() val courseSuggestions: Flow<List<String>>
     val groupSessionFrequencyName: MutableStateFlow<String> = MutableStateFlow("")
     val groupSessionTypeName: MutableStateFlow<String> = MutableStateFlow("")
@@ -72,7 +71,7 @@ class EditGroupViewModel(
 
     fun hideGroup() {
         if (group != null) {
-            groupRepo.hideGroup(groupID)
+            groupRepo.hideGroup(groupID, false)
         }
     }
 

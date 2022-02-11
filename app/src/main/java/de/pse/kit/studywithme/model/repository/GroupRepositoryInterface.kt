@@ -21,7 +21,7 @@ interface GroupRepositoryInterface {
 
     fun deleteGroup(group: Group): Boolean
 
-    fun hideGroup(groupID: Int): Boolean
+    fun hideGroup(groupID: Int, hidden:Boolean): Boolean
 
     fun newMember(groupID: Int, uid: Int): Boolean
 

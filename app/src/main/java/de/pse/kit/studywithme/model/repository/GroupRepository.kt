@@ -7,6 +7,7 @@ import de.pse.kit.studywithme.model.data.*
 import de.pse.kit.studywithme.model.database.AppDatabase
 
 import de.pse.kit.studywithme.model.network.GroupService
+import de.pse.kit.studywithme.model.network.ReportService
 import de.pse.kit.studywithme.model.network.UserService
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.*
@@ -16,7 +17,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 class GroupRepository private constructor(context: Context): GroupRepositoryInterface {
     private val groupService = GroupService.instance
-    private val userService = UserService.instance
+    private val reportService = ReportService.instance
     private val groupDao = AppDatabase.getInstance(context).groupDao()
     private val auth = Authenticator
 
@@ -216,9 +217,13 @@ class GroupRepository private constructor(context: Context): GroupRepositoryInte
         }
     }
 
-    override fun hideGroup(groupID: Int): Boolean {
+    override fun hideGroup(groupID: Int, hidden:Boolean): Boolean {
+        if (auth.firebaseUID == null) {
+            // TODO: Explicit exception class
+            throw Exception("Authentication Error: No local user signed in.")
+        }
         return runBlocking {
-            return@runBlocking groupService.hideGroup(groupID)
+            return@runBlocking groupService.hideGroup(groupID, hidden)
         }
     }
 
@@ -357,7 +362,7 @@ class GroupRepository private constructor(context: Context): GroupRepositoryInte
             if (lectures?.map {
                     it.lectureName
                 }?.contains(name) != true) {
-                return@runBlocking groupService.newLecture(Lecture(-1, name, majorID = auth.user!!.majorID!!))
+                return@runBlocking groupService.newLecture(Lecture(-1, name, majorID = auth.user!!.majorID!!), auth.user!!.majorID!!)
             } else {
                 return@runBlocking lectures.last {
                     it.lectureName == name
@@ -367,11 +372,21 @@ class GroupRepository private constructor(context: Context): GroupRepositoryInte
     }
 
     override fun reportGroup(groupID: Int, groupField: GroupField) {
-        TODO()
+        if (auth.firebaseUID == null) {
+            // TODO: Explicit exception class
+            throw Exception("Authentication Error: No local user signed in.")
+        }
+        return runBlocking { reportService.reportGroup(groupID, groupField, auth.user!!.userID) }
     }
 
     override fun reportUser(userID: Int, userField: UserField) {
-        TODO()
+        if (auth.firebaseUID == null) {
+            // TODO: Explicit exception class
+            throw Exception("Authentication Error: No local user signed in.")
+        }
+        return runBlocking {
+            reportService.reportUser(userID, userField, auth.user!!.userID)
+        }
     }
 
 

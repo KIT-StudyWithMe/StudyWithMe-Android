@@ -15,14 +15,14 @@ interface GroupService {
     suspend fun newGroup(group: RemoteGroup, groupID: Int): RemoteGroup?
     suspend fun editGroup(groupID: Int, group: RemoteGroup): RemoteGroup?
     suspend fun removeGroup(groupID: Int): Boolean
-    suspend fun hideGroup(groupID: Int): Boolean
+    suspend fun hideGroup(groupID: Int, hidden:Boolean): Boolean
     suspend fun newMember(groupID: Int, uid: Int): GroupMember?
     suspend fun joinRequest(groupID: Int, uid:Int): Boolean
     suspend fun getJoinRequests(groupID: Int): List<UserLight>?
     suspend fun removeMember(groupID: Int, uid: Int): Boolean
     suspend fun getLectures(majorID: Int, prefix: String): List<Lecture>?
     suspend fun getLecture(lectureID: Int): Lecture?
-    suspend fun newLecture(lecture: Lecture): Lecture?
+    suspend fun newLecture(lecture: Lecture, majorID: Int): Lecture?
     suspend fun getMajor(majorID: Int): Major?
 
     companion object {
