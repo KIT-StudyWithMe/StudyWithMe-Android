@@ -37,9 +37,9 @@ interface GroupDao {
     @Query("SELECT * FROM major WHERE major_ID LIKE :majorID")
     suspend fun getMajor(majorID: Int): Major?
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveLecture(lecture: Lecture)
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveMajor(major: Major)
 }

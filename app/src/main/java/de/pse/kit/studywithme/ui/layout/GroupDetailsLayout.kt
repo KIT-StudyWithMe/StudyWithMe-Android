@@ -1,5 +1,6 @@
 package de.pse.kit.studywithme.ui.layout
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
@@ -7,6 +8,9 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -20,9 +24,12 @@ fun GroupDetailsLayout(
     groupAdmin: List<String>,
     groupMember: List<String>,
     groupRequests: List<String> = emptyList(),
+    adminClick: (String) -> Unit = {},
+    memberClick: (String) -> Unit = {},
+    requestClick: (String) -> Unit = {},
     description: String = "",
-    place: String? = "",
-    time: String? = "",
+    place: String? = null,
+    time: String? = null,
     selectedChips: List<String>,
     chapterNumber: Int? = null,
     exerciseSheetNumber: Int? = null,
@@ -31,23 +38,29 @@ fun GroupDetailsLayout(
         Column {
             Text(text = "Gruppeninformationen", modifier = Modifier.padding(top = 12.dp))
             for (element in groupAdmin) {
-                FormText(icon = Icons.Filled.Person, text = element)
+                FormText(modifier = Modifier.clickable {
+                    adminClick(element)
+                }, icon = Icons.Filled.Person, text = element)
             }
             for (element in groupMember) {
-                FormText(icon = Icons.Outlined.Person, text = element)
+                FormText(modifier = Modifier.clickable {
+                    memberClick(element)
+                }, icon = Icons.Outlined.Person, text = element)
             }
             for (element in groupRequests) {
-                FormText(icon = Icons.Outlined.PersonAddAlt, text = "Beitrittsanfrage: $element")
+                FormText(modifier = Modifier.clickable {
+                    requestClick(element)
+                }, icon = Icons.Outlined.PersonAddAlt, text = "Beitrittsanfrage: $element")
             }
             FormText(icon = Icons.Filled.Info, text = description, maxLines = 3)
 
-            if (place != "" && time != "") {
+            if (place != null && time != null) {
                 Text(
                     text = "Nächste geplante Lernsession",
                     modifier = Modifier.padding(top = 12.dp)
                 )
-                FormText(icon = Icons.Filled.LocationOn, text = place!!, maxLines = 2)
-                FormText(icon = Icons.Filled.Timer, text = time!!, maxLines = 2)
+                FormText(icon = Icons.Filled.LocationOn, text = place, maxLines = 2)
+                FormText(icon = Icons.Filled.Timer, text = time, maxLines = 2)
             }
 
             Text(text = "Weitere Informationen", modifier = Modifier.padding(top = 12.dp))

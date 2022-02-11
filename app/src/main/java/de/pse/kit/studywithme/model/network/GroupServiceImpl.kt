@@ -89,9 +89,9 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
         }
     }
 
-    override suspend fun newGroup(group: RemoteGroup, groupID: Int): RemoteGroup? {
+    override suspend fun newGroup(group: RemoteGroup, userID: Int): RemoteGroup? {
         return try {
-            client.post(HttpRoutes.GROUPS + groupID) {
+            client.post(HttpRoutes.GROUPS + userID) {
                 contentType(ContentType.Application.Json)
                 body = group
             }
@@ -133,8 +133,7 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
 
     override suspend fun removeGroup(groupID: Int): Boolean {
         return try {
-            client.delete<HttpResponse>(HttpRoutes.GROUPS + groupID)
-            true
+            client.delete(HttpRoutes.GROUPS + groupID)
         } catch (e: RedirectResponseException) {
             println("Redirect Error: ${e.response.status.description}")
             false
@@ -152,10 +151,11 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
 
     override suspend fun hideGroup(groupID: Int, hidden:Boolean): Boolean {
         return try {
-            client.post<HttpResponse>(HttpRoutes.GROUPS + groupID + "/hide") {
+            val response = client.post<HttpResponse>(HttpRoutes.GROUPS + groupID + "/hide") {
                 contentType(ContentType.Application.Json)
                 body = hidden
             }
+            println(response.status)
             true
         } catch (e: RedirectResponseException) {
             println("Redirect Error: ${e.response.status.description}")
@@ -179,8 +179,7 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
 
     override suspend fun joinRequest(groupID: Int, uid: Int): Boolean {
         return try {
-            client.put<HttpResponse>(HttpRoutes.GROUPS + groupID + "/join/" + uid)
-            true
+            client.put(HttpRoutes.GROUPS + groupID + "/join/" + uid)
         } catch (e: RedirectResponseException) {
             println("Redirect Error: ${e.response.status.description}")
             false
@@ -217,8 +216,7 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
 
     override suspend fun removeMember(groupID: Int, uid: Int): Boolean {
         return try {
-            client.delete<HttpResponse>(HttpRoutes.GROUPS + "/users/" + uid)
-            true
+            client.delete(HttpRoutes.GROUPS + "/users/" + uid)
         } catch (e: RedirectResponseException) {
             println("Redirect Error: ${e.response.status.description}")
             false

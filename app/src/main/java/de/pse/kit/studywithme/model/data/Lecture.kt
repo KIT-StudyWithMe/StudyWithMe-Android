@@ -7,6 +7,14 @@ import androidx.room.PrimaryKey
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+/**
+ * Data class for the object lecture
+ *
+ * @property lectureID
+ * @property lectureName
+ * @property majorID
+ * @constructor Create empty Lecture
+ */
 @Serializable
 @Entity(indices = [Index(value = ["lecture_name"])])
 data class Lecture(

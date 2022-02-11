@@ -6,6 +6,21 @@ import androidx.room.PrimaryKey
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+/**
+ * Data class for the object user
+ *
+ * @property userID
+ * @property name
+ * @property collegeID
+ * @property college
+ * @property majorID
+ * @property major
+ * @property contact
+ * @property firebaseUID
+ * @property isBLocked
+ * @property isModerator
+ * @constructor Create empty User
+ */
 @Serializable
 @Entity
 data class User(
