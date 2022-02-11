@@ -4,6 +4,7 @@ import de.pse.kit.studywithme.model.data.*
 import io.ktor.client.*
 import io.ktor.client.features.*
 import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.http.*
 
 class GroupServiceImpl(private var client: HttpClient): GroupService {
@@ -132,7 +133,8 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
 
     override suspend fun removeGroup(groupID: Int): Boolean {
         return try {
-            client.delete(HttpRoutes.GROUPS + groupID)
+            client.delete<HttpResponse>(HttpRoutes.GROUPS + groupID)
+            true
         } catch (e: RedirectResponseException) {
             println("Redirect Error: ${e.response.status.description}")
             false
@@ -150,10 +152,11 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
 
     override suspend fun hideGroup(groupID: Int, hidden:Boolean): Boolean {
         return try {
-            client.post(HttpRoutes.GROUPS + groupID + "/hide") {
+            client.post<HttpResponse>(HttpRoutes.GROUPS + groupID + "/hide") {
                 contentType(ContentType.Application.Json)
                 body = hidden
             }
+            true
         } catch (e: RedirectResponseException) {
             println("Redirect Error: ${e.response.status.description}")
             false
@@ -176,7 +179,8 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
 
     override suspend fun joinRequest(groupID: Int, uid: Int): Boolean {
         return try {
-            client.put(HttpRoutes.GROUPS + groupID + "/join/" + uid)
+            client.put<HttpResponse>(HttpRoutes.GROUPS + groupID + "/join/" + uid)
+            true
         } catch (e: RedirectResponseException) {
             println("Redirect Error: ${e.response.status.description}")
             false
@@ -213,7 +217,8 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
 
     override suspend fun removeMember(groupID: Int, uid: Int): Boolean {
         return try {
-            client.delete(HttpRoutes.GROUPS + "/users/" + uid)
+            client.delete<HttpResponse>(HttpRoutes.GROUPS + "/users/" + uid)
+            true
         } catch (e: RedirectResponseException) {
             println("Redirect Error: ${e.response.status.description}")
             false
