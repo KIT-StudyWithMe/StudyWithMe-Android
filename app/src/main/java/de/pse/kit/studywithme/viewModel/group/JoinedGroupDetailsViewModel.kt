@@ -19,15 +19,23 @@ class JoinedGroupDetailsViewModel(
     val groupRepo: GroupRepositoryInterface,
     val sessionRepo: SessionRepositoryInterface
 ) : SignedInViewModel(navController) {
-
+    
     val group: MutableState<Group?> = mutableStateOf(null)
     val members: MutableState<List<GroupMember>> = mutableStateOf(emptyList())
+    val requests: MutableState<List<UserLight>> = mutableStateOf(emptyList())
     val sessions: MutableState<List<Session>> = mutableStateOf(emptyList())
     val isAdmin: MutableState<Boolean> = mutableStateOf(false)
     val openReportDialog: MutableState<Boolean> = mutableStateOf(false)
     val groupReports: MutableSet<GroupField> = mutableSetOf()
     val sessionReports: MutableSet<SessionField> = mutableSetOf()
 
+    val openAdminDialog: MutableState<Boolean> = mutableStateOf(false)
+    val openMemberDialog: MutableState<Boolean> = mutableStateOf(false)
+    val openRequestDialog: MutableState<Boolean> = mutableStateOf(false)
+    
+    val clickedUser: MutableState<GroupMember?> = mutableStateOf(null)
+    val clickedUserName: MutableState<String> = mutableStateOf("")
+    
     init {
         runBlocking {
             launch {
@@ -50,6 +58,9 @@ class JoinedGroupDetailsViewModel(
                     isAdmin.value = it
                 }
             }
+            launch {
+                //requests.value = groupRepo.getJoinRequests(groupID)
+            }
         }
     }
 
@@ -57,7 +68,7 @@ class JoinedGroupDetailsViewModel(
         NavGraph.navigateToEditGroup(navController, groupID)
     }
 
-    fun report() {
+    fun reportGroup() {
         if (sessions.value.isNotEmpty()) {
             for (field in sessionReports) {
                 sessionRepo.reportSession(sessions.value.first().sessionID, field)
@@ -86,6 +97,30 @@ class JoinedGroupDetailsViewModel(
     fun participate() {
         if (!sessions.value.isEmpty()) {
             sessionRepo.newAttendee(sessions.value[0].sessionID)
+        }
+    }
+
+    fun reportUser(userField: UserField) {
+        if (clickedUser.value != null) {
+            groupRepo.reportUser(clickedUser.value!!.userID, userField)
+        }
+    }
+
+    fun makeAdmin() {
+        if (clickedUser.value != null) {
+            //TODO()
+        }
+    }
+
+    fun removeMember() {
+        if (clickedUser.value != null) {
+            groupRepo.removeMember(groupID, clickedUser.value!!.userID)
+        }
+    }
+
+    fun acceptRequest(accept: Boolean) {
+        if (clickedUser.value != null && accept) {
+            groupRepo.newMember(groupID, clickedUser.value!!.userID)
         }
     }
 }

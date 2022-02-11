@@ -137,7 +137,7 @@ fun GroupReportDialog(
                         Text("Abbrechen", color = MaterialTheme.colorScheme.onPrimaryContainer)
                     }
                 },
-                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                containerColor = MaterialTheme.colorScheme.primary,
                 textContentColor = MaterialTheme.colorScheme.onPrimaryContainer
             )
         }

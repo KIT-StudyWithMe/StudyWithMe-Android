@@ -29,7 +29,6 @@ fun NewSessionView(viewModel: NewSessionViewModel) {
                 TopBar(
                     title = "Nächste Lernsession",
                     subtitle = group?.name ?: "",
-                    isTab = true,
                     actions = {
                         IconButton(onClick = { viewModel.saveNewSession() }) {
                             Icon(

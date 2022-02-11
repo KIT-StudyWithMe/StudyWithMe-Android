@@ -24,13 +24,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import de.pse.kit.studywithme.model.repository.FakeGroupRepository
 import de.pse.kit.studywithme.model.repository.FakeSessionRepository
-import de.pse.kit.studywithme.ui.component.Button
-import de.pse.kit.studywithme.ui.component.GroupReportDialog
-import de.pse.kit.studywithme.ui.component.NavigationBar
-import de.pse.kit.studywithme.ui.component.TopBar
+import de.pse.kit.studywithme.ui.component.*
 import de.pse.kit.studywithme.ui.layout.GroupDetailsLayout
 import de.pse.kit.studywithme.viewModel.group.JoinedGroupDetailsViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import java.lang.reflect.Member
 
 @ExperimentalCoroutinesApi
 @ExperimentalMaterialApi
@@ -41,6 +39,7 @@ fun JoinedGroupDetailsView(viewModel: JoinedGroupDetailsViewModel) {
         val group by viewModel.group
         val sessions by viewModel.sessions
         val groupMembers by viewModel.members
+        val groupRequests by viewModel.requests
 
         Scaffold(
             topBar = {
@@ -79,8 +78,33 @@ fun JoinedGroupDetailsView(viewModel: JoinedGroupDetailsViewModel) {
                 withSession = true,
                 groupReports = viewModel.groupReports,
                 sessionReports = viewModel.sessionReports,
-                onConfirm = { viewModel.report() }
+                onConfirm = { viewModel.reportGroup() }
             )
+
+            AdminDialog(
+                openDialog = viewModel.openAdminDialog,
+                name = viewModel.clickedUserName,
+                contact = null,
+                report = { viewModel.reportUser(it.first()) }
+            )
+
+            MemberDialog(
+                openDialog = viewModel.openMemberDialog,
+                isAdmin = viewModel.isAdmin.value,
+                name = viewModel.clickedUserName,
+                report = { viewModel.reportUser(it) },
+                makeAdmin = { viewModel.makeAdmin() },
+                removeMember = { viewModel.removeMember() }
+            )
+
+            if (viewModel.isAdmin.value) {
+                RequestDialog(
+                    openDialog = viewModel.openRequestDialog,
+                    name = viewModel.clickedUserName,
+                    report = { viewModel.reportUser(it) },
+                    acceptRequest = { viewModel.acceptRequest(it) }
+                )
+            }
 
             Column(
                 modifier = Modifier
@@ -98,13 +122,39 @@ fun JoinedGroupDetailsView(viewModel: JoinedGroupDetailsViewModel) {
                     }.map {
                         it.name
                     },
-                    adminClick = {  },
+                    adminClick = {
+                        val name = it
+                        viewModel.clickedUser.value = groupMembers.filter {
+                            it.name == name
+                        }.firstOrNull()
+                        viewModel.openAdminDialog.value = true
+                        viewModel.clickedUserName.value = name
+                    },
                     groupMember = groupMembers.filter {
                         !it.isAdmin
                     }.map {
                         it.name
                     },
+                    memberClick = {
+                        val name = it
+                        viewModel.clickedUser.value = groupMembers.filter {
+                            it.name == name
+                        }.firstOrNull()
+                        viewModel.openMemberDialog.value = true
+                        viewModel.clickedUserName.value = name
+                    },
                     description = group?.description ?: "",
+                    groupRequests = groupRequests.map {
+                        it.name
+                    },
+                    requestClick = {
+                        val name = it
+                        viewModel.clickedUser.value = groupMembers.filter {
+                            it.name == name
+                        }.firstOrNull()
+                        viewModel.openRequestDialog.value = true
+                        viewModel.clickedUserName.value= name
+                    },
                     place = sessions.firstOrNull()?.location,
                     time = sessions.firstOrNull()?.date.toString(),
                     selectedChips = listOf(
