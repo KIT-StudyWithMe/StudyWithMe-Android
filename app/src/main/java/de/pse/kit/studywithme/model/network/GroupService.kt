@@ -12,7 +12,7 @@ interface GroupService {
     suspend fun getGroupSuggestions(uid: Int): List<RemoteGroup>?
     suspend fun getGroup(groupID: Int): RemoteGroup?
     suspend fun getGroupMembers(groupID: Int): List<GroupMember>?
-    suspend fun newGroup(group: RemoteGroup, groupID: Int): RemoteGroup?
+    suspend fun newGroup(group: RemoteGroup, userID: Int): RemoteGroup?
     suspend fun editGroup(groupID: Int, group: RemoteGroup): RemoteGroup?
     suspend fun removeGroup(groupID: Int): Boolean
     suspend fun hideGroup(groupID: Int, hidden:Boolean): Boolean

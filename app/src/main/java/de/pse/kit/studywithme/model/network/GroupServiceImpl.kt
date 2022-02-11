@@ -88,9 +88,9 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
         }
     }
 
-    override suspend fun newGroup(group: RemoteGroup, groupID: Int): RemoteGroup? {
+    override suspend fun newGroup(group: RemoteGroup, userID: Int): RemoteGroup? {
         return try {
-            client.post(HttpRoutes.GROUPS + groupID) {
+            client.post(HttpRoutes.GROUPS + userID) {
                 contentType(ContentType.Application.Json)
                 body = group
             }
