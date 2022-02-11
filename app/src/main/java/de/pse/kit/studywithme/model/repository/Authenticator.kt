@@ -17,18 +17,11 @@ object Authenticator {
     var user: User? = null
 
 
-    init {
-        auth.addAuthStateListener {
-            firebaseUser = it.currentUser
-        }
-    }
-
-
     suspend fun signUp(email: String, password: String): Boolean {
         try {
             auth.createUserWithEmailAndPassword(email, password).await()
-            Log.d(TAG, "current auth userid: (${auth.uid})")
-            Log.d(TAG, "current userid: (${firebaseUser?.uid})")
+            firebaseUser = auth.currentUser
+            Log.d(TAG, "createUserWithEmail(${auth.uid}):success")
             Log.d(TAG, "createUserWithEmail($firebaseUID):success")
             return true
         } catch (e: Exception) {
@@ -40,7 +33,9 @@ object Authenticator {
     suspend fun signIn(email: String, password: String): Boolean {
         try {
             auth.signInWithEmailAndPassword(email, password).await()
-            Log.d(TAG, "signInWithEmail:success")
+            firebaseUser = auth.currentUser
+            Log.d(TAG, "signInWithEmail(${auth.uid}):success")
+            Log.d(TAG, "signInWithEmail(${firebaseUID}):success")
             return true
         } catch (e: Exception) {
             Log.w(TAG, "signInWithEmail:failure", e)
