@@ -2,7 +2,7 @@ package de.pse.kit.studywithme.model.network
 
 object HttpRoutes {
 
-    private const val BASE_URL = "https://api.test2.studywithme.ovh"
+    private const val BASE_URL = "https://api.test.studywithme.ovh"
     const val USERS = "$BASE_URL/users/"
     const val GROUPS = "$BASE_URL/groups/"
     const val SESSIONS = "$BASE_URL/sessions/"

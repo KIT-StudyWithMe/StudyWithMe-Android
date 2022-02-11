@@ -29,8 +29,22 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
         }
     }
 
-    override suspend fun getJoinedGroups(uid: Int): List<RemoteGroup> {
-        TODO("Not yet implemented")
+    override suspend fun getJoinedGroups(uid: Int): List<RemoteGroup>? {
+        return try {
+            client.get(HttpRoutes.USERS + uid + "/groups")
+        } catch (e: RedirectResponseException) {
+            println("Redirect Error: ${e.response.status.description}")
+            null
+        } catch (e: ClientRequestException) {
+            println("Request Error: ${e.response.status.description}")
+            null
+        } catch (e: ServerResponseException) {
+            println("Response Error: ${e.response.status.description}")
+            null
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+            null
+        }
     }
 
     override suspend fun getGroupSuggestions(uid: Int): List<RemoteGroup> {
