@@ -30,8 +30,8 @@ class GroupRepository private constructor(context: Context): GroupRepositoryInte
         }
 
         return runBlocking {
-            val remoteGroups = groupService.getGroups(search)
-            return@runBlocking remoteGroups!!.map {
+            val remoteGroups = groupService.getGroups(search) ?: return@runBlocking emptyList()
+            return@runBlocking remoteGroups.map {
                 val lecture = groupService.getLecture(it.lectureID)
                 val major = if (lecture != null) groupService.getMajor(lecture.majorID) else null
                 val group = RemoteGroup.toGroup(it, lecture = lecture, major = major)
@@ -51,19 +51,21 @@ class GroupRepository private constructor(context: Context): GroupRepositoryInte
 
             launch {
                 val remoteGroups = groupService.getJoinedGroups(auth.user!!.userID)
-                val groups = remoteGroups!!.map {
-                    val lecture = groupService.getLecture(it.lectureID)
-                    val major = if (lecture != null) groupService.getMajor(lecture.majorID) else null
-                    val group = RemoteGroup.toGroup(it, lecture = lecture, major = major)
-                    return@map group
-                }
-                send (groups)
-                truthWasSend.set(true)
-
-                groups.forEach {
-                    groupDao.saveGroup(RemoteGroup.toRemoteGroup(it))
-                    if (it.lecture != null) groupDao.saveLecture(it.lecture)
-                    if (it.major != null) groupDao.saveMajor(it.major)
+                if (remoteGroups != null) {
+                    val groups = remoteGroups.map {
+                        val lecture = groupService.getLecture(it.lectureID)
+                        val major =
+                            if (lecture != null) groupService.getMajor(lecture.majorID) else null
+                        val group = RemoteGroup.toGroup(it, lecture = lecture, major = major)
+                        return@map group
+                    }
+                    send(groups)
+                    truthWasSend.set(true)
+                    groups.forEach {
+                        groupDao.saveGroup(RemoteGroup.toRemoteGroup(it))
+                        if (it.lecture != null) groupDao.saveLecture(it.lecture)
+                        if (it.major != null) groupDao.saveMajor(it.major)
+                    }
                 }
             }
             launch {
@@ -86,8 +88,8 @@ class GroupRepository private constructor(context: Context): GroupRepositoryInte
         }
 
         return runBlocking {
-            val remoteGroups = groupService.getGroupSuggestions(auth.user!!.userID)
-            return@runBlocking remoteGroups!!.map {
+            val remoteGroups = groupService.getGroupSuggestions(auth.user!!.userID) ?: return@runBlocking emptyList()
+            return@runBlocking remoteGroups.map {
                 val lecture = groupService.getLecture(it.lectureID)
                 val major = if (lecture != null) groupService.getMajor(lecture.majorID) else null
                 val group = RemoteGroup.toGroup(it, lecture = lecture, major = major)
@@ -139,7 +141,7 @@ class GroupRepository private constructor(context: Context): GroupRepositoryInte
 
             if (newLecture) {
                 val remoteLecture = groupService.newLecture(group.lecture, group.groupID)
-                if (remoteLecture == null) return@runBlocking false
+                    ?: return@runBlocking false
                 group.lectureID = remoteLecture.lectureID
             }
 
@@ -315,10 +317,13 @@ class GroupRepository private constructor(context: Context): GroupRepositoryInte
             throw Exception("Authentication Error: No local user signed in.")
         }
         return flow {
-            val remoteLectures = groupService.getLectures(prefix)!!.filter {
-                it.majorID == auth.user!!.majorID
+            var remoteLectures = groupService.getLectures(prefix)
+            if(remoteLectures != null) {
+                remoteLectures = remoteLectures.filter {
+                    it.majorID == auth.user!!.majorID
+                }
+                emit(remoteLectures)
             }
-            emit(remoteLectures)
         }.filterNotNull()
     }
 
