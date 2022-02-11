@@ -10,14 +10,6 @@ interface GroupDao {
     @Query("SELECT * FROM remotegroup")
     suspend fun getGroups(): List<RemoteGroup>
 
-    /*
-    @Query("SELECT * FROM `Group` WHERE group_ID in " +
-            "(SELECT g.group_ID FROM `group` g, GroupMember gm, User u " +
-            "WHERE g.group_ID == gm.group_ID AND u.user_ID == :userID AND gm.user_ID == :userID)"
-    )
-    fun getJoinedGroups(userID: Int): List<Group>
-    */
-
     @Query("SELECT * FROM remotegroup WHERE group_ID LIKE :groupID")
     suspend fun getGroup(groupID: Int): RemoteGroup
 

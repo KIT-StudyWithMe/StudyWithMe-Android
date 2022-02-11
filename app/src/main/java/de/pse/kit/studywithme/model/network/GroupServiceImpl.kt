@@ -207,12 +207,42 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
         }
     }
 
-    override suspend fun getLectures(prefix: String): List<Lecture> {
-        TODO("Not yet implemented")
+    override suspend fun getLectures(prefix: String, majorID: Int): List<Lecture>? {
+        return try {
+            client.get(HttpRoutes.MAJORS + majorID +  "/lectures") {
+                parameter("name", prefix)
+            }
+        } catch (e: RedirectResponseException) {
+            println("Redirect Error: ${e.response.status.description}")
+            null
+        } catch (e: ClientRequestException) {
+            println("Request Error: ${e.response.status.description}")
+            null
+        } catch (e: ServerResponseException) {
+            println("Response Error: ${e.response.status.description}")
+            null
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+            null
+        }
     }
 
     override suspend fun getLecture(lectureID: Int): Lecture? {
-        TODO("Not yet implemented")
+        return try {
+            client.get(HttpRoutes.LECTURES + lectureID)
+        } catch (e: RedirectResponseException) {
+            println("Redirect Error: ${e.response.status.description}")
+            null
+        } catch (e: ClientRequestException) {
+            println("Request Error: ${e.response.status.description}")
+            null
+        } catch (e: ServerResponseException) {
+            println("Response Error: ${e.response.status.description}")
+            null
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+            null
+        }
     }
 
     override suspend fun newLecture(lecture: Lecture, groupID: Int): Lecture? {
@@ -237,7 +267,39 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
     }
 
     override suspend fun getMajor(majorID: Int): Major? {
-        TODO("Not yet implemented")
+        return try {
+            client.get(HttpRoutes.MAJORS + majorID)
+        } catch (e: RedirectResponseException) {
+            println("Redirect Error: ${e.response.status.description}")
+            null
+        } catch (e: ClientRequestException) {
+            println("Request Error: ${e.response.status.description}")
+            null
+        } catch (e: ServerResponseException) {
+            println("Response Error: ${e.response.status.description}")
+            null
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+            null
+        }
     }
-
+    override suspend fun hideGroup(hidden: Boolean, groupID: Int) :Boolean {
+        return try {
+            client.get(HttpRoutes.GROUPS + groupID + "/hide") {
+                body = hidden
+            }
+        } catch (e: RedirectResponseException) {
+            println("Redirect Error: ${e.response.status.description}")
+            false
+        } catch (e: ClientRequestException) {
+            println("Request Error: ${e.response.status.description}")
+            false
+        } catch (e: ServerResponseException) {
+            println("Response Error: ${e.response.status.description}")
+            false
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+            false
+        }
+    }
 }

@@ -17,7 +17,6 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 class GroupRepository private constructor(context: Context): GroupRepositoryInterface {
     private val groupService = GroupService.instance
-    private val userService = UserService.instance
     private val groupDao = AppDatabase.getInstance(context).groupDao()
     private val auth = Authenticator
 
@@ -338,17 +337,18 @@ class GroupRepository private constructor(context: Context): GroupRepositoryInte
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
+        val userMajorID = auth.user!!.majorID
         return flow {
-            var remoteLectures = groupService.getLectures(prefix)
-            if(remoteLectures != null) {
-                remoteLectures = remoteLectures.filter {
-                    it.majorID == auth.user!!.majorID
+            if(userMajorID != null) {
+                var remoteLectures = groupService.getLectures(prefix, userMajorID)
+                if (remoteLectures != null) {
+                    remoteLectures = remoteLectures.filter {
+                        it.majorID == auth.user!!.majorID
+                    }
+                    emit(remoteLectures)
                 }
-                emit(remoteLectures)
             }
         }.filterNotNull()
     }
-
-
     companion object : SingletonHolder<GroupRepository, Context>({ GroupRepository(it) })
 }

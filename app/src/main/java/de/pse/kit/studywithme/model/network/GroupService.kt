@@ -19,10 +19,11 @@ interface GroupService {
     suspend fun joinRequest(groupID: Int, uid:Int): Boolean
     suspend fun getJoinRequests(groupID: Int): List<UserLight>?
     suspend fun removeMember(groupID: Int, uid: Int): Boolean
-    suspend fun getLectures(prefix: String): List<Lecture>?
+    suspend fun getLectures(prefix: String, majorID: Int): List<Lecture>?
     suspend fun getLecture(lectureID: Int): Lecture?
     suspend fun newLecture(lecture: Lecture, groupID: Int): Lecture?
     suspend fun getMajor(majorID: Int): Major?
+    suspend fun hideGroup(hidden:Boolean, groupID: Int) :Boolean
 
     companion object {
         val instance: GroupService by lazy {
