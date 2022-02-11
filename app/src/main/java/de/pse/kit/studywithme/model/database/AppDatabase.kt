@@ -9,14 +9,36 @@ import de.pse.kit.studywithme.SingletonHolder
 import de.pse.kit.studywithme.model.data.*
 import de.pse.kit.studywithme.model.database.TypeConverters as TypeConverters_
 
+/**
+ *
+ *
+ * @constructor Create empty App database
+ */
 @Database(
     entities = [Session::class, RemoteGroup::class, User::class, SessionAttendee::class, GroupMember::class, Lecture::class, Major::class],
     version = 1
 )
 @TypeConverters(TypeConverters_::class)
 abstract class AppDatabase : RoomDatabase() {
+    /**
+     * Session dao
+     *
+     * @return
+     */
     abstract fun sessionDao(): SessionDao
+
+    /**
+     * Group dao
+     *
+     * @return
+     */
     abstract fun groupDao(): GroupDao
+
+    /**
+     * User dao
+     *
+     * @return
+     */
     abstract fun userDao(): UserDao
 
     companion object : SingletonHolder<AppDatabase, Context>({
