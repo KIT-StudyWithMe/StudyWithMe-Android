@@ -5,6 +5,7 @@ import android.util.Log
 import de.pse.kit.studywithme.SingletonHolder
 import de.pse.kit.studywithme.model.data.Session
 import de.pse.kit.studywithme.model.data.SessionAttendee
+import de.pse.kit.studywithme.model.data.SessionField
 import de.pse.kit.studywithme.model.database.AppDatabase
 import de.pse.kit.studywithme.model.network.SessionService
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -176,6 +177,10 @@ class SessionRepository private constructor(context: Context) : SessionRepositor
                 }
             }
         }.filterNotNull()
+    }
+
+    override fun reportSession(sessionID: Int, sessionfield: SessionField) {
+        TODO()
     }
 
     companion object : SingletonHolder<SessionRepository, Context>({ SessionRepository(it) })

@@ -2,6 +2,7 @@ package de.pse.kit.studywithme.model.repository
 
 import de.pse.kit.studywithme.model.data.Session
 import de.pse.kit.studywithme.model.data.SessionAttendee
+import de.pse.kit.studywithme.model.data.SessionField
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 
@@ -23,4 +24,6 @@ interface SessionRepositoryInterface {
     fun removeAttendee(sessionID: Int)
 
     fun getAttendees(sessionID: Int): Flow<List<SessionAttendee>>
+
+    fun reportSession(sessionID: Int, sessionfield: SessionField)
 }

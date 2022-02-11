@@ -366,6 +366,14 @@ class GroupRepository private constructor(context: Context): GroupRepositoryInte
         }
     }
 
+    override fun reportGroup(groupID: Int, groupField: GroupField) {
+        TODO()
+    }
+
+    override fun reportUser(userID: Int, userField: UserField) {
+        TODO()
+    }
+
 
     companion object : SingletonHolder<GroupRepository, Context>({ GroupRepository(it) })
 }

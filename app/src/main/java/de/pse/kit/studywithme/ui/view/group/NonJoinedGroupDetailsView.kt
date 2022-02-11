@@ -7,9 +7,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Edit
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
+import androidx.compose.material.icons.rounded.Flag
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -22,6 +21,7 @@ import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
 import de.pse.kit.studywithme.model.repository.FakeGroupRepository
 import de.pse.kit.studywithme.model.repository.FakeSessionRepository
 import de.pse.kit.studywithme.ui.component.Button
+import de.pse.kit.studywithme.ui.component.GroupReportDialog
 import de.pse.kit.studywithme.ui.component.NavigationBar
 import de.pse.kit.studywithme.ui.component.TopBar
 import de.pse.kit.studywithme.ui.layout.GroupDetailsLayout
@@ -43,7 +43,16 @@ fun NonJoinedGroupDetailsView(viewModel: NonJoinedGroupDetailsViewModel) {
                 TopBar(
                     title = group?.name ?: "",
                     subtitle = group?.lecture?.lectureName ?: "",
-                    navClick = { viewModel.navBack() })
+                    navClick = { viewModel.navBack() },
+                    actions = {
+                        IconButton(onClick = { viewModel.openReportDialog.value = true }) {
+                            Icon(
+                                Icons.Rounded.Flag,
+                                contentDescription = "Knopf um die Gruppe zu melden."
+                            )
+                        }
+                    }
+                )
             },
             bottomBar = {
                 NavigationBar(
@@ -54,12 +63,21 @@ fun NonJoinedGroupDetailsView(viewModel: NonJoinedGroupDetailsViewModel) {
             },
             containerColor = MaterialTheme.colorScheme.surface
         ) {
-            Column(modifier = Modifier
-                .padding(horizontal = 24.dp, vertical = 0.dp)
-                .padding(bottom =80.dp)
-                .verticalScroll(
-                    state = ScrollState(0)
-                ),) {
+            GroupReportDialog(
+                openDialog = viewModel.openReportDialog,
+                withSession = false,
+                groupReports = viewModel.groupReports,
+                onConfirm = { viewModel.report() }
+            )
+
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 24.dp, vertical = 0.dp)
+                    .padding(bottom = 80.dp)
+                    .verticalScroll(
+                        state = ScrollState(0)
+                    ),
+            ) {
                 GroupDetailsLayout(
                     groupAdmin = groupAdmins.filter {
                         it.isAdmin

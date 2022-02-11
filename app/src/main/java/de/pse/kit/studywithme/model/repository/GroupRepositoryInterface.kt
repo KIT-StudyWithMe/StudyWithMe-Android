@@ -40,4 +40,8 @@ interface GroupRepositoryInterface {
     fun getLectures(prefix: String): Flow<List<Lecture>>
 
     fun getLecture(name: String): Lecture?
+
+    fun reportGroup(groupID: Int, groupField: GroupField)
+
+    fun reportUser(userID: Int, userField: UserField)
 }

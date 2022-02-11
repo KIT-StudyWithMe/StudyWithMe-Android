@@ -204,4 +204,12 @@ class FakeGroupRepository() : GroupRepositoryInterface {
     override fun getLecture(name: String): Lecture? {
         TODO("Not yet implemented")
     }
+
+    override fun reportGroup(groupID: Int, groupField: GroupField) {
+        TODO("Not yet implemented")
+    }
+
+    override fun reportUser(userID: Int, userField: UserField) {
+        TODO("Not yet implemented")
+    }
 }
