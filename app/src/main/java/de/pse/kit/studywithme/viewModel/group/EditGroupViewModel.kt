@@ -76,6 +76,10 @@ class EditGroupViewModel(
     }
 
     fun saveEditGroup() {
+        if (group == null) {
+            return
+        }
+
         var sessionFrequencyToSave: SessionFrequency = SessionFrequency.ONCE
         for (i in sessionFrequencies.indices) {
             if (sessionFrequencyStrings[i].equals(groupSessionFrequencyName)) {
@@ -104,7 +108,7 @@ class EditGroupViewModel(
         }
 
         val group = Group(
-            groupID = -1,
+            groupID = group!!.groupID,
             name = groupName.value,
             lectureID = -1,
             lecture = Lecture(-1, groupLecture.value, -1),

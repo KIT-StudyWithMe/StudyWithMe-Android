@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.concurrent.atomic.AtomicBoolean
 
-class GroupRepository private constructor(context: Context): GroupRepositoryInterface {
+class GroupRepository private constructor(context: Context) : GroupRepositoryInterface {
     private val groupService = GroupService.instance
     private val reportService = ReportService.instance
     private val groupDao = AppDatabase.getInstance(context).groupDao()
@@ -83,7 +83,7 @@ class GroupRepository private constructor(context: Context): GroupRepositoryInte
                     val group = RemoteGroup.toGroup(it, lecture = lecture, major = major)
                     return@map group
                 }
-                 if(!truthWasSend.get()) send(groups)
+                if (!truthWasSend.get()) send(groups)
             }
         }.filterNotNull()
     }
@@ -95,7 +95,8 @@ class GroupRepository private constructor(context: Context): GroupRepositoryInte
         }
 
         return runBlocking {
-            val remoteGroups = groupService.getGroupSuggestions(auth.user!!.userID) ?: return@runBlocking emptyList()
+            val remoteGroups = groupService.getGroupSuggestions(auth.user!!.userID)
+                ?: return@runBlocking emptyList()
             return@runBlocking remoteGroups.map {
                 val lecture = groupService.getLecture(it.lectureID)
                 val major = if (lecture != null) groupService.getMajor(lecture.majorID) else null
@@ -152,7 +153,8 @@ class GroupRepository private constructor(context: Context): GroupRepositoryInte
                 ?: return@runBlocking false
             group.lectureID = remoteLecture.lectureID
 
-            val remoteGroup = groupService.newGroup(RemoteGroup.toRemoteGroup(group), auth.user!!.userID)
+            val remoteGroup =
+                groupService.newGroup(RemoteGroup.toRemoteGroup(group), auth.user!!.userID)
             if (remoteGroup != null) {
                 Log.d(auth.TAG, "Remote Database Group Post:success")
                 groupDao.saveGroup(remoteGroup)
@@ -189,7 +191,7 @@ class GroupRepository private constructor(context: Context): GroupRepositoryInte
         }
     }
 
-    override fun exitGroup(groupID: Int, uid: Int){
+    override fun exitGroup(groupID: Int, uid: Int) {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
@@ -204,7 +206,7 @@ class GroupRepository private constructor(context: Context): GroupRepositoryInte
         }
     }
 
-    override fun deleteGroup(group: Group): Boolean{
+    override fun deleteGroup(group: Group): Boolean {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
@@ -217,7 +219,7 @@ class GroupRepository private constructor(context: Context): GroupRepositoryInte
         }
     }
 
-    override fun hideGroup(groupID: Int, hidden:Boolean): Boolean {
+    override fun hideGroup(groupID: Int, hidden: Boolean): Boolean {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
@@ -256,7 +258,14 @@ class GroupRepository private constructor(context: Context): GroupRepositoryInte
     }
 
     override fun getJoinRequests(groupID: Int): List<UserLight> {
-        TODO("Not yet implemented")
+        if (auth.firebaseUID == null) {
+            // TODO: Explicit exception class
+            throw Exception("Authentication Error: No local user signed in.")
+        }
+
+        return runBlocking {
+            return@runBlocking groupService.getJoinRequests(groupID) ?: emptyList()
+        }
     }
 
     override fun removeMember(groupID: Int, uid: Int) {
@@ -332,7 +341,7 @@ class GroupRepository private constructor(context: Context): GroupRepositoryInte
 
         return flow {
             getGroupAdmins(groupID).collect {
-                 val admin = it.map {
+                val admin = it.map {
                     it.groupID
                 }.contains(groupID)
                 emit(admin)
@@ -340,55 +349,76 @@ class GroupRepository private constructor(context: Context): GroupRepositoryInte
         }
     }
 
-    override fun getLectures(prefix: String): Flow<List<Lecture>> {
+    override fun hasSignedInUserJoinRequested(groupID: Int): Boolean {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
-        return flow {
-            var remoteLectures = groupService.getLectures(majorID = auth.user!!.majorID!!, prefix)
-            if(remoteLectures != null) {
-                remoteLectures = remoteLectures.filter {
-                    it.majorID == auth.user!!.majorID
-                }
-                emit(remoteLectures)
+        val userIDs = getJoinRequests(groupID).map {
+            it.userID
+        }
+        if (userIDs.contains(auth.user!!.userID.toLong())) {
+            return true
+        }
+        return false
+    }
+
+
+override fun getLectures(prefix: String): Flow<List<Lecture>> {
+    if (auth.firebaseUID == null) {
+        // TODO: Explicit exception class
+        throw Exception("Authentication Error: No local user signed in.")
+    }
+    return flow {
+        var remoteLectures = groupService.getLectures(majorID = auth.user!!.majorID!!, prefix)
+        if (remoteLectures != null) {
+            remoteLectures = remoteLectures.filter {
+                it.majorID == auth.user!!.majorID
             }
-        }.filterNotNull()
-    }
+            emit(remoteLectures)
+        }
+    }.filterNotNull()
+}
 
-    override fun getLecture(name: String): Lecture? {
-        return runBlocking {
-            val lectures = groupService.getLectures(majorID = auth.user!!.majorID!!, name)
-            if (lectures?.map {
-                    it.lectureName
-                }?.contains(name) != true) {
-                return@runBlocking groupService.newLecture(Lecture(-1, name, majorID = auth.user!!.majorID!!), auth.user!!.majorID!!)
-            } else {
-                return@runBlocking lectures.last {
-                    it.lectureName == name
-                }
+override fun getLecture(name: String): Lecture? {
+    return runBlocking {
+        val lectures = groupService.getLectures(majorID = auth.user!!.majorID!!, name)
+        if (lectures?.map {
+                it.lectureName
+            }?.contains(name) != true) {
+            return@runBlocking groupService.newLecture(
+                Lecture(
+                    -1,
+                    name,
+                    majorID = auth.user!!.majorID!!
+                ), auth.user!!.majorID!!
+            )
+        } else {
+            return@runBlocking lectures.last {
+                it.lectureName == name
             }
         }
     }
+}
 
-    override fun reportGroup(groupID: Int, groupField: GroupField) {
-        if (auth.firebaseUID == null) {
-            // TODO: Explicit exception class
-            throw Exception("Authentication Error: No local user signed in.")
-        }
-        return runBlocking { reportService.reportGroup(groupID, groupField, auth.user!!.userID) }
+override fun reportGroup(groupID: Int, groupField: GroupField) {
+    if (auth.firebaseUID == null) {
+        // TODO: Explicit exception class
+        throw Exception("Authentication Error: No local user signed in.")
     }
+    return runBlocking { reportService.reportGroup(groupID, groupField, auth.user!!.userID) }
+}
 
-    override fun reportUser(userID: Int, userField: UserField) {
-        if (auth.firebaseUID == null) {
-            // TODO: Explicit exception class
-            throw Exception("Authentication Error: No local user signed in.")
-        }
-        return runBlocking {
-            reportService.reportUser(userID, userField, auth.user!!.userID)
-        }
+override fun reportUser(userID: Int, userField: UserField) {
+    if (auth.firebaseUID == null) {
+        // TODO: Explicit exception class
+        throw Exception("Authentication Error: No local user signed in.")
     }
+    return runBlocking {
+        reportService.reportUser(userID, userField, auth.user!!.userID)
+    }
+}
 
 
-    companion object : SingletonHolder<GroupRepository, Context>({ GroupRepository(it) })
+companion object : SingletonHolder<GroupRepository, Context>({ GroupRepository(it) })
 }

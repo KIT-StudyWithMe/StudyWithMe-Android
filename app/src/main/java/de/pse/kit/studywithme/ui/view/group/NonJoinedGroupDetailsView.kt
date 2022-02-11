@@ -95,7 +95,9 @@ fun NonJoinedGroupDetailsView(viewModel: NonJoinedGroupDetailsViewModel) {
                     chapterNumber = group?.lectureChapter,
                     exerciseSheetNumber = group?.exercise
                 )
-                Button(text = "Beitreten", onClick = { viewModel.joinRequest() })
+                if (!viewModel.alreadyRequested.value) {
+                    Button(text = "Beitreten", onClick = { viewModel.joinRequest() })
+                }
             }
         }
     }

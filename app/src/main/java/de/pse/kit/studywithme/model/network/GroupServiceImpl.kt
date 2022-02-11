@@ -17,16 +17,16 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
                 parameter("name", search)
             }
         } catch (e: RedirectResponseException) {
-            println("Redirect Error: ${e.response.status.description}")
+            println("GetGroups Redirect Error: ${e.response.status}")
             null
         } catch (e: ClientRequestException) {
-            println("Request Error: ${e.response.status.description}")
+            println("GetGroups Request Error: ${e.response.status}")
             null
         } catch (e: ServerResponseException) {
-            println("Response Error: ${e.response.status.description}")
+            println("GetGroups Response Error: ${e.response.status}")
             null
         } catch (e: Exception) {
-            println("Error: ${e.message}")
+            println("GetGroups Error: ${e.message}")
             null
         }
     }
@@ -35,16 +35,16 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
         return try {
             client.get(HttpRoutes.USERS + uid + "/groups")
         } catch (e: RedirectResponseException) {
-            println("Redirect Error: ${e.response.status.description}")
+            println("GetJoinedGroups Redirect Error: ${e.response.status}")
             null
         } catch (e: ClientRequestException) {
-            println("Request Error: ${e.response.status.description}")
+            println("GetJoinedGroups Request Error: ${e.response.status}")
             null
         } catch (e: ServerResponseException) {
-            println("Response Error: ${e.response.status.description}")
+            println("GetJoinedGroups Response Error: ${e.response.status}")
             null
         } catch (e: Exception) {
-            println("Error: ${e.message}")
+            println("GetJoinedGroups Error: ${e.message}")
             null
         }
     }
@@ -53,16 +53,16 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
         return try {
             client.get(HttpRoutes.GROUPS + "suggestion/" + uid)
         } catch (e: RedirectResponseException) {
-            println("Redirect Error: ${e.response.status.description}")
+            println("GetJoinedSuggestions Redirect Error: ${e.response.status}")
             null
         } catch (e: ClientRequestException) {
-            println("Request Error: ${e.response.status.description}")
+            println("GetJoinedSuggestions Request Error: ${e.response.status}")
             null
         } catch (e: ServerResponseException) {
-            println("Response Error: ${e.response.status.description}")
+            println("GetJoinedSuggestions Response Error: ${e.response.status}")
             null
         } catch (e: Exception) {
-            println("Error: ${e.message}")
+            println("GetJoinedSuggestions Error: ${e.message}")
             null
         }
     }
@@ -71,16 +71,16 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
         return try {
             client.get(HttpRoutes.GROUPS + groupID)
         } catch (e: RedirectResponseException) {
-            println("Redirect Error: ${e.response.status.description}")
+            println("GetGroup Redirect Error: ${e.response.status}")
             null
         } catch (e: ClientRequestException) {
-            println("Request Error: ${e.response.status.description}")
+            println("GetGroup Request Error: ${e.response.status}")
             null
         } catch (e: ServerResponseException) {
-            println("Response Error: ${e.response.status.description}")
+            println("GetGroup Response Error: ${e.response.status}")
             null
         } catch (e: Exception) {
-            println("Error: ${e.message}")
+            println("GetGroup Error: ${e.message}")
             null
         }
 
@@ -90,16 +90,16 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
         return try{
             client.get(HttpRoutes.GROUPS + groupID + "/users")
         } catch (e: RedirectResponseException) {
-            println("Redirect Error: ${e.response.status.description}")
+            println("GetGroupMembers Redirect Error: ${e.response.status}")
             null
         } catch (e: ClientRequestException) {
-            println("Request Error: ${e.response.status.description}")
+            println("GetGroupMembers Request Error: ${e.response.status}")
             null
         } catch (e: ServerResponseException) {
-            println("Response Error: ${e.response.status.description}")
+            println("GetGroupMembers Response Error: ${e.response.status}")
             null
         } catch (e: Exception) {
-            println("Error: ${e.message}")
+            println("GetGroupMembers Error: ${e.message}")
             null
         }
     }
@@ -111,16 +111,16 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
                 body = group
             }
         } catch (e: RedirectResponseException) {
-            println("Redirect Error: ${e.response.status.description}")
+            println("NewGroup Redirect Error: ${e.response.status}")
             null
         } catch (e: ClientRequestException) {
-            println("Request Error: ${e.response.status.description}")
+            println("NewGroup Request Error: ${e.response.status}")
             null
         } catch (e: ServerResponseException) {
-            println("Response Error: ${e.response.status.description}")
+            println("NewGroup Response Error: ${e.response.status}")
             null
         } catch (e: Exception) {
-            println("Error: ${e.message}")
+            println("NewGroup Error: ${e.message}")
             null
         }
     }
@@ -132,16 +132,16 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
                 body = group
             }
         } catch (e: RedirectResponseException) {
-            println("Redirect Error: ${e.response.status.description}")
+            println("EditGroup Redirect Error: ${e.response.status}")
             null
         } catch (e: ClientRequestException) {
-            println("Request Error: ${e.response.status.description}")
+            println("EditGroup Request Error: ${e.response.status}")
             null
         } catch (e: ServerResponseException) {
-            println("Response Error: ${e.response.status.description}")
+            println("EditGroup Response Error: ${e.response.status}")
             null
         } catch (e: Exception) {
-            println("Error: ${e.message}")
+            println("EditGroup Error: ${e.message}")
             null
         }
     }
@@ -150,16 +150,16 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
         return try {
             client.delete(HttpRoutes.GROUPS + groupID)
         } catch (e: RedirectResponseException) {
-            println("Redirect Error: ${e.response.status.description}")
+            println("RemoveGroup Redirect Error: ${e.response.status}")
             false
         } catch (e: ClientRequestException) {
-            println("Request Error: ${e.response.status.description}")
+            println("RemoveGroup Request Error: ${e.response.status}")
             false
         } catch (e: ServerResponseException) {
-            println("Response Error: ${e.response.status.description}")
+            println("RemoveGroup Response Error: ${e.response.status}")
             false
         } catch (e: Exception) {
-            println("Error: ${e.message}")
+            println("RemoveGroup Error: ${e.message}")
             false
         }
     }
@@ -173,16 +173,16 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
             println(response.status)
             true
         } catch (e: RedirectResponseException) {
-            println("Redirect Error: ${e.response.status.description}")
+            println("HideGroup Redirect Error: ${e.response.status}")
             false
         } catch (e: ClientRequestException) {
-            println("Request Error: ${e.response.status.description}")
+            println("HideGroup Request Error: ${e.response.status}")
             false
         } catch (e: ServerResponseException) {
-            println("Response Error: ${e.response.status.description}")
+            println("HideGroup Response Error: ${e.response.status}")
             false
         } catch (e: Exception) {
-            println("Error: ${e.message}")
+            println("HideGroup Error: ${e.message}")
             false
         }
     }
@@ -196,16 +196,16 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
         return try {
             client.put(HttpRoutes.GROUPS + groupID + "/join/" + uid)
         } catch (e: RedirectResponseException) {
-            println("Redirect Error: ${e.response.status.description}")
+            println("JoinRequest Redirect Error: ${e.response.status}")
             false
         } catch (e: ClientRequestException) {
-            println("Request Error: ${e.response.status.description}")
+            println("JoinRequest Request Error: ${e.response.status}")
             false
         } catch (e: ServerResponseException) {
-            println("Response Error: ${e.response.status.description}")
+            println("JoinRequest Response Error: ${e.response.status}")
             false
         } catch (e: Exception) {
-            println("Error: ${e.message}")
+            println("JoinRequest Error: ${e.message}")
             false
         }
     }
@@ -215,16 +215,16 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
         return try {
             client.get(HttpRoutes.GROUPS + groupID + "/requests")
         } catch (e: RedirectResponseException) {
-            println("Redirect Error: ${e.response.status.description}")
+            println("GetJoinRequests Redirect Error: ${e.response.status}")
             null
         } catch (e: ClientRequestException) {
-            println("Request Error: ${e.response.status.description}")
+            println("GetJoinRequests Request Error: ${e.response.status}")
             null
         } catch (e: ServerResponseException) {
-            println("Response Error: ${e.response.status.description}")
+            println("GetJoinRequests Response Error: ${e.response.status}")
             null
         } catch (e: Exception) {
-            println("Error: ${e.message}")
+            println("GetJoinRequests Error: ${e.message}")
             null
         }
     }
@@ -233,16 +233,16 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
         return try {
             client.delete(HttpRoutes.GROUPS + "/users/" + uid)
         } catch (e: RedirectResponseException) {
-            println("Redirect Error: ${e.response.status.description}")
+            println("RemoveMember Redirect Error: ${e.response.status}")
             false
         } catch (e: ClientRequestException) {
-            println("Request Error: ${e.response.status.description}")
+            println("RemoveMember Request Error: ${e.response.status}")
             false
         } catch (e: ServerResponseException) {
-            println("Response Error: ${e.response.status.description}")
+            println("RemoveMember Response Error: ${e.response.status}")
             false
         } catch (e: Exception) {
-            println("Error: ${e.message}")
+            println("RemoveMember Error: ${e.message}")
             false
         }
     }

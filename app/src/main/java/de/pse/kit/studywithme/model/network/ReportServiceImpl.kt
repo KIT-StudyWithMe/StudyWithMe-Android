@@ -25,52 +25,52 @@ class ReportServiceImpl(private val client: HttpClient): ReportService {
 
     override suspend fun reportGroup(groupID: Int, groupField: GroupField, reporterID: Int) {
         try {
-            client.put(HttpRoutes.GROUPS + groupID + "/reports/" + reporterID) {
+            client.put(HttpRoutes.GROUPS + groupID + "/report/" + reporterID) {
                 contentType(ContentType.Application.Json)
                 body = groupField
             }
         } catch (e: RedirectResponseException) {
-            println("Redirect Error: ${e.response.status.description}")
+            println("ReportGroup Redirect Error: ${e.response.status.description}")
         } catch (e: ClientRequestException) {
-            println("Request Error: ${e.response.status.description}")
+            println("ReportGroup Request Error: ${e.response.status.description}")
         } catch (e: ServerResponseException) {
-            println("Response Error: ${e.response.status.description}")
+            println("ReportGroup Response Error: ${e.response.status.description}")
         } catch (e: Exception) {
-            println("Error: ${e.message}")
+            println("ReportGroup Error: ${e.message}")
         }
     }
 
     override suspend fun reportUser(userID: Int, userField: UserField, reporterID: Int) {
         try {
-            client.put(HttpRoutes.USERS + userID + "/reports/" + reporterID) {
+            client.put(HttpRoutes.USERS + userID + "/report/" + reporterID) {
                 contentType(ContentType.Application.Json)
                 body = userField
             }
         } catch (e: RedirectResponseException) {
-            println("Redirect Error: ${e.response.status.description}")
+            println("ReportUser Redirect Error: ${e.response.status.description}")
         } catch (e: ClientRequestException) {
-            println("Request Error: ${e.response.status.description}")
+            println("ReportUser Request Error: ${e.response.status.description}")
         } catch (e: ServerResponseException) {
-            println("Response Error: ${e.response.status.description}")
+            println("ReportUser Response Error: ${e.response.status.description}")
         } catch (e: Exception) {
-            println("Error: ${e.message}")
+            println("ReportUser Error: ${e.message}")
         }
     }
 
     override suspend fun reportSession(sessionID: Int, sessionField: SessionField, reporterID: Int) {
         try {
-            client.put(HttpRoutes.SESSIONS + sessionID + "/reports/" + reporterID) {
+            client.put(HttpRoutes.SESSIONS + sessionID + "/report/" + reporterID) {
                 contentType(ContentType.Application.Json)
                 body = sessionField
             }
         } catch (e: RedirectResponseException) {
-            println("Redirect Error: ${e.response.status.description}")
+            println("ReportSession Redirect Error: ${e.response.status.description}")
         } catch (e: ClientRequestException) {
-            println("Request Error: ${e.response.status.description}")
+            println("ReportSession Request Error: ${e.response.status.description}")
         } catch (e: ServerResponseException) {
-            println("Response Error: ${e.response.status.description}")
+            println("ReportSession Response Error: ${e.response.status.description}")
         } catch (e: Exception) {
-            println("Error: ${e.message}")
+            println("ReportSession Error: ${e.message}")
         }
     }
 

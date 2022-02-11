@@ -37,6 +37,8 @@ interface GroupRepositoryInterface {
 
     fun isSignedInUserAdmin(groupID: Int): Flow<Boolean>
 
+    fun hasSignedInUserJoinRequested(groupID: Int): Boolean
+
     fun getLectures(prefix: String): Flow<List<Lecture>>
 
     fun getLecture(name: String): Lecture?

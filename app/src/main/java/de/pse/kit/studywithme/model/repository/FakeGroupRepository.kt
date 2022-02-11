@@ -197,6 +197,10 @@ class FakeGroupRepository() : GroupRepositoryInterface {
         }
     }
 
+    override fun hasSignedInUserJoinRequested(groupID: Int): Boolean {
+        TODO("Not yet implemented")
+    }
+
     override fun getLectures(prefix: String): Flow<List<Lecture>> {
         TODO("Not yet implemented")
     }
