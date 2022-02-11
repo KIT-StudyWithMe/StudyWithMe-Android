@@ -15,16 +15,29 @@ fun Button(
     modifier: Modifier = Modifier,
     onClick: (() -> Unit),
     text: String,
-    primary: Boolean = true
+    primary: Boolean = true,
+    emphasize: Boolean = false
 ) {
     MyApplicationTheme3 {
-        if (primary) {
+        if (primary && !emphasize) {
             Button_(
                 onClick = onClick,
                 modifier = modifier.fillMaxWidth(),
                 colors = buttonColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                ),
+                contentPadding = PaddingValues(0.dp)
+            ) {
+                Text(text)
+            }
+        } else if (emphasize) {
+            Button_(
+                onClick = onClick,
+                modifier = modifier.fillMaxWidth(),
+                colors = buttonColors(
+                    containerColor = MaterialTheme.colorScheme.errorContainer,
+                    contentColor = MaterialTheme.colorScheme.onErrorContainer
                 ),
                 contentPadding = PaddingValues(0.dp)
             ) {
@@ -56,6 +69,12 @@ fun PrimaryButtonPreview() {
 @Preview
 fun SecondaryButtonPreview() {
     Button(onClick = {}, text = "Passwort vergessen", primary = false)
+}
+
+@Composable
+@Preview
+fun EmphasizeButtonPreview() {
+    Button(onClick = {}, text = "Gruppe löschen", emphasize = true)
 }
 
 @Composable

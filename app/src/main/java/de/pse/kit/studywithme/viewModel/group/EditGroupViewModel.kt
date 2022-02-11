@@ -16,7 +16,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 class EditGroupViewModel(
-
     navController: NavController,
     val groupID: Int,
     private val groupRepo: GroupRepositoryInterface
@@ -28,6 +27,7 @@ class EditGroupViewModel(
     val groupName: MutableStateFlow<String> = MutableStateFlow("")
     val groupDescription: MutableStateFlow<String> = MutableStateFlow("")
     val groupLecture: MutableStateFlow<String> = MutableStateFlow("")
+
     // TODO() val courseSuggestions: Flow<List<String>>
     val groupSessionFrequencyName: MutableStateFlow<String> = MutableStateFlow("")
     val groupSessionTypeName: MutableStateFlow<String> = MutableStateFlow("")
@@ -37,8 +37,10 @@ class EditGroupViewModel(
     val sessionFrequencyStrings = listOf(
         "Einmalig", "Wöchentlich", "Alle 2 Wochen", "Alle 3 Wochen", "Monatlich",
     )
-    private val sessionFrequencies = listOf(SessionFrequency.ONCE, SessionFrequency.WEEKLY,
-        SessionFrequency.TWOWEEKLY, SessionFrequency.THREEWEEKLY, SessionFrequency.MONTHLY)
+    private val sessionFrequencies = listOf(
+        SessionFrequency.ONCE, SessionFrequency.WEEKLY,
+        SessionFrequency.TWOWEEKLY, SessionFrequency.THREEWEEKLY, SessionFrequency.MONTHLY
+    )
     val sessionTypeStrings = listOf("Präsenz", "Online", "Hybrid")
     val sessionTypes = listOf(SessionType.PRESENCE, SessionType.ONLINE, SessionType.HYBRID)
 
@@ -47,7 +49,7 @@ class EditGroupViewModel(
             groupRepo.getGroup(groupID).collect {
                 group = it
                 groupName.value = it.name
-                groupLecture.value = it.lecture!!.lectureName
+                groupLecture.value = it.lecture?.lectureName ?: ""
                 groupDescription.value = it.description
                 groupLectureChapter.value = it.lectureChapter.toString()
                 groupExercise.value = it.exercise.toString()
@@ -62,7 +64,19 @@ class EditGroupViewModel(
         }
     }
 
-    fun saveEditGroup(){
+    fun deleteGroup() {
+        if (group != null) {
+            groupRepo.deleteGroup(group!!)
+        }
+    }
+
+    fun hideGroup() {
+        if (group != null) {
+            groupRepo.hideGroup(groupID)
+        }
+    }
+
+    fun saveEditGroup() {
         var sessionFrequencyToSave: SessionFrequency = SessionFrequency.ONCE
         for (i in sessionFrequencies.indices) {
             if (sessionFrequencyStrings[i].equals(groupSessionFrequencyName)) {
@@ -89,7 +103,7 @@ class EditGroupViewModel(
             errorMessage.value = "Übungsblattnummer muss eine Zahl sein"
             return
         }
-        //TODO()
+
         val group = Group(
             groupID = -1,
             name = groupName.value,
@@ -101,7 +115,11 @@ class EditGroupViewModel(
             lectureChapter = lectureChapterInt,
             exercise = groupExerciseInt,
         )
-        groupRepo.newGroup(group, true)
+        val groupSaved = groupRepo.editGroup(group)
+
+        if (groupSaved) {
+            navBack()
+        }
     }
 
 }

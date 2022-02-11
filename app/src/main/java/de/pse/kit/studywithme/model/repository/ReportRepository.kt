@@ -43,24 +43,6 @@ class ReportRepository private constructor() {
         }
     }
 
-    fun reportGroup(groupID: Int, boxID: Int) {
-        return runBlocking {
-            return@runBlocking reportService.reportGroup(groupID, boxID)
-        }
-    }
-
-    fun reportUser(userID: Int, boxID: Int) {
-        return runBlocking {
-            return@runBlocking reportService.reportUser(userID, boxID)
-        }
-    }
-
-    fun reportSession(sessionID: Int, boxID: Int) {
-        return runBlocking {
-            return@runBlocking reportService.reportSession(sessionID, boxID)
-        }
-    }
-
     fun getBlockedUsers(): List<User> {
         return runBlocking {
             return@runBlocking reportService.getBlockedUsers()

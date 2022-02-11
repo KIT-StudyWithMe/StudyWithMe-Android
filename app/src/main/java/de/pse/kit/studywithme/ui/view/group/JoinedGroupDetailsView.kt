@@ -10,6 +10,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material.icons.rounded.Flag
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -24,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import de.pse.kit.studywithme.model.repository.FakeGroupRepository
 import de.pse.kit.studywithme.model.repository.FakeSessionRepository
 import de.pse.kit.studywithme.ui.component.Button
+import de.pse.kit.studywithme.ui.component.GroupReportDialog
 import de.pse.kit.studywithme.ui.component.NavigationBar
 import de.pse.kit.studywithme.ui.component.TopBar
 import de.pse.kit.studywithme.ui.layout.GroupDetailsLayout
@@ -47,6 +49,12 @@ fun JoinedGroupDetailsView(viewModel: JoinedGroupDetailsViewModel) {
                     subtitle = group?.lecture?.lectureName ?: "",
                     navClick = { viewModel.navBack() },
                     actions = {
+                        IconButton(onClick = { viewModel.openReportDialog.value = true }) {
+                            Icon(
+                                Icons.Rounded.Flag,
+                                contentDescription = "Knopf um die Gruppe oder Session zu melden."
+                            )
+                        }
                         if (viewModel.isAdmin.value) {
                             IconButton(onClick = { viewModel.editGroup() }) {
                                 Icon(
@@ -65,10 +73,19 @@ fun JoinedGroupDetailsView(viewModel: JoinedGroupDetailsViewModel) {
             },
             containerColor = MaterialTheme.colorScheme.surface
         ) {
+
+            GroupReportDialog(
+                openDialog = viewModel.openReportDialog,
+                withSession = true,
+                groupReports = viewModel.groupReports,
+                sessionReports = viewModel.sessionReports,
+                onConfirm = { viewModel.report() }
+            )
+
             Column(
                 modifier = Modifier
                     .padding(horizontal = 24.dp, vertical = 0.dp)
-                    .padding(bottom =80.dp)
+                    .padding(bottom = 80.dp)
                     .verticalScroll(
                         state = ScrollState(0)
                     ),
@@ -87,8 +104,8 @@ fun JoinedGroupDetailsView(viewModel: JoinedGroupDetailsViewModel) {
                         it.name
                     },
                     description = group?.description ?: "",
-                    place = sessions[0].location,
-                    time = sessions[0].date.toString(),
+                    place = sessions.firstOrNull()?.location,
+                    time = sessions.firstOrNull()?.date.toString(),
                     selectedChips = listOf(
                         group?.sessionFrequency?.name?.lowercase()
                             ?.replaceFirstChar { it.uppercase() }

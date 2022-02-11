@@ -3,10 +3,7 @@ package de.pse.kit.studywithme.viewModel.group
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.navigation.NavController
-import de.pse.kit.studywithme.model.data.Group
-import de.pse.kit.studywithme.model.data.GroupMember
-import de.pse.kit.studywithme.model.data.Session
-import de.pse.kit.studywithme.model.data.User
+import de.pse.kit.studywithme.model.data.*
 import de.pse.kit.studywithme.model.repository.GroupRepositoryInterface
 import de.pse.kit.studywithme.model.repository.SessionRepositoryInterface
 import de.pse.kit.studywithme.ui.view.navigation.NavGraph
@@ -22,6 +19,8 @@ class NonJoinedGroupDetailsViewModel(
 ) : SignedInViewModel(navController) {
     val group: MutableState<Group?> = mutableStateOf(null)
     val admins: MutableState<List<GroupMember>> = mutableStateOf(emptyList())
+    val openReportDialog: MutableState<Boolean> = mutableStateOf(false)
+    val groupReports: MutableSet<GroupField> = mutableSetOf()
 
 
     init {
@@ -35,6 +34,14 @@ class NonJoinedGroupDetailsViewModel(
                 groupRepo.getGroupAdmins(groupID).collect {
                     admins.value = it
                 }
+            }
+        }
+    }
+
+    fun report() {
+        if (group.value != null) {
+            for (field in groupReports) {
+                groupRepo.reportGroup(groupID, field)
             }
         }
     }

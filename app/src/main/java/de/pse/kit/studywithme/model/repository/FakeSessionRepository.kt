@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import de.pse.kit.studywithme.model.data.Session
 import de.pse.kit.studywithme.model.data.SessionAttendee
+import de.pse.kit.studywithme.model.data.SessionField
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -59,5 +60,9 @@ class FakeSessionRepository() : SessionRepositoryInterface {
 
     override fun getAttendees(sessionID: Int): Flow<List<SessionAttendee>> {
         return flow { emit(listOf(sessionAttendee)) }
+    }
+
+    override fun reportSession(sessionID: Int, sessionfield: SessionField) {
+        TODO("Not yet implemented")
     }
 }

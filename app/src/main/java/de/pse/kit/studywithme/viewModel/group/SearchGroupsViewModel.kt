@@ -14,7 +14,7 @@ class SearchGroupsViewModel(navController: NavController, val groupRepo: GroupRe
     var groups: MutableState<List<Group>> = mutableStateOf(emptyList())
 
     init {
-        groups.value = groupRepo.getGroupSuggestions()
+        //groups.value = groupRepo.getGroupSuggestions()
     }
 
     fun search(prefix: String) {

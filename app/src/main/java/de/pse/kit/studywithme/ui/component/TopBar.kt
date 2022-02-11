@@ -61,7 +61,7 @@ fun SearchBar(onChange: (String) -> Unit) {
     MyApplicationTheme3 {
         SmallTopAppBar(
             title = {
-                Search(modifier = Modifier.padding(start = 5.dp, end = 20.dp), onChange = onChange)
+                Search(modifier = Modifier.padding(start = 5.dp, end = 20.dp, bottom = 3.dp), onChange = onChange)
             },
             colors = smallTopAppBarColors(
                 containerColor = MaterialTheme.colorScheme.primary,

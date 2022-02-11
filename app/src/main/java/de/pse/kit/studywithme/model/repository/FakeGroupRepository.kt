@@ -129,12 +129,12 @@ class FakeGroupRepository() : GroupRepositoryInterface {
         }
     }
 
-    override fun newGroup(group: Group, newLecture: Boolean): Boolean {
+    override fun newGroup(group: Group): Boolean {
         groups.add(group)
         return true
     }
 
-    override fun editGroup(group: Group, newLecture: Boolean): Boolean {
+    override fun editGroup(group: Group): Boolean {
         groups.minus(groups.filter {
             it.groupID == group.groupID
         }.get(0))
@@ -145,10 +145,14 @@ class FakeGroupRepository() : GroupRepositoryInterface {
     override fun exitGroup(groupID: Int, uid: Int) {
     }
 
-    override fun deleteGroup(group: Group) {
-        groups.remove(groups.filter {
+    override fun deleteGroup(group: Group): Boolean {
+        return groups.remove(groups.filter {
             it.groupID == group.groupID
         }.get(0))
+    }
+
+    override fun hideGroup(groupID: Int): Boolean {
+        TODO("Not yet implemented")
     }
 
     override fun newMember(groupID: Int, uid: Int): Boolean {
@@ -194,6 +198,18 @@ class FakeGroupRepository() : GroupRepositoryInterface {
     }
 
     override fun getLectures(prefix: String): Flow<List<Lecture>> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getLecture(name: String): Lecture? {
+        TODO("Not yet implemented")
+    }
+
+    override fun reportGroup(groupID: Int, groupField: GroupField) {
+        TODO("Not yet implemented")
+    }
+
+    override fun reportUser(userID: Int, userField: UserField) {
         TODO("Not yet implemented")
     }
 }

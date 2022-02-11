@@ -8,10 +8,10 @@ import de.pse.kit.studywithme.model.data.*
 @Dao
 interface GroupDao {
     @Query("SELECT * FROM remotegroup")
-    suspend fun getGroups(): List<RemoteGroup>
+    suspend fun getGroups(): List<RemoteGroup>?
 
     @Query("SELECT * FROM remotegroup WHERE group_ID LIKE :groupID")
-    suspend fun getGroup(groupID: Int): RemoteGroup
+    suspend fun getGroup(groupID: Int): RemoteGroup?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveGroup(group: RemoteGroup)
@@ -29,13 +29,13 @@ interface GroupDao {
     suspend fun removeMember(groupID: Int, uid: Int)
 
     @Query("SELECT * FROM groupmember WHERE group_ID LIKE :groupID")
-    suspend fun getGroupMembers(groupID: Int): List<GroupMember>
+    suspend fun getGroupMembers(groupID: Int): List<GroupMember>?
 
     @Query("SELECT * FROM lecture WHERE lecture_ID LIKE :lectureID")
-    suspend fun getLecture(lectureID: Int): Lecture
+    suspend fun getLecture(lectureID: Int): Lecture?
 
     @Query("SELECT * FROM major WHERE major_ID LIKE :majorID")
-    suspend fun getMajor(majorID: Int): Major
+    suspend fun getMajor(majorID: Int): Major?
 
     @Insert
     suspend fun saveLecture(lecture: Lecture)

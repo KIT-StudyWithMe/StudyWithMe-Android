@@ -148,6 +148,11 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
         }
     }
 
+    override suspend fun hideGroup(groupID: Int): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    // Erstmal auslassen
     override suspend fun newMember(groupID: Int, uid: Int): GroupMember? {
         TODO("Not yet implemented")
     }
@@ -207,11 +212,11 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
         }
     }
 
-    override suspend fun getLectures(prefix: String, majorID: Int): List<Lecture>? {
+    override suspend fun getLectures(majorID: Int, prefix: String): List<Lecture>? {
         return try {
-            client.get(HttpRoutes.MAJORS + majorID +  "/lectures") {
+            client.get(HttpRoutes.MAJORS + "$majorID/lectures") {
                 parameter("name", prefix)
-            }
+           }
         } catch (e: RedirectResponseException) {
             println("Redirect Error: ${e.response.status.description}")
             null
@@ -228,78 +233,15 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
     }
 
     override suspend fun getLecture(lectureID: Int): Lecture? {
-        return try {
-            client.get(HttpRoutes.LECTURES + lectureID)
-        } catch (e: RedirectResponseException) {
-            println("Redirect Error: ${e.response.status.description}")
-            null
-        } catch (e: ClientRequestException) {
-            println("Request Error: ${e.response.status.description}")
-            null
-        } catch (e: ServerResponseException) {
-            println("Response Error: ${e.response.status.description}")
-            null
-        } catch (e: Exception) {
-            println("Error: ${e.message}")
-            null
-        }
+        TODO("Not yet implemented")
     }
 
-    override suspend fun newLecture(lecture: Lecture, groupID: Int): Lecture? {
-        return try {
-            client.post(HttpRoutes.GROUPS + groupID + "/sessions") {
-                contentType(ContentType.Application.Json)
-                body = lecture
-            }
-        } catch (e: RedirectResponseException) {
-            println("Redirect Error: ${e.response.status.description}")
-            null
-        } catch (e: ClientRequestException) {
-            println("Request Error: ${e.response.status.description}")
-            null
-        } catch (e: ServerResponseException) {
-            println("Response Error: ${e.response.status.description}")
-            null
-        } catch (e: Exception) {
-            println("Error: ${e.message}")
-            null
-        }
+    override suspend fun newLecture(lecture: Lecture): Lecture? {
+        TODO("Not yet implemented")
     }
 
     override suspend fun getMajor(majorID: Int): Major? {
-        return try {
-            client.get(HttpRoutes.MAJORS + majorID)
-        } catch (e: RedirectResponseException) {
-            println("Redirect Error: ${e.response.status.description}")
-            null
-        } catch (e: ClientRequestException) {
-            println("Request Error: ${e.response.status.description}")
-            null
-        } catch (e: ServerResponseException) {
-            println("Response Error: ${e.response.status.description}")
-            null
-        } catch (e: Exception) {
-            println("Error: ${e.message}")
-            null
-        }
+        TODO("Not yet implemented")
     }
-    override suspend fun hideGroup(hidden: Boolean, groupID: Int) :Boolean {
-        return try {
-            client.get(HttpRoutes.GROUPS + groupID + "/hide") {
-                body = hidden
-            }
-        } catch (e: RedirectResponseException) {
-            println("Redirect Error: ${e.response.status.description}")
-            false
-        } catch (e: ClientRequestException) {
-            println("Request Error: ${e.response.status.description}")
-            false
-        } catch (e: ServerResponseException) {
-            println("Response Error: ${e.response.status.description}")
-            false
-        } catch (e: Exception) {
-            println("Error: ${e.message}")
-            false
-        }
-    }
+
 }
