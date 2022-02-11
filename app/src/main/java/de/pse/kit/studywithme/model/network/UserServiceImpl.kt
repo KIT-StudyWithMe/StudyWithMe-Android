@@ -17,16 +17,16 @@ class UserServiceImpl(private var client: HttpClient) : UserService {
         return try {
             client.get(HttpRoutes.USERS)
         } catch (e: RedirectResponseException) {
-            println("Redirect Error: ${e.response.status}")
+            println("GetUsers Redirect Error: ${e.response.status}")
             null
         } catch (e: ClientRequestException) {
-            println("Request Error: ${e.response.status}")
+            println("GetUsers Request Error: ${e.response.status}")
             null
         } catch (e: ServerResponseException) {
-            println("Response Error: ${e.response.status}")
+            println("GetUsers Response Error: ${e.response.status}")
             null
         } catch (e: Exception) {
-            println("Error: ${e.message}")
+            println("GetUsers Error: ${e.message}")
             null
         }
     }
@@ -35,16 +35,16 @@ class UserServiceImpl(private var client: HttpClient) : UserService {
         return try {
             client.get(HttpRoutes.USERS + id + "/detail")
         } catch (e: RedirectResponseException) {
-            println("Redirect Error: ${e.response.status}")
+            println("GetUser Redirect Error: ${e.response.status}")
             null
         } catch (e: ClientRequestException) {
-            println("Request Error: ${e.response.status}")
+            println("GetUser Request Error: ${e.response.status}")
             null
         } catch (e: ServerResponseException) {
-            println("Response Error: ${e.response.status}")
+            println("GetUser Response Error: ${e.response.status}")
             null
         } catch (e: Exception) {
-            println("Error: ${e.message}")
+            println("GetUser Error: ${e.message}")
             null
         }
     }
@@ -56,16 +56,16 @@ class UserServiceImpl(private var client: HttpClient) : UserService {
             }
             return users.last()
         } catch (e: RedirectResponseException) {
-            println("Redirect Error: ${e.response.status}")
+            println("GetUserByFUID Redirect Error: ${e.response.status}")
             null
         } catch (e: ClientRequestException) {
-            println("Request Error: ${e.response.status}")
+            println("GetUserByFUID Request Error: ${e.response.status}")
             null
         } catch (e: ServerResponseException) {
-            println("Response Error: ${e.response.status}")
+            println("GetUserByFUID Response Error: ${e.response.status}")
             null
         } catch (e: Exception) {
-            println("Error: ${e.message}")
+            println("GetUserByFUID Error: ${e.message}")
             null
         }
     }
@@ -77,16 +77,16 @@ class UserServiceImpl(private var client: HttpClient) : UserService {
                 body = user
             }
         } catch (e: RedirectResponseException) {
-            println("Redirect Error: ${e.response.status}")
+            println("NewUser Redirect Error: ${e.response.status}")
             null
         } catch (e: ClientRequestException) {
-            println("Request Error: ${e.response.status}")
+            println("NewUser Request Error: ${e.response.status}")
             null
         } catch (e: ServerResponseException) {
-            println("Response Error: ${e.response.status}")
+            println("NewUser Response Error: ${e.response.status}")
             null
         } catch (e: Exception) {
-            println("Error: ${e.message}")
+            println("NewUser Error: ${e.message}")
             null
         }
     }
@@ -96,16 +96,16 @@ class UserServiceImpl(private var client: HttpClient) : UserService {
             client.delete<HttpResponse>(HttpRoutes.USERS + uid)
             true
         } catch (e: RedirectResponseException) {
-            println("Redirect Error: ${e.response.status}")
+            println("RemoveUser Redirect Error: ${e.response.status}")
             false
         } catch (e: ClientRequestException) {
-            println("Request Error: ${e.response.status}")
+            println("RemoveUser Request Error: ${e.response.status}")
             false
         } catch (e: ServerResponseException) {
-            println("Response Error: ${e.response.status}")
+            println("RemoveUser Response Error: ${e.response.status}")
             false
         } catch (e: Exception) {
-            println("Error: ${e.message}")
+            println("RemoveUser Error: ${e.message}")
             false
         }
     }
@@ -117,16 +117,16 @@ class UserServiceImpl(private var client: HttpClient) : UserService {
                 body = user
             }
         } catch (e: RedirectResponseException) {
-            println("Redirect Error: ${e.response.status}")
+            println("EditUser Redirect Error: ${e.response.status}")
             null
         } catch (e: ClientRequestException) {
-            println("Request Error: ${e.response.status}")
+            println("EditUser Request Error: ${e.response.status}")
             null
         } catch (e: ServerResponseException) {
-            println("Response Error: ${e.response.status}")
+            println("EditUser Response Error: ${e.response.status}")
             null
         } catch (e: Exception) {
-            println("Error: ${e.message}")
+            println("EditUser Error: ${e.message}")
             null
         }
     }
@@ -137,16 +137,16 @@ class UserServiceImpl(private var client: HttpClient) : UserService {
                 parameter("name", prefix)
             }
         } catch (e: RedirectResponseException) {
-            println("Redirect Error: ${e.response.status}")
+            println("GetColleges Redirect Error: ${e.response.status}")
             null
         } catch (e: ClientRequestException) {
-            println("Request Error: ${e.response.status}")
+            println("GetColleges Request Error: ${e.response.status}")
             null
         } catch (e: ServerResponseException) {
-            println("Response Error: ${e.response.status}")
+            println("GetColleges Response Error: ${e.response.status}")
             null
         } catch (e: Exception) {
-            println("Error: ${e.message}")
+            println("GetColleges Error: ${e.message}")
             null
         }
     }
@@ -158,16 +158,16 @@ class UserServiceImpl(private var client: HttpClient) : UserService {
                 body = institution
             }
         } catch (e: RedirectResponseException) {
-            println("Redirect Error: ${e.response.status}")
+            println("NewCollege Redirect Error: ${e.response.status}")
             null
         } catch (e: ClientRequestException) {
-            println("Request Error: ${e.response.status}")
+            println("NewCollege Request Error: ${e.response.status}")
             null
         } catch (e: ServerResponseException) {
-            println("Response Error: ${e.response.status}")
+            println("NewCollege Response Error: ${e.response.status}")
             null
         } catch (e: Exception) {
-            println("Error: ${e.message}")
+            println("NewCollege Error: ${e.message}")
             null
         }
     }
@@ -178,16 +178,16 @@ class UserServiceImpl(private var client: HttpClient) : UserService {
                 parameter("name", prefix)
             }
         } catch (e: RedirectResponseException) {
-            println("Redirect Error: ${e.response.status}")
+            println("GetMajors Redirect Error: ${e.response.status}")
             null
         } catch (e: ClientRequestException) {
-            println("Request Error: ${e.response.status}")
+            println("GetMajors Request Error: ${e.response.status}")
             null
         } catch (e: ServerResponseException) {
-            println("Response Error: ${e.response.status}")
+            println("GetMajors Response Error: ${e.response.status}")
             null
         } catch (e: Exception) {
-            println("Error: ${e.message}")
+            println("GetMajors Error: ${e.message}")
             null
         }
     }
@@ -199,16 +199,16 @@ class UserServiceImpl(private var client: HttpClient) : UserService {
                 body = major
             }
         } catch (e: RedirectResponseException) {
-            println("Redirect Error: ${e.response.status}")
+            println("NewMajor Redirect Error: ${e.response.status}")
             null
         } catch (e: ClientRequestException) {
-            println("Request Error: ${e.response.status}")
+            println("NewMajor Request Error: ${e.response.status}")
             null
         } catch (e: ServerResponseException) {
-            println("Response Error: ${e.response.status}")
+            println("NewMajor Response Error: ${e.response.status}")
             null
         } catch (e: Exception) {
-            println("Error: ${e.message}")
+            println("NewMajor Error: ${e.message}")
             null
         }
     }

@@ -13,18 +13,18 @@ import io.ktor.client.statement.request
 class SessionServiceImpl(private val client: HttpClient) : SessionService {
     override suspend fun getSessions(groupID: Int): List<Session> {
         return try {
-            client.get(HttpRoutes.GROUPS + groupID + "/detail/sessions")
+            client.get(HttpRoutes.GROUPS + groupID + "/sessions")
         } catch (e: RedirectResponseException) {
-            println("Redirect Error: ${e.response.status.description}")
+            println("GetSessions Redirect Error: ${e.response.status}")
             emptyList()
         } catch (e: ClientRequestException) {
-            println("Request Error: ${e.response.status.description}")
+            println("GetSessions Request Error: ${e.response.status}")
             emptyList()
         } catch (e: ServerResponseException) {
-            println("Response Error: ${e.response.status.description}")
+            println("GetSessions Response Error: ${e.response.status}")
             emptyList()
         } catch (e: Exception) {
-            println("Error: ${e.message}")
+            println("GetSessions Error: ${e.message}")
             emptyList()
         }
     }
@@ -33,38 +33,37 @@ class SessionServiceImpl(private val client: HttpClient) : SessionService {
         return try {
             client.get(HttpRoutes.SESSIONS + sessionID)
         } catch (e: RedirectResponseException) {
-            println("Redirect Error: ${e.response.status.description}")
+            println("GetSession Redirect Error: ${e.response.status}")
             null
         } catch (e: ClientRequestException) {
-            println("Request Error: ${e.response.status.description}")
+            println("GetSession Request Error: ${e.response.status}")
             null
         } catch (e: ServerResponseException) {
-            println("Response Error: ${e.response.status.description}")
+            println("GetSession Response Error: ${e.response.status}")
             null
         } catch (e: Exception) {
-            println("Error: ${e.message}")
+            println("GetSession Error: ${e.message}")
             null
         }
     }
 
     override suspend fun newSession(session: Session): Session? {
         return try {
-            client.post(HttpRoutes.GROUPS + session.groupID + "/detail/sessions") {
+            client.post(HttpRoutes.GROUPS + session.groupID + "/sessions") {
                 contentType(ContentType.Application.Json)
                 body = session
             }
         } catch (e: RedirectResponseException) {
-            println("Redirect Error: ${e.response.status.description}")
+            println("NewSession Redirect Error: ${e.response.status}")
             null
         } catch (e: ClientRequestException) {
-            println("Request Error: ${e.response.status.description}")
+            println("NewSession Request Error: ${e.response.status}")
             null
         } catch (e: ServerResponseException) {
-            println("Response Error: ${e.response.status}")
-            println("Response Error: ${e.response.status.description}")
+            println("NewSession Response Error: ${e.response.status}")
             null
         } catch (e: Exception) {
-            println("Error: ${e.message}")
+            println("NewSession Error: ${e.message}")
             null
         }
     }
@@ -76,16 +75,16 @@ class SessionServiceImpl(private val client: HttpClient) : SessionService {
                 body = session
             }
         } catch (e: RedirectResponseException) {
-            println("Redirect Error: ${e.response.status.description}")
+            println("EditSession Redirect Error: ${e.response.status}")
             null
         } catch (e: ClientRequestException) {
-            println("Request Error: ${e.response.status.description}")
+            println("EditSession Request Error: ${e.response.status}")
             null
         } catch (e: ServerResponseException) {
-            println("Response Error: ${e.response.status.description}")
+            println("EditSession Response Error: ${e.response.status}")
             null
         } catch (e: Exception) {
-            println("Error: ${e.message}")
+            println("EditSession Error: ${e.message}")
             null
         }
     }
@@ -94,13 +93,13 @@ class SessionServiceImpl(private val client: HttpClient) : SessionService {
         try {
             client.delete(HttpRoutes.SESSIONS + sessionID)
         } catch (e: RedirectResponseException) {
-            println("Redirect Error: ${e.response.status.description}")
+            println("RemoveSession Redirect Error: ${e.response.status}")
         } catch (e: ClientRequestException) {
-            println("Request Error: ${e.response.status.description}")
+            println("RemoveSession Request Error: ${e.response.status}")
         } catch (e: ServerResponseException) {
-            println("Response Error: ${e.response.status.description}")
+            println("RemoveSession Response Error: ${e.response.status}")
         } catch (e: Exception) {
-            println("Error: ${e.message}")
+            println("RemoveSession Error: ${e.message}")
         }
     }
 
@@ -111,16 +110,16 @@ class SessionServiceImpl(private val client: HttpClient) : SessionService {
                 body = userID
             }
         } catch (e: RedirectResponseException) {
-            println("Redirect Error: ${e.response.status.description}")
+            println("NewAttendee Redirect Error: ${e.response.status}")
             null
         } catch (e: ClientRequestException) {
-            println("Request Error: ${e.response.status.description}")
+            println("NewAttendee Request Error: ${e.response.status}")
             null
         } catch (e: ServerResponseException) {
-            println("Response Error: ${e.response.status.description}")
+            println("NewAttendee Response Error: ${e.response.status}")
             null
         } catch (e: Exception) {
-            println("Error: ${e.message}")
+            println("NewAttendee Error: ${e.message}")
             null
         }
     }
