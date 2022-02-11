@@ -13,11 +13,11 @@ variables:
 
     # ANDROID_COMPILE_SDK is the version of Android you're compiling with.
     # It should match compileSdkVersion.
-    ANDROID_COMPILE_SDK: "29"
+    ANDROID_COMPILE_SDK: "31"
 
     # ANDROID_BUILD_TOOLS is the version of the Android build tools you are using.
     # It should match buildToolsVersion.
-    ANDROID_BUILD_TOOLS: "29.0.3"
+    ANDROID_BUILD_TOOLS: "33.0.0-rc1"
 
     # It's what version of the command line tools we're going to download from the official site.
     # Official Site-> https://developer.android.com/studio/index.html
@@ -60,6 +60,7 @@ before_script:
 
     # Copy Keystore
     - echo -n ${ANDROID_KEY_BASE64} | base64 -d > signing.keystore
+    - echo -n ${GOOGLE_SERVICES_JSON} | base64 -d > app/google-services.json
     - echo "keystorePath=../signing.keystore" > signing.properties
     - echo "keystorePassword=${KEYSTORE_PASSWORD}" >> signing.properties
     - echo "keyAlias=${KEYSTORE_ALIAS}" >> signing.properties
