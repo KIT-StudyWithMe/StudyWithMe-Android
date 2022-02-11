@@ -98,6 +98,7 @@ fun JoinedGroupDetailsView(viewModel: JoinedGroupDetailsViewModel) {
                     }.map {
                         it.name
                     },
+                    adminClick = {  },
                     groupMember = groupMembers.filter {
                         !it.isAdmin
                     }.map {
@@ -119,7 +120,7 @@ fun JoinedGroupDetailsView(viewModel: JoinedGroupDetailsViewModel) {
                     Button(
                         text = "Nächste Lernsesison planen",
                         onClick = { viewModel.planSession() })
-                } else {
+                } else if (sessions.isNotEmpty()) {
                     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                         if (viewModel.isAdmin.value) {
                             Button(

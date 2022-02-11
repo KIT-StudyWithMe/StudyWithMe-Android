@@ -25,7 +25,7 @@ class ReportServiceImpl(private val client: HttpClient): ReportService {
 
     override suspend fun reportGroup(groupID: Int, groupField: GroupField, reporterID: Int) {
         try {
-            client.put(HttpRoutes.GROUPS + groupID + HttpRoutes.REPORTS + reporterID) {
+            client.put(HttpRoutes.GROUPS + groupID + "/report/" + reporterID) {
                 contentType(ContentType.Application.Json)
                 body = groupField
             }
@@ -42,7 +42,7 @@ class ReportServiceImpl(private val client: HttpClient): ReportService {
 
     override suspend fun reportUser(userID: Int, userField: UserField, reporterID: Int) {
         try {
-            client.put(HttpRoutes.USERS + userID + HttpRoutes.REPORTS + reporterID) {
+            client.put(HttpRoutes.USERS + userID + "/report/" + reporterID) {
                 contentType(ContentType.Application.Json)
                 body = userField
             }

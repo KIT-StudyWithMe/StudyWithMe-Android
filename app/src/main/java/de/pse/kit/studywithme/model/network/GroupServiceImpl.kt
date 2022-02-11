@@ -4,6 +4,7 @@ import de.pse.kit.studywithme.model.data.*
 import io.ktor.client.*
 import io.ktor.client.features.*
 import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.http.*
 
 class GroupServiceImpl(private var client: HttpClient): GroupService {
@@ -150,10 +151,12 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
 
     override suspend fun hideGroup(groupID: Int, hidden:Boolean): Boolean {
         return try {
-            client.post(HttpRoutes.GROUPS + groupID + "/hide") {
+            val response = client.post<HttpResponse>(HttpRoutes.GROUPS + groupID + "/hide") {
                 contentType(ContentType.Application.Json)
                 body = hidden
             }
+            println(response.status)
+            true
         } catch (e: RedirectResponseException) {
             println("Redirect Error: ${e.response.status.description}")
             false

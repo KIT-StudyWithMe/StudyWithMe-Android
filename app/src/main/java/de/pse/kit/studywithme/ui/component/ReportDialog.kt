@@ -125,6 +125,12 @@ fun GroupReportDialog(
                 dismissButton = {
                     TextButton(
                         onClick = {
+                            groupReports.clear()
+                            sessionReports.clear()
+                            nameButtonStyle.value = FontWeight.Normal
+                            lectureButtonStyle.value = FontWeight.Normal
+                            descriptionButtonStyle.value = FontWeight.Normal
+                            locationButtonStyle.value = FontWeight.Normal
                             openDialog.value = false
                         }
                     ) {
