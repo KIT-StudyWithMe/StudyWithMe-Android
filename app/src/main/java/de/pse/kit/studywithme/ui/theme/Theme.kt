@@ -30,10 +30,10 @@ private val LightColorPalette3 = ColorScheme(
     onSurfaceVariant = Color.Black,
     inverseSurface = White200,
     inverseOnSurface = Color.Black,
-    error = Color.Red,
-    onError = Color.Black,
-    errorContainer = Color.Red,
-    onErrorContainer = Color.Black,
+    error = Red500,
+    onError = Color.White,
+    errorContainer = Red500,
+    onErrorContainer = Color.White,
     outline = Green700
 )
 

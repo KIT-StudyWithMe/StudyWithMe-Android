@@ -36,63 +36,57 @@ fun GroupFormLayout(
     groupSessionTypeStrings: List<String>
 ) {
     MyApplicationTheme3 {
-        Scaffold(
-            containerColor = MaterialTheme.colorScheme.surface
+        Column(
+            modifier = Modifier
+                .verticalScroll(
+                    state = ScrollState(0)
+                )
+
         ) {
-            Column(
-                modifier = Modifier
-                    .padding(horizontal = 24.dp, vertical = 0.dp)
-                    .verticalScroll(
-                        state = ScrollState(0)
-                    )
-
-            ) {
-                Text(modifier = Modifier.padding(top = 12.dp), text = "Gruppeninformationen")
-                FormTextField(
-                    label = "Gruppenname",
-                    text = groupName,
-                    onChange = groupNameChange
-                )
-                FormTextField(
-                    label = "Vorlesung",
-                    text = lecture,
-                    onChange = lectureChange
-                )
-                FormTextField(
-                    label = "Beschreibung",
-                    text = description,
-                    onChange = descriptionChange
-                )
-                Text(
-                    modifier = Modifier.padding(vertical = 12.dp),
-                    text = "Geplante Häufigkeit der Treffen"
-                )
-                ChipSelectionRow(
-                    chipNames = sessionFrequencyStrings,
-                    selected = groupSessionFrequency,
-                    onChange = groupSessionFrequencyChange
-                )
-                Text(modifier = Modifier.padding(vertical = 12.dp), text = "Geplante Art der Treffen")
-                ChipSelectionRow(
-                    chipNames = groupSessionTypeStrings,
-                    selected = groupSessionType,
-                    onChange = groupSessionTypeChange
-                )
-                Text(modifier = Modifier.padding(top = 12.dp), text = "Lernfortschritt")
-                FormTextField(
-                    label = "Vorlesung: Kapitelnummer",
-                    text = chapterNumber,
-                    onChange = chapterNumberChange,
-                    type = TextFieldType.NUMBER
-                )
-                FormTextField(
-                    label = "Übungsblatt Nr.",
-                    text = exerciseSheetNumber,
-                    onChange = exerciseSheetNumberChange,
-                    type = TextFieldType.NUMBER
-                )
-            }
-
+            Text(modifier = Modifier.padding(top = 12.dp), text = "Gruppeninformationen")
+            FormTextField(
+                label = "Gruppenname",
+                text = groupName,
+                onChange = groupNameChange
+            )
+            FormTextField(
+                label = "Vorlesung",
+                text = lecture,
+                onChange = lectureChange
+            )
+            FormTextField(
+                label = "Beschreibung",
+                text = description,
+                onChange = descriptionChange
+            )
+            Text(
+                modifier = Modifier.padding(vertical = 12.dp),
+                text = "Geplante Häufigkeit der Treffen"
+            )
+            ChipSelectionRow(
+                chipNames = sessionFrequencyStrings,
+                selected = groupSessionFrequency,
+                onChange = groupSessionFrequencyChange
+            )
+            Text(modifier = Modifier.padding(vertical = 12.dp), text = "Geplante Art der Treffen")
+            ChipSelectionRow(
+                chipNames = groupSessionTypeStrings,
+                selected = groupSessionType,
+                onChange = groupSessionTypeChange
+            )
+            Text(modifier = Modifier.padding(top = 12.dp), text = "Lernfortschritt")
+            FormTextField(
+                label = "Vorlesung: Kapitelnummer",
+                text = chapterNumber,
+                onChange = chapterNumberChange,
+                type = TextFieldType.NUMBER
+            )
+            FormTextField(
+                label = "Übungsblatt Nr.",
+                text = exerciseSheetNumber,
+                onChange = exerciseSheetNumberChange,
+                type = TextFieldType.NUMBER
+            )
         }
     }
 }
@@ -149,14 +143,20 @@ fun EditGroupFormPreview() {
         },
         bottomBar = { NavigationBar(selectedItem = remember { mutableStateOf(1) }) }
     ) {
-        GroupFormLayout(groupName = "Gruppe 6", lecture = "Lineare Algebra II", description = "Moin Moin!", groupSessionFrequency = "Einmalig", groupSessionType = "Online",
-        sessionFrequencyStrings = listOf(
-            "Einmalig",
-            "Wöchentlich",
-            "Alle 2 Wochen",
-            "Alle 3 Wochen",
-            "Monatlich",
-        ),
-        groupSessionTypeStrings = listOf("Präsenz", "Online", "Hybrid"))
+        GroupFormLayout(
+            groupName = "Gruppe 6",
+            lecture = "Lineare Algebra II",
+            description = "Moin Moin!",
+            groupSessionFrequency = "Einmalig",
+            groupSessionType = "Online",
+            sessionFrequencyStrings = listOf(
+                "Einmalig",
+                "Wöchentlich",
+                "Alle 2 Wochen",
+                "Alle 3 Wochen",
+                "Monatlich",
+            ),
+            groupSessionTypeStrings = listOf("Präsenz", "Online", "Hybrid")
+        )
     }
 }

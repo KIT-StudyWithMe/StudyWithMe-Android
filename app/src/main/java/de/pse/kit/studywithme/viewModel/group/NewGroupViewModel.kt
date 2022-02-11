@@ -46,19 +46,21 @@ class NewGroupViewModel(navController: NavController, private val groupRepo: Gro
         }
         val lectureChapterInt: Int
         val groupExerciseInt: Int
+
         try {
             lectureChapterInt = groupLectureChapter.value.toInt()
         } catch (e: NumberFormatException) {
             errorMessage.value = "Kapitelnummer muss eine Zahl sein"
             return
         }
+
         try {
             groupExerciseInt = groupExercise.value.toInt()
         } catch (e: NumberFormatException) {
             errorMessage.value = "Übungsblattnummer muss eine Zahl sein"
             return
         }
-        //TODO()
+
         val group = Group(
             groupID = -1,
             name = groupName.value,
@@ -70,15 +72,9 @@ class NewGroupViewModel(navController: NavController, private val groupRepo: Gro
             lectureChapter = lectureChapterInt,
             exercise = groupExerciseInt,
         )
-        val saved = groupRepo.newGroup(group, true)
+        val saved = groupRepo.newGroup(group)
         if (saved) {
             navBack()
         }
-    }
-    fun cancel() {
-       NavGraph.navigateToSearchGroups(navController)
-    }
-    fun onGroupCourseChange(newGroupCourse: String){
-        //TODO()
     }
 }
