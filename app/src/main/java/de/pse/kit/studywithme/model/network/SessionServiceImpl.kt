@@ -126,7 +126,21 @@ class SessionServiceImpl(private val client: HttpClient) : SessionService {
     }
 
     override suspend fun getAttendees(sessionID: Int): List<SessionAttendee>? {
-        TODO("Not yet implemented")
+        return try {
+            client.get(HttpRoutes.SESSIONS + sessionID + "/attendee")
+        }catch (e: RedirectResponseException) {
+            println("Redirect Error: ${e.response.status.description}")
+            null
+        } catch (e: ClientRequestException) {
+            println("Request Error: ${e.response.status.description}")
+            null
+        } catch (e: ServerResponseException) {
+            println("Response Error: ${e.response.status.description}")
+            null
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+            null
+        }
     }
 
     override suspend fun removeAttendee(userID: Int, sessionID: Int) {

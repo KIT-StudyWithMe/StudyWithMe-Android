@@ -15,7 +15,7 @@ import java.util.*
 class SessionServiceTest {
 
     private val service = SessionService.instance
-
+    private val session = Session(0, 1, "Bibliothek", Date(1608336000000), 2)
     @Test
     fun sessionSerializationTest() {
         val session = Session(0, 0, "Bibliothek", Date(1608336000000), 2)
@@ -27,12 +27,15 @@ class SessionServiceTest {
     }
 
     @Test
-     fun createSession() {
-        val session = Session(0, 0, "Bibliothek", Date(1608336000000), 2)
+     fun createAndDeleteSession() {
 
         runBlocking {
             val saveSession = service.newSession(session)
             println(saveSession)
         }
+    }
+    @Test
+    fun editSession() {
+
     }
 }
