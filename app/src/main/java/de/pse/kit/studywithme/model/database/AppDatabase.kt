@@ -10,7 +10,7 @@ import de.pse.kit.studywithme.model.data.*
 import de.pse.kit.studywithme.model.database.TypeConverters as TypeConverters_
 
 /**
- *
+ * Returns an instance of the database and implements the access objects
  *
  * @constructor Create empty App database
  */
@@ -21,23 +21,23 @@ import de.pse.kit.studywithme.model.database.TypeConverters as TypeConverters_
 @TypeConverters(TypeConverters_::class)
 abstract class AppDatabase : RoomDatabase() {
     /**
-     * Session dao
+     * Returns the Dao for session
      *
-     * @return
+     * @return SessionDao
      */
     abstract fun sessionDao(): SessionDao
 
     /**
-     * Group dao
+     * Returns the Dao for group
      *
-     * @return
+     * @return GroupDao
      */
     abstract fun groupDao(): GroupDao
 
     /**
-     * User dao
+     * Returns the Dao for user
      *
-     * @return
+     * @return UserDao
      */
     abstract fun userDao(): UserDao
 
