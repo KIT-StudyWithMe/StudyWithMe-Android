@@ -12,10 +12,10 @@ interface UserDao {
     suspend fun removeUser(user: User)
 
     @Query("SELECT * FROM user WHERE user_ID LIKE :uid")
-    suspend fun getUser(uid: Int): User
+    suspend fun getUser(uid: Int): User?
 
     @Query("SELECT * FROM user WHERE firebase_UID LIKE :fuid")
-    suspend fun getUser(fuid: String): User
+    suspend fun getUser(fuid: String): User?
 
     @Update
     suspend fun editUser(user: User)

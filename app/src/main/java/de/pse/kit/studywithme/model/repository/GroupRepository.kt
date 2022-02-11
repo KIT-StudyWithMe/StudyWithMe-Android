@@ -9,7 +9,6 @@ import de.pse.kit.studywithme.model.database.AppDatabase
 import de.pse.kit.studywithme.model.network.GroupService
 import de.pse.kit.studywithme.model.network.UserService
 import kotlinx.coroutines.async
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -76,9 +75,10 @@ class GroupRepository private constructor(context: Context): GroupRepositoryInte
             }
             launch {
                 val localGroups = groupDao.getGroups()
-                val groups = localGroups.map {
+                val groups = localGroups?.map {
                     val lecture = groupDao.getLecture(it.lectureID)
-                    val major = groupDao.getMajor(lecture.majorID)
+                    val major =
+                        if (lecture != null) groupDao.getMajor(lecture.majorID) else null
                     val group = RemoteGroup.toGroup(it, lecture = lecture, major = major)
                     return@map group
                 }
@@ -115,9 +115,9 @@ class GroupRepository private constructor(context: Context): GroupRepositoryInte
 
             launch {
                 val remoteGroup = groupService.getGroup(groupID)
-                if (remoteGroup == null) cancel()
+                if (remoteGroup == null) return@launch
 
-                val lecture = groupService.getLecture(remoteGroup!!.lectureID)
+                val lecture = groupService.getLecture(remoteGroup.lectureID)
                 val major = if (lecture != null) groupService.getMajor(lecture.majorID) else null
                 val group = RemoteGroup.toGroup(remoteGroup, lecture = lecture, major = major)
                 send(group)
@@ -125,8 +125,10 @@ class GroupRepository private constructor(context: Context): GroupRepositoryInte
             }
             launch {
                 val localGroup = groupDao.getGroup(groupID)
+                if (localGroup == null) return@launch
+
                 val lecture = groupDao.getLecture(localGroup.lectureID)
-                val major = groupDao.getMajor(lecture.majorID)
+                val major = if (lecture != null) groupService.getMajor(lecture.majorID) else null
                 val group = RemoteGroup.toGroup(localGroup, lecture = lecture, major = major)
                 if (!truthWasSend.get()) {
                     send(group)
@@ -135,7 +137,7 @@ class GroupRepository private constructor(context: Context): GroupRepositoryInte
         }.filterNotNull()
     }
 
-    override fun newGroup(group: Group, newLecture: Boolean): Boolean {
+    override fun newGroup(group: Group): Boolean {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
@@ -145,11 +147,9 @@ class GroupRepository private constructor(context: Context): GroupRepositoryInte
                 return@runBlocking false
             }
 
-            if (newLecture) {
-                val remoteLecture = groupService.newLecture(group.lecture, group.groupID)
-                    ?: return@runBlocking false
-                group.lectureID = remoteLecture.lectureID
-            }
+            val remoteLecture = getLecture(group.lecture.lectureName)
+                ?: return@runBlocking false
+            group.lectureID = remoteLecture.lectureID
 
             val remoteGroup = groupService.newGroup(RemoteGroup.toRemoteGroup(group), group.groupID)
             if (remoteGroup != null) {
@@ -162,7 +162,7 @@ class GroupRepository private constructor(context: Context): GroupRepositoryInte
         }
     }
 
-    override fun editGroup(group: Group, newLecture: Boolean): Boolean {
+    override fun editGroup(group: Group): Boolean {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
@@ -173,11 +173,9 @@ class GroupRepository private constructor(context: Context): GroupRepositoryInte
                 return@runBlocking false
             }
 
-            if (newLecture) {
-                val remoteLecture = groupService.newLecture(group.lecture, group.groupID)
-                if (remoteLecture == null) return@runBlocking false
-                group.lectureID = remoteLecture.lectureID
-            }
+            val remoteLecture = getLecture(group.lecture.lectureName)
+                ?: return@runBlocking false
+            group.lectureID = remoteLecture.lectureID
 
             val editedGroup = RemoteGroup.toRemoteGroup(group)
             val remoteGroup = groupService.editGroup(group.groupID, editedGroup)
@@ -205,18 +203,22 @@ class GroupRepository private constructor(context: Context): GroupRepositoryInte
         }
     }
 
-    override fun deleteGroup(group: Group){
+    override fun deleteGroup(group: Group): Boolean{
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
-        runBlocking {
+        return runBlocking {
             launch {
                 groupDao.removeGroup(RemoteGroup.toRemoteGroup(group))
             }
-            launch {
-                groupService.removeGroup(group.groupID)
-            }
+            return@runBlocking groupService.removeGroup(group.groupID)
+        }
+    }
+
+    override fun hideGroup(groupID: Int): Boolean {
+        return runBlocking {
+            return@runBlocking groupService.hideGroup(groupID)
         }
     }
 
@@ -309,7 +311,7 @@ class GroupRepository private constructor(context: Context): GroupRepositoryInte
             launch {
                 val localGroupMembers = groupDao.getGroupMembers(groupID)
                 if (!truthWasSend.get()) {
-                    send(localGroupMembers.filter {
+                    send(localGroupMembers?.filter {
                         it.isAdmin
                     })
                 }
@@ -339,7 +341,7 @@ class GroupRepository private constructor(context: Context): GroupRepositoryInte
             throw Exception("Authentication Error: No local user signed in.")
         }
         return flow {
-            var remoteLectures = groupService.getLectures(prefix)
+            var remoteLectures = groupService.getLectures(majorID = auth.user!!.majorID!!, prefix)
             if(remoteLectures != null) {
                 remoteLectures = remoteLectures.filter {
                     it.majorID == auth.user!!.majorID
@@ -347,6 +349,21 @@ class GroupRepository private constructor(context: Context): GroupRepositoryInte
                 emit(remoteLectures)
             }
         }.filterNotNull()
+    }
+
+    override fun getLecture(name: String): Lecture? {
+        return runBlocking {
+            val lectures = groupService.getLectures(majorID = auth.user!!.majorID!!, name)
+            if (lectures?.map {
+                    it.lectureName
+                }?.contains(name) != true) {
+                return@runBlocking groupService.newLecture(Lecture(-1, name, majorID = auth.user!!.majorID!!))
+            } else {
+                return@runBlocking lectures.last {
+                    it.lectureName == name
+                }
+            }
+        }
     }
 
 

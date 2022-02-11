@@ -13,13 +13,15 @@ interface GroupRepositoryInterface {
 
     fun getGroup(groupID: Int): Flow<Group>
 
-    fun newGroup(group: Group, newLecture: Boolean): Boolean
+    fun newGroup(group: Group): Boolean
 
-    fun editGroup(group: Group, newLecture: Boolean): Boolean
+    fun editGroup(group: Group): Boolean
 
     fun exitGroup(groupID: Int, uid: Int)
 
-    fun deleteGroup(group: Group)
+    fun deleteGroup(group: Group): Boolean
+
+    fun hideGroup(groupID: Int): Boolean
 
     fun newMember(groupID: Int, uid: Int): Boolean
 
@@ -36,4 +38,6 @@ interface GroupRepositoryInterface {
     fun isSignedInUserAdmin(groupID: Int): Flow<Boolean>
 
     fun getLectures(prefix: String): Flow<List<Lecture>>
+
+    fun getLecture(name: String): Lecture?
 }

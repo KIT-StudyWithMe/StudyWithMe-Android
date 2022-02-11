@@ -134,7 +134,7 @@ class UserServiceImpl(private var client: HttpClient) : UserService {
     override suspend fun getColleges(prefix: String): List<Institution>? {
         return try {
             client.get(HttpRoutes.INSTITUTIONS) {
-                parameter("institution", prefix)
+                parameter("name", prefix)
             }
         } catch (e: RedirectResponseException) {
             println("Redirect Error: ${e.response.status}")
@@ -175,7 +175,7 @@ class UserServiceImpl(private var client: HttpClient) : UserService {
     override suspend fun getMajors(prefix: String): List<Major>? {
         return try {
             client.get(HttpRoutes.MAJORS) {
-                parameter("major", prefix)
+                parameter("name", prefix)
             }
         } catch (e: RedirectResponseException) {
             println("Redirect Error: ${e.response.status}")

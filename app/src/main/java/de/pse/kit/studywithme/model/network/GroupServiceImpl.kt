@@ -148,6 +148,11 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
         }
     }
 
+    override suspend fun hideGroup(groupID: Int): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    // Erstmal auslassen
     override suspend fun newMember(groupID: Int, uid: Int): GroupMember? {
         TODO("Not yet implemented")
     }
@@ -207,20 +212,11 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
         }
     }
 
-    override suspend fun getLectures(prefix: String): List<Lecture> {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getLecture(lectureID: Int): Lecture? {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun newLecture(lecture: Lecture, groupID: Int): Lecture? {
+    override suspend fun getLectures(majorID: Int, prefix: String): List<Lecture>? {
         return try {
-            client.post(HttpRoutes.GROUPS + groupID + "/sessions") {
-                contentType(ContentType.Application.Json)
-                body = lecture
-            }
+            client.get(HttpRoutes.MAJORS + "$majorID/lectures") {
+                parameter("name", prefix)
+           }
         } catch (e: RedirectResponseException) {
             println("Redirect Error: ${e.response.status.description}")
             null
@@ -234,6 +230,14 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
             println("Error: ${e.message}")
             null
         }
+    }
+
+    override suspend fun getLecture(lectureID: Int): Lecture? {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun newLecture(lecture: Lecture): Lecture? {
+        TODO("Not yet implemented")
     }
 
     override suspend fun getMajor(majorID: Int): Major? {
