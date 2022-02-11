@@ -18,6 +18,7 @@ class NonJoinedGroupDetailsViewModel(
     val groupRepo: GroupRepositoryInterface
 ) : SignedInViewModel(navController) {
     val group: MutableState<Group?> = mutableStateOf(null)
+    val alreadyRequested: MutableState<Boolean> = mutableStateOf(false)
     val admins: MutableState<List<GroupMember>> = mutableStateOf(emptyList())
     val openReportDialog: MutableState<Boolean> = mutableStateOf(false)
     val groupReports: MutableSet<GroupField> = mutableSetOf()
@@ -35,6 +36,7 @@ class NonJoinedGroupDetailsViewModel(
                     admins.value = it
                 }
             }
+            alreadyRequested.value = groupRepo.hasSignedInUserJoinRequested(groupID)
         }
     }
 
@@ -51,6 +53,9 @@ class NonJoinedGroupDetailsViewModel(
     }
 
     fun joinRequest() {
-        groupRepo.joinRequest(groupID)
+        if (groupRepo.joinRequest(groupID)) {
+            alreadyRequested.value = true
+            //navBack()
+        }
     }
 }
