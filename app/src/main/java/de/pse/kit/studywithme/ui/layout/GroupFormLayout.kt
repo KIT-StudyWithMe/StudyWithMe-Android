@@ -36,13 +36,7 @@ fun GroupFormLayout(
     groupSessionTypeStrings: List<String>
 ) {
     MyApplicationTheme3 {
-        Column(
-            modifier = Modifier
-                .verticalScroll(
-                    state = ScrollState(0)
-                )
-
-        ) {
+        Column {
             Text(modifier = Modifier.padding(top = 12.dp), text = "Gruppeninformationen")
             FormTextField(
                 label = "Gruppenname",

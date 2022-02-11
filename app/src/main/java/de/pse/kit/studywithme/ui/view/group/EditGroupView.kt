@@ -1,9 +1,11 @@
 package de.pse.kit.studywithme.ui.view.group
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.*
@@ -52,7 +54,12 @@ fun EditGroupView(viewModel: EditGroupViewModel) {
             }
         ) {
             Column(
-                modifier = Modifier.padding(horizontal = 24.dp, vertical = 0.dp),
+                modifier = Modifier
+                    .padding(horizontal = 24.dp, vertical = 0.dp)
+                    .padding(bottom = 80.dp)
+                    .verticalScroll(
+                        state = ScrollState(0)
+                    ),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 GroupFormLayout(
