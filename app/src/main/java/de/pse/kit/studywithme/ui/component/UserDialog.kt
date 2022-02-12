@@ -159,6 +159,7 @@ fun MemberDialog(
                     Column {
                         if (isAdmin) {
                             Text("Mitglied verwalten:", fontWeight = FontWeight.Bold)
+                            /*
                             TextButton(onClick = {
                                 if (makeAdminButtonStyle.value == FontWeight.Normal) {
                                     makeAdminButtonStyle.value = FontWeight.Bold
@@ -177,6 +178,8 @@ fun MemberDialog(
                                     color = MaterialTheme.colorScheme.onPrimaryContainer
                                 )
                             }
+                            */
+                             
                             TextButton(onClick = {
                                 if (removeMemberButtonStyle.value == FontWeight.Normal) {
                                     removeMemberButtonStyle.value = FontWeight.Bold
