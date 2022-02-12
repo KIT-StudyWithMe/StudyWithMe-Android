@@ -58,8 +58,9 @@ class UserServiceImpl(private var client: HttpClient) : UserService {
     override suspend fun getUser(fbid: String): UserLight? {
         return try {
             val users: List<UserLight> = client.get(HttpRoutes.USERS) {
-                parameter("fuid", fbid)
+                parameter("FUID", fbid)
             }
+            println("test: "+ users)
             return users.last()
         } catch (e: RedirectResponseException) {
             println("GetUserByFUID Redirect Error: ${e.response.status}")

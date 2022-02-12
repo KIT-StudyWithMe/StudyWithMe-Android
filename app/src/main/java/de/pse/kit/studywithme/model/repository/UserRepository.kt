@@ -25,7 +25,6 @@ class UserRepository private constructor(context: Context) : UserRepositoryInter
     private val userService = UserService.instance
     private val userDao = AppDatabase.getInstance(context).userDao()
     private val auth = Authenticator
-    private var userCache: User? = null
 
     @ExperimentalCoroutinesApi
     override fun isSignedIn(): Boolean {
@@ -50,7 +49,7 @@ class UserRepository private constructor(context: Context) : UserRepositoryInter
 
         return channelFlow {
             val truthWasSend = AtomicBoolean(false)
-            send(userCache)
+            send(auth.user)
 
             launch {
                 val remoteUserLight = userService.getUser(auth.firebaseUID!!)
@@ -83,7 +82,7 @@ class UserRepository private constructor(context: Context) : UserRepositoryInter
 
             if (remoteUser == user) {
                 userDao.editUser(user)
-                userCache = user
+                auth.user = user
 
                 return@runBlocking true
             } else {
@@ -102,7 +101,6 @@ class UserRepository private constructor(context: Context) : UserRepositoryInter
                         Log.d(auth.TAG, "Remote Database User Get:success")
                         userDao.saveUser(remoteUser)
 
-                        userCache = remoteUser
                         auth.user = remoteUser
 
                         return@runBlocking true
@@ -151,7 +149,6 @@ class UserRepository private constructor(context: Context) : UserRepositoryInter
                     launch {
                         userDao.saveUser(remoteUser)
                     }
-                    userCache = remoteUser
                     auth.user = remoteUser
 
                     return@runBlocking true
