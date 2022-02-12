@@ -13,6 +13,16 @@ import de.pse.kit.studywithme.model.data.GroupField
 import de.pse.kit.studywithme.model.data.Report
 import de.pse.kit.studywithme.model.data.SessionField
 
+/**
+ * Composable pattern used in the view
+ *
+ * @param openDialog
+ * @param withSession
+ * @param groupReports
+ * @param sessionReports
+ * @param onConfirm
+ * @receiver
+ */
 @Composable
 fun GroupReportDialog(
     openDialog: MutableState<Boolean>,

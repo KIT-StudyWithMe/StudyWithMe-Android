@@ -13,6 +13,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
 
+/**
+ * Composable pattern used in the view
+ *
+ * @param modifier
+ * @param chipNames
+ * @param selected
+ * @param onChange
+ * @receiver
+ */
 @Composable
 fun ChipSelectionRow(
     modifier: Modifier = Modifier,

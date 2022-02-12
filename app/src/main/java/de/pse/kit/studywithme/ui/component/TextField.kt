@@ -24,6 +24,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 
+/**
+ * Enum class for the components type of a textfield
+ *
+ * @constructor Create empty Text field type
+ */
 enum class TextFieldType {
     PASSWORD,
     EMAIL,
@@ -32,6 +37,17 @@ enum class TextFieldType {
     TEXT
 }
 
+/**
+ * Composable pattern used in the view
+ *
+ * @param modifier
+ * @param text
+ * @param label
+ * @param onChange
+ * @param singleLine
+ * @param type
+ * @receiver
+ */
 @Composable
 fun FormTextField(
     modifier: Modifier = Modifier,

@@ -23,6 +23,16 @@ import androidx.compose.ui.unit.sp
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
 import java.util.*
 
+/**
+ * Composable pattern used in the view
+ *
+ * @param modifier
+ * @param context
+ * @param preselectedText
+ * @param preselectedTime
+ * @param onChange
+ * @receiver
+ */
 @Composable
 fun TimePicker(
     modifier: Modifier = Modifier,
