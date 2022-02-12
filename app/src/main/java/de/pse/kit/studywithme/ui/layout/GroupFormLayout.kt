@@ -17,6 +17,33 @@ import de.pse.kit.myapplication.ui.theme.*
 import de.pse.kit.studywithme.ui.component.*
 import java.lang.NumberFormatException
 
+/**
+ * Layout used in the view
+ *
+ * @param groupName
+ * @param groupNameChange
+ * @param lecture
+ * @param lectureChange
+ * @param description
+ * @param descriptionChange
+ * @param groupSessionFrequency
+ * @param groupSessionFrequencyChange
+ * @param groupSessionType
+ * @param groupSessionTypeChange
+ * @param chapterNumber
+ * @param chapterNumberChange
+ * @param exerciseSheetNumber
+ * @param exerciseSheetNumberChange
+ * @param sessionFrequencyStrings
+ * @param groupSessionTypeStrings
+ * @receiver
+ * @receiver
+ * @receiver
+ * @receiver
+ * @receiver
+ * @receiver
+ * @receiver
+ */
 @ExperimentalMaterial3Api
 @Composable
 fun GroupFormLayout(

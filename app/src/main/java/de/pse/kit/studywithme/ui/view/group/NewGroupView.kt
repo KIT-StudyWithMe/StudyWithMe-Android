@@ -21,6 +21,11 @@ import de.pse.kit.studywithme.ui.component.TopBar
 import de.pse.kit.studywithme.ui.layout.GroupFormLayout
 import de.pse.kit.studywithme.viewModel.group.NewGroupViewModel
 
+/**
+ * View of the newgroup screen
+ *
+ * @param viewModel
+ */
 @ExperimentalMaterial3Api
 @Composable
 fun NewGroupView(viewModel: NewGroupViewModel) {

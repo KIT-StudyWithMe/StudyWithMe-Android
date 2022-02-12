@@ -8,6 +8,11 @@ import com.google.firebase.ktx.Firebase
 import de.pse.kit.studywithme.model.data.User
 import kotlinx.coroutines.tasks.await
 
+/**
+ * Object required for the authentification of a user
+ *
+ * @constructor Create empty Authenticator
+ */
 object Authenticator {
     val TAG = "AUTH"
     private val auth = Firebase.auth

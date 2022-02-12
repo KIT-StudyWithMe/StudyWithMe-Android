@@ -25,6 +25,11 @@ import de.pse.kit.studywithme.ui.component.TextField
 import de.pse.kit.studywithme.ui.component.TextFieldType
 import de.pse.kit.studywithme.viewModel.auth.SignInViewModel
 
+/**
+ * View of the signin screen
+ *
+ * @param viewModel
+ */
 @ExperimentalMaterial3Api
 @Composable
 fun SignInView(viewModel: SignInViewModel) {

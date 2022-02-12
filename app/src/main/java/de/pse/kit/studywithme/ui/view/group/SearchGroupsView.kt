@@ -23,6 +23,11 @@ import de.pse.kit.studywithme.ui.component.SearchBar
 import de.pse.kit.studywithme.ui.component.SearchGroupResult
 import de.pse.kit.studywithme.viewModel.group.SearchGroupsViewModel
 
+/**
+ * View of the searchgroups screen
+ *
+ * @param viewModel
+ */
 @ExperimentalMaterial3Api
 @ExperimentalMaterialApi
 @Composable

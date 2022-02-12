@@ -20,6 +20,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 
+/**
+ * Composable pattern used in the view
+ *
+ * @param modifier
+ * @param text
+ * @param label
+ * @param onChange
+ * @receiver
+ */
 @Composable
 fun Search(
     modifier: Modifier = Modifier,

@@ -89,7 +89,7 @@ interface GroupService {
      * @param uid
      * @return groupmember object or null
      */
-    suspend fun newMember(groupID: Int, uid: Int): GroupMember?
+    suspend fun newMember(groupID: Int, uid: Int):GroupMember?
 
     /**
      * Creates join request by the user with ID uid to the group with ID groupID and returns true if successful

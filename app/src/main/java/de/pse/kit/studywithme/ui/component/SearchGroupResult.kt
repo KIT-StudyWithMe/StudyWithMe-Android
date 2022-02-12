@@ -20,6 +20,18 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
 
+/**
+ * Composable pattern used in the view
+ *
+ * @param modifier
+ * @param groupName
+ * @param lecture
+ * @param major
+ * @param imgURL
+ * @param live
+ * @param onClick
+ * @receiver
+ */
 @ExperimentalMaterialApi
 @Composable
 fun SearchGroupResult(

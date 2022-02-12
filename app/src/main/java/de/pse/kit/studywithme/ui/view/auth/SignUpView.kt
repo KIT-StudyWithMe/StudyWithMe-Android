@@ -24,6 +24,11 @@ import de.pse.kit.studywithme.ui.component.TextField
 import de.pse.kit.studywithme.ui.component.TextFieldType
 import de.pse.kit.studywithme.viewModel.auth.SignUpViewModel
 
+/**
+ * View of the signup screen
+ *
+ * @param viewModel
+ */
 @ExperimentalMaterial3Api
 @Composable
 fun SignUpView(viewModel: SignUpViewModel) {

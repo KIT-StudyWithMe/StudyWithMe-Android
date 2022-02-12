@@ -31,6 +31,11 @@ import de.pse.kit.studywithme.ui.component.Button
 import de.pse.kit.studywithme.viewModel.profile.ProfileViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+/**
+ * View of the profile screen
+ *
+ * @param viewModel
+ */
 @ExperimentalCoroutinesApi
 @ExperimentalMaterial3Api
 @ExperimentalMaterialApi

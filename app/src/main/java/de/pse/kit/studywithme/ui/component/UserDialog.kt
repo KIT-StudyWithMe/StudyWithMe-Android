@@ -17,6 +17,15 @@ import androidx.compose.ui.unit.dp
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
 import de.pse.kit.studywithme.model.data.UserField
 
+/**
+ * Composable pattern used in the view
+ *
+ * @param openDialog
+ * @param name
+ * @param contact
+ * @param report
+ * @receiver
+ */
 @Composable
 fun AdminDialog(
     openDialog: MutableState<Boolean>,

@@ -30,6 +30,11 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.util.Collections.list
 
 
+/**
+ * View of the nonjoinedgroupdetails screen
+ *
+ * @param viewModel
+ */
 @ExperimentalMaterial3Api
 @ExperimentalMaterialApi
 @Composable

@@ -10,6 +10,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
 
+/**
+ * Composable pattern used in the view
+ *
+ * @param modifier
+ * @param onClick
+ * @param text
+ * @param primary
+ * @param emphasize
+ * @receiver
+ */
 @Composable
 fun Button(
     modifier: Modifier = Modifier,

@@ -17,6 +17,11 @@ import de.pse.kit.studywithme.ui.layout.Sessionlayout
 import de.pse.kit.studywithme.viewModel.session.NewSessionViewModel
 import java.util.*
 
+/**
+ * View of the newsession screen
+ *
+ * @param viewModel
+ */
 @ExperimentalMaterial3Api
 @Composable
 fun NewSessionView(viewModel: NewSessionViewModel) {

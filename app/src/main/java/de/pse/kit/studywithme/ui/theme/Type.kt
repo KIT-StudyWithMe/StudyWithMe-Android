@@ -9,6 +9,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import de.pse.kit.studywithme.R
 
+/**
+ * Textstyles used in the view of the application
+ */
 // Set of Material typography styles to start with
 val Typography3 = Typography3(
     bodyMedium = TextStyle(

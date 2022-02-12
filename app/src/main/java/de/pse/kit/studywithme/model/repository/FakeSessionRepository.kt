@@ -10,6 +10,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.util.*
 
+/**
+ * Repository class for internal tests of session components
+ *
+ * @constructor Create empty Fake session repository
+ */
 class FakeSessionRepository() : SessionRepositoryInterface {
 
     var session = Session(

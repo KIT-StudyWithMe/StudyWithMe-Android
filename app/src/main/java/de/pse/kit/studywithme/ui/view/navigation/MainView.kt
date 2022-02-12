@@ -31,6 +31,13 @@ import de.pse.kit.studywithme.viewModel.session.EditSessionViewModel
 import de.pse.kit.studywithme.viewModel.session.NewSessionViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+/**
+ * Navigation changes the view the main view shows
+ *
+ * @param userRepo
+ * @param groupRepo
+ * @param sessionRepo
+ */
 @ExperimentalMaterialApi
 @ExperimentalMaterial3Api
 @ExperimentalCoroutinesApi

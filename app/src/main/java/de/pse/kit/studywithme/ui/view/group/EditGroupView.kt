@@ -22,6 +22,11 @@ import de.pse.kit.studywithme.ui.component.Button
 import de.pse.kit.studywithme.ui.layout.GroupFormLayout
 import de.pse.kit.studywithme.viewModel.group.EditGroupViewModel
 
+/**
+ * View of the editgroup view
+ *
+ * @param viewModel
+ */
 @ExperimentalMaterial3Api
 @Composable
 fun EditGroupView(viewModel: EditGroupViewModel) {
