@@ -154,7 +154,8 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
 
     override suspend fun removeGroup(groupID: Int): Boolean {
         return try {
-            client.delete(HttpRoutes.GROUPS + groupID)
+            client.delete<HttpResponse>(HttpRoutes.GROUPS + groupID)
+            true
         } catch (e: RedirectResponseException) {
             println("RemoveGroup Redirect Error: ${e.response.status}")
             false
@@ -193,14 +194,14 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
         }
     }
 
-    // Erstmal auslassen
     override suspend fun newMember(groupID: Int, uid: Int): GroupMember? {
         TODO("Not yet implemented")
     }
 
     override suspend fun joinRequest(groupID: Int, uid: Int): Boolean {
         return try {
-            client.put(HttpRoutes.GROUPS + groupID + "/join/" + uid)
+            client.put<HttpResponse>(HttpRoutes.GROUPS + groupID + "/join/" + uid)
+            true
         } catch (e: RedirectResponseException) {
             println("JoinRequest Redirect Error: ${e.response.status}")
             false
@@ -237,7 +238,8 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
 
     override suspend fun removeMember(groupID: Int, uid: Int): Boolean {
         return try {
-            client.delete(HttpRoutes.GROUPS + "/users/" + uid)
+            client.delete<HttpResponse>(HttpRoutes.GROUPS + "/users/" + uid)
+            true
         } catch (e: RedirectResponseException) {
             println("RemoveMember Redirect Error: ${e.response.status}")
             false

@@ -19,7 +19,6 @@ class EditGroupViewModel(
     navController: NavController,
     val groupID: Int,
     private val groupRepo: GroupRepositoryInterface
-
 ) : SignedInViewModel(navController) {
 
     var groupState: MutableState<Group?> = mutableStateOf(null)
@@ -65,7 +64,10 @@ class EditGroupViewModel(
 
     fun deleteGroup() {
         if (group != null) {
-            groupRepo.deleteGroup(group!!)
+            if (groupRepo.deleteGroup(group!!)) {
+                navBack()
+                navBack()
+            }
         }
     }
 
