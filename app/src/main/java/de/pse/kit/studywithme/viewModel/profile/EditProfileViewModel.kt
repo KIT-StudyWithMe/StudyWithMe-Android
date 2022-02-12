@@ -10,6 +10,14 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
 
+/**
+ * ViewModel of the editprofile screen
+ *
+ * @property userRepo
+ * @constructor
+ *
+ * @param navController
+ */
 @ExperimentalCoroutinesApi
 class EditProfileViewModel(navController: NavController, val userRepo: UserRepositoryInterface) :
     SignedInViewModel(navController) {
@@ -32,6 +40,10 @@ class EditProfileViewModel(navController: NavController, val userRepo: UserRepos
         }
     }
 
+    /**
+     * Saves profile with given parameters
+     *
+     */
     fun saveProfile() {
         if (user != null) {
             val remoteCollege = userRepo.getCollege(college.value)

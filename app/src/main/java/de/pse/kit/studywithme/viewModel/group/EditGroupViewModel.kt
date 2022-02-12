@@ -15,6 +15,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
+/**
+ * ViewModel for editgroup screen
+ *
+ * @property groupID
+ * @property groupRepo
+ * @constructor
+ *
+ * @param navController
+ */
 class EditGroupViewModel(
     navController: NavController,
     val groupID: Int,
@@ -62,6 +71,10 @@ class EditGroupViewModel(
         }
     }
 
+    /**
+     * Deletes a group and navigates to last view
+     *
+     */
     fun deleteGroup() {
         if (group != null) {
             if (groupRepo.deleteGroup(group!!)) {
@@ -71,12 +84,20 @@ class EditGroupViewModel(
         }
     }
 
+    /**
+     * Hides group from other users
+     *
+     */
     fun hideGroup() {
         if (group != null) {
             groupRepo.hideGroup(groupID, false)
         }
     }
 
+    /**
+     * Edits group if the given parameters are correct and navigates to last view
+     *
+     */
     fun saveEditGroup() {
         if (group == null) {
             return

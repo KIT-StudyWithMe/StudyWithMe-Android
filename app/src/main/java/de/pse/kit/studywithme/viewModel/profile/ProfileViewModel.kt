@@ -10,6 +10,14 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.runBlocking
 
+/**
+ * ViewModel of the profileview screen
+ *
+ * @property userRepo
+ * @constructor
+ *
+ * @param navController
+ */
 @ExperimentalCoroutinesApi
 class ProfileViewModel(navController: NavController, val userRepo: UserRepositoryInterface) :
     SignedInViewModel(navController) {
@@ -34,10 +42,18 @@ class ProfileViewModel(navController: NavController, val userRepo: UserRepositor
         }
     }
 
+    /**
+     * Navigates to editprofile view
+     *
+     */
     fun navToEditProfile() {
         NavGraph.navigateToEditProfile(navController)
     }
 
+    /**
+     * Signs out user from application by navigating him to the sign in view
+     *
+     */
     fun signOut() {
         if (userRepo.signOut()) {
             NavGraph.navigateToSignIn(navController)

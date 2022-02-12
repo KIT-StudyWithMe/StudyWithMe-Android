@@ -12,6 +12,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import de.pse.kit.studywithme.ui.view.navigation.NavGraph
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * ViewModel of newgroup screen
+ *
+ * @property groupRepo
+ * @constructor
+ *
+ * @param navController
+ */
 class NewGroupViewModel(navController: NavController, private val groupRepo: GroupRepositoryInterface) : SignedInViewModel(navController) {
 
     val groupName: MutableStateFlow<String> = MutableStateFlow("")
@@ -31,6 +39,10 @@ class NewGroupViewModel(navController: NavController, private val groupRepo: Gro
     val sessionTypeStrings = listOf("Präsenz", "Online", "Hybrid")
     val sessionTypes = listOf(SessionType.PRESENCE, SessionType.ONLINE, SessionType.HYBRID)
 
+    /**
+     * Saves group with given parameters
+     *
+     */
     fun save(){
         var sessionFrequencyToSave:SessionFrequency = SessionFrequency.ONCE
         for (i in sessionFrequencies.indices) {

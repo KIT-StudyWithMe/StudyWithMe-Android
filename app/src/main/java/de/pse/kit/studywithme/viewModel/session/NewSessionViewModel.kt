@@ -15,6 +15,16 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.*
 
+/**
+ * ViewModel of the newsession screen
+ *
+ * @property sessionRepo
+ * @property groupRepo
+ * @property groupID
+ * @constructor
+ *
+ * @param navController
+ */
 class NewSessionViewModel(
     navController: NavController,
     val sessionRepo: SessionRepositoryInterface,
@@ -36,6 +46,10 @@ class NewSessionViewModel(
         }
     }
 
+    /**
+     * Saves the session with the given parameters
+     *
+     */
     fun saveNewSession() {
         val durationInt: Int
         try {
