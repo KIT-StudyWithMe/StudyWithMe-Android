@@ -58,18 +58,5 @@ class SessionServiceTest {
 
         }
     }
-    @Ignore
-    @Test
-    fun attendees() {
-        runBlocking {
-            val sessionX = service.newSession(sessionTest)
-            val sessionAttendee = service.newAttendee(1, sessionX!!.sessionID)
-            service.removeSession(sessionX.sessionID)
-            println(service.getSession(sessionX.sessionID))
-            assert (service.getAttendees(sessionX!!.sessionID)!!.contains(sessionAttendee))
-            service.removeAttendee(sessionAttendee!!.userID, sessionAttendee.sessionID)
-            assert(!(service.getAttendees(sessionX.sessionID)!!.contains(sessionAttendee)))
-        }
-    }
 
 }
