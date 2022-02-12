@@ -37,13 +37,21 @@ class NewSessionViewModel(
     }
 
     fun saveNewSession() {
+        var durationInt: Int
+        try {
+            durationInt = duration.value.toInt()
+        } catch (e: NumberFormatException) {
+            durationInt = 0
+            return
+        }
+
         val saved = sessionRepo.newSession(
             Session(
                 sessionID = -1,
                 groupID = groupID,
                 location = place.value,
                 date = date.value,
-                duration = duration.value.toInt()
+                duration = durationInt
             )
         )
         if (saved) {

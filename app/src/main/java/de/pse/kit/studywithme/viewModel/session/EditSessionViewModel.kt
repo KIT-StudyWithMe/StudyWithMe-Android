@@ -50,6 +50,14 @@ class EditSessionViewModel(
 
 
     fun saveSession() {
+        var durationInt: Int
+        try {
+            durationInt = duration.value.toInt()
+        } catch (e: NumberFormatException) {
+            durationInt = 0
+            return
+        }
+
         if (session != null) {
             val edited = sessionRepo.editSession(
                 Session(
@@ -57,7 +65,7 @@ class EditSessionViewModel(
                     groupID = groupState.value!!.groupID,
                     location = place.value,
                     date = date.value,
-                    duration = duration.value.toInt()
+                    duration = durationInt
                 )
             )
             if (edited) {
