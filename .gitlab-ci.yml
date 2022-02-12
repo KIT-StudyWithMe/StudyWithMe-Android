@@ -84,12 +84,10 @@ before_script:
 #    paths:
 #      - app/build/outputs/
 
-# Run all tests, if any fails, interrupt the pipeline(fail it)
-debugTests:
-    interruptible: true
-    stage: test
-    script:
-        - ./gradlew -Pci --console=plain :app:testDebug
+stages:
+  - build
+  - docu
+  - test
 
 assembleRelease:
     stage: build
@@ -98,3 +96,23 @@ assembleRelease:
     artifacts:
         paths:
             - app/build/outputs/apk/release/*.apk
+    only:
+      - main
+
+# Run all tests, if any fails, interrupt the pipeline(fail it)
+debugTests:
+    interruptible: true
+    stage: test
+    script:
+        - ./gradlew -Pci --console=plain :app:testDebug
+
+documentation:
+  stage: docu
+  script:
+    - gradle dokkaHtml
+  artifacts:
+    paths:
+      - app/build/dokka/*
+    expire_in: 1 week
+  only:
+    - main
