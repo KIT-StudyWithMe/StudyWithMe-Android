@@ -19,7 +19,8 @@ class NewSessionViewModel(
     navController: NavController,
     val sessionRepo: SessionRepositoryInterface,
     val groupRepo: GroupRepositoryInterface,
-    val groupID: Int
+    val groupID: Int,
+    val errorMessage: MutableStateFlow<String> = MutableStateFlow("")
 ) : SignedInViewModel(navController) {
     val groupState: MutableState<Group?> = mutableStateOf(null)
     val place: MutableStateFlow<String> = MutableStateFlow("")
@@ -37,14 +38,13 @@ class NewSessionViewModel(
     }
 
     fun saveNewSession() {
-        var durationInt: Int
+        val durationInt: Int
         try {
             durationInt = duration.value.toInt()
         } catch (e: NumberFormatException) {
-            durationInt = 0
+            errorMessage.value = "Dauer muss eine Zahl sein"
             return
         }
-
         val saved = sessionRepo.newSession(
             Session(
                 sessionID = -1,
