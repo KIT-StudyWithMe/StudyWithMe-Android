@@ -165,6 +165,7 @@ fun JoinedGroupDetailsView(viewModel: JoinedGroupDetailsViewModel) {
                     },
                     place = sessions.firstOrNull()?.location,
                     time = sessions.firstOrNull()?.date.toString(),
+                    sessionParticipantsCount = viewModel.sessionAttendees.value.count(),
                     selectedChips = listOf(
                         group?.sessionFrequency?.name?.lowercase()
                             ?.replaceFirstChar { it.uppercase() }
@@ -188,12 +189,12 @@ fun JoinedGroupDetailsView(viewModel: JoinedGroupDetailsViewModel) {
                                 primary = false
                             )
                         }
-                        /*
+
                         Button(modifier = Modifier.weight(1f),
                             text = "Teilnehmen",
                             onClick = { viewModel.participate() }
                         )
-                        */
+
                     }
                 }
                 if (!viewModel.isAdmin.value) {

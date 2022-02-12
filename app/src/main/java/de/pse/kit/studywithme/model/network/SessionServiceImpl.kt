@@ -109,24 +109,25 @@ class SessionServiceImpl(private val client: HttpClient) : SessionService {
         }
     }
 
-    override suspend fun newAttendee(userID: Int, sessionID: Int): SessionAttendee? {
+    override suspend fun newAttendee(userID: Int, sessionID: Int): Boolean {
         return try {
-            client.put(HttpRoutes.SESSIONS + sessionID + "/participate/" +userID) {
+            client.put<HttpResponse>(HttpRoutes.SESSIONS + sessionID + "/participate/" +userID) {
                 contentType(ContentType.Application.Json)
                 body = userID
             }
+            true
         } catch (e: RedirectResponseException) {
             println("NewAttendee Redirect Error: ${e.response.status}")
-            null
+            false
         } catch (e: ClientRequestException) {
             println("NewAttendee Request Error: ${e.response.status}")
-            null
+            true
         } catch (e: ServerResponseException) {
             println("NewAttendee Response Error: ${e.response.status}")
-            null
+            true
         } catch (e: Exception) {
             println("NewAttendee Error: ${e.message}")
-            null
+            true
         }
     }
 

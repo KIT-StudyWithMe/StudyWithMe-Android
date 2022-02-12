@@ -6,6 +6,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.icons.rounded.Group
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,6 +30,7 @@ import de.pse.kit.studywithme.ui.component.*
  * @param description
  * @param place
  * @param time
+ * @param sessionParticipantsCount
  * @param selectedChips
  * @param chapterNumber
  * @param exerciseSheetNumber
@@ -49,6 +51,7 @@ fun GroupDetailsLayout(
     description: String = "",
     place: String? = null,
     time: String? = null,
+    sessionParticipantsCount: Int = 0,
     selectedChips: List<String>,
     chapterNumber: Int? = null,
     exerciseSheetNumber: Int? = null,
@@ -80,6 +83,7 @@ fun GroupDetailsLayout(
                 )
                 FormText(icon = Icons.Filled.LocationOn, text = place, maxLines = 2)
                 FormText(icon = Icons.Filled.Timer, text = time, maxLines = 2)
+                FormText(icon = Icons.Rounded.Group, text = "Es nehmen $sessionParticipantsCount teil", maxLines = 2)
             }
 
             Text(text = "Weitere Informationen", modifier = Modifier.padding(top = 12.dp))
@@ -126,6 +130,7 @@ fun GroupDetailsLayoutPreview() {
             description = "Wir sind voll die coole Truppe",
             place = "Engelbertstraße 21, 76227 Karlsruhe",
             time = "Freitag 19.11.2021, 10:00-12:00 Uhr",
+            sessionParticipantsCount = 1,
             selectedChips = listOf("Einmalig", "Präsenz"),
             chapterNumber = 3
         )

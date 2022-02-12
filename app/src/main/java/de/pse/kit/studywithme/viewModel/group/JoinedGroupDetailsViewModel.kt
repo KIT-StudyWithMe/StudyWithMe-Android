@@ -34,6 +34,7 @@ class JoinedGroupDetailsViewModel(
     val members: MutableState<List<GroupMember>> = mutableStateOf(emptyList())
     val requests: MutableState<List<UserLight>> = mutableStateOf(emptyList())
     val sessions: MutableState<List<Session>> = mutableStateOf(emptyList())
+    val sessionAttendees: MutableState<List<SessionAttendee>> = mutableStateOf(emptyList())
     val isAdmin: MutableState<Boolean> = mutableStateOf(false)
     val openReportDialog: MutableState<Boolean> = mutableStateOf(false)
     val groupReports: MutableSet<GroupField> = mutableSetOf()
@@ -61,6 +62,11 @@ class JoinedGroupDetailsViewModel(
             launch {
                 sessionRepo.getSessions(groupID).collect {
                     sessions.value = it
+                    if (it.isNotEmpty()) {
+                        sessionRepo.getAttendees(it.first().sessionID).collect {
+                            sessionAttendees.value = it
+                        }
+                    }
                 }
             }
             launch {
@@ -121,8 +127,13 @@ class JoinedGroupDetailsViewModel(
      *
      */
     fun participate() {
-        if (!sessions.value.isEmpty()) {
-            sessionRepo.newAttendee(sessions.value[0].sessionID)
+        if (sessions.value.isNotEmpty()) {
+            sessionRepo.newAttendee(sessions.value.first().sessionID)
+            runBlocking {
+                sessionRepo.getAttendees(sessions.value.first().sessionID).collect {
+                    sessionAttendees.value = it
+                }
+            }
         }
     }
 

@@ -25,6 +25,7 @@ class FakeSessionRepository() : SessionRepositoryInterface {
         duration = 2
     )
     var sessionAttendee = SessionAttendee(
+        sessionAttendeeID = 0,
         sessionID = 0,
         userID = 0,
         participates = true

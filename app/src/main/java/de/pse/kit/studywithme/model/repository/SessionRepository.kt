@@ -137,8 +137,8 @@ class SessionRepository private constructor(context: Context) : SessionRepositor
         
         return runBlocking {
             val remoteSessionAttendee = sessionService.newAttendee(auth.user!!.userID, sessionID)
-            if (remoteSessionAttendee != null) {
-                sessionDao.saveSessionAttendee(remoteSessionAttendee)
+            if (remoteSessionAttendee) {
+                //sessionDao.saveSessionAttendee(remoteSessionAttendee)
                 return@runBlocking true
             } else {
                 return@runBlocking false
@@ -155,9 +155,6 @@ class SessionRepository private constructor(context: Context) : SessionRepositor
         runBlocking {
             launch {
                 sessionService.removeAttendee(auth.user!!.userID, sessionID)
-            }
-            launch {
-                sessionDao.removeSessionAttendee(SessionAttendee(sessionID, auth.user!!.userID, true))
             }
         }
     }

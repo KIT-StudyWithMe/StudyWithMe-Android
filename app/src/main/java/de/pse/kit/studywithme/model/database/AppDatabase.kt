@@ -16,7 +16,7 @@ import de.pse.kit.studywithme.model.database.TypeConverters as TypeConverters_
  */
 @Database(
     entities = [Session::class, RemoteGroup::class, User::class, SessionAttendee::class, GroupMember::class, Lecture::class, Major::class],
-    version = 1
+    version = 2
 )
 @TypeConverters(TypeConverters_::class)
 abstract class AppDatabase : RoomDatabase() {
@@ -45,7 +45,7 @@ abstract class AppDatabase : RoomDatabase() {
         Room.databaseBuilder(
             it.applicationContext,
             AppDatabase::class.java, "StudyWithMe.db"
-        )
+        ).fallbackToDestructiveMigration()
             .build()
     })
 }
