@@ -66,10 +66,10 @@ class JoinedGroupDetailsViewModel(
             launch {
                 groupRepo.isSignedInUserAdmin(groupID).collect {
                     isAdmin.value = it
+                    if (it) {
+                        requests.value = groupRepo.getJoinRequests(groupID)
+                    }
                 }
-            }
-            launch {
-                requests.value = groupRepo.getJoinRequests(groupID)
             }
         }
     }
