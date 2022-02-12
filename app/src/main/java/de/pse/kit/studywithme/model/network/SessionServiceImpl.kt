@@ -111,7 +111,7 @@ class SessionServiceImpl(private val client: HttpClient) : SessionService {
 
     override suspend fun newAttendee(userID: Int, sessionID: Int): SessionAttendee? {
         return try {
-            client.put(HttpRoutes.SESSIONS + sessionID + "/participate") {
+            client.put(HttpRoutes.SESSIONS + sessionID + "/participate/" +userID) {
                 contentType(ContentType.Application.Json)
                 body = userID
             }
