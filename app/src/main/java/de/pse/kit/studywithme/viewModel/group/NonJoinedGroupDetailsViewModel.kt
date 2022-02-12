@@ -55,7 +55,7 @@ class NonJoinedGroupDetailsViewModel(
     fun joinRequest() {
         if (groupRepo.joinRequest(groupID)) {
             alreadyRequested.value = true
-            //navBack()
+            navBack()
         }
     }
 }

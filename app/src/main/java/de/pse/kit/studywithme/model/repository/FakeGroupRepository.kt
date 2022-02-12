@@ -171,6 +171,10 @@ class FakeGroupRepository() : GroupRepositoryInterface {
         TODO("Not yet implemented")
     }
 
+    override fun leaveGroup(groupID: Int) {
+        TODO("Not yet implemented")
+    }
+
     override fun getGroupMembers(groupID: Int): Flow<List<GroupMember>> {
         return flow {
             emit(groupMembers.filter {

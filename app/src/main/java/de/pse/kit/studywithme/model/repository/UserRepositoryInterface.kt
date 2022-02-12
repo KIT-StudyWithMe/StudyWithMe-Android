@@ -22,7 +22,7 @@ interface UserRepositoryInterface {
 
     fun resetPassword(email: String): Boolean
 
-    fun signOut()
+    fun signOut(): Boolean
 
     @ExperimentalCoroutinesApi
     fun deleteAccount(email: String, password: String): Boolean

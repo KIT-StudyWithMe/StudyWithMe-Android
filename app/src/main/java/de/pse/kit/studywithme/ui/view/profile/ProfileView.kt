@@ -27,6 +27,7 @@ import de.pse.kit.studywithme.model.repository.UserRepository
 import de.pse.kit.studywithme.ui.component.FormText
 import de.pse.kit.studywithme.ui.component.NavigationBar
 import de.pse.kit.studywithme.ui.component.TopBar
+import de.pse.kit.studywithme.ui.component.Button
 import de.pse.kit.studywithme.viewModel.profile.ProfileViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -70,6 +71,8 @@ fun ProfileView(viewModel: ProfileViewModel) {
 
                 Text("Kontaktinformationen", modifier = Modifier.padding(top = 12.dp))
                 FormText(text = viewModel.contact, icon = Icons.Outlined.AlternateEmail)
+
+                Button(text = "Abmelden", onClick = { viewModel.signOut() }, emphasize = true)
             }
         }
     }

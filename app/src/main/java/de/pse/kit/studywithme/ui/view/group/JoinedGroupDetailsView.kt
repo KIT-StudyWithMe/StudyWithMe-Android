@@ -153,7 +153,7 @@ fun JoinedGroupDetailsView(viewModel: JoinedGroupDetailsViewModel) {
                             it.name == name
                         }.firstOrNull()
                         viewModel.openRequestDialog.value = true
-                        viewModel.clickedUserName.value= name
+                        viewModel.clickedUserName.value = name
                     },
                     place = sessions.firstOrNull()?.location,
                     time = sessions.firstOrNull()?.date.toString(),
@@ -186,6 +186,13 @@ fun JoinedGroupDetailsView(viewModel: JoinedGroupDetailsViewModel) {
                         )
                     }
                 }
+                Button(
+                    text = "Gruppe verlassen",
+                    onClick = {
+                        viewModel.leaveGroup()
+                    },
+                    emphasize = true
+                )
             }
         }
     }

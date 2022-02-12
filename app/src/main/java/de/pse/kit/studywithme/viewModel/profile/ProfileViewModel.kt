@@ -21,16 +21,26 @@ class ProfileViewModel(navController: NavController, val userRepo: UserRepositor
 
     init {
         runBlocking {
-            userRepo.getSignedInUser().collect {
-                username = it.name
-                contact = it.contact
-                college = it.college ?: ""
-                major = it.major ?: ""
+            try {
+                userRepo.getSignedInUser().collect {
+                    username = it.name
+                    contact = it.contact
+                    college = it.college ?: ""
+                    major = it.major ?: ""
+                }
+            } catch (e: Exception) {
+
             }
         }
     }
 
     fun navToEditProfile() {
-        navController.navigate(NavGraph.EditProfile.route)
+        NavGraph.navigateToEditProfile(navController)
+    }
+
+    fun signOut() {
+        if (userRepo.signOut()) {
+            NavGraph.navigateToSignIn(navController)
+        }
     }
 }

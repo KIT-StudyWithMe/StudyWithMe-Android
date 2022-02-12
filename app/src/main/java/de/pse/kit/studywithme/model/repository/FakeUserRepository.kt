@@ -55,8 +55,9 @@ class FakeUserRepository(var signedIn: Boolean) : UserRepositoryInterface {
         return true
     }
 
-    override fun signOut() {
+    override fun signOut(): Boolean {
         signedIn = false
+        return true
     }
 
     @ExperimentalCoroutinesApi
