@@ -6,6 +6,12 @@ import io.ktor.client.features.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 
+/**
+ * The implementation of the functions from the report interface
+ *
+ * @property client
+ * @constructor Create empty Report service impl
+ */
 class ReportServiceImpl(private val client: HttpClient): ReportService {
     override suspend fun getReports(): List<Report> {
         TODO("Not yet implemented")

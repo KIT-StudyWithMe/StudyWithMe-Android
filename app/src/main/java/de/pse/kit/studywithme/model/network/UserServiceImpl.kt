@@ -11,6 +11,12 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 
+/**
+ * The implementation of the functions from the user interface
+ *
+ * @property client
+ * @constructor Create empty User service impl
+ */
 class UserServiceImpl(private var client: HttpClient) : UserService {
 
     override suspend fun getUsers(): List<User>? {

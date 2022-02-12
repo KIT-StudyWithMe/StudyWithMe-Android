@@ -8,6 +8,12 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 
+/**
+ * The implementation of the functions from the group interface
+ *
+ * @property client
+ * @constructor Create empty Group service impl
+ */
 class GroupServiceImpl(private var client: HttpClient): GroupService {
     override suspend fun getGroups(search: String): List<RemoteGroup>? {
         return try {

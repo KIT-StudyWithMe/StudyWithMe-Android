@@ -10,6 +10,12 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.client.statement.request
 
+/**
+ * The implementation of the functions from the session interface
+ *
+ * @property client
+ * @constructor Create empty Session service impl
+ */
 class SessionServiceImpl(private val client: HttpClient) : SessionService {
     override suspend fun getSessions(groupID: Int): List<Session> {
         return try {

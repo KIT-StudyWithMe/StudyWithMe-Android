@@ -1,5 +1,10 @@
 package de.pse.kit.studywithme.model.network
 
+/**
+ * Object for shortcuts of serveradresses
+ *
+ * @constructor Create empty Http routes
+ */
 object HttpRoutes {
 
     private const val BASE_URL = "https://api.test.studywithme.ovh"
