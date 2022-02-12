@@ -2,15 +2,12 @@ package de.pse.kit.studywithme
 
 import com.google.common.truth.Truth.assertThat
 import de.pse.kit.studywithme.model.data.Session
-import de.pse.kit.studywithme.model.data.SessionAttendee
 import de.pse.kit.studywithme.model.network.SessionService
 import junit.framework.Assert.assertNotNull
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import org.junit.After
-import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
 import java.util.*
@@ -18,9 +15,9 @@ import java.util.*
 class SessionServiceTest {
 
     private val service = SessionService.instance
-    private var session = Session(0, 1, "Bibliothek", Date(1608336000000), 2)
-    private val sessionB = Session(10, 1, "Bib", Date(1608336000000), 2)
-
+    private var sessionTest = Session(5, 1, "Bibliothek", Date(1608336000000), 2)
+    private val sessionB = Session(30, 1, "Bib", Date(1608336000000), 2)
+    @Ignore
     @Test
     fun sessionSerializationTest() {
         val session = Session(0, 1, "Bibliothek", Date(1608336000000), 2)
@@ -37,25 +34,27 @@ class SessionServiceTest {
         runBlocking {
             val saveSessionB = service.newSession(sessionB)
             assertNotNull(saveSessionB)
+            assert(service.getSession(saveSessionB!!.sessionID) == saveSessionB)
             service.removeSession(saveSessionB!!.sessionID)
-            assert(service.getSession(saveSessionB.sessionID) != saveSessionB)
         }
     }
     @Ignore
     @Test
     fun getAndEditSession() {
         runBlocking {
-            session = service.newSession(session)!!
-            val editedSession = Session(session!!.sessionID, 1, "Campus", Date(1608336000000), 2)
-            service.editSession(editedSession)
-            assert(service.getSession(session.sessionID) == editedSession )
+            sessionTest = service.newSession(sessionTest)!!
         }
     }
     @Ignore
     @Test
     fun getSessions() {
         runBlocking {
-            assert(service.getSessions(session!!.groupID)!!.contains(session))
+            val sessionX = service.newSession(sessionTest)
+           println(service.getSessions(sessionX!!.groupID))
+            println(service.getSession(sessionX!!.sessionID))
+            service.removeSession(sessionX.sessionID)
+            println(service.getSessions(sessionX!!.groupID))
+            println(service.getSession(sessionX!!.sessionID))
 
         }
     }
@@ -63,10 +62,13 @@ class SessionServiceTest {
     @Test
     fun attendees() {
         runBlocking {
-            val sessionAttendee = service.newAttendee(1, session.sessionID)
-            assert (service.getAttendees(session.sessionID)!!.contains(sessionAttendee))
+            val sessionX = service.newSession(sessionTest)
+            val sessionAttendee = service.newAttendee(1, sessionX!!.sessionID)
+            service.removeSession(sessionX.sessionID)
+            println(service.getSession(sessionX.sessionID))
+            assert (service.getAttendees(sessionX!!.sessionID)!!.contains(sessionAttendee))
             service.removeAttendee(sessionAttendee!!.userID, sessionAttendee.sessionID)
-            assert(!(service.getAttendees(session.sessionID)!!.contains(sessionAttendee)))
+            assert(!(service.getAttendees(sessionX.sessionID)!!.contains(sessionAttendee)))
         }
     }
 
