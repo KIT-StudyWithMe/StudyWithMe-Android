@@ -215,6 +215,28 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
         }
     }
 
+    override suspend fun declineMember(groupID: Int, uid: Int): Boolean {
+        return try {
+            client.put<HttpResponse>(HttpRoutes.GROUPS + groupID + "/users/" + uid + "/membership") {
+                contentType(ContentType.Application.Json)
+                body = false
+            }
+            true
+        } catch (e: RedirectResponseException) {
+            println("NewMember Redirect Error: ${e.response.status}")
+            false
+        } catch (e: ClientRequestException) {
+            println("NewMember Request Error: ${e.response.status}")
+            false
+        } catch (e: ServerResponseException) {
+            println("NewMember Response Error: ${e.response.status}")
+            false
+        } catch (e: Exception) {
+            println("NewMember Error: ${e.message}")
+            false
+        }
+    }
+
     override suspend fun joinRequest(groupID: Int, uid: Int): Boolean {
         return try {
             client.put<HttpResponse>(HttpRoutes.GROUPS + groupID + "/join/" + uid)

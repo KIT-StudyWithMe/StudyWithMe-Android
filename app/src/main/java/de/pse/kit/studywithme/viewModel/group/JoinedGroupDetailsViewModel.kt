@@ -167,13 +167,15 @@ class JoinedGroupDetailsViewModel(
     }
 
     /**
-     * Join request is being accepted
+     * Join request is being accepted if accept is true
      *
      * @param accept
      */
     fun acceptRequest(accept: Boolean) {
         if (clickedUser.value != null && accept) {
             runBlocking {
+                groupRepo.newMember(groupID, clickedUser.value!!.userID)
+
                 launch {
                     groupRepo.getGroupMembers(groupID).collect {
                         members.value = it
@@ -184,6 +186,9 @@ class JoinedGroupDetailsViewModel(
                     requests.value = groupRepo.getJoinRequests(groupID)
                 }
             }
+        } else if (clickedUser.value != null) {
+            groupRepo.declineMember(groupID, clickedUser.value!!.userID)
+            requests.value = groupRepo.getJoinRequests(groupID)
         }
     }
 }

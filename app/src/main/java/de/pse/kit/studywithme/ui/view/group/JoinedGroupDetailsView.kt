@@ -188,10 +188,12 @@ fun JoinedGroupDetailsView(viewModel: JoinedGroupDetailsViewModel) {
                                 primary = false
                             )
                         }
+                        /*
                         Button(modifier = Modifier.weight(1f),
                             text = "Teilnehmen",
                             onClick = { viewModel.participate() }
                         )
+                        */
                     }
                 }
                 if (!viewModel.isAdmin.value) {

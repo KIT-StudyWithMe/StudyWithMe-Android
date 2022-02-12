@@ -29,8 +29,6 @@ class SessionRepository private constructor(context: Context) : SessionRepositor
     private val reportService = ReportService.instance
     private val sessionDao = AppDatabase.getInstance(context).sessionDao()
     private val auth = Authenticator
-    // TODO: Local in key value speichern beim anmelden und hier abrufen
-    private val uid: Int?  = null
 
     @ExperimentalCoroutinesApi
     override fun getSessions(groupID: Int): Flow<List<Session>> {
@@ -132,15 +130,14 @@ class SessionRepository private constructor(context: Context) : SessionRepositor
     }
 
     override fun newAttendee(sessionID: Int): Boolean {
-        if (uid == null) {
+        if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
         
         return runBlocking {
-            val remoteSessionAttendee = sessionService.newAttendee(uid, sessionID)
+            val remoteSessionAttendee = sessionService.newAttendee(auth.user!!.userID, sessionID)
             if (remoteSessionAttendee != null) {
-                Log.d(auth.TAG, "Remote Database Session Post:success")
                 sessionDao.saveSessionAttendee(remoteSessionAttendee)
                 return@runBlocking true
             } else {
@@ -150,17 +147,17 @@ class SessionRepository private constructor(context: Context) : SessionRepositor
     }
 
     override fun removeAttendee(sessionID: Int) {
-        if (uid == null) {
+        if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
 
         runBlocking {
             launch {
-                sessionService.removeAttendee(uid, sessionID)
+                sessionService.removeAttendee(auth.user!!.userID, sessionID)
             }
             launch {
-                sessionDao.removeSessionAttendee(SessionAttendee(sessionID, uid, true))
+                sessionDao.removeSessionAttendee(SessionAttendee(sessionID, auth.user!!.userID, true))
             }
         }
     }

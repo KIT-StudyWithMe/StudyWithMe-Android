@@ -92,6 +92,15 @@ interface GroupService {
     suspend fun newMember(groupID: Int, uid: Int):GroupMember?
 
     /**
+     * Decline a new group member
+     *
+     * @param groupID
+     * @param uid
+     * @return Boolean
+     */
+    suspend fun declineMember(groupID: Int, uid: Int): Boolean
+
+    /**
      * Creates join request by the user with ID uid to the group with ID groupID and returns true if successful
      *
      * @param groupID

@@ -67,7 +67,7 @@ fun EditSessionView(viewModel: EditSessionViewModel) {
                     viewModel.date.value = it
                     Log.d("Test", it.toString())
                              },
-                duration = "",
+                duration = viewModel.duration.collectAsState().value,
                 durationChange = {viewModel.duration.value = it}
             )
 
