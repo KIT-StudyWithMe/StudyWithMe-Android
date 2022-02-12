@@ -54,7 +54,7 @@ interface SessionService {
      * @param sessionID
      * @return true or false
      */
-    suspend fun newAttendee(userID: Int, sessionID: Int): SessionAttendee?
+    suspend fun newAttendee(userID: Int, sessionID: Int): Boolean
 
     /**
      * Returns a list of users that attend the session with the ID sessionID or null if the session has no attendee
