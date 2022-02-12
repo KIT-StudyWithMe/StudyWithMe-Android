@@ -59,7 +59,7 @@ class JoinedGroupDetailsViewModel(
                 }
             }
             launch {
-                //requests.value = groupRepo.getJoinRequests(groupID)
+                requests.value = groupRepo.getJoinRequests(groupID)
             }
         }
     }
@@ -116,6 +116,10 @@ class JoinedGroupDetailsViewModel(
         if (clickedUser.value != null) {
             groupRepo.removeMember(groupID, clickedUser.value!!.userID)
         }
+    }
+
+    fun leaveGroup() {
+        groupRepo.leaveGroup(groupID)
     }
 
     fun acceptRequest(accept: Boolean) {

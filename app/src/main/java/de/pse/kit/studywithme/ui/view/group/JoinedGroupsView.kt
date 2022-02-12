@@ -7,10 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,10 +35,19 @@ fun JoinedGroupsView(viewModel: JoinedGroupsViewModel) {
             },
             containerColor = MaterialTheme.colorScheme.surface
         ) {
-            Column(modifier = Modifier
-                .padding(horizontal = 20.dp, vertical = 6.dp),) {
-                ChipSelectionRow(chipNames = viewModel.lectures, onChange = { viewModel.filter(it) })
-                Divider(modifier = Modifier.padding(top = 6.dp, bottom = 10.dp), color = MaterialTheme.colorScheme.tertiary, thickness = 1.dp)
+            Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 6.dp)) {
+                if (viewModel.filteredGroups.value.isNotEmpty()) {
+                    ChipSelectionRow(
+                        chipNames = viewModel.lectures,
+                        onChange = { viewModel.filter(it) })
+                    Divider(
+                        modifier = Modifier.padding(top = 6.dp, bottom = 10.dp),
+                        color = MaterialTheme.colorScheme.tertiary,
+                        thickness = 1.dp
+                    )
+                } else {
+                    Text("Du bist noch keiner Lerngruppe beigetreten.")
+                }
 
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(12.dp)

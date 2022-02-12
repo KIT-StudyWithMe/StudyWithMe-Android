@@ -31,6 +31,8 @@ interface GroupRepositoryInterface {
 
     fun removeMember(groupID: Int, uid: Int)
 
+    fun leaveGroup(groupID: Int)
+
     fun getGroupMembers(groupID: Int): Flow<List<GroupMember>>
 
     fun getGroupAdmins(groupID: Int): Flow<List<GroupMember>>

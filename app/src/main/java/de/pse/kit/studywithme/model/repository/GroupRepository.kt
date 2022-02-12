@@ -273,6 +273,7 @@ class GroupRepository private constructor(context: Context) : GroupRepositoryInt
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
+
         runBlocking {
             launch {
                 groupDao.removeMember(groupID, uid)
@@ -281,6 +282,15 @@ class GroupRepository private constructor(context: Context) : GroupRepositoryInt
                 groupService.removeMember(groupID, uid)
             }
         }
+    }
+
+    override fun leaveGroup(groupID: Int) {
+        if (auth.firebaseUID == null) {
+            // TODO: Explicit exception class
+            throw Exception("Authentication Error: No local user signed in.")
+        }
+
+        removeMember(groupID, auth.user!!.userID)
     }
 
     override fun getGroupMembers(groupID: Int): Flow<List<GroupMember>> {
