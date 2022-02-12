@@ -19,6 +19,22 @@ import de.pse.kit.studywithme.ui.component.*
 import java.lang.NumberFormatException
 import java.util.*
 
+/**
+ * Layout used in the view
+ *
+ * @param place
+ * @param placeChange
+ * @param date
+ * @param dateChange
+ * @param time
+ * @param timeChange
+ * @param duration
+ * @param durationChange
+ * @receiver
+ * @receiver
+ * @receiver
+ * @receiver
+ */
 @ExperimentalMaterial3Api
 @Composable
 fun Sessionlayout(
