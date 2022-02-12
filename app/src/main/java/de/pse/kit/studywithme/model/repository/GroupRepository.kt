@@ -254,6 +254,17 @@ class GroupRepository private constructor(context: Context) : GroupRepositoryInt
         }
     }
 
+    override fun declineMember(groupID: Int, uid: Int): Boolean {
+        if (auth.firebaseUID == null) {
+            // TODO: Explicit exception class
+            throw Exception("Authentication Error: No local user signed in.")
+        }
+
+        return runBlocking {
+            return@runBlocking groupService.declineMember(groupID, uid)
+        }
+    }
+
     override fun joinRequest(groupID: Int): Boolean {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class

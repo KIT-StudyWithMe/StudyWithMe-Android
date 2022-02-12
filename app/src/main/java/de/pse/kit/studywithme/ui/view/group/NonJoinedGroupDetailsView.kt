@@ -101,7 +101,7 @@ fun NonJoinedGroupDetailsView(viewModel: NonJoinedGroupDetailsViewModel) {
                     exerciseSheetNumber = group?.exercise
                 )
                 if (!viewModel.alreadyRequested.value) {
-                    Button(text = "Beitreten", onClick = { viewModel.joinRequest() })
+                    Button(text = "Beitrittsanfrage senden", onClick = { viewModel.joinRequest() })
                 }
             }
         }

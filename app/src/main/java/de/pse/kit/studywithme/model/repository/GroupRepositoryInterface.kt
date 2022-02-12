@@ -86,6 +86,15 @@ interface GroupRepositoryInterface {
     fun newMember(groupID: Int, uid: Int): Boolean
 
     /**
+     * Declines the join request by user with ID uid to the group with ID groupID and returns true if successful
+     *
+     * @param groupID
+     * @param uid
+     * @return false or true
+     */
+    fun declineMember(groupID: Int, uid: Int): Boolean
+
+    /**
      * Creates join request of a user to the group with ID groupID and returns true if successful
      *
      * @param groupID
