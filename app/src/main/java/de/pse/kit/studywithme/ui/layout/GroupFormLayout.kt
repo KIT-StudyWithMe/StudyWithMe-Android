@@ -10,10 +10,12 @@ import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.pse.kit.myapplication.ui.theme.*
 import de.pse.kit.studywithme.ui.component.*
+import java.lang.NumberFormatException
 
 @ExperimentalMaterial3Api
 @Composable
@@ -35,6 +37,10 @@ fun GroupFormLayout(
     sessionFrequencyStrings: List<String>,
     groupSessionTypeStrings: List<String>
 ) {
+    var chapterNumberError by remember { mutableStateOf("") }
+    var exerciseSheetNumberError by remember { mutableStateOf("") }
+
+
     MyApplicationTheme3 {
         Column {
             Text(modifier = Modifier.padding(top = 12.dp), text = "Gruppeninformationen")
@@ -70,17 +76,51 @@ fun GroupFormLayout(
             )
             Text(modifier = Modifier.padding(top = 12.dp), text = "Lernfortschritt")
             FormTextField(
-                label = "Vorlesung: Kapitelnummer",
+                label = "Vorlesung: Kapitelnr.",
                 text = chapterNumber,
-                onChange = chapterNumberChange,
+                onChange = {
+                    try {
+                        it.toInt()
+                        chapterNumberError = ""
+                        chapterNumberChange(it)
+                    } catch (e: NumberFormatException) {
+                        chapterNumberError = "Das Kapitel muss eine Zahl sein"
+                    }
+                },
                 type = TextFieldType.NUMBER
             )
+
+            if (chapterNumberError != "") {
+                Text(
+                    chapterNumberError,
+                    modifier = Modifier.padding(bottom = 4.dp),
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
+
+
             FormTextField(
                 label = "Übungsblatt Nr.",
                 text = exerciseSheetNumber,
-                onChange = exerciseSheetNumberChange,
+                onChange = {
+                    try {
+                        it.toInt()
+                        exerciseSheetNumberError = ""
+                        exerciseSheetNumberChange(it)
+                    } catch (e: NumberFormatException) {
+                        exerciseSheetNumberError = "Die Übungsblatt Nr. muss eine Zahl sein"
+                    }
+                },
                 type = TextFieldType.NUMBER
             )
+
+            if (exerciseSheetNumberError != "") {
+                Text(
+                    exerciseSheetNumberError,
+                    modifier = Modifier.padding(bottom = 4.dp),
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
         }
     }
 }

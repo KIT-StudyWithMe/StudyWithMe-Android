@@ -3,6 +3,7 @@ package de.pse.kit.studywithme
 import de.pse.kit.studywithme.model.data.Institution
 import de.pse.kit.studywithme.model.data.Major
 import de.pse.kit.studywithme.model.data.User
+import de.pse.kit.studywithme.model.network.GroupService
 import de.pse.kit.studywithme.model.network.UserService
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
@@ -23,6 +24,12 @@ class UserServiceTest {
     @Test
     fun myTest() {
         runBlocking {
+            val serviceG = GroupService.instance
+            val hide = serviceG.hideGroup(7, true)
+            val groups = serviceG.getGroups("geile Hengste")
+            println(groups)
+
+
             val majors = service.getMajors(userB.major ?: "")
             println(majors)
             assert(majors != null)

@@ -45,7 +45,7 @@ fun SignInView(viewModel: SignInViewModel) {
                     Text(
                         viewModel.errorMessage.collectAsState().value,
                         modifier = Modifier.padding(bottom = 4.dp),
-                        color = Color.Red
+                        color = MaterialTheme.colorScheme.error
                     )
                 }
                 TextField(

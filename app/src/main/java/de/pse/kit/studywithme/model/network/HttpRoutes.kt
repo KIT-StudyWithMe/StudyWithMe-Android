@@ -6,7 +6,7 @@ package de.pse.kit.studywithme.model.network
  * @constructor Create empty Http routes
  */
 object HttpRoutes {
-
+    const val TAG = "REST CALL"
     private const val BASE_URL = "https://api.test.studywithme.ovh"
     const val USERS = "$BASE_URL/users/"
     const val GROUPS = "$BASE_URL/groups/"

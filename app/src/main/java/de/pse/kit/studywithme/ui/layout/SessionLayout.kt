@@ -7,13 +7,16 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.Text
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
 import de.pse.kit.studywithme.ui.component.*
+import java.lang.NumberFormatException
 import java.util.*
 
 @ExperimentalMaterial3Api
@@ -29,16 +32,20 @@ fun Sessionlayout(
     durationChange: (String) -> Unit = {}
 
 ) {
+    var durationError by remember { mutableStateOf("") }
+
     MyApplicationTheme3 {
         Scaffold(
             containerColor = MaterialTheme.colorScheme.surface
         ) {
-            Column(modifier = Modifier
-                .padding(horizontal = 20.dp, vertical = 5.dp)
-                .padding(bottom =80.dp)
-                .verticalScroll(
-                    state = ScrollState(0)
-                ),) {
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 20.dp, vertical = 5.dp)
+                    .padding(bottom = 80.dp)
+                    .verticalScroll(
+                        state = ScrollState(0)
+                    ),
+            ) {
                 FormTextField(text = place, label = "Lernort", onChange = placeChange)
 
                 DatePicker(
@@ -63,7 +70,24 @@ fun Sessionlayout(
                         onChange = timeChange
                     )
                 }
-                FormTextField(text = duration, onChange = durationChange, label = "Dauer", type = TextFieldType.NUMBER)
+
+                FormTextField(text = duration, onChange = {
+                    try {
+                        it.toInt()
+                        durationError = ""
+                        durationChange(it)
+                    } catch (e: NumberFormatException) {
+                        durationError = "Dauer muss eine Zahl sein"
+                    }
+                }, label = "Dauer", singleLine = true, type = TextFieldType.NUMBER)
+
+                if (durationError != "") {
+                    Text(
+                        durationError,
+                        modifier = Modifier.padding(bottom = 4.dp),
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
             }
         }
     }
