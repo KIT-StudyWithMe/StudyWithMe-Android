@@ -12,6 +12,11 @@ import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 import kotlinx.coroutines.runBlocking
 
+/**
+ * Report repository
+ *
+ * @constructor Create empty Report repository
+ */
 class ReportRepository private constructor() {
     private val reportService = ReportService.instance
 

@@ -17,6 +17,25 @@ import androidx.compose.ui.unit.dp
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
 import de.pse.kit.studywithme.ui.component.*
 
+/**
+ * Layout used in the view
+ *
+ * @param groupAdmin
+ * @param groupMember
+ * @param groupRequests
+ * @param adminClick
+ * @param memberClick
+ * @param requestClick
+ * @param description
+ * @param place
+ * @param time
+ * @param selectedChips
+ * @param chapterNumber
+ * @param exerciseSheetNumber
+ * @receiver
+ * @receiver
+ * @receiver
+ */
 @ExperimentalMaterialApi
 @ExperimentalMaterial3Api
 @Composable

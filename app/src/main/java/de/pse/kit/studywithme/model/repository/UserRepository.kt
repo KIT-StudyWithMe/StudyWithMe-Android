@@ -14,6 +14,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.concurrent.atomic.AtomicBoolean
 
+/**
+ * User repository
+ *
+ * @constructor
+ *
+ * @param context
+ */
 class UserRepository private constructor(context: Context) : UserRepositoryInterface {
     private val userService = UserService.instance
     private val userDao = AppDatabase.getInstance(context).userDao()

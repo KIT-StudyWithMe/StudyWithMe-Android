@@ -12,6 +12,17 @@ import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
 import androidx.compose.ui.text.font.FontWeight
 
 
+/**
+ * Composable pattern used in the view
+ *
+ * @param selectedItem
+ * @param clickLeft
+ * @param clickMiddle
+ * @param clickRight
+ * @receiver
+ * @receiver
+ * @receiver
+ */
 @Composable
 fun NavigationBar(
     selectedItem: MutableState<Int> = remember { mutableStateOf(0) },

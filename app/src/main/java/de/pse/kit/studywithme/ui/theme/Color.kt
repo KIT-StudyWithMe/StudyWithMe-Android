@@ -2,6 +2,9 @@ package de.pse.kit.myapplication.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
+/**
+ * Colors used in the view of the application
+ */
 val White200 = Color(0xFFFDFDF5)
 val Grey200 = Color(0xFFF2F5EC)
 val Green100 = Color(0xFFDAE4D9)

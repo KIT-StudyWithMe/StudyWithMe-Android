@@ -15,6 +15,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.concurrent.atomic.AtomicBoolean
 
+/**
+ * Group repository
+ *
+ * @constructor
+ *
+ * @param context
+ */
 class GroupRepository private constructor(context: Context) : GroupRepositoryInterface {
     private val groupService = GroupService.instance
     private val reportService = ReportService.instance

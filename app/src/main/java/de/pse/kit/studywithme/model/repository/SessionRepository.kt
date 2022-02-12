@@ -17,6 +17,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.concurrent.atomic.AtomicBoolean
 
+/**
+ * Session repository
+ *
+ * @constructor
+ *
+ * @param context
+ */
 class SessionRepository private constructor(context: Context) : SessionRepositoryInterface {
     private val sessionService = SessionService.instance
     private val reportService = ReportService.instance

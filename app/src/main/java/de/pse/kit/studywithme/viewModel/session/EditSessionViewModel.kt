@@ -22,8 +22,7 @@ class EditSessionViewModel(
     val sessionID: Int,
     val sessionRepo: SessionRepositoryInterface,
     val groupRepo: GroupRepositoryInterface,
-    val groupID: Int,
-    val errorMessage: MutableStateFlow<String> = MutableStateFlow("")
+    val groupID: Int
 ) :
     SignedInViewModel(navController) {
     val groupState: MutableState<Group?> = mutableStateOf(null)
@@ -51,20 +50,11 @@ class EditSessionViewModel(
 
 
     fun saveSession() {
-        var durationInt: Int
-        try {
-            durationInt = duration.value.toInt()
-        } catch (e: NumberFormatException) {
-            durationInt = 0
-            return
-        }
-
         if (session != null) {
             val durationInt: Int
             try {
                 durationInt = duration.value.toInt()
             } catch (e: NumberFormatException) {
-                errorMessage.value = "Dauer muss eine Zahl sein"
                 return
             }
             val edited = sessionRepo.editSession(
