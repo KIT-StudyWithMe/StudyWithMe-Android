@@ -164,7 +164,7 @@ class UserRepository private constructor(context: Context) : UserRepositoryInter
         }
     }
 
-    override fun signOut() {
+    override fun signOut(): Boolean {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
@@ -172,6 +172,10 @@ class UserRepository private constructor(context: Context) : UserRepositoryInter
 
         //TODO: Maye delete all local data
         auth.signOut()
+        if (auth.firebaseUID == null) {
+            return true
+        }
+        return false
     }
 
     @ExperimentalCoroutinesApi
