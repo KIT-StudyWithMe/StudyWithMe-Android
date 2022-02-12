@@ -120,11 +120,22 @@ class JoinedGroupDetailsViewModel(
 
     fun leaveGroup() {
         groupRepo.leaveGroup(groupID)
+        navBack()
     }
 
     fun acceptRequest(accept: Boolean) {
         if (clickedUser.value != null && accept) {
-            groupRepo.newMember(groupID, clickedUser.value!!.userID)
+            runBlocking {
+                launch {
+                    groupRepo.getGroupMembers(groupID).collect {
+                        members.value = it
+                    }
+                }
+
+                launch {
+                    requests.value = groupRepo.getJoinRequests(groupID)
+                }
+            }
         }
     }
 }
