@@ -9,6 +9,14 @@ import de.pse.kit.studywithme.ui.view.navigation.NavGraph
 import de.pse.kit.studywithme.viewModel.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 
+/**
+ * ViewModel for signup screen
+ *
+ * @property userRepo
+ * @constructor
+ *
+ * @param navController
+ */
 class SignUpViewModel(navController: NavController, val userRepo: UserRepositoryInterface) :
     ViewModel(navController) {
 
@@ -19,6 +27,10 @@ class SignUpViewModel(navController: NavController, val userRepo: UserRepository
     val major: MutableStateFlow<String> = MutableStateFlow("")
     val errorMessage: MutableStateFlow<String> = MutableStateFlow("")
 
+    /**
+     * User gets registered
+     *
+     */
     fun signUp() {
         Log.d("Auth-UI", "signUp:started")
 

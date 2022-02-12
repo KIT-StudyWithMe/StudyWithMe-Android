@@ -1,5 +1,14 @@
 package de.pse.kit.studywithme
 
+/**
+ * Class for the singleton pattern
+ *
+ * @param T
+ * @param A
+ * @constructor
+ *
+ * @param creator
+ */
 open class SingletonHolder<out T: Any, in A>(creator: (A) -> T) {
     private var creator: ((A) -> T)? = creator
     @Volatile private var instance: T? = null

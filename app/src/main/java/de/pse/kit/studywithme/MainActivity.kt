@@ -15,6 +15,11 @@ import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
 import de.pse.kit.studywithme.ui.view.navigation.MainView
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+/**
+ * Main activity
+ *
+ * @constructor Create empty Main activity
+ */
 @ExperimentalMaterialApi
 @ExperimentalMaterial3Api
 @ExperimentalCoroutinesApi
