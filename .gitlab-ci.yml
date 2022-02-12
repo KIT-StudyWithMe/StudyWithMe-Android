@@ -109,7 +109,7 @@ debugTests:
 documentation:
   stage: docu
   script:
-    - gradle dokkaHtml
+    - ./gradlew dokkaHtml
   artifacts:
     paths:
       - app/build/dokka/*
