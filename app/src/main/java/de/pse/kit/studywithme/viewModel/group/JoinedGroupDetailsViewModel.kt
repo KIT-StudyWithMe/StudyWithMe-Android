@@ -12,6 +12,16 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
+/**
+ * ViewModel of the joinedgroupdetails screen
+ *
+ * @property groupID
+ * @property groupRepo
+ * @property sessionRepo
+ * @constructor
+ *
+ * @param navController
+ */
 @ExperimentalCoroutinesApi
 class JoinedGroupDetailsViewModel(
     navController: NavController,
@@ -56,18 +66,26 @@ class JoinedGroupDetailsViewModel(
             launch {
                 groupRepo.isSignedInUserAdmin(groupID).collect {
                     isAdmin.value = it
+                    if (it) {
+                        requests.value = groupRepo.getJoinRequests(groupID)
+                    }
                 }
-            }
-            launch {
-                requests.value = groupRepo.getJoinRequests(groupID)
             }
         }
     }
 
+    /**
+     * Navigates to editgroup view
+     *
+     */
     fun editGroup() {
         NavGraph.navigateToEditGroup(navController, groupID)
     }
 
+    /**
+     * Report of a group is being created
+     *
+     */
     fun reportGroup() {
         if (sessions.value.isNotEmpty()) {
             for (field in sessionReports) {
@@ -82,6 +100,10 @@ class JoinedGroupDetailsViewModel(
         }
     }
 
+    /**
+     * Navigates to newsession view if there is no active session to edit yet otherwise navigates to editsession view
+     *
+     */
     fun planSession() {
         if (sessions.value.isEmpty()) {
             NavGraph.navigateToNewSession(navController, groupID)
@@ -94,37 +116,74 @@ class JoinedGroupDetailsViewModel(
         }
     }
 
+    /**
+     * Adds user to session as attendant
+     *
+     */
     fun participate() {
         if (!sessions.value.isEmpty()) {
             sessionRepo.newAttendee(sessions.value[0].sessionID)
         }
     }
 
+    /**
+     * Report of a user is being created
+     *
+     * @param userField
+     */
     fun reportUser(userField: UserField) {
         if (clickedUser.value != null) {
             groupRepo.reportUser(clickedUser.value!!.userID, userField)
         }
     }
 
+    /**
+     * Makes a user a admin
+     *
+     */
     fun makeAdmin() {
         if (clickedUser.value != null) {
             //TODO()
         }
     }
 
+    /**
+     * Removes a member of the group
+     *
+     */
     fun removeMember() {
         if (clickedUser.value != null) {
             groupRepo.removeMember(groupID, clickedUser.value!!.userID)
         }
     }
 
+    /**
+     * Group is being left by the user
+     *
+     */
     fun leaveGroup() {
         groupRepo.leaveGroup(groupID)
+        navBack()
     }
 
+    /**
+     * Join request is being accepted
+     *
+     * @param accept
+     */
     fun acceptRequest(accept: Boolean) {
         if (clickedUser.value != null && accept) {
-            groupRepo.newMember(groupID, clickedUser.value!!.userID)
+            runBlocking {
+                launch {
+                    groupRepo.getGroupMembers(groupID).collect {
+                        members.value = it
+                    }
+                }
+
+                launch {
+                    requests.value = groupRepo.getJoinRequests(groupID)
+                }
+            }
         }
     }
 }

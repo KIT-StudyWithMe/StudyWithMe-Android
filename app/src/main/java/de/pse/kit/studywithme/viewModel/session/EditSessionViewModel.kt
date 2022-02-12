@@ -17,6 +17,17 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.*
 
+/**
+ * ViewModel of the esitsession screen
+ *
+ * @property sessionID
+ * @property sessionRepo
+ * @property groupRepo
+ * @property groupID
+ * @constructor
+ *
+ * @param navController
+ */
 class EditSessionViewModel(
     navController: NavController,
     val sessionID: Int,
@@ -48,7 +59,10 @@ class EditSessionViewModel(
     }
 
 
-
+    /**
+     * Saves session with the given parameters
+     *
+     */
     fun saveSession() {
         if (session != null) {
             val durationInt: Int

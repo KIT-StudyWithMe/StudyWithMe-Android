@@ -245,7 +245,7 @@ class GroupRepository private constructor(context: Context) : GroupRepositoryInt
         return runBlocking {
             val remoteGroupMember = groupService.newMember(groupID, uid)
             if (remoteGroupMember != null) {
-                Log.d(auth.TAG, "Remote Database Session Post:success")
+                Log.d(auth.TAG, "Remote Database Member Post:success")
                 groupDao.newMember(remoteGroupMember)
                 return@runBlocking true
             } else {

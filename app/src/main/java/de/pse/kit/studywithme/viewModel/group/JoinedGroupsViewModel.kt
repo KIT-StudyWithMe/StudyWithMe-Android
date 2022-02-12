@@ -11,6 +11,14 @@ import de.pse.kit.studywithme.viewModel.SignedInViewModel
 import de.pse.kit.studywithme.viewModel.ViewModel
 import kotlinx.coroutines.runBlocking
 
+/**
+ * ViewModel of the joinedgroup screen
+ *
+ * @property groupRepo
+ * @constructor
+ *
+ * @param navController
+ */
 class JoinedGroupsViewModel(navController: NavController, val groupRepo: GroupRepositoryInterface
 ) : SignedInViewModel(navController) {
 
@@ -31,10 +39,20 @@ class JoinedGroupsViewModel(navController: NavController, val groupRepo: GroupRe
         }
     }
 
+    /**
+     * Navigates to the joinedgroup view
+     *
+     * @param group
+     */
     fun navToGroup(group: Group) {
         NavGraph.navigateToJoinedGroup(navController, group.groupID)
     }
 
+    /**
+     * Filters groups after given lecture
+     *
+     * @param lecture
+     */
     fun filter(lecture: String) {
         if (lecture == filter) {
             filteredGroups.value = groups

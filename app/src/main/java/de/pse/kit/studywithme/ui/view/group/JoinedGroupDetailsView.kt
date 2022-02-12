@@ -22,6 +22,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import de.pse.kit.studywithme.model.data.GroupMember
 import de.pse.kit.studywithme.model.repository.FakeGroupRepository
 import de.pse.kit.studywithme.model.repository.FakeSessionRepository
 import de.pse.kit.studywithme.ui.component.*
@@ -154,8 +155,10 @@ fun JoinedGroupDetailsView(viewModel: JoinedGroupDetailsViewModel) {
                     },
                     requestClick = {
                         val name = it
-                        viewModel.clickedUser.value = groupMembers.filter {
+                        viewModel.clickedUser.value = groupRequests.filter {
                             it.name == name
+                        }.map {
+                            GroupMember(viewModel.groupID, it.userID.toInt(), it.name, isAdmin = false)
                         }.firstOrNull()
                         viewModel.openRequestDialog.value = true
                         viewModel.clickedUserName.value = name
@@ -191,13 +194,15 @@ fun JoinedGroupDetailsView(viewModel: JoinedGroupDetailsViewModel) {
                         )
                     }
                 }
-                Button(
-                    text = "Gruppe verlassen",
-                    onClick = {
-                        viewModel.leaveGroup()
-                    },
-                    emphasize = true
-                )
+                if (!viewModel.isAdmin.value) {
+                    Button(
+                        text = "Gruppe verlassen",
+                        onClick = {
+                            viewModel.leaveGroup()
+                        },
+                        emphasize = true
+                    )
+                }
             }
         }
     }

@@ -201,16 +201,16 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
                 body = true
             }
         } catch (e: RedirectResponseException) {
-            println("HideGroup Redirect Error: ${e.response.status}")
+            println("NewMember Redirect Error: ${e.response.status}")
             null
         } catch (e: ClientRequestException) {
-            println("HideGroup Request Error: ${e.response.status}")
+            println("NewMember Request Error: ${e.response.status}")
             null
         } catch (e: ServerResponseException) {
-            println("HideGroup Response Error: ${e.response.status}")
+            println("NewMember Response Error: ${e.response.status}")
             null
         } catch (e: Exception) {
-            println("HideGroup Error: ${e.message}")
+            println("NewMember Error: ${e.message}")
             null
         }
     }

@@ -12,6 +12,15 @@ import de.pse.kit.studywithme.viewModel.ViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
+/**
+ * ViewModel of nonjoinedgroupdetails screen
+ *
+ * @property groupID
+ * @property groupRepo
+ * @constructor
+ *
+ * @param navController
+ */
 class NonJoinedGroupDetailsViewModel(
     navController: NavController,
     val groupID: Int,
@@ -40,6 +49,10 @@ class NonJoinedGroupDetailsViewModel(
         }
     }
 
+    /**
+     * Report of the group is being created
+     *
+     */
     fun report() {
         if (group.value != null) {
             for (field in groupReports) {
@@ -48,14 +61,22 @@ class NonJoinedGroupDetailsViewModel(
         }
     }
 
+    /**
+     * Navigates to editgroup view
+     *
+     */
     fun editGroup() {
         NavGraph.navigateToEditGroup(navController, groupID)
     }
 
+    /**
+     * Join request to the group is being created
+     *
+     */
     fun joinRequest() {
         if (groupRepo.joinRequest(groupID)) {
             alreadyRequested.value = true
-            navBack()
+           // navBack()
         }
     }
 }
