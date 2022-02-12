@@ -7,6 +7,12 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
+/**
+ * Repository class for internal tests of user components
+ *
+ * @property signedIn
+ * @constructor Create empty Fake user repository
+ */
 class FakeUserRepository(var signedIn: Boolean) : UserRepositoryInterface {
 
     var user = User(

@@ -10,6 +10,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlin.streams.toList
 
+/**
+ * Repository class for internal tests of group components
+ *
+ * @constructor Create empty Fake group repository
+ */
 class FakeGroupRepository() : GroupRepositoryInterface {
     private var groups = mutableListOf(
         Group(
