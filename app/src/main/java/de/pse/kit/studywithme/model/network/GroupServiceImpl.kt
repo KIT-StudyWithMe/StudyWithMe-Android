@@ -193,9 +193,25 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
         }
     }
 
-    // Erstmal auslassen
     override suspend fun newMember(groupID: Int, uid: Int): GroupMember? {
-        TODO("Not yet implemented")
+        return try {
+            client.put(HttpRoutes.GROUPS + groupID + "/users/" + uid + "/membership") {
+                contentType(ContentType.Application.Json)
+                body = true
+            }
+        } catch (e: RedirectResponseException) {
+            println("HideGroup Redirect Error: ${e.response.status}")
+            null
+        } catch (e: ClientRequestException) {
+            println("HideGroup Request Error: ${e.response.status}")
+            null
+        } catch (e: ServerResponseException) {
+            println("HideGroup Response Error: ${e.response.status}")
+            null
+        } catch (e: Exception) {
+            println("HideGroup Error: ${e.message}")
+            null
+        }
     }
 
     override suspend fun joinRequest(groupID: Int, uid: Int): Boolean {
