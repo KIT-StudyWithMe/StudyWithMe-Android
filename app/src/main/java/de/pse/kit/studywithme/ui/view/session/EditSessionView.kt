@@ -18,6 +18,11 @@ import de.pse.kit.studywithme.ui.view.navigation.joinedGroupDetailsName
 import de.pse.kit.studywithme.viewModel.session.EditSessionViewModel
 import java.util.*
 
+/**
+ * View of the editsession screen
+ *
+ * @param viewModel
+ */
 @ExperimentalMaterial3Api
 @Composable
 fun EditSessionView(viewModel: EditSessionViewModel) {

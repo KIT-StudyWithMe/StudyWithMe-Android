@@ -30,6 +30,11 @@ import de.pse.kit.studywithme.viewModel.group.JoinedGroupDetailsViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.lang.reflect.Member
 
+/**
+ * View of the joinedgroupdetails screen
+ *
+ * @param viewModel
+ */
 @ExperimentalCoroutinesApi
 @ExperimentalMaterialApi
 @ExperimentalMaterial3Api

@@ -21,6 +21,11 @@ import de.pse.kit.studywithme.ui.component.SearchGroupResult
 import de.pse.kit.studywithme.ui.component.TopBar
 import de.pse.kit.studywithme.viewModel.group.JoinedGroupsViewModel
 
+/**
+ * View of the joinedgroups screen
+ *
+ * @param viewModel
+ */
 @ExperimentalMaterialApi
 @ExperimentalMaterial3Api
 @Composable

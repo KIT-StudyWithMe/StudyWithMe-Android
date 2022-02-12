@@ -28,6 +28,11 @@ import de.pse.kit.studywithme.ui.component.TopBar
 import de.pse.kit.studywithme.viewModel.profile.EditProfileViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+/**
+ * View of the editprofile screen
+ *
+ * @param viewModel
+ */
 @ExperimentalMaterial3Api
 @ExperimentalCoroutinesApi
 @Composable

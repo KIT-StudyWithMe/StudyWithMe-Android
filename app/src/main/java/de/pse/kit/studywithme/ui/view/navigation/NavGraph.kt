@@ -13,6 +13,13 @@ const val editSessionName = "editSession"
 
 const val id = "id"
 
+/**
+ * Manages navigation through the application by buttons like the buttons on the buttom bar
+ *
+ * @property route
+ * @property arguments
+ * @constructor Create empty Nav graph
+ */
 sealed class NavGraph(val route: String, val arguments: List<NamedNavArgument>? = null) {
     object SignUp : NavGraph(signUpName)
     object SignInForm : NavGraph("signInForm")
