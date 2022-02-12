@@ -1,7 +1,9 @@
 package de.pse.kit.studywithme.ui.view.auth
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -36,7 +38,11 @@ fun SignUpView(viewModel: SignUpViewModel) {
         Scaffold(
             containerColor = MaterialTheme.colorScheme.surface
         ) {
-            Column(modifier = Modifier.padding(24.dp)) {
+            Column(modifier = Modifier
+                .padding(24.dp)
+                .verticalScroll(
+                    state = ScrollState(0)
+                )) {
                 Text(
                     text = "StudyWithMe",
                     modifier = Modifier.padding(bottom = 82.dp, top = 150.dp)
