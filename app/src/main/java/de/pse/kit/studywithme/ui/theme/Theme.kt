@@ -8,6 +8,9 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.graphics.Color
 import androidx.compose.runtime.Composable
 
+/**
+ * Themes used in the view of the application
+ */
 private val LightColorPalette3 = ColorScheme(
     primary = Grey200,
     onPrimary = Color.Black,
