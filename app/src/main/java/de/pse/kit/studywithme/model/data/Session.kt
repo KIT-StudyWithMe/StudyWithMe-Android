@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
 import java.util.*
 
 /**
- * Data class o fthe object session
+ * Data class of the object session
  *
  * @property sessionID
  * @property groupID

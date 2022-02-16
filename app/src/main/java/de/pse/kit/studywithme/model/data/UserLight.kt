@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * Data class to user object received by the server
+ * Data class of user object received by the server
  *
  * @property userID
  * @property name
