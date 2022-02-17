@@ -44,7 +44,7 @@ interface GroupRepositoryInterface {
     fun newGroup(group: Group): Boolean
 
     /**
-     * Edits the group with edited group object group and returns true if successfull
+     * Edits the group with edited group object group and returns true if successful
      *
      * @param group
      * @return true or false
