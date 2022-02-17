@@ -19,7 +19,7 @@ import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
 import de.pse.kit.studywithme.ui.component.*
 
 /**
- * Layout used in the view
+ * Layout for JoinedGroupDetailsView
  *
  * @param groupAdmin
  * @param groupMember

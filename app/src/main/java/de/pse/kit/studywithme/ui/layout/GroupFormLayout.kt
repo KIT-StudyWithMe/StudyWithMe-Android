@@ -18,7 +18,7 @@ import de.pse.kit.studywithme.ui.component.*
 import java.lang.NumberFormatException
 
 /**
- * Layout used in the view
+ * Layout for the EditGroupView
  *
  * @param groupName
  * @param groupNameChange
