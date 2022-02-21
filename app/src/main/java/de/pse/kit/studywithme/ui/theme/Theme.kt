@@ -57,48 +57,48 @@ private val LightColorPalette = Colors(
 )
 
 private val DarkColorPalette3 = ColorScheme(
-    primary = Grey200,
-    onPrimary = Color.Black,
+    primary = White200,
+    onPrimary = Color.White,
     primaryContainer = Green200,
     onPrimaryContainer = Color.Black,
-    inversePrimary = Color.Black,
-    secondary = Green500,
+    inversePrimary = Color.White,
+    secondary = Green200,
     onSecondary = Color.White,
     secondaryContainer = Green100,
-    onSecondaryContainer = Green700,
-    tertiary = Green700,
+    onSecondaryContainer = Green200,
+    tertiary = Green500,
     onTertiary = Color.White,
     tertiaryContainer = Red500,
     onTertiaryContainer = Color.White,
     background = White200,
-    onBackground = Color.Black,
-    surface = White200,
-    onSurface = Color.Black,
+    onBackground = Color.White,
+    surface = Black100,
+    onSurface = Color.White,
     surfaceVariant = White200,
-    onSurfaceVariant = Color.Black,
+    onSurfaceVariant = Color.White,
     inverseSurface = White200,
-    inverseOnSurface = Color.Black,
+    inverseOnSurface = Color.White,
     error = Red500,
     onError = Color.White,
     errorContainer = Red500,
     onErrorContainer = Color.White,
-    outline = Green700
+    outline = Green500
 )
 
 private val DarkColorPalette = Colors(
-    primary = Grey200,
+    primary = White200,
     primaryVariant = Green200,
-    onPrimary = Color.Black,
-    secondary = Green100,
+    onPrimary = Color.White,
+    secondary = White200,
     secondaryVariant = Green700,
-    onSecondary = Color.Black,
+    onSecondary = Color.White,
     background = White200,
-    onBackground = Color.Black,
-    surface = White200,
-    onSurface = Color.Black,
+    onBackground = Color.White,
+    surface = Black100,
+    onSurface = Color.White,
     error = Color.Red,
-    onError = Color.Black,
-    isLight = true
+    onError = Color.White,
+    isLight = false
 )
 
 @Composable
