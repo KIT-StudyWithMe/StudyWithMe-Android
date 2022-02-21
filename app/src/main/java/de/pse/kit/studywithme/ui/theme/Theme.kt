@@ -56,12 +56,57 @@ private val LightColorPalette = Colors(
     isLight = true
 )
 
+private val DarkColorPalette3 = ColorScheme(
+    primary = Grey200,
+    onPrimary = Color.Black,
+    primaryContainer = Green200,
+    onPrimaryContainer = Color.Black,
+    inversePrimary = Color.Black,
+    secondary = Green500,
+    onSecondary = Color.White,
+    secondaryContainer = Green100,
+    onSecondaryContainer = Green700,
+    tertiary = Green700,
+    onTertiary = Color.White,
+    tertiaryContainer = Red500,
+    onTertiaryContainer = Color.White,
+    background = White200,
+    onBackground = Color.Black,
+    surface = White200,
+    onSurface = Color.Black,
+    surfaceVariant = White200,
+    onSurfaceVariant = Color.Black,
+    inverseSurface = White200,
+    inverseOnSurface = Color.Black,
+    error = Red500,
+    onError = Color.White,
+    errorContainer = Red500,
+    onErrorContainer = Color.White,
+    outline = Green700
+)
+
+private val DarkColorPalette = Colors(
+    primary = Grey200,
+    primaryVariant = Green200,
+    onPrimary = Color.Black,
+    secondary = Green100,
+    secondaryVariant = Green700,
+    onSecondary = Color.Black,
+    background = White200,
+    onBackground = Color.Black,
+    surface = White200,
+    onSurface = Color.Black,
+    error = Color.Red,
+    onError = Color.Black,
+    isLight = true
+)
+
 @Composable
 fun MyApplicationTheme3(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable() () -> Unit
 ) {
-    val colors = LightColorPalette3
+    val colors = if (darkTheme) DarkColorPalette3 else LightColorPalette3
 
     MaterialTheme3(
         colorScheme = colors,
@@ -75,7 +120,7 @@ fun MyApplicationTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable() () -> Unit
 ) {
-    val colors = LightColorPalette
+    val colors = if (darkTheme) DarkColorPalette else LightColorPalette
 
     MaterialTheme(
         colors = colors,
