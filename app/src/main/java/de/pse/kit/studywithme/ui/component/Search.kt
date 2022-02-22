@@ -46,7 +46,13 @@ fun Search(
                 input = it
                 onChange(it)
             },
-            placeholder = { Text(label, fontSize = MaterialTheme.typography.h6.fontSize) },
+            placeholder = {
+                Text(
+                    label,
+                    fontSize = MaterialTheme.typography.h6.fontSize,
+                    color = Color.Black
+                )
+            },
             textStyle = TextStyle(fontSize = MaterialTheme.typography.h6.fontSize),
             trailingIcon = {
                 Icon(

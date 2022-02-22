@@ -3,6 +3,7 @@ package de.pse.kit.studywithme
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -10,8 +11,7 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
 import androidx.core.view.WindowCompat
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import de.pse.kit.myapplication.ui.theme.Grey200
-import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
+import de.pse.kit.myapplication.ui.theme.*
 import de.pse.kit.studywithme.ui.view.navigation.MainView
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -32,9 +32,11 @@ class MainActivity: ComponentActivity() {
 
         setContent {
             val systemUiController = rememberSystemUiController()
+            val darkTheme: Boolean = isSystemInDarkTheme()
+            val colors = if (darkTheme) Black100 else Grey200
 
             SideEffect {
-                systemUiController.setSystemBarsColor(Grey200, darkIcons = true)
+                systemUiController.setSystemBarsColor(colors, darkIcons = !darkTheme)
             }
 
             MyApplicationTheme3 {
