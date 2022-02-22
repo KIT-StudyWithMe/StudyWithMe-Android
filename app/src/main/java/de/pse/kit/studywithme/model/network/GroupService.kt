@@ -40,7 +40,7 @@ interface GroupService {
     suspend fun getGroup(groupID: Int): RemoteGroup?
 
     /**
-     * Retruns a list of all members of the group with the ID froupID or null if there are none
+     * Returns a list of all members of the group with the ID groupID or null if there are none
      *
      * @param groupID
      * @return list of groupmember object or null

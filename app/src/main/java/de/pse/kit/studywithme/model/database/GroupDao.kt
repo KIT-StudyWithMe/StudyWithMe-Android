@@ -13,7 +13,7 @@ import de.pse.kit.studywithme.model.data.*
 @Dao
 interface GroupDao {
     /**
-     * Returns a list of groups communicated with the server
+     * Returns a list of groups communicated with the database
      *
      * @return List of remotegroup objects
      */
@@ -30,7 +30,7 @@ interface GroupDao {
     suspend fun getGroup(groupID: Int): RemoteGroup?
 
     /**
-     * Saves remotegroup object on the server
+     * Saves remotegroup object in the database
      *
      * @param group
      */
@@ -38,7 +38,7 @@ interface GroupDao {
     suspend fun saveGroup(group: RemoteGroup)
 
     /**
-     * Edits remotegroup object on the server
+     * Edits remotegroup object in the database
      *
      * @param group
      */
@@ -46,7 +46,7 @@ interface GroupDao {
     suspend fun editGroup(group: RemoteGroup)
 
     /**
-     * Removes remotegroup object on the server
+     * Removes remotegroup object in the database
      *
      * @param group
      */

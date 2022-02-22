@@ -20,7 +20,7 @@ import java.lang.NumberFormatException
 import java.util.*
 
 /**
- * Layout used in the view
+ * Layout for the EditSessionView
  *
  * @param place
  * @param placeChange

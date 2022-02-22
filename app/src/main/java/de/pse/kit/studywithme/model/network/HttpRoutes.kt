@@ -7,7 +7,7 @@ package de.pse.kit.studywithme.model.network
  */
 object HttpRoutes {
     const val TAG = "REST CALL"
-    private const val BASE_URL = "https://api.prod.studywithme.ovh"
+    private const val BASE_URL = "https://api.test.studywithme.ovh"
     const val USERS = "$BASE_URL/users/"
     const val GROUPS = "$BASE_URL/groups/"
     const val SESSIONS = "$BASE_URL/sessions/"

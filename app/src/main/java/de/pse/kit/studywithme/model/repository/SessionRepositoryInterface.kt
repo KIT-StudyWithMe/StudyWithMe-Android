@@ -49,7 +49,7 @@ interface SessionRepositoryInterface {
     fun removeSession(session: Session)
 
     /**
-     * Creates a new attendant of the session with ID sessionID and retruns true if successful
+     * Creates a new attendant of the session with ID sessionID and returns true if successful
      *
      * @param sessionID
      * @return true or false

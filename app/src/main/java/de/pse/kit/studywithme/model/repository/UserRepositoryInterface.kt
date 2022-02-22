@@ -103,7 +103,7 @@ interface UserRepositoryInterface {
     fun getColleges(prefix: String): List<String>
 
     /**
-     * Returns a college with the given name or null if there isnone
+     * Returns a college with the given name or null if there is none
      *
      * @param name
      * @return institution object or null

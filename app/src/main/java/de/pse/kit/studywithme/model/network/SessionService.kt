@@ -33,7 +33,7 @@ interface SessionService {
     suspend fun newSession(session: Session): Session?
 
     /**
-     * Edit a session
+     * Edits a session
      *
      * @param session
      * @return session object or null
@@ -41,7 +41,7 @@ interface SessionService {
     suspend fun editSession(session: Session): Session?
 
     /**
-     * Remove a session
+     * Removes a session
      *
      * @param sessionID
      */
