@@ -7,6 +7,7 @@ import android.widget.DatePicker
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
 import androidx.compose.material.Text
@@ -19,7 +20,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import de.pse.kit.myapplication.ui.theme.Black100
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
+import de.pse.kit.myapplication.ui.theme.White200
 import java.util.*
 
 /**
@@ -42,6 +45,8 @@ fun DatePicker(
     val month: Int
     val day: Int
     val color = 4
+    val darkTheme: Boolean = isSystemInDarkTheme()
+    val colors = if (darkTheme) White200 else Black100
 
     val calendar = Calendar.getInstance()
     year = calendar.get(Calendar.YEAR)
@@ -81,7 +86,7 @@ fun DatePicker(
                     .background(MaterialTheme.colorScheme.surface)
                     .clickable { datePickerDialog.show() }
                     .padding(horizontal = 16.dp, vertical = 16.dp),
-                color = if (date.value == "Datum") MaterialTheme.colorScheme.tertiary else Color.Black,
+                color = if (date.value == "Datum") MaterialTheme.colorScheme.tertiary else colors,
                 fontSize = 16.sp
             )
         }

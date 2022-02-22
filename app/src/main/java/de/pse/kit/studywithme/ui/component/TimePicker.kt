@@ -6,6 +6,7 @@ import android.widget.TimePicker
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
 import androidx.compose.material.Text
@@ -20,7 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
+import de.pse.kit.myapplication.ui.theme.*
 import java.util.*
 
 /**
@@ -44,6 +45,8 @@ fun TimePicker(
     val hour: Int
     val minute: Int
     val color = 4
+    val darkTheme: Boolean = isSystemInDarkTheme()
+    val colors = if (darkTheme) White200 else Black100
 
     val calendar = Calendar.getInstance()
     hour = calendar.get(Calendar.HOUR_OF_DAY)
@@ -81,7 +84,7 @@ fun TimePicker(
                     .background(MaterialTheme.colorScheme.background)
                     .clickable { timePickerDialog.show() }
                     .padding(horizontal = 16.dp, vertical = 16.dp),
-                color = if (time.value == preselectedText) MaterialTheme.colorScheme.tertiary else Color.Black,
+                color = if (time.value == preselectedText) MaterialTheme.colorScheme.tertiary else colors,
                 fontSize = 16.sp
             )
         }
