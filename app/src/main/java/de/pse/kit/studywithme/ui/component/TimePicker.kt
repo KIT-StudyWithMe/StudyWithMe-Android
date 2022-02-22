@@ -49,8 +49,8 @@ fun TimePicker(
     val colors = if (darkTheme) White200 else Black100
 
     val calendar = Calendar.getInstance()
-    hour = calendar.get(Calendar.HOUR_OF_DAY)
-    minute = calendar.get(Calendar.MINUTE)
+    hour = calendar[Calendar.HOUR_OF_DAY]
+    minute = calendar[Calendar.MINUTE]
     calendar.time = preselectedTime ?: Date()
 
     val time =
