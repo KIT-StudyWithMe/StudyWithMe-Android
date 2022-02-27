@@ -47,7 +47,7 @@ fun JoinedGroupsView(viewModel: JoinedGroupsViewModel) {
                         onChange = { viewModel.filter(it) })
                     Divider(
                         modifier = Modifier.padding(top = 6.dp, bottom = 10.dp),
-                        color = MaterialTheme.colorScheme.tertiary,
+                        color = MaterialTheme.colorScheme.outline,
                         thickness = 1.dp
                     )
                 } else {

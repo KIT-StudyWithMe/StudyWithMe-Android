@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import de.pse.kit.myapplication.ui.theme.*
+import java.time.LocalTime
 import java.util.*
 
 /**
@@ -42,25 +43,30 @@ fun TimePicker(
     preselectedTime: Date? = null,
     onChange: (Date) -> Unit = { }
 ) {
-    val hour: Int
-    val minute: Int
     val color = 4
     val darkTheme: Boolean = isSystemInDarkTheme()
     val colors = if (darkTheme) White200 else Black100
 
     val calendar = Calendar.getInstance()
-    hour = calendar[Calendar.HOUR_OF_DAY]
-    minute = calendar[Calendar.MINUTE]
     calendar.time = preselectedTime ?: Date()
+    val hour = calendar.get(Calendar.HOUR_OF_DAY)
+    val minute = calendar.get(Calendar.MINUTE)
 
-    val time =
-        remember { mutableStateOf(if (preselectedTime != null) "$hour:$minute" else preselectedText) }
+    val time = remember {
+        mutableStateOf(
+            if (preselectedTime != null)
+                "${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}"
+            else preselectedText
+        )
+    }
     val timePickerDialog = TimePickerDialog(
         context,
         color,
         { _: TimePicker, selectedHour: Int, selectedMinute: Int ->
             time.value =
-                "$selectedHour:$selectedMinute"
+                "${selectedHour.toString().padStart(2, '0')}:${selectedMinute.toString().padStart(2, '0')}"
+            calendar.set(Calendar.HOUR_OF_DAY, selectedHour)
+            calendar.set(Calendar.MINUTE, selectedMinute)
             onChange(calendar.time)
         },
         hour,
@@ -72,7 +78,7 @@ fun TimePicker(
         Card(
             modifier = modifier.fillMaxWidth(),
             border = BorderStroke(
-                color = MaterialTheme.colorScheme.tertiary,
+                color = MaterialTheme.colorScheme.onSecondaryContainer,
                 width = 1.dp
             ),
             backgroundColor = MaterialTheme.colorScheme.surface
@@ -94,15 +100,21 @@ fun TimePicker(
 @Preview
 @Composable
 fun TimePickerPreview() {
-    TimePicker(modifier = Modifier, context = LocalContext.current)
+    TimePicker(
+        modifier = Modifier,
+        context = LocalContext.current
+    )
 }
 
 @Preview
 @Composable
 fun PreselectedTimePickerPreview() {
+    val time = Calendar.getInstance()
+    time.set(2022, 2, 27, 9, 7)
+
     TimePicker(
         modifier = Modifier,
         context = LocalContext.current,
-        preselectedTime = Date()
+        preselectedTime = time.time
     )
 }

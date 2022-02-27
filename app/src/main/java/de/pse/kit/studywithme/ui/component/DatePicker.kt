@@ -41,27 +41,29 @@ fun DatePicker(
     preselectedDate: Date? = null,
     onChange: (Date) -> Unit = { }
 ) {
-    val year: Int
-    val month: Int
-    val day: Int
     val color = 4
     val darkTheme: Boolean = isSystemInDarkTheme()
     val colors = if (darkTheme) White200 else Black100
 
     val calendar = Calendar.getInstance()
-    year = calendar.get(Calendar.YEAR)
-    month = calendar.get(Calendar.MONTH)
-    day = calendar.get(Calendar.DAY_OF_MONTH)
     calendar.time = preselectedDate ?: Date()
+    val year = calendar.get(Calendar.YEAR)
+    val month = calendar.get(Calendar.MONTH)
+    val day = calendar.get(Calendar.DAY_OF_MONTH)
 
-    val date =
-        remember { mutableStateOf(if (preselectedDate != null) "$day.${month + 1}.$year" else "Datum") }
+    val date = remember {
+        mutableStateOf(
+            if (preselectedDate != null)
+                "${day.toString().padStart(2, '0')}.${(month + 1).toString().padStart(2, '0')}.$year"
+            else "Datum"
+        )
+    }
     val datePickerDialog = DatePickerDialog(
         context,
         color,
         { _: DatePicker, selectedYear, selectedMonth, selectedDay ->
             date.value =
-                "${if (selectedDay < 10) "0" else ""}$selectedDay.${if (selectedMonth < 9) "0" else ""}${selectedMonth + 1}.$selectedYear"
+                "${selectedDay.toString().padStart(2, '0')}.${(selectedMonth + 1).toString().padStart(2, '0')}.$year"
             calendar.set(selectedYear, selectedMonth, selectedDay)
             onChange(calendar.time)
         },
@@ -75,7 +77,7 @@ fun DatePicker(
             modifier = modifier.fillMaxWidth(),
             backgroundColor = MaterialTheme.colorScheme.surface,
             border = BorderStroke(
-                color = MaterialTheme.colorScheme.tertiary,
+                color = MaterialTheme.colorScheme.onSecondaryContainer,
                 width = 1.dp
             )
         ) {
