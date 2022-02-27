@@ -58,7 +58,7 @@ fun NewGroupView(viewModel: NewGroupViewModel) {
             Column(
                 modifier = Modifier
                     .padding(horizontal = 24.dp, vertical = 0.dp)
-                    .padding(bottom = 80.dp)
+                    .padding(it)
                     .verticalScroll(
                         state = ScrollState(0)
                     ),

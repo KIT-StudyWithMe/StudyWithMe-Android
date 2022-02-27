@@ -40,6 +40,7 @@ fun SignUpView(viewModel: SignUpViewModel) {
         ) {
             Column(modifier = Modifier
                 .padding(24.dp)
+                .padding(it)
                 .verticalScroll(
                     state = ScrollState(0)
                 )) {

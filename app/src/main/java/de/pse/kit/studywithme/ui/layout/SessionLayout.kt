@@ -57,7 +57,6 @@ fun Sessionlayout(
             Column(
                 modifier = Modifier
                     .padding(horizontal = 20.dp, vertical = 5.dp)
-                    .padding(bottom = 80.dp)
                     .verticalScroll(
                         state = ScrollState(0)
                     ),

@@ -44,19 +44,21 @@ fun SearchGroupsView(viewModel: SearchGroupsViewModel) {
             containerColor = MaterialTheme.colorScheme.surface
         ) {
             Column(modifier = Modifier
-                .padding(horizontal = 20.dp, vertical = 12.dp),) {
+                .padding(horizontal = 20.dp)
+                .padding(top = 6.dp)
+                .padding(it)) {
                 Button(onClick = { viewModel.newGroup() }, text = "Neue Gruppe")
 
                 LazyColumn(
-                    modifier = Modifier.padding(top = 12.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                    modifier = Modifier.padding(top = 6.dp),
+                    verticalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
                     items(viewModel.groups.value.size) {
                         val group = viewModel.groups.value.get(it)
                         SearchGroupResult(
                             groupName = group.name,
                             lecture = group.lecture?.lectureName ?: "",
-                            major = group.major?.name ?: "", // TODO()
+                            major = group.major?.name ?: "",
                             onClick = { viewModel.navToGroup(group) }
                         )
                     }

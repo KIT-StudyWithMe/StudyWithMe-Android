@@ -40,7 +40,12 @@ fun JoinedGroupsView(viewModel: JoinedGroupsViewModel) {
             },
             containerColor = MaterialTheme.colorScheme.surface
         ) {
-            Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 6.dp)) {
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
+                    .padding(top = 6.dp)
+                    .padding(it)
+            ) {
                 if (viewModel.filteredGroups.value.isNotEmpty()) {
                     ChipSelectionRow(
                         chipNames = viewModel.lectures,
@@ -55,7 +60,7 @@ fun JoinedGroupsView(viewModel: JoinedGroupsViewModel) {
                 }
 
                 LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                    verticalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
                     items(viewModel.filteredGroups.value.size) {
                         val group = viewModel.filteredGroups.value.get(it)

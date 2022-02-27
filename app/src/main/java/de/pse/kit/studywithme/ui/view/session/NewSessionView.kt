@@ -1,10 +1,14 @@
 package de.pse.kit.studywithme.ui.view.session
 
 import android.util.Log
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Save
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
@@ -37,7 +41,7 @@ fun NewSessionView(viewModel: NewSessionViewModel) {
                     actions = {
                         IconButton(onClick = { viewModel.saveNewSession() }) {
                             Icon(
-                                Icons.Rounded.Edit,
+                                Icons.Filled.Save,
                                 contentDescription = "Knopf um die Nutzerdaten zu speichern."
                             )
                         }
@@ -54,16 +58,18 @@ fun NewSessionView(viewModel: NewSessionViewModel) {
                 )
             }
         ) {
-            Sessionlayout(
-                place = "",
-                placeChange = { viewModel.place.value = it },
-                date = null,
-                dateChange = { viewModel.date.value = it },
-                time = null,
-                timeChange = { viewModel.date.value = it },
-                duration = "",
-                durationChange = { viewModel.duration.value = it }
-            )
+            Box(modifier = Modifier.padding(it)) {
+                Sessionlayout(
+                    place = "",
+                    placeChange = { viewModel.place.value = it },
+                    date = null,
+                    dateChange = { viewModel.date.value = it },
+                    time = null,
+                    timeChange = { viewModel.date.value = it },
+                    duration = "",
+                    durationChange = { viewModel.duration.value = it }
+                )
+            }
         }
     }
 }
