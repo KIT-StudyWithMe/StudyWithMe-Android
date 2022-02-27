@@ -18,6 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import de.pse.kit.myapplication.ui.theme.MyApplicationTheme
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
 
 /**
@@ -48,7 +49,7 @@ fun SearchGroupResult(
             modifier = modifier.fillMaxWidth(),
             onClick = onClick,
             shape = RoundedCornerShape(12.dp),
-            border = BorderStroke(1.dp, color = MaterialTheme.colorScheme.tertiary),
+            border = BorderStroke(1.dp, color = MaterialTheme.colorScheme.outline),
             backgroundColor = MaterialTheme.colorScheme.primary
         ) {
             Row(
@@ -80,7 +81,7 @@ fun SearchGroupResult(
                     Text(
                         text = lecture,
                         fontSize = MaterialTheme.typography.labelLarge.fontSize,
-                        color = MaterialTheme.colorScheme.tertiary
+                        color = MaterialTheme.colorScheme.onSecondaryContainer
                     )
                 }
                 Spacer(modifier = Modifier.weight(1.0f))

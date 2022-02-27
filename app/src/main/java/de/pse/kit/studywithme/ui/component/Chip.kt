@@ -102,9 +102,9 @@ fun Chip(
                     containerColor = MaterialTheme.colorScheme.surface,
                     contentColor = MaterialTheme.colorScheme.onSurface
                 ),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.onSurface)
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.onSecondaryContainer)
             ) {
-                Text(text)
+                Text(text, color = MaterialTheme.colorScheme.onSecondaryContainer)
             }
         }
     }

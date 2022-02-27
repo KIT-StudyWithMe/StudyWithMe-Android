@@ -50,7 +50,7 @@ fun Search(
                 Text(
                     label,
                     fontSize = MaterialTheme.typography.h6.fontSize,
-                    color = Color.Black
+                    color = MaterialTheme.colors.secondaryVariant
                 )
             },
             textStyle = TextStyle(fontSize = MaterialTheme.typography.h6.fontSize),
@@ -62,10 +62,10 @@ fun Search(
                 )
             }, // decorative
             colors = textFieldColors(
-                textColor = Color.Black,
-                disabledTextColor = MaterialTheme.colors.secondaryVariant,
+                textColor = MaterialTheme.colors.onSecondary,
+                disabledTextColor = MaterialTheme.colors.onSecondary,
                 backgroundColor = MaterialTheme.colors.secondary,
-                cursorColor = Color.Black,
+                cursorColor = MaterialTheme.colors.onSecondary,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
                 disabledIndicatorColor = Color.Transparent,
