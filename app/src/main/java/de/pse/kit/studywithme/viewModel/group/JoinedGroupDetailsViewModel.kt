@@ -2,6 +2,9 @@ package de.pse.kit.studywithme.viewModel.group
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import de.pse.kit.studywithme.model.data.*
 import de.pse.kit.studywithme.ui.view.navigation.NavGraph
@@ -10,7 +13,6 @@ import de.pse.kit.studywithme.model.repository.SessionRepositoryInterface
 import de.pse.kit.studywithme.viewModel.SignedInViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 /**
  * ViewModel of the joinedgroupdetails screen
@@ -29,7 +31,7 @@ class JoinedGroupDetailsViewModel(
     val groupRepo: GroupRepositoryInterface,
     val sessionRepo: SessionRepositoryInterface
 ) : SignedInViewModel(navController) {
-    
+
     val group: MutableState<Group?> = mutableStateOf(null)
     val members: MutableState<List<GroupMember>> = mutableStateOf(emptyList())
     val requests: MutableState<List<UserLight>> = mutableStateOf(emptyList())
@@ -43,38 +45,40 @@ class JoinedGroupDetailsViewModel(
     val openAdminDialog: MutableState<Boolean> = mutableStateOf(false)
     val openMemberDialog: MutableState<Boolean> = mutableStateOf(false)
     val openRequestDialog: MutableState<Boolean> = mutableStateOf(false)
-    
+
     val clickedUser: MutableState<GroupMember?> = mutableStateOf(null)
     val clickedUserName: MutableState<String> = mutableStateOf("")
-    
+
     init {
-        runBlocking {
-            launch {
-                groupRepo.getGroup(groupID).collect {
-                    group.value = it
-                }
+        refreshJoinedGroupDetails()
+    }
+
+    fun refreshJoinedGroupDetails() {
+        viewModelScope.launch {
+            groupRepo.getGroup(groupID).collect {
+                group.value = it
             }
-            launch {
-                groupRepo.getGroupMembers(groupID).collect {
-                    members.value = it
-                }
+        }
+        viewModelScope.launch {
+            groupRepo.getGroupMembers(groupID).collect {
+                members.value = it
             }
-            launch {
-                sessionRepo.getSessions(groupID).collect {
-                    sessions.value = it
-                    if (it.isNotEmpty()) {
-                        sessionRepo.getAttendees(it.first().sessionID).collect {
-                            sessionAttendees.value = it
-                        }
+        }
+        viewModelScope.launch {
+            sessionRepo.getSessions(groupID).collect {
+                sessions.value = it
+                if (it.isNotEmpty()) {
+                    sessionRepo.getAttendees(it.first().sessionID).collect {
+                        sessionAttendees.value = it
                     }
                 }
             }
-            launch {
-                groupRepo.isSignedInUserAdmin(groupID).collect {
-                    isAdmin.value = it
-                    if (it) {
-                        requests.value = groupRepo.getJoinRequests(groupID)
-                    }
+        }
+        viewModelScope.launch {
+            groupRepo.isSignedInUserAdmin(groupID).collect {
+                isAdmin.value = it
+                if (it) {
+                    requests.value = groupRepo.getJoinRequests(groupID)
                 }
             }
         }
@@ -95,13 +99,17 @@ class JoinedGroupDetailsViewModel(
     fun reportGroup() {
         if (sessions.value.isNotEmpty()) {
             for (field in sessionReports) {
-                sessionRepo.reportSession(sessions.value.first().sessionID, field)
+                viewModelScope.launch {
+                    sessionRepo.reportSession(sessions.value.first().sessionID, field)
+                }
             }
         }
 
         if (group.value != null) {
             for (field in groupReports) {
-                groupRepo.reportGroup(groupID, field)
+                viewModelScope.launch {
+                    groupRepo.reportGroup(groupID, field)
+                }
             }
         }
     }
@@ -128,8 +136,8 @@ class JoinedGroupDetailsViewModel(
      */
     fun participate() {
         if (sessions.value.isNotEmpty()) {
-            sessionRepo.newAttendee(sessions.value.first().sessionID)
-            runBlocking {
+            viewModelScope.launch {
+                sessionRepo.newAttendee(sessions.value.first().sessionID)
                 sessionRepo.getAttendees(sessions.value.first().sessionID).collect {
                     sessionAttendees.value = it
                 }
@@ -144,7 +152,9 @@ class JoinedGroupDetailsViewModel(
      */
     fun reportUser(userField: UserField) {
         if (clickedUser.value != null) {
-            groupRepo.reportUser(clickedUser.value!!.userID, userField)
+            viewModelScope.launch {
+                groupRepo.reportUser(clickedUser.value!!.userID, userField)
+            }
         }
     }
 
@@ -164,7 +174,9 @@ class JoinedGroupDetailsViewModel(
      */
     fun removeMember() {
         if (clickedUser.value != null) {
-            groupRepo.removeMember(groupID, clickedUser.value!!.userID)
+            viewModelScope.launch {
+                groupRepo.removeMember(groupID, clickedUser.value!!.userID)
+            }
         }
     }
 
@@ -173,8 +185,27 @@ class JoinedGroupDetailsViewModel(
      *
      */
     fun leaveGroup() {
-        groupRepo.leaveGroup(groupID)
+        if (isAdmin.value && members.value.count() == 1) {
+            deleteGroup()
+            return
+        }
+        viewModelScope.launch {
+            groupRepo.leaveGroup(groupID)
+        }
         navBack()
+    }
+
+    /**
+     * Deletes a group and navigates to last view
+     *
+     */
+    fun deleteGroup() {
+        if (group.value != null) {
+            viewModelScope.launch {
+                groupRepo.deleteGroup(group.value!!)
+            }
+            navBack()
+        }
     }
 
     /**
@@ -184,9 +215,8 @@ class JoinedGroupDetailsViewModel(
      */
     fun acceptRequest(accept: Boolean) {
         if (clickedUser.value != null && accept) {
-            runBlocking {
+            viewModelScope.launch {
                 groupRepo.newMember(groupID, clickedUser.value!!.userID)
-
                 launch {
                     groupRepo.getGroupMembers(groupID).collect {
                         members.value = it
@@ -198,8 +228,21 @@ class JoinedGroupDetailsViewModel(
                 }
             }
         } else if (clickedUser.value != null) {
-            groupRepo.declineMember(groupID, clickedUser.value!!.userID)
-            requests.value = groupRepo.getJoinRequests(groupID)
+            viewModelScope.launch {
+                groupRepo.declineMember(groupID, clickedUser.value!!.userID)
+                requests.value = groupRepo.getJoinRequests(groupID)
+            }
         }
     }
+}
+
+@ExperimentalCoroutinesApi
+class JoinedGroupDetailsViewModelFactory(
+    private val navController: NavController,
+    private val groupID: Int,
+    private val groupRepo: GroupRepositoryInterface,
+    private val sessionRepo: SessionRepositoryInterface
+) : ViewModelProvider.NewInstanceFactory() {
+    override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T =
+        JoinedGroupDetailsViewModel(navController, groupID, groupRepo, sessionRepo) as T
 }

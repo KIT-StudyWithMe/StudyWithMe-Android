@@ -1,5 +1,6 @@
 package de.pse.kit.studywithme.ui.view.group
 
+import android.util.Log
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -30,14 +31,12 @@ import de.pse.kit.studywithme.viewModel.group.EditGroupViewModel
 @ExperimentalMaterial3Api
 @Composable
 fun EditGroupView(viewModel: EditGroupViewModel) {
-    val group by viewModel.groupState
-
     MyApplicationTheme3 {
         Scaffold(
             containerColor = MaterialTheme.colorScheme.surface,
             topBar = {
                 TopBar(
-                    title = group?.name ?: "",
+                    title = viewModel.group?.name ?: "",
                     actions = {
                         IconButton(onClick = { viewModel.saveEditGroup() }) {
                             Icon(

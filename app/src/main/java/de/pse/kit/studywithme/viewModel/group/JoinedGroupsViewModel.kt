@@ -1,15 +1,15 @@
 package de.pse.kit.studywithme.viewModel.group
 
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import de.pse.kit.studywithme.model.data.Group
 import de.pse.kit.studywithme.model.repository.GroupRepositoryInterface
 import de.pse.kit.studywithme.ui.view.navigation.NavGraph
 import de.pse.kit.studywithme.viewModel.SignedInViewModel
-import de.pse.kit.studywithme.viewModel.ViewModel
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.launch
 
 /**
  * ViewModel of the joinedgroup screen
@@ -19,7 +19,8 @@ import kotlinx.coroutines.runBlocking
  *
  * @param navController
  */
-class JoinedGroupsViewModel(navController: NavController, val groupRepo: GroupRepositoryInterface
+class JoinedGroupsViewModel(
+    navController: NavController, val groupRepo: GroupRepositoryInterface
 ) : SignedInViewModel(navController) {
 
     private var groups: List<Group> = emptyList()
@@ -28,11 +29,19 @@ class JoinedGroupsViewModel(navController: NavController, val groupRepo: GroupRe
     var lectures: List<String> = emptyList()
 
     init {
-        runBlocking {
+        refreshJoinedGroups()
+    }
+
+    /**
+     * Refreshes joined groups
+     *
+     */
+    fun refreshJoinedGroups() {
+        viewModelScope.launch {
             groupRepo.getJoinedGroups().collect {
                 groups = it
                 filteredGroups.value = it
-                lectures  = groups.map {
+                lectures = groups.map {
                     it.lecture?.lectureName
                 }.distinct().filterNotNull()
             }
@@ -57,8 +66,7 @@ class JoinedGroupsViewModel(navController: NavController, val groupRepo: GroupRe
         if (lecture == filter) {
             filteredGroups.value = groups
             filter = ""
-        }
-        else {
+        } else {
             filter = lecture
 
             filteredGroups.value = groups.filter {
@@ -68,3 +76,10 @@ class JoinedGroupsViewModel(navController: NavController, val groupRepo: GroupRe
     }
 }
 
+class JoinedGroupsViewModelFactory(
+    private val navController: NavController,
+    private val groupRepo: GroupRepositoryInterface
+) : ViewModelProvider.NewInstanceFactory() {
+    override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T =
+        JoinedGroupsViewModel(navController, groupRepo) as T
+}

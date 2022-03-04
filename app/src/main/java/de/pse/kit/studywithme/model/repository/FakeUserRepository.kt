@@ -25,28 +25,28 @@ class FakeUserRepository(var signedIn: Boolean) : UserRepositoryInterface {
     )
 
     @ExperimentalCoroutinesApi
-    override fun isSignedIn(): Boolean {
+    override suspend fun isSignedIn(): Boolean {
         return signedIn
     }
 
     @ExperimentalCoroutinesApi
-    override fun getSignedInUser(): Flow<User> {
+    override suspend fun getSignedInUser(): Flow<User> {
         return flow {
             emit(user)
         }
     }
 
-    override fun editSignedInUser(user: User): Boolean {
+    override suspend fun editSignedInUser(user: User): Boolean {
         this.user = user
         return true
     }
 
-    override fun signIn(email: String, password: String): Boolean {
+    override suspend fun signIn(email: String, password: String): Boolean {
         signedIn = true
         return true
     }
 
-    override fun signUp(
+    override suspend fun signUp(
         email: String,
         password: String,
         username: String,
@@ -57,34 +57,34 @@ class FakeUserRepository(var signedIn: Boolean) : UserRepositoryInterface {
         return true
     }
 
-    override fun resetPassword(email: String): Boolean {
+    override suspend fun resetPassword(email: String): Boolean {
         return true
     }
 
-    override fun signOut(): Boolean {
+    override suspend fun signOut(): Boolean {
         signedIn = false
         return true
     }
 
     @ExperimentalCoroutinesApi
-    override fun deleteAccount(email: String, password: String): Boolean {
+    override suspend fun deleteAccount(email: String, password: String): Boolean {
         signedIn = false
         return true
     }
 
-    override fun getMajors(prefix: String): List<String> {
+    override suspend fun getMajors(prefix: String): List<String> {
         return listOf("Informatik B.Sc.", "Informatik M.Sc.")
     }
 
-    override fun getMajor(name: String): Major? {
+    override suspend fun getMajor(name: String): Major? {
         TODO("Not yet implemented")
     }
 
-    override fun getColleges(prefix: String): List<String> {
+    override suspend fun getColleges(prefix: String): List<String> {
         return listOf("Karlsruher Institut für Technologie")
     }
 
-    override fun getCollege(name: String): Institution? {
+    override suspend fun getCollege(name: String): Institution? {
         TODO("Not yet implemented")
     }
 

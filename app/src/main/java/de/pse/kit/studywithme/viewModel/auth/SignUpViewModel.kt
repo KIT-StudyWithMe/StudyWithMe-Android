@@ -1,6 +1,8 @@
 package de.pse.kit.studywithme.viewModel.auth
 
 import android.util.Log
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import de.pse.kit.studywithme.model.data.User
 import de.pse.kit.studywithme.model.repository.UserRepository
@@ -8,6 +10,7 @@ import de.pse.kit.studywithme.model.repository.UserRepositoryInterface
 import de.pse.kit.studywithme.ui.view.navigation.NavGraph
 import de.pse.kit.studywithme.viewModel.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 
 /**
  * ViewModel for signup screen
@@ -34,18 +37,28 @@ class SignUpViewModel(navController: NavController, val userRepo: UserRepository
     fun signUp() {
         Log.d("Auth-UI", "signUp:started")
 
-        if (userRepo.signUp(
-                email = email.value,
-                password = password.value,
-                username = username.value,
-                major = major.value,
-                institution = college.value
-            )
-        ) {
-            Log.d("Auth-UI", "signUp:completed")
-            NavGraph.navigateToSearchGroups(navController)
-        } else {
-            errorMessage.value = "Registrierung fehlgeschlagen"
+        viewModelScope.launch {
+            if (userRepo.signUp(
+                    email = email.value,
+                    password = password.value,
+                    username = username.value,
+                    major = major.value,
+                    institution = college.value
+                )
+            ) {
+                Log.d("Auth-UI", "signUp:completed")
+                NavGraph.navigateToSearchGroups(navController)
+            } else {
+                errorMessage.value = "Registrierung fehlgeschlagen"
+            }
         }
     }
+}
+
+class SignUpViewModelFactory(
+    private val navController: NavController,
+    private val userRepo: UserRepositoryInterface
+) : ViewModelProvider.NewInstanceFactory() {
+    override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T =
+        SignUpViewModel(navController, userRepo) as T
 }

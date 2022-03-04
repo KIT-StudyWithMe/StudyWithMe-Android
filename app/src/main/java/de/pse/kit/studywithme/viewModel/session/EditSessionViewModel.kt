@@ -3,6 +3,8 @@ package de.pse.kit.studywithme.viewModel.session
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import de.pse.kit.studywithme.model.data.Group
 import de.pse.kit.studywithme.model.data.Session
@@ -11,6 +13,7 @@ import de.pse.kit.studywithme.model.repository.SessionRepository
 import de.pse.kit.studywithme.model.repository.SessionRepositoryInterface
 import de.pse.kit.studywithme.ui.view.navigation.NavGraph
 import de.pse.kit.studywithme.viewModel.SignedInViewModel
+import de.pse.kit.studywithme.viewModel.group.EditGroupViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -43,17 +46,17 @@ class EditSessionViewModel(
     val duration: MutableStateFlow<String> = MutableStateFlow("")
 
     init {
-        runBlocking {
+        viewModelScope.launch {
             sessionRepo.getSession(sessionID).collect {
                 session = it
                 place.value = it.location
                 date.value = it.date
                 duration.value = it.duration.toString()
             }
-            launch {
-                groupRepo.getGroup(groupID).collect {
-                    groupState.value = it
-                }
+        }
+        viewModelScope.launch {
+            groupRepo.getGroup(groupID).collect {
+                groupState.value = it
             }
         }
     }
@@ -71,18 +74,31 @@ class EditSessionViewModel(
             } catch (e: NumberFormatException) {
                 return
             }
-            val edited = sessionRepo.editSession(
-                Session(
-                    sessionID = session!!.sessionID,
-                    groupID = groupState.value!!.groupID,
-                    location = place.value,
-                    date = date.value,
-                    duration = durationInt
+            viewModelScope.launch {
+                val edited = sessionRepo.editSession(
+                    Session(
+                        sessionID = session!!.sessionID,
+                        groupID = groupState.value!!.groupID,
+                        location = place.value,
+                        date = date.value,
+                        duration = durationInt
+                    )
                 )
-            )
-            if (edited) {
-                navBack()
+                if (edited) {
+                    navBack()
+                }
             }
         }
     }
+}
+
+class EditSessionViewModelFactory(
+    private val navController: NavController,
+    private val sessionID: Int,
+    private val sessionRepo: SessionRepositoryInterface,
+    private val groupRepo: GroupRepositoryInterface,
+    private val groupID: Int
+) : ViewModelProvider.NewInstanceFactory() {
+    override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T =
+        EditSessionViewModel(navController, sessionID, sessionRepo ,groupRepo, groupID) as T
 }

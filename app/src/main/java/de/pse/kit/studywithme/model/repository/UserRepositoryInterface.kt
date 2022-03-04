@@ -14,7 +14,7 @@ interface UserRepositoryInterface {
      * @return true or false
      */
     @ExperimentalCoroutinesApi
-    fun isSignedIn(): Boolean
+    suspend fun isSignedIn(): Boolean
 
     /**
      * Returns signed in user
@@ -22,7 +22,7 @@ interface UserRepositoryInterface {
      * @return flow user object
      */
     @ExperimentalCoroutinesApi
-    fun getSignedInUser(): Flow<User>
+    suspend fun getSignedInUser(): Flow<User>
 
     /**
      * Edits the signed in user and retruns true if successful
@@ -30,7 +30,7 @@ interface UserRepositoryInterface {
      * @param user
      * @return true or false
      */
-    fun editSignedInUser(user: User): Boolean
+    suspend fun editSignedInUser(user: User): Boolean
 
     /**
      * Signs in the user with his given details and returns true if successful
@@ -39,7 +39,7 @@ interface UserRepositoryInterface {
      * @param password
      * @return true or false
      */
-    fun signIn(email: String, password: String): Boolean
+    suspend fun signIn(email: String, password: String): Boolean
 
     /**
      * Registers user with his given details and returns true if successful
@@ -51,7 +51,7 @@ interface UserRepositoryInterface {
      * @param institution
      * @return true or false
      */
-    fun signUp(email: String, password: String, username: String, major: String, institution: String): Boolean
+    suspend fun signUp(email: String, password: String, username: String, major: String, institution: String): Boolean
 
     /**
      * Resets the password and returns true if successful
@@ -59,14 +59,14 @@ interface UserRepositoryInterface {
      * @param email
      * @return true or false
      */
-    fun resetPassword(email: String): Boolean
+    suspend fun resetPassword(email: String): Boolean
 
     /**
      * Signs out a user of the application and returns true if successful
      *
      * @return true or false
      */
-    fun signOut(): Boolean
+    suspend fun signOut(): Boolean
 
     /**
      * Deletes the acoount with the given details and returns true if successful
@@ -76,7 +76,7 @@ interface UserRepositoryInterface {
      * @return true or false
      */
     @ExperimentalCoroutinesApi
-    fun deleteAccount(email: String, password: String): Boolean
+    suspend fun deleteAccount(email: String, password: String): Boolean
 
     /**
      * Returns list of major starting with the given prefix
@@ -84,7 +84,7 @@ interface UserRepositoryInterface {
      * @param prefix
      * @return list of strings
      */
-    fun getMajors(prefix: String): List<String>
+    suspend fun getMajors(prefix: String): List<String>
 
     /**
      * Returns major with the given name or null if there is none
@@ -92,7 +92,7 @@ interface UserRepositoryInterface {
      * @param name
      * @return major object or null
      */
-    fun getMajor(name: String): Major?
+    suspend fun getMajor(name: String): Major?
 
     /**
      * Returns list of colleges starting with the given prefix
@@ -100,7 +100,7 @@ interface UserRepositoryInterface {
      * @param prefix
      * @return list of strings
      */
-    fun getColleges(prefix: String): List<String>
+    suspend fun getColleges(prefix: String): List<String>
 
     /**
      * Returns a college with the given name or null if there is none
@@ -108,5 +108,5 @@ interface UserRepositoryInterface {
      * @param name
      * @return institution object or null
      */
-    fun getCollege(name: String): Institution?
+    suspend fun getCollege(name: String): Institution?
 }

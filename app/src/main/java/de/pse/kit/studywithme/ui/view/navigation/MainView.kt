@@ -1,11 +1,15 @@
 package de.pse.kit.studywithme.ui.view.navigation
 
+import android.util.Log
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
@@ -22,14 +26,22 @@ import de.pse.kit.studywithme.ui.view.profile.EditProfileView
 import de.pse.kit.studywithme.ui.view.profile.ProfileView
 import de.pse.kit.studywithme.ui.view.session.EditSessionView
 import de.pse.kit.studywithme.ui.view.session.NewSessionView
+import de.pse.kit.studywithme.viewModel.SignedInViewModel
 import de.pse.kit.studywithme.viewModel.auth.SignInViewModel
+import de.pse.kit.studywithme.viewModel.auth.SignInViewModelFactory
 import de.pse.kit.studywithme.viewModel.auth.SignUpViewModel
+import de.pse.kit.studywithme.viewModel.auth.SignUpViewModelFactory
 import de.pse.kit.studywithme.viewModel.group.*
 import de.pse.kit.studywithme.viewModel.profile.EditProfileViewModel
+import de.pse.kit.studywithme.viewModel.profile.EditProfileViewModelFactory
 import de.pse.kit.studywithme.viewModel.profile.ProfileViewModel
+import de.pse.kit.studywithme.viewModel.profile.ProfileViewModelFactory
 import de.pse.kit.studywithme.viewModel.session.EditSessionViewModel
+import de.pse.kit.studywithme.viewModel.session.EditSessionViewModelFactory
 import de.pse.kit.studywithme.viewModel.session.NewSessionViewModel
+import de.pse.kit.studywithme.viewModel.session.NewSessionViewModelFactory
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.runBlocking
 
 /**
  * Navigation changes the view the main view shows
@@ -42,18 +54,24 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 @ExperimentalMaterial3Api
 @ExperimentalCoroutinesApi
 @Composable
-fun MainView(userRepo: UserRepositoryInterface = UserRepository.getInstance(LocalContext.current),
-             groupRepo: GroupRepositoryInterface = GroupRepository.getInstance(LocalContext.current),
-             sessionRepo: SessionRepositoryInterface = SessionRepository.getInstance(LocalContext.current)) {
+fun MainView(
+    userRepo: UserRepositoryInterface = UserRepository.getInstance(LocalContext.current),
+    groupRepo: GroupRepositoryInterface = GroupRepository.getInstance(LocalContext.current),
+    sessionRepo: SessionRepositoryInterface = SessionRepository.getInstance(LocalContext.current)
+) {
     val navController = rememberNavController()
-    val startRoute =
-        if (userRepo.isSignedIn()) NavGraph.JoinedGroupsTab.route
-        else NavGraph.SignInForm.route
+    var startRoute = NavGraph.SignInForm.route
+
+    runBlocking {
+        if (userRepo.isSignedIn()) startRoute = NavGraph.JoinedGroupsTab.route
+    }
 
     NavHost(
         navController = navController,
         startDestination = startRoute
     ) {
+
+
         joinedGroupsGraph(navController, groupRepo, sessionRepo)
 
         searchGroupsGraph(navController, groupRepo)
@@ -68,20 +86,25 @@ fun MainView(userRepo: UserRepositoryInterface = UserRepository.getInstance(Loca
 fun NavGraphBuilder.signInGraph(navController: NavController, userRepo: UserRepositoryInterface) {
     navigation(startDestination = NavGraph.SignIn.route, route = NavGraph.SignInForm.route) {
         composable(NavGraph.SignIn.route) {
-            SignInView(
-                SignInViewModel(
+            val viewModel: SignInViewModel = viewModel(
+                factory = SignInViewModelFactory(
                     navController,
                     userRepo
                 )
             )
+
+            SignInView(viewModel)
         }
+
         composable(NavGraph.SignUp.route) {
-            SignUpView(
-                SignUpViewModel(
+            val viewModel: SignUpViewModel = viewModel(
+                factory = SignUpViewModelFactory(
                     navController,
                     userRepo
                 )
             )
+
+            SignUpView(viewModel)
         }
     }
 }
@@ -89,64 +112,89 @@ fun NavGraphBuilder.signInGraph(navController: NavController, userRepo: UserRepo
 @ExperimentalCoroutinesApi
 @ExperimentalMaterialApi
 @ExperimentalMaterial3Api
-fun NavGraphBuilder.joinedGroupsGraph(navController: NavController, groupRepo: GroupRepositoryInterface, sessionRepo: SessionRepositoryInterface) {
+fun NavGraphBuilder.joinedGroupsGraph(
+    navController: NavController,
+    groupRepo: GroupRepositoryInterface,
+    sessionRepo: SessionRepositoryInterface
+) {
     navigation(
         startDestination = NavGraph.JoinedGroups.route,
         route = NavGraph.JoinedGroupsTab.route
     ) {
         composable(route = NavGraph.JoinedGroups.route) {
-            JoinedGroupsView(
-                JoinedGroupsViewModel(
+            val viewModel: JoinedGroupsViewModel = viewModel(
+                factory = JoinedGroupsViewModelFactory(
                     navController,
                     groupRepo
                 )
             )
+
+            LaunchedEffect("navigation") {
+                viewModel.refreshJoinedGroups()
+            }
+
+            JoinedGroupsView(
+                viewModel
+            )
         }
+
         composable(
             route = NavGraph.JoinedGroupDetails.route,
             arguments = NavGraph.JoinedGroupDetails.arguments!!
         ) {
-            JoinedGroupDetailsView(
-                JoinedGroupDetailsViewModel(
+            val viewModel: JoinedGroupDetailsViewModel = viewModel(
+                factory = JoinedGroupDetailsViewModelFactory(
                     navController,
                     it.arguments!!.getInt(NavGraph.JoinedGroupDetails.argName),
                     groupRepo,
                     sessionRepo
                 )
             )
+
+            LaunchedEffect("navigation") {
+                viewModel.refreshJoinedGroupDetails()
+            }
+
+            JoinedGroupDetailsView(viewModel)
         }
+
         composable(
             route = NavGraph.EditGroup.route,
             arguments = NavGraph.EditGroup.arguments!!
         ) {
-            EditGroupView(
-                EditGroupViewModel(
+            val viewModel: EditGroupViewModel = viewModel(
+                factory = EditGroupViewModelFactory(
                     navController,
                     it.arguments!!.getInt(NavGraph.EditGroup.argName),
                     groupRepo
                 )
             )
+
+            EditGroupView(viewModel)
         }
+
         composable(
             route = NavGraph.NewSession.route,
             arguments = NavGraph.NewSession.arguments!!
         ) {
-            NewSessionView(
-                NewSessionViewModel(
+            val viewModel: NewSessionViewModel = viewModel(
+                factory = NewSessionViewModelFactory(
                     navController,
                     sessionRepo,
                     groupRepo,
                     it.arguments!!.getInt(NavGraph.NewSession.argName)
-
                 )
             )
+
+            NewSessionView(viewModel)
         }
+
         composable(
             route = NavGraph.EditSession.route,
             arguments = NavGraph.EditSession.arguments!!
         ) {
-            EditSessionView(
-                EditSessionViewModel(
+            val viewModel: EditSessionViewModel = viewModel(
+                factory = EditSessionViewModelFactory(
                     navController,
                     it.arguments!!.getInt(NavGraph.EditSession.sessionID),
                     sessionRepo,
@@ -154,51 +202,61 @@ fun NavGraphBuilder.joinedGroupsGraph(navController: NavController, groupRepo: G
                     it.arguments!!.getInt(NavGraph.EditSession.groupID)
                 )
             )
+
+            EditSessionView(viewModel)
         }
     }
 }
 
 @ExperimentalMaterialApi
 @ExperimentalMaterial3Api
-fun NavGraphBuilder.searchGroupsGraph(navController: NavController, groupRepo: GroupRepositoryInterface) {
+fun NavGraphBuilder.searchGroupsGraph(
+    navController: NavController,
+    groupRepo: GroupRepositoryInterface
+) {
     navigation(
         startDestination = NavGraph.SearchGroups.route,
         route = NavGraph.SearchGroupsTab.route
     ) {
         composable(route = NavGraph.SearchGroups.route) {
-            SearchGroupsView(
-                SearchGroupsViewModel(
+            val viewModel: SearchGroupsViewModel = viewModel(
+                factory = SearchGroupsViewModelFactory(
                     navController,
                     groupRepo
                 )
             )
+
+            SearchGroupsView(viewModel)
         }
+
         composable(
             route = NavGraph.NonJoinedGroupDetails.route,
             arguments = NavGraph.NonJoinedGroupDetails.arguments!!
         ) {
-            NonJoinedGroupDetailsView(
-                NonJoinedGroupDetailsViewModel(
+            val viewModel: NonJoinedGroupDetailsViewModel = viewModel(
+                factory = NonJoinedGroupDetailsViewModelFactory(
                     navController,
                     it.arguments!!.getInt(NavGraph.JoinedGroupDetails.argName),
                     groupRepo
                 )
             )
+
+            LaunchedEffect("navigation") {
+                viewModel.refreshNonJoinedGroupDetails()
+            }
+
+            NonJoinedGroupDetailsView(viewModel)
         }
+
         composable(NavGraph.NewGroup.route) {
-            NewGroupView(NewGroupViewModel(navController, groupRepo))
-        }
-        composable(
-            route = NavGraph.EditGroup.route,
-            arguments = NavGraph.EditGroup.arguments!!
-        ) {
-            EditGroupView(
-                EditGroupViewModel(
+            val viewModel: NewGroupViewModel = viewModel(
+                factory = NewGroupViewModelFactory(
                     navController,
-                    it.arguments!!.getInt(NavGraph.EditGroup.argName),
                     groupRepo
                 )
             )
+
+            NewGroupView(viewModel)
         }
     }
 }
@@ -212,20 +270,25 @@ fun NavGraphBuilder.profileGraph(navController: NavController, userRepo: UserRep
         route = NavGraph.ProfileTab.route
     ) {
         composable(route = NavGraph.Profile.route) {
-            ProfileView(
-                ProfileViewModel(
+            val viewModel: ProfileViewModel = viewModel(
+                factory = ProfileViewModelFactory(
                     navController,
                     userRepo
                 )
             )
+
+            ProfileView(viewModel)
         }
+
         composable(route = NavGraph.EditProfile.route) {
-            EditProfileView(
-                EditProfileViewModel(
+            val viewModel: EditProfileViewModel = viewModel(
+                factory = EditProfileViewModelFactory(
                     navController,
                     userRepo
                 )
             )
+
+            EditProfileView(viewModel)
         }
     }
 }

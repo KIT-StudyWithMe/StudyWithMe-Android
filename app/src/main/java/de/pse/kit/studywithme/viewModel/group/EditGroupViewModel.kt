@@ -1,7 +1,10 @@
 package de.pse.kit.studywithme.viewModel.group
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import de.pse.kit.studywithme.model.data.Group
 import de.pse.kit.studywithme.model.data.Lecture
@@ -30,11 +33,11 @@ class EditGroupViewModel(
     private val groupRepo: GroupRepositoryInterface
 ) : SignedInViewModel(navController) {
 
-    var groupState: MutableState<Group?> = mutableStateOf(null)
     var group: Group? = null
     val groupName: MutableStateFlow<String> = MutableStateFlow("")
     val groupDescription: MutableStateFlow<String> = MutableStateFlow("")
     val groupLecture: MutableStateFlow<String> = MutableStateFlow("")
+
     // TODO() val courseSuggestions: Flow<List<String>>
     val groupSessionFrequencyName: MutableStateFlow<String> = MutableStateFlow("")
     val groupSessionTypeName: MutableStateFlow<String> = MutableStateFlow("")
@@ -63,13 +66,9 @@ class EditGroupViewModel(
                 groupSessionFrequencyName.value = it.sessionFrequency.toString()
                 groupSessionTypeName.value = it.sessionType.toString()
             }
-            launch {
-                groupRepo.getGroup(groupID).collect {
-                    groupState.value = it
-                }
-            }
         }
     }
+
 
     /**
      * Deletes a group and navigates to last view
@@ -77,9 +76,11 @@ class EditGroupViewModel(
      */
     fun deleteGroup() {
         if (group != null) {
-            if (groupRepo.deleteGroup(group!!)) {
-                navBack()
-                navBack()
+            viewModelScope.launch {
+                if (groupRepo.deleteGroup(group!!)) {
+                    navBack()
+                    navBack()
+                }
             }
         }
     }
@@ -90,7 +91,9 @@ class EditGroupViewModel(
      */
     fun hideGroup() {
         if (group != null) {
-            groupRepo.hideGroup(groupID, false)
+            viewModelScope.launch {
+                groupRepo.hideGroup(groupID, false)
+            }
         }
     }
 
@@ -141,11 +144,20 @@ class EditGroupViewModel(
             lectureChapter = lectureChapterInt,
             exercise = groupExerciseInt,
         )
-        val groupSaved = groupRepo.editGroup(group)
-
-        if (groupSaved) {
-            navBack()
+        viewModelScope.launch {
+            val groupSaved = groupRepo.editGroup(group)
+            if (groupSaved) {
+                navBack()
+            }
         }
     }
+}
 
+class EditGroupViewModelFactory(
+    private val navController: NavController,
+    private val groupID: Int,
+    private val groupRepo: GroupRepositoryInterface
+) : ViewModelProvider.NewInstanceFactory() {
+    override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T =
+        EditGroupViewModel(navController, groupID, groupRepo) as T
 }

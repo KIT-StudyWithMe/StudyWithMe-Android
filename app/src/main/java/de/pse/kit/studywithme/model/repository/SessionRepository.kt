@@ -10,11 +10,11 @@ import de.pse.kit.studywithme.model.database.AppDatabase
 import de.pse.kit.studywithme.model.network.ReportService
 import de.pse.kit.studywithme.model.network.SessionService
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
@@ -31,165 +31,139 @@ class SessionRepository private constructor(context: Context) : SessionRepositor
     private val auth = Authenticator
 
     @ExperimentalCoroutinesApi
-    override fun getSessions(groupID: Int): Flow<List<Session>> {
+    override suspend fun getSessions(groupID: Int): Flow<List<Session>> = channelFlow {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
+        val truthWasSend = AtomicBoolean(false)
 
-        return channelFlow {
-            val truthWasSend = AtomicBoolean(false)
-
-            launch {
-                val remoteSession = sessionService.getSessions(groupID)
-                send(remoteSession)
-                truthWasSend.set(true)
+        launch {
+            val remoteSession = sessionService.getSessions(groupID)
+            send(remoteSession)
+            truthWasSend.set(true)
+        }
+        launch {
+            val localSession = sessionDao.getSessions(groupID)
+            if (!truthWasSend.get()) {
+                send(localSession)
             }
-            launch {
-                val localSession = sessionDao.getSessions(groupID)
-                if (!truthWasSend.get()) {
-                    send(localSession)
-                }
-            }
-        }.filterNotNull()
-    }
+        }
+    }.filterNotNull()
 
-    override fun getSession(sessionID: Int): Flow<Session> {
+    override suspend fun getSession(sessionID: Int): Flow<Session> = channelFlow {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
+        val truthWasSend = AtomicBoolean(false)
 
-        return channelFlow {
-            val truthWasSend = AtomicBoolean(false)
-
-            launch {
-                val remoteSession = sessionService.getSession(sessionID)
-                send(remoteSession)
-                truthWasSend.set(true)
+        launch {
+            val remoteSession = sessionService.getSession(sessionID)
+            send(remoteSession)
+            truthWasSend.set(true)
+        }
+        launch {
+            val localSession = sessionDao.getSession(sessionID)
+            if (!truthWasSend.get()) {
+                send(localSession)
             }
-            launch {
-                val localSession = sessionDao.getSession(sessionID)
-                if (!truthWasSend.get()) {
-                    send(localSession)
-                }
-            }
-        }.filterNotNull()
-    }
+        }
+    }.filterNotNull()
 
-    override fun newSession(session: Session): Boolean {
+    override suspend fun newSession(session: Session): Boolean {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
-
-        return runBlocking {
-            val remoteSession = sessionService.newSession(session)
-            if (remoteSession != null) {
-                Log.d(auth.TAG, "Remote Database Session Post:success")
-                sessionDao.saveSession(remoteSession)
-                return@runBlocking true
-            } else {
-                return@runBlocking false
-            }
+        val remoteSession = sessionService.newSession(session)
+        if (remoteSession != null) {
+            Log.d(auth.TAG, "Remote Database Session Post:success")
+            sessionDao.saveSession(remoteSession)
+            return true
+        } else {
+            return false
         }
     }
 
-    override fun editSession(session: Session): Boolean {
+    override suspend fun editSession(session: Session): Boolean {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
+        val remoteSession = sessionService.editSession(session)
 
-        return runBlocking {
-            val remoteSession = sessionService.editSession(session)
-
-            if (remoteSession == session) {
-                sessionDao.editSession(session)
-                return@runBlocking true
-            } else {
-                return@runBlocking false
-            }
+        if (remoteSession == session) {
+            sessionDao.editSession(session)
+            return true
+        } else {
+            return false
         }
     }
 
-    override fun removeSession(session: Session) {
+    override suspend fun removeSession(session: Session): Unit = coroutineScope {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
 
-        runBlocking {
-            launch {
-                sessionDao.removeSession(session)
-            }
-            launch {
-                sessionService.removeSession(session.sessionID)
-            }
+        launch {
+            sessionDao.removeSession(session)
+        }
+        launch {
+            sessionService.removeSession(session.sessionID)
         }
     }
 
-    override fun newAttendee(sessionID: Int): Boolean {
+    override suspend fun newAttendee(sessionID: Int): Boolean {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
-        
-        return runBlocking {
-            val remoteSessionAttendee = sessionService.newAttendee(auth.user!!.userID, sessionID)
-            if (remoteSessionAttendee) {
-                //sessionDao.saveSessionAttendee(remoteSessionAttendee)
-                return@runBlocking true
-            } else {
-                return@runBlocking false
-            }
+        val remoteSessionAttendee = sessionService.newAttendee(auth.user!!.userID, sessionID)
+
+        if (remoteSessionAttendee) {
+            //sessionDao.saveSessionAttendee(remoteSessionAttendee)
+            return true
+        } else {
+            return false
         }
     }
 
-    override fun removeAttendee(sessionID: Int) {
+    override suspend fun removeAttendee(sessionID: Int) {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
-
-        runBlocking {
-            launch {
-                sessionService.removeAttendee(auth.user!!.userID, sessionID)
-            }
-        }
+        sessionService.removeAttendee(auth.user!!.userID, sessionID)
     }
 
-    override fun getAttendees(sessionID: Int): Flow<List<SessionAttendee>> {
+    override suspend fun getAttendees(sessionID: Int): Flow<List<SessionAttendee>> = channelFlow {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
+        val truthWasSend = AtomicBoolean(false)
 
-        return channelFlow {
-            val truthWasSend = AtomicBoolean(false)
-
-            launch {
-                val remoteSessionAttendees = sessionService.getAttendees(sessionID)
-                send(remoteSessionAttendees)
-                truthWasSend.set(true)
+        launch {
+            val remoteSessionAttendees = sessionService.getAttendees(sessionID)
+            send(remoteSessionAttendees)
+            truthWasSend.set(true)
+        }
+        launch {
+            val localSessionAttendees = sessionDao.getSessionAttendees(sessionID)
+            if (!truthWasSend.get()) {
+                send(localSessionAttendees)
             }
-            launch {
-                val localSessionAttendees = sessionDao.getSessionAttendees(sessionID)
-                if (!truthWasSend.get()) {
-                    send(localSessionAttendees)
-                }
-            }
-        }.filterNotNull()
-    }
+        }
+    }.filterNotNull()
 
-    override fun reportSession(sessionID: Int, sessionfield: SessionField) {
+    override suspend fun reportSession(sessionID: Int, sessionfield: SessionField) {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
-        return runBlocking {
-            reportService.reportSession(sessionID, sessionfield, auth.user!!.userID)
-        }
+        reportService.reportSession(sessionID, sessionfield, auth.user!!.userID)
     }
 
     companion object : SingletonHolder<SessionRepository, Context>({ SessionRepository(it) })

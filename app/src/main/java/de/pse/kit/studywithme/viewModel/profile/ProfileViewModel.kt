@@ -1,13 +1,17 @@
 package de.pse.kit.studywithme.viewModel.profile
 
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import de.pse.kit.studywithme.model.repository.UserRepository
 import de.pse.kit.studywithme.model.repository.UserRepositoryInterface
 import de.pse.kit.studywithme.ui.view.navigation.NavGraph
 import de.pse.kit.studywithme.viewModel.SignedInViewModel
 import de.pse.kit.studywithme.viewModel.ViewModel
+import de.pse.kit.studywithme.viewModel.auth.SignUpViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 /**
@@ -28,7 +32,7 @@ class ProfileViewModel(navController: NavController, val userRepo: UserRepositor
     var major: String = ""
 
     init {
-        runBlocking {
+        viewModelScope.launch {
             try {
                 userRepo.getSignedInUser().collect {
                     username = it.name
@@ -55,8 +59,20 @@ class ProfileViewModel(navController: NavController, val userRepo: UserRepositor
      *
      */
     fun signOut() {
-        if (userRepo.signOut()) {
-            NavGraph.navigateToSignIn(navController)
+        viewModelScope.launch {
+            if (userRepo.signOut()) {
+                NavGraph.navigateToSignIn(navController)
+            }
         }
     }
 }
+
+@ExperimentalCoroutinesApi
+class ProfileViewModelFactory(
+    private val navController: NavController,
+    private val userRepo: UserRepositoryInterface
+) : ViewModelProvider.NewInstanceFactory() {
+    override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T =
+        ProfileViewModel(navController, userRepo) as T
+}
+

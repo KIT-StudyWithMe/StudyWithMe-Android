@@ -111,22 +111,22 @@ class FakeGroupRepository() : GroupRepositoryInterface {
     )
 
 
-    override fun getGroups(search: String): List<Group> {
+    override suspend fun getGroups(search: String): List<Group> {
         return groups.filter {
             val match = Regex(search).find(it.name)?.range?.start
             match == 0
         }
     }
 
-    override fun getJoinedGroups(): Flow<List<Group>> {
+    override suspend fun getJoinedGroups(): Flow<List<Group>> {
         return flow { emit(groups) }
     }
 
-    override fun getGroupSuggestions(): List<Group> {
+    override suspend fun getGroupSuggestions(): List<Group> {
         return groups
     }
 
-    override fun getGroup(groupID: Int): Flow<Group> {
+    override suspend fun getGroup(groupID: Int): Flow<Group> {
         return flow {
             emit(groups.filter {
                 it.groupID == groupID
@@ -134,12 +134,12 @@ class FakeGroupRepository() : GroupRepositoryInterface {
         }
     }
 
-    override fun newGroup(group: Group): Boolean {
+    override suspend fun newGroup(group: Group): Boolean {
         groups.add(group)
         return true
     }
 
-    override fun editGroup(group: Group): Boolean {
+    override suspend fun editGroup(group: Group): Boolean {
         groups.minus(groups.filter {
             it.groupID == group.groupID
         }.get(0))
@@ -147,51 +147,51 @@ class FakeGroupRepository() : GroupRepositoryInterface {
         return true
     }
 
-    override fun exitGroup(groupID: Int, uid: Int) {
+    override suspend fun exitGroup(groupID: Int, uid: Int) {
     }
 
-    override fun deleteGroup(group: Group): Boolean {
+    override suspend fun deleteGroup(group: Group): Boolean {
         return groups.remove(groups.filter {
             it.groupID == group.groupID
         }.get(0))
     }
 
-    override fun hideGroup(groupID: Int, hidden: Boolean): Boolean {
+    override suspend fun hideGroup(groupID: Int, hidden: Boolean): Boolean {
         TODO("Not yet implemented")
     }
 
-    override fun newMember(groupID: Int, uid: Int): Boolean {
+    override suspend fun newMember(groupID: Int, uid: Int): Boolean {
         TODO("Not yet implemented")
     }
 
-    override fun declineMember(groupID: Int, uid: Int): Boolean {
+    override suspend fun declineMember(groupID: Int, uid: Int): Boolean {
         TODO("Not yet implemented")
     }
 
-    override fun joinRequest(groupID: Int): Boolean {
+    override suspend fun joinRequest(groupID: Int): Boolean {
         TODO("Not yet implemented")
     }
 
-    override fun getJoinRequests(groupID: Int): List<UserLight> {
+    override suspend fun getJoinRequests(groupID: Int): List<UserLight> {
         return listOf(UserLight(userID = 3, name = "bin zu uncool"))
     }
 
-    override fun removeMember(groupID: Int, uid: Int) {
+    override suspend fun removeMember(groupID: Int, uid: Int) {
         TODO("Not yet implemented")
     }
 
-    override fun leaveGroup(groupID: Int) {
+    override suspend fun leaveGroup(groupID: Int) {
         TODO("Not yet implemented")
     }
 
-    override fun getGroupMembers(groupID: Int): Flow<List<GroupMember>> {
+    override suspend fun getGroupMembers(groupID: Int): Flow<List<GroupMember>> {
         return flow {
             emit(groupMembers.filter {
                 it.groupID == groupID
             })
         }
     }
-    override fun getGroupAdmins(groupID: Int): Flow<List<GroupMember>> {
+    override suspend fun getGroupAdmins(groupID: Int): Flow<List<GroupMember>> {
         return flow {
             emit(groupMembers.filter {
                 it.isAdmin
@@ -200,7 +200,7 @@ class FakeGroupRepository() : GroupRepositoryInterface {
         }
     }
 
-    override fun isSignedInUserAdmin(groupID: Int): Flow<Boolean> {
+    override suspend fun isSignedInUserAdmin(groupID: Int): Flow<Boolean> {
         return flow {
             if (groupID == 2) {
                 emit(false)
@@ -210,23 +210,23 @@ class FakeGroupRepository() : GroupRepositoryInterface {
         }
     }
 
-    override fun hasSignedInUserJoinRequested(groupID: Int): Boolean {
+    override suspend fun hasSignedInUserJoinRequested(groupID: Int): Boolean {
         TODO("Not yet implemented")
     }
 
-    override fun getLectures(prefix: String): Flow<List<Lecture>> {
+    override suspend fun getLectures(prefix: String): Flow<List<Lecture>> {
         TODO("Not yet implemented")
     }
 
-    override fun getLecture(name: String): Lecture? {
+    override suspend fun getLecture(name: String): Lecture? {
         TODO("Not yet implemented")
     }
 
-    override fun reportGroup(groupID: Int, groupField: GroupField) {
+    override suspend fun reportGroup(groupID: Int, groupField: GroupField) {
         TODO("Not yet implemented")
     }
 
-    override fun reportUser(userID: Int, userField: UserField) {
+    override suspend fun reportUser(userID: Int, userField: UserField) {
         TODO("Not yet implemented")
     }
 }

@@ -2,11 +2,14 @@ package de.pse.kit.studywithme.viewModel.group
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import de.pse.kit.studywithme.model.data.Group
 import de.pse.kit.studywithme.model.repository.GroupRepositoryInterface
 import de.pse.kit.studywithme.ui.view.navigation.NavGraph
 import de.pse.kit.studywithme.viewModel.SignedInViewModel
+import kotlinx.coroutines.launch
 
 /**
  * ViewModel of the searchgroups screen
@@ -31,7 +34,9 @@ class SearchGroupsViewModel(navController: NavController, val groupRepo: GroupRe
      * @param prefix
      */
     fun search(prefix: String) {
-        groups.value = groupRepo.getGroups(prefix)
+        viewModelScope.launch {
+            groups.value = groupRepo.getGroups(prefix)
+        }
     }
 
     /**
@@ -50,4 +55,12 @@ class SearchGroupsViewModel(navController: NavController, val groupRepo: GroupRe
     fun newGroup() {
         NavGraph.navigateToNewGroup(navController)
     }
+}
+
+class SearchGroupsViewModelFactory(
+    private val navController: NavController,
+    private val groupRepo: GroupRepositoryInterface
+) : ViewModelProvider.NewInstanceFactory() {
+    override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T =
+        SearchGroupsViewModel(navController, groupRepo) as T
 }

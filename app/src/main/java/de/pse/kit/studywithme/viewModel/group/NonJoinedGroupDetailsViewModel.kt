@@ -2,6 +2,8 @@ package de.pse.kit.studywithme.viewModel.group
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import de.pse.kit.studywithme.model.data.*
 import de.pse.kit.studywithme.model.repository.GroupRepositoryInterface
@@ -10,7 +12,6 @@ import de.pse.kit.studywithme.ui.view.navigation.NavGraph
 import de.pse.kit.studywithme.viewModel.SignedInViewModel
 import de.pse.kit.studywithme.viewModel.ViewModel
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 /**
  * ViewModel of nonjoinedgroupdetails screen
@@ -34,17 +35,25 @@ class NonJoinedGroupDetailsViewModel(
 
 
     init {
-        runBlocking {
-            launch {
-                groupRepo.getGroup(groupID).collect {
-                    group.value = it
-                }
+        refreshNonJoinedGroupDetails()
+    }
+
+    /**
+     * Refresh non joined group details
+     *
+     */
+    fun refreshNonJoinedGroupDetails() {
+        viewModelScope.launch {
+            groupRepo.getGroup(groupID).collect {
+                group.value = it
             }
-            launch {
-                groupRepo.getGroupAdmins(groupID).collect {
-                    admins.value = it
-                }
+        }
+        viewModelScope.launch {
+            groupRepo.getGroupAdmins(groupID).collect {
+                admins.value = it
             }
+        }
+        viewModelScope.launch {
             alreadyRequested.value = groupRepo.hasSignedInUserJoinRequested(groupID)
         }
     }
@@ -56,7 +65,9 @@ class NonJoinedGroupDetailsViewModel(
     fun report() {
         if (group.value != null) {
             for (field in groupReports) {
-                groupRepo.reportGroup(groupID, field)
+                viewModelScope.launch {
+                    groupRepo.reportGroup(groupID, field)
+                }
             }
         }
     }
@@ -74,9 +85,20 @@ class NonJoinedGroupDetailsViewModel(
      *
      */
     fun joinRequest() {
-        if (groupRepo.joinRequest(groupID)) {
-            alreadyRequested.value = true
-           // navBack()
+        viewModelScope.launch {
+            if (groupRepo.joinRequest(groupID)) {
+                alreadyRequested.value = true
+                // navBack()
+            }
         }
     }
+}
+
+class NonJoinedGroupDetailsViewModelFactory(
+    private val navController: NavController,
+    private val groupID: Int,
+    private val groupRepo: GroupRepositoryInterface
+) : ViewModelProvider.NewInstanceFactory() {
+    override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T =
+        NonJoinedGroupDetailsViewModel(navController, groupID, groupRepo) as T
 }

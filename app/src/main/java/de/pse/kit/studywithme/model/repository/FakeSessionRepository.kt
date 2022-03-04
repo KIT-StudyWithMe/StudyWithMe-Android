@@ -32,43 +32,43 @@ class FakeSessionRepository() : SessionRepositoryInterface {
     )
 
     @ExperimentalCoroutinesApi
-    override fun getSessions(groupID: Int): Flow<List<Session>> {
+    override suspend fun getSessions(groupID: Int): Flow<List<Session>> {
         return flow { emit(listOf(session)) }
     }
 
-    override fun getSession(sessionID: Int): Flow<Session> {
+    override suspend fun getSession(sessionID: Int): Flow<Session> {
         return flow { emit(session) }
     }
 
-    override fun newSession(session: Session): Boolean {
+    override suspend fun newSession(session: Session): Boolean {
         this.session = session
         return true
     }
 
-    override fun editSession(session: Session): Boolean {
+    override suspend fun editSession(session: Session): Boolean {
         this.session = session
         return true
     }
 
-    override fun removeSession(session: Session) {
+    override suspend fun removeSession(session: Session) {
         this.session = session
         return
     }
 
-    override fun newAttendee(sessionID: Int): Boolean {
+    override suspend fun newAttendee(sessionID: Int): Boolean {
 
         return true
     }
 
-    override fun removeAttendee(sessionID: Int) {
+    override suspend fun removeAttendee(sessionID: Int) {
 
     }
 
-    override fun getAttendees(sessionID: Int): Flow<List<SessionAttendee>> {
+    override suspend fun getAttendees(sessionID: Int): Flow<List<SessionAttendee>> {
         return flow { emit(listOf(sessionAttendee)) }
     }
 
-    override fun reportSession(sessionID: Int, sessionfield: SessionField) {
+    override suspend fun reportSession(sessionID: Int, sessionfield: SessionField) {
         TODO("Not yet implemented")
     }
 }

@@ -15,7 +15,7 @@ interface SessionRepositoryInterface {
      * @return flow list of session object
      */
     @ExperimentalCoroutinesApi
-    fun getSessions(groupID: Int): Flow<List<Session>>
+    suspend fun getSessions(groupID: Int): Flow<List<Session>>
 
     /**
      * Returns a session with the ID sessionID
@@ -23,7 +23,7 @@ interface SessionRepositoryInterface {
      * @param sessionID
      * @return flow session object
      */
-    fun getSession(sessionID: Int): Flow<Session>
+    suspend fun getSession(sessionID: Int): Flow<Session>
 
     /**
      * Creates a new session with the given session object and returns true if successful
@@ -31,7 +31,7 @@ interface SessionRepositoryInterface {
      * @param session
      * @return true or false
      */
-    fun newSession(session: Session): Boolean
+    suspend fun newSession(session: Session): Boolean
 
     /**
      * Edits group in database with the given edited session object and returns true if successful
@@ -39,14 +39,14 @@ interface SessionRepositoryInterface {
      * @param session
      * @return true or false
      */
-    fun editSession(session: Session): Boolean
+    suspend fun editSession(session: Session): Boolean
 
     /**
      * Removes the given session
      *
      * @param session
      */
-    fun removeSession(session: Session)
+    suspend fun removeSession(session: Session)
 
     /**
      * Creates a new attendant of the session with ID sessionID and returns true if successful
@@ -54,14 +54,14 @@ interface SessionRepositoryInterface {
      * @param sessionID
      * @return true or false
      */
-    fun newAttendee(sessionID: Int): Boolean
+    suspend fun newAttendee(sessionID: Int): Boolean
 
     /**
      * Removes an attendant of the session with ID sessionID
      *
      * @param sessionID
      */
-    fun removeAttendee(sessionID: Int)
+    suspend fun removeAttendee(sessionID: Int)
 
     /**
      * Returns all attendants which attend the session with the ID sessionID
@@ -69,7 +69,7 @@ interface SessionRepositoryInterface {
      * @param sessionID
      * @return flow list of sessionattendee object
      */
-    fun getAttendees(sessionID: Int): Flow<List<SessionAttendee>>
+    suspend fun getAttendees(sessionID: Int): Flow<List<SessionAttendee>>
 
     /**
      * Creates a detailed report of the session with ID sessionID
@@ -77,5 +77,5 @@ interface SessionRepositoryInterface {
      * @param sessionID
      * @param sessionfield
      */
-    fun reportSession(sessionID: Int, sessionfield: SessionField)
+    suspend fun reportSession(sessionID: Int, sessionfield: SessionField)
 }

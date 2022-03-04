@@ -1,13 +1,18 @@
 package de.pse.kit.studywithme.viewModel.profile
 
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import de.pse.kit.studywithme.model.data.User
 import de.pse.kit.studywithme.model.repository.UserRepositoryInterface
 import de.pse.kit.studywithme.ui.view.navigation.NavGraph
 import de.pse.kit.studywithme.viewModel.SignedInViewModel
 import de.pse.kit.studywithme.viewModel.ViewModel
+import de.pse.kit.studywithme.viewModel.auth.SignUpViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 /**
@@ -29,7 +34,7 @@ class EditProfileViewModel(navController: NavController, val userRepo: UserRepos
     val major: MutableStateFlow<String> = MutableStateFlow("")
 
     init {
-        runBlocking {
+        viewModelScope.launch {
             userRepo.getSignedInUser().collect {
                 user = it
                 username.value = it.name
@@ -45,24 +50,34 @@ class EditProfileViewModel(navController: NavController, val userRepo: UserRepos
      *
      */
     fun saveProfile() {
-        if (user != null) {
-            val remoteCollege = userRepo.getCollege(college.value)
-            val remoteMajor = userRepo.getMajor(major.value)
+        viewModelScope.launch {
+            if (user != null) {
+                val remoteCollege = async { userRepo.getCollege(college.value) }
+                val remoteMajor = async { userRepo.getMajor(major.value) }
 
-            val edited = userRepo.editSignedInUser(
-                User(
-                    userID = user!!.userID,
-                    name = username.value,
-                    college = remoteCollege?.name ?: user!!.college,
-                    collegeID = remoteCollege?.institutionID?.toInt() ?: user!!.collegeID,
-                    major = remoteMajor?.name ?: user!!.major,
-                    majorID = remoteMajor?.majorID?.toInt() ?: user!!.majorID,
-                    contact = contact.value,
-                    firebaseUID = user!!.firebaseUID
+                val edited = userRepo.editSignedInUser(
+                    User(
+                        userID = user!!.userID,
+                        name = username.value,
+                        college = remoteCollege.await()?.name ?: user!!.college,
+                        collegeID = remoteCollege.await()?.institutionID?.toInt() ?: user!!.collegeID,
+                        major = remoteMajor.await()?.name ?: user!!.major,
+                        majorID = remoteMajor.await()?.majorID?.toInt() ?: user!!.majorID,
+                        contact = contact.value,
+                        firebaseUID = user!!.firebaseUID
+                    )
                 )
-            )
-            if (edited) navBack()
+                if (edited) navBack()
+            }
         }
     }
+}
+
+class EditProfileViewModelFactory(
+    private val navController: NavController,
+    private val userRepo: UserRepositoryInterface
+) : ViewModelProvider.NewInstanceFactory() {
+    override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T =
+        EditProfileViewModel(navController, userRepo) as T
 }
 

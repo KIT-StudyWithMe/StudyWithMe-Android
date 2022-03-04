@@ -317,7 +317,6 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
     override suspend fun getLecture(lectureID: Int): Lecture? {
         return try {
             val lecture: Lecture? = client.get(HttpRoutes.LECTURES + lectureID)
-            println(lecture)
             return lecture
         } catch (e: RedirectResponseException) {
             println("GetLecture Redirect Error: ${e.response.status}")

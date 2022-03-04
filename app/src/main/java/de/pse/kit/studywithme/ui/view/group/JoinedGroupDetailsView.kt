@@ -197,15 +197,15 @@ fun JoinedGroupDetailsView(viewModel: JoinedGroupDetailsViewModel) {
 
                     }
                 }
-                if (!viewModel.isAdmin.value) {
-                    Button(
-                        text = "Gruppe verlassen",
-                        onClick = {
-                            viewModel.leaveGroup()
-                        },
-                        emphasize = true
-                    )
-                }
+
+                Button(
+                    text = "Gruppe verlassen",
+                    onClick = {
+                        viewModel.leaveGroup()
+                    },
+                    emphasize = true
+                )
+
             }
         }
     }

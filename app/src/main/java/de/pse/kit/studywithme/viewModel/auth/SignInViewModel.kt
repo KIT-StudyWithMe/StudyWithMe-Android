@@ -2,12 +2,17 @@ package de.pse.kit.studywithme.viewModel.auth
 
 
 import android.util.Log
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import de.pse.kit.studywithme.model.repository.GroupRepositoryInterface
 import de.pse.kit.studywithme.model.repository.UserRepository
 import de.pse.kit.studywithme.model.repository.UserRepositoryInterface
 import de.pse.kit.studywithme.ui.view.navigation.NavGraph
 import de.pse.kit.studywithme.viewModel.ViewModel
+import de.pse.kit.studywithme.viewModel.group.EditGroupViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 
 /**
  * ViewModel of the signin screen
@@ -37,11 +42,13 @@ class SignInViewModel(navController: NavController, val userRepo: UserRepository
      *
      */
     fun signIn() {
-        if (userRepo.signIn(email.value, password.value)) {
-            Log.d("Auth-UI", "auth:completed")
-            NavGraph.navigateToJoinedGroups(navController)
-        } else {
-            errorMessage.value = "Anmeldung fehlgeschlagen"
+        viewModelScope.launch {
+            if (userRepo.signIn(email.value, password.value)) {
+                Log.d("Auth-UI", "auth:completed")
+                NavGraph.navigateToJoinedGroups(navController)
+            } else {
+                errorMessage.value = "Anmeldung fehlgeschlagen"
+            }
         }
     }
 
@@ -50,11 +57,21 @@ class SignInViewModel(navController: NavController, val userRepo: UserRepository
      *
      */
     fun forgotPassword() {
-        if (userRepo.resetPassword(email = email.value)) {
-            Log.d("Auth-UI", "passwordResetMailSend:completed")
-            errorMessage.value = "Eine Email zum zurücksetzen wurde gesendet"
-        } else {
-            errorMessage.value = "Versuche eine andere Email Adresse"
+        viewModelScope.launch {
+            if (userRepo.resetPassword(email = email.value)) {
+                Log.d("Auth-UI", "passwordResetMailSend:completed")
+                errorMessage.value = "Eine Email zum zurücksetzen wurde gesendet"
+            } else {
+                errorMessage.value = "Versuche eine andere Email Adresse"
+            }
         }
     }
+}
+
+class SignInViewModelFactory(
+    private val navController: NavController,
+    private val userRepo: UserRepositoryInterface
+) : ViewModelProvider.NewInstanceFactory() {
+    override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T =
+        SignInViewModel(navController, userRepo) as T
 }

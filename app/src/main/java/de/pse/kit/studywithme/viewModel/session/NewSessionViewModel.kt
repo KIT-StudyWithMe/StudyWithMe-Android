@@ -2,6 +2,8 @@ package de.pse.kit.studywithme.viewModel.session
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import de.pse.kit.studywithme.model.data.Group
 import de.pse.kit.studywithme.model.data.Session
@@ -37,11 +39,9 @@ class NewSessionViewModel(
     val duration: MutableStateFlow<String> = MutableStateFlow("")
 
     init {
-        runBlocking {
-            launch {
-                groupRepo.getGroup(groupID).collect {
-                    groupState.value = it
-                }
+        viewModelScope.launch {
+            groupRepo.getGroup(groupID).collect {
+                groupState.value = it
             }
         }
     }
@@ -57,17 +57,29 @@ class NewSessionViewModel(
         } catch (e: NumberFormatException) {
             return
         }
-        val saved = sessionRepo.newSession(
-            Session(
-                sessionID = -1,
-                groupID = groupID,
-                location = place.value,
-                date = date.value,
-                duration = durationInt
+        viewModelScope.launch {
+            val saved = sessionRepo.newSession(
+                Session(
+                    sessionID = -1,
+                    groupID = groupID,
+                    location = place.value,
+                    date = date.value,
+                    duration = durationInt
+                )
             )
-        )
-        if (saved) {
-            navBack()
+            if (saved) {
+                navBack()
+            }
         }
     }
+}
+
+class NewSessionViewModelFactory(
+    private val navController: NavController,
+    private val sessionRepo: SessionRepositoryInterface,
+    private val groupRepo: GroupRepositoryInterface,
+    private val groupID: Int
+) : ViewModelProvider.NewInstanceFactory() {
+    override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T =
+        NewSessionViewModel(navController, sessionRepo ,groupRepo, groupID) as T
 }

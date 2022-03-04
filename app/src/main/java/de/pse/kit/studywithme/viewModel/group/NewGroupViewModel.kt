@@ -1,6 +1,8 @@
 package de.pse.kit.studywithme.viewModel.group
 
 import android.util.Log
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import de.pse.kit.studywithme.model.data.Group
 import de.pse.kit.studywithme.model.data.Lecture
@@ -11,6 +13,7 @@ import de.pse.kit.studywithme.viewModel.SignedInViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import de.pse.kit.studywithme.ui.view.navigation.NavGraph
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 
 /**
  * ViewModel of newgroup screen
@@ -84,9 +87,19 @@ class NewGroupViewModel(navController: NavController, private val groupRepo: Gro
             lectureChapter = lectureChapterInt,
             exercise = groupExerciseInt,
         )
-        val saved = groupRepo.newGroup(group)
-        if (saved) {
-            navBack()
+        viewModelScope.launch {
+            val saved = groupRepo.newGroup(group)
+            if (saved) {
+                navBack()
+            }
         }
     }
+}
+
+class NewGroupViewModelFactory(
+    private val navController: NavController,
+    private val groupRepo: GroupRepositoryInterface
+) : ViewModelProvider.NewInstanceFactory() {
+    override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T =
+        NewGroupViewModel(navController, groupRepo) as T
 }

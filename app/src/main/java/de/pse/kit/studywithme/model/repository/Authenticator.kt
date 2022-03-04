@@ -62,7 +62,6 @@ object Authenticator {
     fun signOut() {
         auth.signOut()
         firebaseUser = null
-        //user = null
     }
 
     suspend fun deleteFirebaseUser(email: String, password: String): Boolean {
