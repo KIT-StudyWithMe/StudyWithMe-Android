@@ -67,7 +67,7 @@ class FakeUserRepository(var signedIn: Boolean) : UserRepositoryInterface {
     }
 
     @ExperimentalCoroutinesApi
-    override suspend fun deleteAccount(email: String, password: String): Boolean {
+    override suspend fun deleteAccount(password: String): Boolean {
         signedIn = false
         return true
     }

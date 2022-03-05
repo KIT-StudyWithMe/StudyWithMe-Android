@@ -71,12 +71,11 @@ interface UserRepositoryInterface {
     /**
      * Deletes the acoount with the given details and returns true if successful
      *
-     * @param email
      * @param password
      * @return true or false
      */
     @ExperimentalCoroutinesApi
-    suspend fun deleteAccount(email: String, password: String): Boolean
+    suspend fun deleteAccount(password: String): Boolean
 
     /**
      * Returns list of major starting with the given prefix

@@ -15,16 +15,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
+import de.pse.kit.studywithme.model.data.UserField
 import de.pse.kit.studywithme.model.repository.FakeUserRepository
-import de.pse.kit.studywithme.ui.component.FormText
-import de.pse.kit.studywithme.ui.component.FormTextField
-import de.pse.kit.studywithme.ui.component.NavigationBar
-import de.pse.kit.studywithme.ui.component.TopBar
+import de.pse.kit.studywithme.ui.component.*
 import de.pse.kit.studywithme.viewModel.profile.EditProfileViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -61,13 +62,65 @@ fun EditProfileView(viewModel: EditProfileViewModel) {
                     clickRight = { viewModel.navBack() })
             }
         ) {
+            var password by remember { mutableStateOf("") }
+            var openDialog by remember { mutableStateOf(false) }
+
+            if (openDialog) {
+                AlertDialog(
+                    onDismissRequest = {
+                        openDialog = false
+                    },
+                    title = {
+                        Text(text = "Account löschen")
+                    },
+                    text = {
+                        Column {
+                            Text(
+                                "Gebe dein Passwort ein:",
+                                modifier = Modifier.padding(top = 12.dp),
+                                fontWeight = FontWeight.Bold
+                            )
+                            TextField(
+                                label = "Passwort",
+                                onChange = { password = it },
+                                type = TextFieldType.PASSWORD
+                            )
+                        }
+                    },
+                    confirmButton = {
+                        TextButton(
+                            onClick = {
+                                viewModel.deleteAccount(password)
+                                password = ""
+                                openDialog = false
+                            }
+                        ) {
+                            Text("Bestätigen", color = MaterialTheme.colorScheme.onPrimaryContainer)
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(
+                            onClick = {
+                                password = ""
+                                openDialog = false
+                            }
+                        ) {
+                            Text("Abbrechen", color = MaterialTheme.colorScheme.onPrimaryContainer)
+                        }
+                    },
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    textContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+            }
+
             Column(
                 modifier = Modifier
                     .padding(horizontal = 24.dp, vertical = 0.dp)
                     .padding(it)
                     .verticalScroll(
                         state = ScrollState(0)
-                    ),) {
+                    ),
+            ) {
                 Text("Persönliche Informationen", modifier = Modifier.padding(top = 12.dp))
                 FormTextField(
                     text = viewModel.college.collectAsState().value,
@@ -90,6 +143,12 @@ fun EditProfileView(viewModel: EditProfileViewModel) {
                     text = viewModel.contact.collectAsState().value,
                     onChange = { viewModel.contact.value = it },
                     label = "Erreichbar unter"
+                )
+                Button(
+                    modifier = Modifier.padding(top = 12.dp),
+                    text = "Account löschen",
+                    onClick = { openDialog = true },
+                    emphasize = true
                 )
             }
         }

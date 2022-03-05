@@ -71,8 +71,21 @@ class EditProfileViewModel(navController: NavController, val userRepo: UserRepos
             }
         }
     }
+
+    /**
+     * Deletes the user account
+     *
+     */
+    fun deleteAccount(password: String) {
+        viewModelScope.launch {
+            if (userRepo.deleteAccount(password)) {
+                NavGraph.navigateToSignIn(navController)
+            }
+        }
+    }
 }
 
+@ExperimentalCoroutinesApi
 class EditProfileViewModelFactory(
     private val navController: NavController,
     private val userRepo: UserRepositoryInterface

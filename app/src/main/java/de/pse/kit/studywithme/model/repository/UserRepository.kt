@@ -115,7 +115,7 @@ class UserRepository private constructor(context: Context) : UserRepositoryInter
         val remoteMajor = getMajor(major)
 
         if (remoteInstitution == null || remoteMajor == null) {
-            auth.deleteFirebaseUser(email, password)
+            auth.deleteFirebaseUser(password)
             return false
         }
 
@@ -140,7 +140,7 @@ class UserRepository private constructor(context: Context) : UserRepositoryInter
 
             return true
         } else {
-            auth.deleteFirebaseUser(email, password)
+            auth.deleteFirebaseUser(password)
             return false
         }
     }
@@ -164,17 +164,18 @@ class UserRepository private constructor(context: Context) : UserRepositoryInter
     }
 
     @ExperimentalCoroutinesApi
-    override suspend fun deleteAccount(email: String, password: String): Boolean {
+    override suspend fun deleteAccount(password: String): Boolean {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
 
         // TODO: Delete all local data
-        getSignedInUser().collect() {
-            userService.removeUser(it.userID)
+        if (auth.deleteFirebaseUser(password)) {
+            userService.removeUser(auth.user!!.userID)
+            return true
         }
-        return auth.deleteFirebaseUser(email, password)
+        return false
     }
 
     override suspend fun getMajors(prefix: String): List<String> {

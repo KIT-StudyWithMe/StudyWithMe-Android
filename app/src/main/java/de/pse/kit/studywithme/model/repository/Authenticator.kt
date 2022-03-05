@@ -64,14 +64,13 @@ object Authenticator {
         firebaseUser = null
     }
 
-    suspend fun deleteFirebaseUser(email: String, password: String): Boolean {
+    suspend fun deleteFirebaseUser(password: String): Boolean {
         if (firebaseUser == null) {
-            if (!signIn(email, password)) {
-                return false
-            }
+            return false
         }
 
-        val credential = EmailAuthProvider.getCredential(email, password)
+        println("EMAIl: " + firebaseUser!!.email)
+        val credential = EmailAuthProvider.getCredential(firebaseUser!!.email!!, password)
 
         try {
             firebaseUser!!.reauthenticate(credential).await()
