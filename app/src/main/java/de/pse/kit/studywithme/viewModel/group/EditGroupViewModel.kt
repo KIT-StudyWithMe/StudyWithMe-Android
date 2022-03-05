@@ -63,11 +63,20 @@ class EditGroupViewModel(
                 groupDescription.value = it.description
                 groupLectureChapter.value = it.lectureChapter.toString()
                 groupExercise.value = it.exercise.toString()
-                groupSessionFrequencyName.value = it.sessionFrequency.toString()
-                groupSessionTypeName.value = it.sessionType.toString()
+                for(i in sessionFrequencies.indices) {
+                    if(sessionFrequencies[i] == it.sessionFrequency) {
+                        groupSessionFrequencyName.value = sessionFrequencyStrings[i]
+                    }
+                }
+                for(i in sessionTypes.indices) {
+                    if(sessionTypes[i] == it.sessionType) {
+                        groupSessionTypeName.value = sessionTypeStrings[i]
+                    }
+                }
             }
         }
     }
+
 
 
     /**
@@ -108,13 +117,13 @@ class EditGroupViewModel(
 
         var sessionFrequencyToSave: SessionFrequency = SessionFrequency.ONCE
         for (i in sessionFrequencies.indices) {
-            if (sessionFrequencyStrings[i].equals(groupSessionFrequencyName.value)) {
+            if (sessionFrequencyStrings[i] == groupSessionFrequencyName.value) {
                 sessionFrequencyToSave = sessionFrequencies[i]
             }
         }
         var sessionTypeToSave: SessionType = SessionType.HYBRID
         for (i in sessionTypes.indices) {
-            if (sessionTypeStrings[i].equals(groupSessionTypeName.value)) {
+            if (sessionTypeStrings[i] == groupSessionTypeName.value) {
                 sessionTypeToSave = sessionTypes[i]
             }
         }
