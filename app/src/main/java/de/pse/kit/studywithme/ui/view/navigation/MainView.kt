@@ -93,6 +93,10 @@ fun NavGraphBuilder.signInGraph(navController: NavController, userRepo: UserRepo
                 )
             )
 
+            LaunchedEffect("navigation") {
+                viewModel.refreshView()
+            }
+
             SignInView(viewModel)
         }
 
@@ -103,6 +107,10 @@ fun NavGraphBuilder.signInGraph(navController: NavController, userRepo: UserRepo
                     userRepo
                 )
             )
+
+            LaunchedEffect("navigation") {
+                viewModel.refreshView()
+            }
 
             SignUpView(viewModel)
         }
@@ -276,6 +284,10 @@ fun NavGraphBuilder.profileGraph(navController: NavController, userRepo: UserRep
                     userRepo
                 )
             )
+
+            LaunchedEffect("navigation") {
+                viewModel.refreshUser()
+            }
 
             ProfileView(viewModel)
         }

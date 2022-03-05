@@ -32,6 +32,14 @@ class ProfileViewModel(navController: NavController, val userRepo: UserRepositor
     var major: String = ""
 
     init {
+        refreshUser()
+    }
+
+    /**
+     * Refresh user
+     *
+     */
+    fun refreshUser() {
         viewModelScope.launch {
             try {
                 userRepo.getSignedInUser().collect {

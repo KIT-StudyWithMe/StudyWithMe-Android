@@ -30,6 +30,16 @@ class SignInViewModel(navController: NavController, val userRepo: UserRepository
     val errorMessage: MutableStateFlow<String> = MutableStateFlow("")
 
     /**
+     * Refresh view
+     *
+     */
+    fun refreshView() {
+        email.value = ""
+        password.value = ""
+        errorMessage.value = ""
+    }
+
+    /**
      * Navigates to signup view
      *
      */
@@ -45,6 +55,7 @@ class SignInViewModel(navController: NavController, val userRepo: UserRepository
         viewModelScope.launch {
             if (userRepo.signIn(email.value, password.value)) {
                 Log.d("Auth-UI", "auth:completed")
+                refreshView()
                 NavGraph.navigateToJoinedGroups(navController)
             } else {
                 errorMessage.value = "Anmeldung fehlgeschlagen"

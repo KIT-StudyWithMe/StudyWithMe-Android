@@ -31,6 +31,19 @@ class SignUpViewModel(navController: NavController, val userRepo: UserRepository
     val errorMessage: MutableStateFlow<String> = MutableStateFlow("")
 
     /**
+    * Refresh view
+    *
+    */
+    fun refreshView() {
+        email.value = ""
+        password.value = ""
+        username.value = ""
+        college.value = ""
+        major.value = ""
+        errorMessage.value = ""
+    }
+
+    /**
      * User gets registered
      *
      */
@@ -47,6 +60,7 @@ class SignUpViewModel(navController: NavController, val userRepo: UserRepository
                 )
             ) {
                 Log.d("Auth-UI", "signUp:completed")
+                refreshView()
                 NavGraph.navigateToSearchGroups(navController)
             } else {
                 errorMessage.value = "Registrierung fehlgeschlagen"
