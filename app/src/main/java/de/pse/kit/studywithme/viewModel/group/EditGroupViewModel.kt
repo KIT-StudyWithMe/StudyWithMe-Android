@@ -108,13 +108,13 @@ class EditGroupViewModel(
 
         var sessionFrequencyToSave: SessionFrequency = SessionFrequency.ONCE
         for (i in sessionFrequencies.indices) {
-            if (sessionFrequencyStrings[i].equals(groupSessionFrequencyName)) {
+            if (sessionFrequencyStrings[i].equals(groupSessionFrequencyName.value)) {
                 sessionFrequencyToSave = sessionFrequencies[i]
             }
         }
         var sessionTypeToSave: SessionType = SessionType.HYBRID
         for (i in sessionTypes.indices) {
-            if (sessionTypeStrings[i].equals(groupSessionTypeName)) {
+            if (sessionTypeStrings[i].equals(groupSessionTypeName.value)) {
                 sessionTypeToSave = sessionTypes[i]
             }
         }
