@@ -156,7 +156,7 @@ class FakeGroupRepository() : GroupRepositoryInterface {
         }.get(0))
     }
 
-    override suspend fun hideGroup(groupID: Int, hidden: Boolean): Boolean {
+    override suspend fun hideGroup(groupID: Int): Boolean {
         TODO("Not yet implemented")
     }
 
@@ -227,6 +227,10 @@ class FakeGroupRepository() : GroupRepositoryInterface {
     }
 
     override suspend fun reportUser(userID: Int, userField: UserField) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun isGroupHidden(groupID: Int): Boolean {
         TODO("Not yet implemented")
     }
 }

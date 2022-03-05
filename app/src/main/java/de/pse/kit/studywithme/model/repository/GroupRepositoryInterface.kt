@@ -68,13 +68,14 @@ interface GroupRepositoryInterface {
     suspend fun deleteGroup(group: Group): Boolean
 
     /**
-     * Hides group from other users search request and returns true if successful
+     * Toggles to hide status of a group.
+     * If hidden, the group won't return as a search result.
+     * Returns true if successful
      *
      * @param groupID
-     * @param hidden
      * @return true or false
      */
-    suspend fun hideGroup(groupID: Int, hidden:Boolean): Boolean
+    suspend fun hideGroup(groupID: Int): Boolean
 
     /**
      * Adds the user with ID uid to the group with ID groupID and returns true if successful
@@ -188,4 +189,12 @@ interface GroupRepositoryInterface {
      * @param userField
      */
     suspend fun reportUser(userID: Int, userField: UserField)
+
+    /**
+     * Returns the hidden status of a group
+     *
+     * @param groupID
+     * @return true or false
+     */
+    suspend fun isGroupHidden(groupID: Int): Boolean
 }

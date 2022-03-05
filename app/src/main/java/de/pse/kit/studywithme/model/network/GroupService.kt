@@ -77,10 +77,17 @@ interface GroupService {
      * Hides the group from other users search request and returns true if it was successful
      *
      * @param groupID
-     * @param hidden
      * @return true or false
      */
-    suspend fun hideGroup(groupID: Int, hidden:Boolean): Boolean
+    suspend fun hideGroup(groupID: Int): Boolean
+
+    /**
+     * Request the hidden status of a group
+     *
+     * @param groupID
+     * @return true/false or null
+     */
+    suspend fun isGroupHidden(groupID: Int): Boolean?
 
     /**
      * Creates a new group member

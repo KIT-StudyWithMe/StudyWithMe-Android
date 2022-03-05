@@ -89,7 +89,7 @@ fun EditGroupView(viewModel: EditGroupViewModel) {
                 Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     Button(
                         modifier = Modifier.weight(1f),
-                        text = "Für andere ausblenden",
+                        text = if (viewModel.hidden.collectAsState().value) "Für andere einblenden" else "Für andere ausblenden",
                         primary = false,
                         onClick = { viewModel.hideGroup() }
                     )

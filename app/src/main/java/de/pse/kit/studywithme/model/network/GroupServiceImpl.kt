@@ -171,13 +171,9 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
         }
     }
 
-    override suspend fun hideGroup(groupID: Int, hidden:Boolean): Boolean {
+    override suspend fun hideGroup(groupID: Int): Boolean {
         return try {
-            val response = client.post<HttpResponse>(HttpRoutes.GROUPS + groupID + "/hide") {
-                contentType(ContentType.Application.Json)
-                body = hidden
-            }
-            println(response.status)
+            client.post<HttpResponse>(HttpRoutes.GROUPS + groupID + "/hide")
             true
         } catch (e: RedirectResponseException) {
             println("HideGroup Redirect Error: ${e.response.status}")
@@ -191,6 +187,24 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
         } catch (e: Exception) {
             println("HideGroup Error: ${e.message}")
             false
+        }
+    }
+
+    override suspend fun isGroupHidden(groupID: Int): Boolean? {
+        return try {
+            client.get(HttpRoutes.GROUPS + groupID + "/hide")
+        } catch (e: RedirectResponseException) {
+            println("HideGroup Redirect Error: ${e.response.status}")
+            null
+        } catch (e: ClientRequestException) {
+            println("HideGroup Request Error: ${e.response.status}")
+            null
+        } catch (e: ServerResponseException) {
+            println("HideGroup Response Error: ${e.response.status}")
+            null
+        } catch (e: Exception) {
+            println("HideGroup Error: ${e.message}")
+            null
         }
     }
 

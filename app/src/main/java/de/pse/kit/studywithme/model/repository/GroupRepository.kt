@@ -122,8 +122,7 @@ class GroupRepository private constructor(context: Context) : GroupRepositoryInt
         val truthWasSend = AtomicBoolean(false)
 
         launch {
-            val remoteGroup = groupService.getGroup(groupID)
-            if (remoteGroup == null) return@launch
+            val remoteGroup = groupService.getGroup(groupID) ?: return@launch
 
             val lecture = groupService.getLecture(remoteGroup.lectureID)
             val major = if (lecture != null) groupService.getMajor(lecture.majorID) else null
@@ -132,8 +131,7 @@ class GroupRepository private constructor(context: Context) : GroupRepositoryInt
             truthWasSend.set(true)
         }
         launch {
-            val localGroup = groupDao.getGroup(groupID)
-            if (localGroup == null) return@launch
+            val localGroup = groupDao.getGroup(groupID) ?: return@launch
 
             val lecture = groupDao.getLecture(localGroup.lectureID)
             val major = if (lecture != null) groupService.getMajor(lecture.majorID) else null
@@ -143,6 +141,10 @@ class GroupRepository private constructor(context: Context) : GroupRepositoryInt
             }
         }
     }.filterNotNull()
+
+    override suspend fun isGroupHidden(groupID: Int): Boolean {
+        return groupService.isGroupHidden(groupID) ?: false
+    }
 
     override suspend fun newGroup(group: Group): Boolean {
         if (auth.firebaseUID == null) {
@@ -215,12 +217,12 @@ class GroupRepository private constructor(context: Context) : GroupRepositoryInt
         return@coroutineScope groupService.removeGroup(group.groupID)
     }
 
-    override suspend fun hideGroup(groupID: Int, hidden: Boolean): Boolean {
+    override suspend fun hideGroup(groupID: Int): Boolean {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
-        return groupService.hideGroup(groupID, hidden)
+        return groupService.hideGroup(groupID)
     }
 
     override suspend fun newMember(groupID: Int, uid: Int): Boolean {

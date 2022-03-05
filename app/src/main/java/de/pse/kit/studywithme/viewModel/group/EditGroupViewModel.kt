@@ -47,6 +47,8 @@ class EditGroupViewModel(
     val sessionFrequencyStrings = listOf(
         "Einmalig", "Wöchentlich", "Alle 2 Wochen", "Alle 3 Wochen", "Monatlich",
     )
+    val hidden = MutableStateFlow(false)
+
     private val sessionFrequencies = listOf(
         SessionFrequency.ONCE, SessionFrequency.WEEKLY,
         SessionFrequency.TWOWEEKLY, SessionFrequency.THREEWEEKLY, SessionFrequency.MONTHLY
@@ -63,20 +65,20 @@ class EditGroupViewModel(
                 groupDescription.value = it.description
                 groupLectureChapter.value = it.lectureChapter.toString()
                 groupExercise.value = it.exercise.toString()
-                for(i in sessionFrequencies.indices) {
-                    if(sessionFrequencies[i] == it.sessionFrequency) {
+                for (i in sessionFrequencies.indices) {
+                    if (sessionFrequencies[i] == it.sessionFrequency) {
                         groupSessionFrequencyName.value = sessionFrequencyStrings[i]
                     }
                 }
-                for(i in sessionTypes.indices) {
-                    if(sessionTypes[i] == it.sessionType) {
+                for (i in sessionTypes.indices) {
+                    if (sessionTypes[i] == it.sessionType) {
                         groupSessionTypeName.value = sessionTypeStrings[i]
                     }
                 }
             }
+            getHiddenStatus()
         }
     }
-
 
 
     /**
@@ -99,11 +101,21 @@ class EditGroupViewModel(
      *
      */
     fun hideGroup() {
-        if (group != null) {
-            viewModelScope.launch {
-                groupRepo.hideGroup(groupID, false)
-            }
+        viewModelScope.launch {
+            groupRepo.hideGroup(groupID)
+            getHiddenStatus()
         }
+    }
+
+    /**
+     * Get hidden status
+     *
+     */
+    private fun getHiddenStatus() {
+        viewModelScope.launch {
+            hidden.value = groupRepo.isGroupHidden(groupID)
+        }
+
     }
 
     /**
