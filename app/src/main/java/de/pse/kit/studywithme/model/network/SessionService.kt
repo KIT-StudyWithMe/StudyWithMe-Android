@@ -3,6 +3,7 @@ package de.pse.kit.studywithme.model.network
 import de.pse.kit.studywithme.model.data.Session
 import de.pse.kit.studywithme.model.data.SessionAttendee
 import io.ktor.client.*
+import io.ktor.client.engine.*
 import io.ktor.client.engine.android.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
@@ -74,9 +75,14 @@ interface SessionService {
 
     companion object {
         val instance: SessionService by lazy {
-            SessionServiceImpl(client = HttpClient(Android) {
+            client(Android.create())
+        }
+
+        fun client(engine: HttpClientEngine): SessionService {
+            return SessionServiceImpl(client = HttpClient(engine) {
                 install(JsonFeature) {
-                    serializer = KotlinxSerializer()
+                    val json = kotlinx.serialization.json.Json { ignoreUnknownKeys = true }
+                    serializer = KotlinxSerializer(json)
                 }
             })
         }

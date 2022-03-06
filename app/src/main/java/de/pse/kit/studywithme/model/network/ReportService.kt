@@ -2,6 +2,7 @@ package de.pse.kit.studywithme.model.network
 
 import de.pse.kit.studywithme.model.data.*
 import io.ktor.client.*
+import io.ktor.client.engine.*
 import io.ktor.client.engine.android.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
@@ -91,10 +92,15 @@ interface ReportService {
     suspend fun unblockUser(uid: Int)
 
     companion object {
-        val instance: ReportServiceImpl by lazy {
-            ReportServiceImpl(client = HttpClient(Android) {
+        val instance: ReportService by lazy {
+            client(Android.create())
+        }
+
+        fun client(engine: HttpClientEngine): ReportService {
+            return ReportServiceImpl(client = HttpClient(engine) {
                 install(JsonFeature) {
-                    serializer = KotlinxSerializer()
+                    val json = kotlinx.serialization.json.Json { ignoreUnknownKeys = true }
+                    serializer = KotlinxSerializer(json)
                 }
             })
         }

@@ -5,6 +5,7 @@ import de.pse.kit.studywithme.model.data.Major
 import de.pse.kit.studywithme.model.data.User
 import de.pse.kit.studywithme.model.data.UserLight
 import io.ktor.client.*
+import io.ktor.client.engine.*
 import io.ktor.client.engine.android.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
@@ -95,9 +96,14 @@ interface UserService {
 
     companion object {
         val instance: UserService by lazy {
-            UserServiceImpl(client = HttpClient(Android) {
+            client(Android.create())
+        }
+
+        fun client(engine: HttpClientEngine): UserService {
+            return UserServiceImpl(client = HttpClient(engine) {
                 install(JsonFeature) {
-                    serializer = KotlinxSerializer()
+                    val json = kotlinx.serialization.json.Json { ignoreUnknownKeys = true }
+                    serializer = KotlinxSerializer(json)
                 }
             })
         }

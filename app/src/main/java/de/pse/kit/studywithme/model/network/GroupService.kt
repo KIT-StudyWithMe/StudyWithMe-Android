@@ -2,6 +2,7 @@ package de.pse.kit.studywithme.model.network
 
 import de.pse.kit.studywithme.model.data.*
 import io.ktor.client.*
+import io.ktor.client.engine.*
 import io.ktor.client.engine.android.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
@@ -96,7 +97,7 @@ interface GroupService {
      * @param uid
      * @return groupmember object or null
      */
-    suspend fun newMember(groupID: Int, uid: Int):GroupMember?
+    suspend fun newMember(groupID: Int, uid: Int): GroupMember?
 
     /**
      * Decline a new group member
@@ -114,7 +115,7 @@ interface GroupService {
      * @param uid
      * @return true or false
      */
-    suspend fun joinRequest(groupID: Int, uid:Int): Boolean
+    suspend fun joinRequest(groupID: Int, uid: Int): Boolean
 
     /**
      * Returns a list of join request the group with ID groupID received or null if there are none
@@ -169,9 +170,14 @@ interface GroupService {
 
     companion object {
         val instance: GroupService by lazy {
-            GroupServiceImpl(client = HttpClient(Android) {
+            client(Android.create())
+        }
+
+        fun client(engine: HttpClientEngine): GroupService {
+            return GroupServiceImpl(client = HttpClient(engine) {
                 install(JsonFeature) {
-                    serializer = KotlinxSerializer()
+                    val json = kotlinx.serialization.json.Json { ignoreUnknownKeys = true }
+                    serializer = KotlinxSerializer(json)
                 }
             })
         }
