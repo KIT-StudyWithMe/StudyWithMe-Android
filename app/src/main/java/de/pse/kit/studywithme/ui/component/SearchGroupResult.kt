@@ -14,6 +14,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -46,7 +48,9 @@ fun SearchGroupResult(
 ) {
     MyApplicationTheme3 {
         Card(
-            modifier = modifier.fillMaxWidth(),
+            modifier = modifier.fillMaxWidth().semantics {
+                contentDescription = "SearchGroupResult"
+            },
             onClick = onClick,
             shape = RoundedCornerShape(12.dp),
             border = BorderStroke(1.dp, color = MaterialTheme.colorScheme.outline),

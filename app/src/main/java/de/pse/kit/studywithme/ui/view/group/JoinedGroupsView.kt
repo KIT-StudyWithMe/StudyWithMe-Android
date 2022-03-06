@@ -10,6 +10,8 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
@@ -32,6 +34,9 @@ import de.pse.kit.studywithme.viewModel.group.JoinedGroupsViewModel
 fun JoinedGroupsView(viewModel: JoinedGroupsViewModel) {
     MyApplicationTheme3 {
         Scaffold(
+            modifier = Modifier.semantics {
+                contentDescription = "JoinedGroupsView"
+            },
             topBar = { TopBar(title = "Meine Lerngruppen", isTab = true) },
             bottomBar = {
                 NavigationBar(
@@ -60,6 +65,9 @@ fun JoinedGroupsView(viewModel: JoinedGroupsViewModel) {
                 }
 
                 LazyColumn(
+                    modifier = Modifier.semantics {
+                        contentDescription = "MyColumn"
+                    },
                     verticalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
                     items(viewModel.filteredGroups.value.size) {

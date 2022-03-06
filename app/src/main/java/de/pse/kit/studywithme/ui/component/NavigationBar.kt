@@ -6,6 +6,9 @@ import androidx.compose.material.icons.outlined.*
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.material3.NavigationBar as NavigationBar_
 import androidx.compose.ui.tooling.preview.Preview
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
@@ -35,6 +38,9 @@ fun NavigationBar(
     MyApplicationTheme3 {
         NavigationBar_(containerColor = MaterialTheme.colorScheme.primary) {
             NavigationBarItem(
+                modifier = Modifier.semantics {
+                      contentDescription = "MyGroupsTab"
+                },
                 icon = {
                     Icon(
                         if (item == 0) Icons.Rounded.Group else Icons.Outlined.Group,
@@ -54,6 +60,9 @@ fun NavigationBar(
                 }
             )
             NavigationBarItem(
+                modifier = Modifier.semantics {
+                    contentDescription = "SearchGroupsTab"
+                },
                 icon = {
                     Icon(
                         if (item == 1) Icons.Rounded.Groups else Icons.Outlined.Groups,
@@ -73,6 +82,9 @@ fun NavigationBar(
                 }
             )
             NavigationBarItem(
+                modifier = Modifier.semantics {
+                    contentDescription = "ProfileTab"
+                },
                 icon = {
                     Icon(
                         if (item == 2) Icons.Rounded.Person else Icons.Outlined.Person,

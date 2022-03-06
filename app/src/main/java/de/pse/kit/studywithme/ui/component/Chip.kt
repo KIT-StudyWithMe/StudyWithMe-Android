@@ -9,6 +9,8 @@ import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
@@ -77,7 +79,9 @@ fun Chip(
     MyApplicationTheme3 {
         if (chosen) {
             TextButton(
-                modifier = modifier,
+                modifier = modifier.semantics {
+                    contentDescription = "Chip"
+                },
                 shape = RoundedCornerShape(25),
                 onClick = onClick,
                 colors = ButtonDefaults.buttonColors(
@@ -95,7 +99,9 @@ fun Chip(
             }
         } else {
             OutlinedButton(
-                modifier = modifier,
+                modifier = modifier.semantics {
+                    contentDescription = "Chip"
+                },
                 shape = RoundedCornerShape(25),
                 onClick = onClick,
                 colors = ButtonDefaults.buttonColors(
