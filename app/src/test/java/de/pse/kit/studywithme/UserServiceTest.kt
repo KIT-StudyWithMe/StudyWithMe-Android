@@ -25,7 +25,7 @@ class UserServiceTest {
     fun myTest() {
         runBlocking {
             val serviceG = GroupService.instance
-            val hide = serviceG.hideGroup(7, true)
+            val hide = serviceG.hideGroup(7)
             val groups = serviceG.getGroups("geile Hengste")
             println(groups)
 
