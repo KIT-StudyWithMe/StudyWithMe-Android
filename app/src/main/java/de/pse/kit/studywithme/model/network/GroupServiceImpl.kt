@@ -270,7 +270,6 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
         }
     }
 
-
     override suspend fun getJoinRequests(groupID: Int): List<UserLight>? {
         return try {
             client.get(HttpRoutes.GROUPS + groupID + "/requests")
