@@ -7,6 +7,8 @@ plugins {
     id 'org.jetbrains.dokka'
 }
 
+apply from: "jacoco.gradle"
+
 android {
     compileSdk 31
     buildToolsVersion "33.0.0-rc1"
@@ -137,4 +139,18 @@ dependencies {
 
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
+}
+/*
+task jacocoTestReport(type: JacocoReport, dependsOn: ['test']) {
+
+    reports {
+        xml.enabled false
+        html.enabled true
+        //html.destination "$buildDir/jacocoReport"
+    }
+}
+*/
+jacoco {
+    toolVersion = "0.8.7"
+    //reportsDirectory = layout.buildDirectory.dir('$buildDir/jacocoReport')
 }
