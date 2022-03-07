@@ -5,10 +5,14 @@ import android.util.Log
 import de.pse.kit.studywithme.SingletonHolder
 import de.pse.kit.studywithme.model.data.*
 import de.pse.kit.studywithme.model.database.AppDatabase
+import de.pse.kit.studywithme.model.network.*
 
-import de.pse.kit.studywithme.model.network.GroupService
-import de.pse.kit.studywithme.model.network.ReportService
-import de.pse.kit.studywithme.model.network.UserService
+import io.ktor.client.*
+import io.ktor.client.engine.android.*
+import io.ktor.client.features.auth.*
+import io.ktor.client.features.auth.providers.*
+import io.ktor.client.features.json.*
+import io.ktor.client.features.json.serializer.*
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.*
@@ -24,10 +28,10 @@ import java.util.concurrent.atomic.AtomicBoolean
  * @param context
  */
 class GroupRepository private constructor(context: Context) : GroupRepositoryInterface {
-    private val groupService = GroupService.instance
-    private val reportService = ReportService.instance
     private val groupDao = AppDatabase.getInstance(context).groupDao()
     private val auth = Authenticator
+    private val reportService = ReportService.getInstance(Pair(Android.create()) { auth.getToken() })
+    private val groupService = GroupService.getInstance(Pair(Android.create()) { auth.getToken() })
 
     override suspend fun getGroups(search: String): List<Group> = coroutineScope {
         if (auth.firebaseUID == null) {

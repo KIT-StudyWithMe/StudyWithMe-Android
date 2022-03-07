@@ -9,6 +9,7 @@ import de.pse.kit.studywithme.model.data.SessionField
 import de.pse.kit.studywithme.model.database.AppDatabase
 import de.pse.kit.studywithme.model.network.ReportService
 import de.pse.kit.studywithme.model.network.SessionService
+import io.ktor.client.engine.android.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -25,10 +26,10 @@ import java.util.concurrent.atomic.AtomicBoolean
  * @param context
  */
 class SessionRepository private constructor(context: Context) : SessionRepositoryInterface {
-    private val sessionService = SessionService.instance
-    private val reportService = ReportService.instance
     private val sessionDao = AppDatabase.getInstance(context).sessionDao()
     private val auth = Authenticator
+    private val sessionService = SessionService.getInstance(Pair(Android.create()) { auth.getToken() })
+    private val reportService = ReportService.getInstance(Pair(Android.create()) { auth.getToken() })
 
     @ExperimentalCoroutinesApi
     override suspend fun getSessions(groupID: Int): Flow<List<Session>> = channelFlow {

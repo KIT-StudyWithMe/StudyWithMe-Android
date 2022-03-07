@@ -1,5 +1,6 @@
 package de.pse.kit.studywithme.model.network
 
+import de.pse.kit.studywithme.SingletonHolder
 import de.pse.kit.studywithme.model.data.Institution
 import de.pse.kit.studywithme.model.data.Major
 import de.pse.kit.studywithme.model.data.User
@@ -7,6 +8,8 @@ import de.pse.kit.studywithme.model.data.UserLight
 import io.ktor.client.*
 import io.ktor.client.engine.*
 import io.ktor.client.engine.android.*
+import io.ktor.client.features.auth.*
+import io.ktor.client.features.auth.providers.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 
@@ -92,20 +95,27 @@ interface UserService {
      */
     suspend fun newMajor(major: Major): Major?
 
+    companion object :
+        SingletonHolder<UserServiceImpl, Pair<HttpClientEngine, suspend () -> String?>>(
+            {
+                val engine = it.first
+                val token = it.second
 
-
-    companion object {
-        val instance: UserService by lazy {
-            client(Android.create())
-        }
-
-        fun client(engine: HttpClientEngine): UserService {
-            return UserServiceImpl(client = HttpClient(engine) {
-                install(JsonFeature) {
-                    val json = kotlinx.serialization.json.Json { ignoreUnknownKeys = true }
-                    serializer = KotlinxSerializer(json)
-                }
+                UserServiceImpl(client = HttpClient(engine) {
+                    install(JsonFeature) {
+                        val json = kotlinx.serialization.json.Json { ignoreUnknownKeys = true }
+                        serializer = KotlinxSerializer(json)
+                    }
+                    install(Auth) {
+                        bearer {
+                            loadTokens {
+                                BearerTokens(
+                                    accessToken = token() ?: return@loadTokens null,
+                                    refreshToken = token() ?: return@loadTokens null
+                                )
+                            }
+                        }
+                    }
+                })
             })
-        }
-    }
 }

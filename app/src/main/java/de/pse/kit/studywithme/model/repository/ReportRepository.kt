@@ -6,6 +6,7 @@ import de.pse.kit.studywithme.model.data.Report
 import de.pse.kit.studywithme.model.data.User
 import de.pse.kit.studywithme.model.network.ReportService
 import de.pse.kit.studywithme.model.network.ReportServiceImpl
+import de.pse.kit.studywithme.model.network.UserService
 import io.ktor.client.*
 import io.ktor.client.engine.android.*
 import io.ktor.client.features.json.*
@@ -18,7 +19,7 @@ import kotlinx.coroutines.runBlocking
  * @constructor Create empty Report repository
  */
 class ReportRepository private constructor() {
-    private val reportService = ReportService.instance
+    private val reportService = ReportService.getInstance(Pair(Android.create()) { "" })
 
     fun getReports(): List<Report> {
         return runBlocking {

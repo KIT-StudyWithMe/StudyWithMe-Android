@@ -21,6 +21,15 @@ object Authenticator {
         get() = firebaseUser?.uid
     var user: User? = null
 
+    suspend fun getToken(): String? {
+        return try {
+            val result = firebaseUser?.getIdToken(true)?.await()
+            result?.token
+        } catch (e: Exception) {
+            Log.w(TAG, "getIdToken:failure", e)
+            null
+        }
+    }
 
     suspend fun signUp(email: String, password: String): Boolean {
         try {
@@ -69,7 +78,6 @@ object Authenticator {
             return false
         }
 
-        println("EMAIl: " + firebaseUser!!.email)
         val credential = EmailAuthProvider.getCredential(firebaseUser!!.email!!, password)
 
         try {

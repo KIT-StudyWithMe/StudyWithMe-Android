@@ -8,6 +8,7 @@ import de.pse.kit.studywithme.model.data.Major
 import de.pse.kit.studywithme.model.data.User
 import de.pse.kit.studywithme.model.database.AppDatabase
 import de.pse.kit.studywithme.model.network.UserService
+import io.ktor.client.engine.android.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -21,9 +22,9 @@ import java.util.concurrent.atomic.AtomicBoolean
  * @param context
  */
 class UserRepository private constructor(context: Context) : UserRepositoryInterface {
-    private val userService = UserService.instance
     private val userDao = AppDatabase.getInstance(context).userDao()
     private val auth = Authenticator
+    private val userService = UserService.getInstance(Pair(Android.create()) { auth.getToken() })
 
     @ExperimentalCoroutinesApi
     override suspend fun isSignedIn(): Boolean {

@@ -1,9 +1,12 @@
 package de.pse.kit.studywithme.model.network
 
+import de.pse.kit.studywithme.SingletonHolder
 import de.pse.kit.studywithme.model.data.*
 import io.ktor.client.*
 import io.ktor.client.engine.*
 import io.ktor.client.engine.android.*
+import io.ktor.client.features.auth.*
+import io.ktor.client.features.auth.providers.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 
@@ -168,18 +171,27 @@ interface GroupService {
      */
     suspend fun getMajor(majorID: Int): Major?
 
-    companion object {
-        val instance: GroupService by lazy {
-            client(Android.create())
-        }
+    companion object :
+        SingletonHolder<GroupServiceImpl, Pair<HttpClientEngine, suspend () -> String?>>(
+            {
+                val engine = it.first
+                val token = it.second
 
-        fun client(engine: HttpClientEngine): GroupService {
-            return GroupServiceImpl(client = HttpClient(engine) {
-                install(JsonFeature) {
-                    val json = kotlinx.serialization.json.Json { ignoreUnknownKeys = true }
-                    serializer = KotlinxSerializer(json)
-                }
+                GroupServiceImpl(client = HttpClient(engine) {
+                    install(JsonFeature) {
+                        val json = kotlinx.serialization.json.Json { ignoreUnknownKeys = true }
+                        serializer = KotlinxSerializer(json)
+                    }
+                    install(Auth) {
+                        bearer {
+                            loadTokens {
+                                BearerTokens(
+                                    accessToken = token() ?: return@loadTokens null,
+                                    refreshToken = token() ?: return@loadTokens null
+                                )
+                            }
+                        }
+                    }
+                })
             })
-        }
-    }
 }
