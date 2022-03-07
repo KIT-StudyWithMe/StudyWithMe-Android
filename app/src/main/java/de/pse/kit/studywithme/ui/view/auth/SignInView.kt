@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -42,7 +43,6 @@ fun SignInView(viewModel: SignInViewModel) {
                 .padding(it)
                 .verticalScroll(
                     state = ScrollState(0)
-
                 )) {
                 Text(
                     text = "StudyWithMe",
@@ -60,6 +60,7 @@ fun SignInView(viewModel: SignInViewModel) {
                     )
                 }
                 TextField(
+                    modifier = Modifier.testTag("Email-Adresse"),
                     label = "Email-Adresse",
                     text = viewModel.email.collectAsState().value,
                     onChange = {
@@ -69,6 +70,7 @@ fun SignInView(viewModel: SignInViewModel) {
                     type = TextFieldType.EMAIL
                 )
                 TextField(
+                    modifier = Modifier.testTag("Passwort"),
                     label = "Passwort",
                     text = viewModel.password.collectAsState().value,
                     onChange = {
@@ -88,7 +90,7 @@ fun SignInView(viewModel: SignInViewModel) {
                         text = "Passwort vergessen", primary = false
                     )
                     Button(
-                        modifier = Modifier.weight(1.0f),
+                        modifier = Modifier.weight(1.0f).testTag("Anmelden"),
                         onClick = { viewModel.signIn() },
                         text = "Anmelden"
                     )
