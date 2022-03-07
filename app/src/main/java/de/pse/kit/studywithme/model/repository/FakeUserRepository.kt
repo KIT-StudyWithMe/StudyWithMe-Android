@@ -42,8 +42,12 @@ class FakeUserRepository(var signedIn: Boolean) : UserRepositoryInterface {
     }
 
     override suspend fun signIn(email: String, password: String): Boolean {
-        signedIn = true
-        return true
+       if (email == "max.mustermann@mustermail.com" && password == "Mind6Zeichen") {
+           signedIn = true
+           return true
+       } else
+           signedIn = false
+        return false
     }
 
     override suspend fun signUp(
