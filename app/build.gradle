@@ -12,6 +12,9 @@ apply from: "jacoco.gradle"
 android {
     compileSdk 31
     buildToolsVersion "33.0.0-rc1"
+    jacoco{
+         version = "0.8.7"
+     }
 
     defaultConfig {
         applicationId "de.pse.kit.studywithme"
