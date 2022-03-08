@@ -1,6 +1,5 @@
 package de.pse.kit.studywithme.ui.view.profile
 
-import android.util.Log
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -9,24 +8,21 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AlternateEmail
 import androidx.compose.material.icons.outlined.School
-import androidx.compose.material.icons.rounded.Book
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.MenuBook
-import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
 import de.pse.kit.studywithme.model.repository.FakeUserRepository
-import de.pse.kit.studywithme.model.repository.UserRepository
 import de.pse.kit.studywithme.ui.component.FormText
 import de.pse.kit.studywithme.ui.component.NavigationBar
 import de.pse.kit.studywithme.ui.component.TopBar
@@ -73,12 +69,14 @@ fun ProfileView(viewModel: ProfileViewModel) {
                     clickMiddle = { viewModel.navToSearchGroups() })
             }
         ) {
-            Column(modifier = Modifier
-                .padding(horizontal = 24.dp, vertical = 0.dp)
-                .padding(it)
-                .verticalScroll(
-                    state = ScrollState(0)
-                ),) {
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 24.dp, vertical = 0.dp)
+                    .padding(it)
+                    .verticalScroll(
+                        state = ScrollState(0)
+                    ),
+            ) {
                 Text("Persönliche Informationen", modifier = Modifier.padding(top = 12.dp))
                 FormText(text = viewModel.college, icon = Icons.Outlined.School)
                 FormText(text = viewModel.major, icon = Icons.Rounded.MenuBook)

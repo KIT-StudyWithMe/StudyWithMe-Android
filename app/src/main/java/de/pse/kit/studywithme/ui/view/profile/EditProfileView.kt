@@ -18,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -45,7 +46,10 @@ fun EditProfileView(viewModel: EditProfileViewModel) {
                 TopBar(
                     title = "Profil bearbeiten",
                     actions = {
-                        IconButton(onClick = { viewModel.saveProfile() }) {
+                        IconButton(
+                            onClick = { viewModel.saveProfile() },
+                            modifier = Modifier.testTag("Speichern")
+                        ) {
                             Icon(
                                 Icons.Rounded.Save,
                                 contentDescription = "Knopf um die Nutzerdaten zu editieren."
@@ -123,11 +127,13 @@ fun EditProfileView(viewModel: EditProfileViewModel) {
             ) {
                 Text("Persönliche Informationen", modifier = Modifier.padding(top = 12.dp))
                 FormTextField(
+                    modifier = Modifier.testTag("Uni"),
                     text = viewModel.college.collectAsState().value,
                     onChange = { viewModel.college.value = it },
                     label = "Universität/Hochschule"
                 )
                 FormTextField(
+                    modifier = Modifier.testTag("Studiengang"),
                     text = viewModel.major.collectAsState().value,
                     onChange = { viewModel.major.value = it },
                     label = "Studiengang"
@@ -135,11 +141,13 @@ fun EditProfileView(viewModel: EditProfileViewModel) {
 
                 Text("Kontaktinformationen", modifier = Modifier.padding(top = 12.dp))
                 FormTextField(
+                    modifier = Modifier.testTag("Nutzername"),
                     text = viewModel.username.collectAsState().value,
                     onChange = { viewModel.username.value = it },
                     label = "Username"
                 )
                 FormTextField(
+                    modifier = Modifier.testTag("Kontaktinfo"),
                     text = viewModel.contact.collectAsState().value,
                     onChange = { viewModel.contact.value = it },
                     label = "Erreichbar unter"
