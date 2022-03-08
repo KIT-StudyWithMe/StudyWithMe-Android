@@ -156,10 +156,10 @@ class EditGroupViewModel(
 
         val group = Group(
             groupID = group!!.groupID,
-            name = groupName.value,
+            name = groupName.value.trim(),
             lectureID = -1,
-            lecture = Lecture(-1, groupLecture.value, -1),
-            description = groupDescription.value,
+            lecture = Lecture(-1, groupLecture.value.trim(), -1),
+            description = groupDescription.value.trim(),
             sessionFrequency = sessionFrequencyToSave,
             sessionType = sessionTypeToSave,
             lectureChapter = lectureChapterInt,

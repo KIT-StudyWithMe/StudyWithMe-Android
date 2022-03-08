@@ -79,7 +79,7 @@ class EditSessionViewModel(
                     Session(
                         sessionID = session!!.sessionID,
                         groupID = groupState.value!!.groupID,
-                        location = place.value,
+                        location = place.value.trim(),
                         date = date.value,
                         duration = durationInt
                     )
