@@ -7,7 +7,6 @@ import de.pse.kit.studywithme.model.data.User
 import de.pse.kit.studywithme.model.data.UserLight
 import io.ktor.client.*
 import io.ktor.client.engine.*
-import io.ktor.client.engine.android.*
 import io.ktor.client.features.auth.*
 import io.ktor.client.features.auth.providers.*
 import io.ktor.client.features.json.*
@@ -110,8 +109,8 @@ interface UserService {
                         bearer {
                             loadTokens {
                                 BearerTokens(
-                                    accessToken = token() ?: return@loadTokens null,
-                                    refreshToken = token() ?: return@loadTokens null
+                                    accessToken = token() ?: "",
+                                    refreshToken = token() ?: ""
                                 )
                             }
                         }

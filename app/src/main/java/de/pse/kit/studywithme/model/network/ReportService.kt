@@ -109,8 +109,8 @@ interface ReportService {
                         bearer {
                             loadTokens {
                                 BearerTokens(
-                                    accessToken = token() ?: return@loadTokens null,
-                                    refreshToken = token() ?: return@loadTokens null
+                                    accessToken = token() ?: "",
+                                    refreshToken = token() ?: ""
                                 )
                             }
                         }
