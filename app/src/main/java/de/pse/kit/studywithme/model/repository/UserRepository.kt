@@ -10,6 +10,7 @@ import de.pse.kit.studywithme.model.database.AppDatabase
 import de.pse.kit.studywithme.model.network.UserService
 import io.ktor.client.engine.android.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.util.concurrent.atomic.AtomicBoolean
@@ -89,6 +90,10 @@ class UserRepository private constructor(context: Context) : UserRepositoryInter
                 val remoteUser = userService.getUser(remoteUserLight.userID.toInt())
                 if (remoteUser != null) {
                     Log.d(auth.TAG, "Remote Database User Get:success")
+
+                    if (userDao.getUser(remoteUser.userID) == null) {
+                        userDao.nukeAll()
+                    }
                     userDao.saveUser(remoteUser)
 
                     auth.user = remoteUser
@@ -136,6 +141,10 @@ class UserRepository private constructor(context: Context) : UserRepositoryInter
         Log.d(auth.TAG, remoteUser.toString() + "remote")
         if (remoteUser != null) {
             Log.d(auth.TAG, "Remote Database User Post:success")
+
+            if (userDao.getUser(remoteUser.userID) == null) {
+                userDao.nukeAll()
+            }
             userDao.saveUser(remoteUser)
             auth.user = remoteUser
 
@@ -165,18 +174,22 @@ class UserRepository private constructor(context: Context) : UserRepositoryInter
     }
 
     @ExperimentalCoroutinesApi
-    override suspend fun deleteAccount(password: String): Boolean {
+    override suspend fun deleteAccount(password: String): Boolean = coroutineScope {
         if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
 
-        // TODO: Delete all local data
         if (auth.deleteFirebaseUser(password)) {
-            userService.removeUser(auth.user!!.userID)
-            return true
+            launch {
+                userService.removeUser(auth.user!!.userID)
+            }
+            launch {
+                userDao.nukeAll()
+            }
+            return@coroutineScope true
         }
-        return false
+        return@coroutineScope false
     }
 
     override suspend fun getMajors(prefix: String): List<String> {

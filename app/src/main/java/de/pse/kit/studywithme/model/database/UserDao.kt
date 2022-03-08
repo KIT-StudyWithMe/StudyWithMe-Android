@@ -10,6 +10,38 @@ import de.pse.kit.studywithme.model.data.User
  */
 @Dao
 interface UserDao {
+    @Query("DELETE FROM user")
+    suspend fun nukeUser()
+
+    @Query("DELETE FROM session")
+    suspend fun nukeSessions()
+
+    @Query("DELETE FROM sessionattendee")
+    suspend fun nukeSessionAttendees()
+
+    @Query("DELETE FROM remotegroup")
+    suspend fun nukeGroups()
+
+    @Query("DELETE FROM lecture")
+    suspend fun nukeLecture()
+
+    @Query("DELETE FROM major")
+    suspend fun nukeMajors()
+
+    @Query("DELETE FROM groupmember")
+    suspend fun nukeMembers()
+
+    @Transaction
+    suspend fun nukeAll() {
+        nukeUser()
+        nukeSessions()
+        nukeSessionAttendees()
+        nukeGroups()
+        nukeLecture()
+        nukeMajors()
+        nukeMembers()
+    }
+
     /**
      * Saves a user in the database
      *
