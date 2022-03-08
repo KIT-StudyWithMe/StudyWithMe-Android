@@ -62,4 +62,61 @@ class SignInViewTest {
         buttonPw.performClick().performTextInput("Mind6Zeichen")
         buttonLogin.performClick()
     }
+
+    /**
+     * UI-Test FA30
+     *
+     */
+    @Test
+    fun forgotPw() {
+        composeTestRule.setContent {
+            MainView(
+                userRepo = FakeUserRepository(false),
+                groupRepo = FakeGroupRepository(),
+                sessionRepo = FakeSessionRepository()
+            )
+        }
+
+        //For debugging
+        composeTestRule.onRoot().printToLog("SIGN_IN_VIEW")
+
+        val buttonPwForget = composeTestRule.onNode(hasTestTag("Passwort vergessen"))
+        val buttonEmail = composeTestRule.onNode(hasTestTag("Email-Adresse"))
+
+        buttonPwForget.performClick()
+        buttonEmail.performClick().performTextInput("hort2@lichter.de")
+        buttonPwForget.performClick()
+    }
+
+    @Test
+    fun signUp() {
+        composeTestRule.setContent {
+            MainView(
+                userRepo = FakeUserRepository(false),
+                groupRepo = FakeGroupRepository(),
+                sessionRepo = FakeSessionRepository()
+            )
+        }
+
+        //For debugging
+        composeTestRule.onRoot().printToLog("SIGN_IN_VIEW")
+
+        val buttonSignUp = composeTestRule.onNode(hasTestTag("RegistrierenSignIn"))
+        val buttonEmail = composeTestRule.onNode(hasTestTag("Email-AdresseSignUp"))
+        val buttonUser = composeTestRule.onNode(hasTestTag("NutzernameSignUp"))
+        val buttonCollege = composeTestRule.onNode(hasTestTag("UniSignUp"))
+        val buttonLecture = composeTestRule.onNode(hasTestTag("LectureSignUp"))
+        val buttonPw = composeTestRule.onNode(hasTestTag("PwSignUp"))
+        val buttonRegister = composeTestRule.onNode(hasTestTag("SignUp"))
+
+        buttonSignUp.performClick()
+        buttonEmail.performClick().performTextInput("hort2@lichter.de")
+        buttonUser.performClick().performTextInput("Horst")
+        buttonCollege.performClick().performTextInput("KIT")
+        buttonLecture.performClick().performTextInput("Info")
+        buttonPw.performClick().performTextInput("Mind6Zeichen")
+        buttonRegister.performClick()
+
+    }
+
 }

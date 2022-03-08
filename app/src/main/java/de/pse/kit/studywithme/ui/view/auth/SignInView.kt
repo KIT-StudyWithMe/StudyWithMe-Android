@@ -85,7 +85,7 @@ fun SignInView(viewModel: SignInViewModel) {
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     Button(
-                        modifier = Modifier.weight(1.0f),
+                        modifier = Modifier.weight(1.0f).testTag("Passwort vergessen"),
                         onClick = { viewModel.forgotPassword() },
                         text = "Passwort vergessen", primary = false
                     )
@@ -100,7 +100,7 @@ fun SignInView(viewModel: SignInViewModel) {
                         text = "Registrieren",
                         modifier = Modifier.align(Alignment.End).padding(end = 12.dp).clickable {
                             viewModel.navToSignUp()
-                        },
+                        }.testTag("RegistrierenSignIn"),
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.tertiary
                     )

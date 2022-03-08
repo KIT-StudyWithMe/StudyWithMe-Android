@@ -13,6 +13,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -60,6 +61,7 @@ fun SignUpView(viewModel: SignUpViewModel) {
                     )
                 }
                 TextField(
+                    modifier = Modifier.testTag("Email-AdresseSignUp"),
                     label = "Email-Adresse",
                     text = viewModel.email.collectAsState().value,
                     onChange = {
@@ -69,6 +71,7 @@ fun SignUpView(viewModel: SignUpViewModel) {
                     type = TextFieldType.EMAIL
                 )
                 TextField(
+                    modifier = Modifier.testTag("NutzernameSignUp"),
                     label = "Username",
                     text = viewModel.username.collectAsState().value,
                     onChange = {
@@ -78,6 +81,7 @@ fun SignUpView(viewModel: SignUpViewModel) {
                     type = TextFieldType.TEXT
                 )
                 TextField(
+                    modifier = Modifier.testTag("UniSignUp"),
                     label = "Universität/Hochschule",
                     text = viewModel.college.collectAsState().value,
                     onChange = {
@@ -86,6 +90,7 @@ fun SignUpView(viewModel: SignUpViewModel) {
                     }
                 )
                 TextField(
+                    modifier = Modifier.testTag("LectureSignUp"),
                     label = "Studiengang",
                     text = viewModel.major.collectAsState().value,
                     onChange = {
@@ -94,6 +99,7 @@ fun SignUpView(viewModel: SignUpViewModel) {
                     }
                 )
                 TextField(
+                    modifier = Modifier.testTag("PwSignUp"),
                     label = "Passwort",
                     text = viewModel.password.collectAsState().value,
                     onChange = {
@@ -108,7 +114,7 @@ fun SignUpView(viewModel: SignUpViewModel) {
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     Button(
-                        modifier = Modifier.weight(1.0f),
+                        modifier = Modifier.weight(1.0f).testTag("SignUp"),
                         onClick = { viewModel.signUp() },
                         text = "Registrieren"
                     )
