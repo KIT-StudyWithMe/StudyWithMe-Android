@@ -3,10 +3,13 @@ package de.pse.kit.studywithme.model.repository
 import android.content.Context
 import android.util.Log
 import de.pse.kit.studywithme.SingletonHolder
+import de.pse.kit.studywithme.model.auth.Authenticator
+import de.pse.kit.studywithme.model.auth.AuthenticatorInterface
 import de.pse.kit.studywithme.model.data.Session
 import de.pse.kit.studywithme.model.data.SessionAttendee
 import de.pse.kit.studywithme.model.data.SessionField
 import de.pse.kit.studywithme.model.database.AppDatabase
+import de.pse.kit.studywithme.model.database.SessionDao
 import de.pse.kit.studywithme.model.network.ReportService
 import de.pse.kit.studywithme.model.network.SessionService
 import io.ktor.client.engine.android.*
@@ -25,11 +28,12 @@ import java.util.concurrent.atomic.AtomicBoolean
  *
  * @param context
  */
-class SessionRepository private constructor(context: Context) : SessionRepositoryInterface {
-    private val sessionDao = AppDatabase.getInstance(context).sessionDao()
-    private val auth = Authenticator
-    private val sessionService = SessionService.getInstance(Pair(Android.create()) { auth.firebaseUID ?: "" })
-    private val reportService = ReportService.getInstance(Pair(Android.create()) { auth.firebaseUID ?: "" })
+class SessionRepository private constructor(
+    private val sessionDao: SessionDao,
+    private val auth: AuthenticatorInterface,
+    private val sessionService: SessionService,
+    private val reportService: ReportService
+) : SessionRepositoryInterface {
 
     @ExperimentalCoroutinesApi
     override suspend fun getSessions(groupID: Int): Flow<List<Session>> = channelFlow {
@@ -167,5 +171,24 @@ class SessionRepository private constructor(context: Context) : SessionRepositor
         reportService.reportSession(sessionID, sessionfield, auth.user!!.userID)
     }
 
-    companion object : SingletonHolder<SessionRepository, Context>({ SessionRepository(it) })
+    companion object : SingletonHolder<SessionRepository, SessionRepoConstructor>({
+        SessionRepository(
+            it.sessionDao,
+            it.auth,
+            it.sessionService,
+            it.reportService
+        )
+    })
 }
+
+data class SessionRepoConstructor(
+    val context: Context,
+    val sessionDao: SessionDao = AppDatabase.getInstance(context).sessionDao(),
+    val auth: AuthenticatorInterface = Authenticator,
+    val sessionService: SessionService = SessionService.getInstance(Pair(Android.create()) {
+        Authenticator.firebaseUID ?: ""
+    }),
+    val reportService: ReportService = ReportService.getInstance(Pair(Android.create()) {
+        Authenticator.firebaseUID ?: ""
+    })
+)

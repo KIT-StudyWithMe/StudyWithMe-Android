@@ -9,6 +9,8 @@ import androidx.compose.material3.*
 import androidx.compose.material3.TopAppBarDefaults.smallTopAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -36,6 +38,9 @@ fun TopBar(
 ) {
     MyApplicationTheme3 {
         SmallTopAppBar(
+            modifier = Modifier.semantics {
+                contentDescription = "TopBar"
+            },
             title = {
                 Column {
                     Text(title.take(26), fontSize = MaterialTheme.typography.titleLarge.fontSize, fontWeight = FontWeight.SemiBold)

@@ -1,5 +1,10 @@
 package de.pse.kit.studywithme.viewModel.profile
 
+import android.util.Log
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
@@ -26,10 +31,10 @@ import kotlinx.coroutines.runBlocking
 class ProfileViewModel(navController: NavController, val userRepo: UserRepositoryInterface) :
     SignedInViewModel(navController) {
 
-    var username: String = ""
-    var contact: String = ""
-    var college: String = ""
-    var major: String = ""
+    var username by mutableStateOf("")
+    var contact by mutableStateOf("")
+    var college by mutableStateOf("")
+    var major by mutableStateOf("")
 
     init {
         refreshUser()
@@ -49,7 +54,6 @@ class ProfileViewModel(navController: NavController, val userRepo: UserRepositor
                     major = it.major ?: ""
                 }
             } catch (e: Exception) {
-
             }
         }
     }

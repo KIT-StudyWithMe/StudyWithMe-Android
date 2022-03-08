@@ -55,9 +55,9 @@ import kotlinx.coroutines.runBlocking
 @ExperimentalCoroutinesApi
 @Composable
 fun MainView(
-    userRepo: UserRepositoryInterface = UserRepository.getInstance(LocalContext.current),
-    groupRepo: GroupRepositoryInterface = GroupRepository.getInstance(LocalContext.current),
-    sessionRepo: SessionRepositoryInterface = SessionRepository.getInstance(LocalContext.current)
+    userRepo: UserRepositoryInterface = UserRepository.getInstance(UserRepoConstructor(LocalContext.current)),
+    groupRepo: GroupRepositoryInterface = GroupRepository.getInstance(GroupRepoConstructor(LocalContext.current)),
+    sessionRepo: SessionRepositoryInterface = SessionRepository.getInstance(SessionRepoConstructor(LocalContext.current))
 ) {
     val navController = rememberNavController()
     var startRoute = NavGraph.SignInForm.route

@@ -1,5 +1,6 @@
 package de.pse.kit.studywithme.ui.view.profile
 
+import android.util.Log
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -18,6 +19,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
@@ -43,13 +46,19 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 fun ProfileView(viewModel: ProfileViewModel) {
     MyApplicationTheme3 {
         Scaffold(
+            modifier = Modifier.semantics {
+                contentDescription = "ProfileView"
+            },
             containerColor = MaterialTheme.colorScheme.surface,
             topBar = {
                 TopBar(
                     title = viewModel.username,
                     isTab = true,
                     actions = {
-                        IconButton(onClick = { viewModel.navToEditProfile() }) {
+                        IconButton(
+                            modifier = Modifier.semantics {
+                                contentDescription = "EditGroupButton"
+                            },onClick = { viewModel.navToEditProfile() }) {
                             Icon(
                                 Icons.Rounded.Edit,
                                 contentDescription = "Knopf um die Nutzerdaten zu editieren."

@@ -3,8 +3,11 @@ package de.pse.kit.studywithme.model.repository
 import android.content.Context
 import android.util.Log
 import de.pse.kit.studywithme.SingletonHolder
+import de.pse.kit.studywithme.model.auth.Authenticator
+import de.pse.kit.studywithme.model.auth.AuthenticatorInterface
 import de.pse.kit.studywithme.model.data.*
 import de.pse.kit.studywithme.model.database.AppDatabase
+import de.pse.kit.studywithme.model.database.GroupDao
 import de.pse.kit.studywithme.model.network.*
 
 import io.ktor.client.engine.android.*
@@ -21,11 +24,12 @@ import java.util.concurrent.atomic.AtomicBoolean
  *
  * @param context
  */
-class GroupRepository private constructor(context: Context) : GroupRepositoryInterface {
-    private val groupDao = AppDatabase.getInstance(context).groupDao()
-    private val auth = Authenticator
-    private val reportService = ReportService.getInstance(Pair(Android.create()) { auth.firebaseUID ?: "" })
-    private val groupService = GroupService.getInstance(Pair(Android.create()) { auth.firebaseUID ?: "" })
+class GroupRepository private constructor(
+    private val groupDao: GroupDao,
+    private val auth: AuthenticatorInterface,
+    private val reportService: ReportService,
+    private val groupService: GroupService
+) : GroupRepositoryInterface {
 
     override suspend fun getGroups(search: String): List<Group> = coroutineScope {
         if (auth.firebaseUID == null) {
@@ -405,5 +409,24 @@ class GroupRepository private constructor(context: Context) : GroupRepositoryInt
     }
 
 
-    companion object : SingletonHolder<GroupRepository, Context>({ GroupRepository(it) })
+    companion object : SingletonHolder<GroupRepository, GroupRepoConstructor>({
+        GroupRepository(
+            it.groupDao,
+            it.auth,
+            it.reportService,
+            it.groupService
+        )
+    })
 }
+
+data class GroupRepoConstructor(
+    val context: Context,
+    val groupDao: GroupDao = AppDatabase.getInstance(context).groupDao(),
+    val auth: AuthenticatorInterface = Authenticator,
+    val reportService: ReportService = ReportService.getInstance(Pair(Android.create()) {
+        Authenticator.firebaseUID ?: ""
+    }),
+    val groupService: GroupService = GroupService.getInstance(Pair(Android.create()) {
+        Authenticator.firebaseUID ?: ""
+    })
+)

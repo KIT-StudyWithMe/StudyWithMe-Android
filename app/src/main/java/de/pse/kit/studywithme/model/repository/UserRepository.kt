@@ -3,10 +3,13 @@ package de.pse.kit.studywithme.model.repository
 import android.content.Context
 import android.util.Log
 import de.pse.kit.studywithme.SingletonHolder
+import de.pse.kit.studywithme.model.auth.Authenticator
+import de.pse.kit.studywithme.model.auth.AuthenticatorInterface
 import de.pse.kit.studywithme.model.data.Institution
 import de.pse.kit.studywithme.model.data.Major
 import de.pse.kit.studywithme.model.data.User
 import de.pse.kit.studywithme.model.database.AppDatabase
+import de.pse.kit.studywithme.model.database.UserDao
 import de.pse.kit.studywithme.model.network.UserService
 import io.ktor.client.engine.android.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -22,10 +25,11 @@ import java.util.concurrent.atomic.AtomicBoolean
  *
  * @param context
  */
-class UserRepository private constructor(context: Context) : UserRepositoryInterface {
-    private val userDao = AppDatabase.getInstance(context).userDao()
-    private val auth = Authenticator
-    private val userService = UserService.getInstance(Pair(Android.create()) { auth.firebaseUID ?: "" })
+class UserRepository private constructor(
+    private val userDao: UserDao,
+    private val userService: UserService,
+    private val auth: AuthenticatorInterface
+) : UserRepositoryInterface {
 
     @ExperimentalCoroutinesApi
     override suspend fun isSignedIn(): Boolean {
@@ -230,5 +234,12 @@ class UserRepository private constructor(context: Context) : UserRepositoryInter
         }
     }
 
-    companion object : SingletonHolder<UserRepository, Context>({ UserRepository(it) })
+    companion object : SingletonHolder<UserRepository, UserRepoConstructor>({ UserRepository(it.userDao, it.userService, it.auth) })
 }
+
+data class UserRepoConstructor(
+    val context: Context,
+    val userDao: UserDao = AppDatabase.getInstance(context).userDao(),
+    val userService: UserService = UserService.getInstance(Pair(Android.create()) { Authenticator.firebaseUID ?: "" }),
+    val auth: AuthenticatorInterface = Authenticator
+)
