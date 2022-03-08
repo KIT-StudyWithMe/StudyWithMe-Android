@@ -44,7 +44,7 @@ class SearchGroupsViewModel(navController: NavController, val groupRepo: GroupRe
     fun search(prefix: String) {
         search?.cancel()
         search = viewModelScope.launch {
-            groups.value = groupRepo.getGroups(prefix)
+            groups.value = groupRepo.getGroups(prefix.trim())
             Log.d("TEST", "GROUP SEARCH")
         }
     }

@@ -53,7 +53,7 @@ class SignInViewModel(navController: NavController, val userRepo: UserRepository
      */
     fun signIn() {
         viewModelScope.launch {
-            if (userRepo.signIn(email.value, password.value)) {
+            if (userRepo.signIn(email.value.trim(), password.value.trim())) {
                 Log.d("Auth-UI", "auth:completed")
                 refreshView()
                 NavGraph.navigateToJoinedGroups(navController)

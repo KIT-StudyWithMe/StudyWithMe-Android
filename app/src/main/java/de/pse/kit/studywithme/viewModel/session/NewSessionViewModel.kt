@@ -62,7 +62,7 @@ class NewSessionViewModel(
                 Session(
                     sessionID = -1,
                     groupID = groupID,
-                    location = place.value,
+                    location = place.value.trim(),
                     date = date.value,
                     duration = durationInt
                 )

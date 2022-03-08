@@ -52,11 +52,11 @@ class SignUpViewModel(navController: NavController, val userRepo: UserRepository
 
         viewModelScope.launch {
             if (userRepo.signUp(
-                    email = email.value,
-                    password = password.value,
-                    username = username.value,
-                    major = major.value,
-                    institution = college.value
+                    email = email.value.trim(),
+                    password = password.value.trim(),
+                    username = username.value.trim(),
+                    major = major.value.trim(),
+                    institution = college.value.trim()
                 )
             ) {
                 Log.d("Auth-UI", "signUp:completed")

@@ -58,12 +58,12 @@ class EditProfileViewModel(navController: NavController, val userRepo: UserRepos
                 val edited = userRepo.editSignedInUser(
                     User(
                         userID = user!!.userID,
-                        name = username.value,
-                        college = remoteCollege.await()?.name ?: user!!.college,
+                        name = username.value.trim(),
+                        college = remoteCollege.await()?.name?.trim() ?: user!!.college,
                         collegeID = remoteCollege.await()?.institutionID?.toInt() ?: user!!.collegeID,
-                        major = remoteMajor.await()?.name ?: user!!.major,
+                        major = remoteMajor.await()?.name?.trim() ?: user!!.major,
                         majorID = remoteMajor.await()?.majorID?.toInt() ?: user!!.majorID,
-                        contact = contact.value,
+                        contact = contact.value.trim(),
                         firebaseUID = user!!.firebaseUID
                     )
                 )
@@ -78,7 +78,7 @@ class EditProfileViewModel(navController: NavController, val userRepo: UserRepos
      */
     fun deleteAccount(password: String) {
         viewModelScope.launch {
-            if (userRepo.deleteAccount(password)) {
+            if (userRepo.deleteAccount(password.trim())) {
                 NavGraph.navigateToSignIn(navController)
             }
         }
