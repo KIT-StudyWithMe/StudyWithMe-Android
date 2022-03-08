@@ -33,7 +33,7 @@ class SignInViewTest {
     val composeTestRule = createComposeRule()
 
     /**
-     * UI-Test von /FA20/
+     * UI-Test /FA20/
      *
      */
     @Test
