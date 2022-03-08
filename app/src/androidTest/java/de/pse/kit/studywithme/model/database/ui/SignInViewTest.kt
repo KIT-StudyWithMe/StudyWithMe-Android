@@ -88,6 +88,10 @@ class SignInViewTest {
         buttonPwForget.performClick()
     }
 
+    /**
+     * UI-Test FA10
+     *
+     */
     @Test
     fun signUp() {
         composeTestRule.setContent {
