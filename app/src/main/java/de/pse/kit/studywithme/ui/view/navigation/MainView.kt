@@ -234,6 +234,10 @@ fun NavGraphBuilder.searchGroupsGraph(
                 )
             )
 
+            LaunchedEffect("navigation") {
+                viewModel.refreshGroups()
+            }
+
             SearchGroupsView(viewModel)
         }
 

@@ -1,5 +1,6 @@
 package de.pse.kit.studywithme.viewModel.group
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModelProvider
@@ -9,6 +10,8 @@ import de.pse.kit.studywithme.model.data.Group
 import de.pse.kit.studywithme.model.repository.GroupRepositoryInterface
 import de.pse.kit.studywithme.ui.view.navigation.NavGraph
 import de.pse.kit.studywithme.viewModel.SignedInViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 /**
@@ -23,9 +26,14 @@ class SearchGroupsViewModel(navController: NavController, val groupRepo: GroupRe
     SignedInViewModel(navController) {
 
     var groups: MutableState<List<Group>> = mutableStateOf(emptyList())
+    var search: Job? = null
 
     init {
         //groups.value = groupRepo.getGroupSuggestions()
+    }
+
+    fun refreshGroups() {
+        groups.value = emptyList()
     }
 
     /**
@@ -34,8 +42,10 @@ class SearchGroupsViewModel(navController: NavController, val groupRepo: GroupRe
      * @param prefix
      */
     fun search(prefix: String) {
-        viewModelScope.launch {
+        search?.cancel()
+        search = viewModelScope.launch {
             groups.value = groupRepo.getGroups(prefix)
+            Log.d("TEST", "GROUP SEARCH")
         }
     }
 

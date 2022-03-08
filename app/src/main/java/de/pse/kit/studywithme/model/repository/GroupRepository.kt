@@ -7,17 +7,11 @@ import de.pse.kit.studywithme.model.data.*
 import de.pse.kit.studywithme.model.database.AppDatabase
 import de.pse.kit.studywithme.model.network.*
 
-import io.ktor.client.*
 import io.ktor.client.engine.android.*
-import io.ktor.client.features.auth.*
-import io.ktor.client.features.auth.providers.*
-import io.ktor.client.features.json.*
-import io.ktor.client.features.json.serializer.*
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
@@ -54,8 +48,7 @@ class GroupRepository private constructor(context: Context) : GroupRepositoryInt
         }?.map {
             val lecture = groupService.getLecture(it.lectureID)
             val major = if (lecture != null) groupService.getMajor(lecture.majorID) else null
-            val group = RemoteGroup.toGroup(it, lecture = lecture, major = major)
-            return@map group
+            return@map RemoteGroup.toGroup(it, lecture = lecture, major = major)
         }
 
         return@coroutineScope filteredGroups ?: emptyList()
