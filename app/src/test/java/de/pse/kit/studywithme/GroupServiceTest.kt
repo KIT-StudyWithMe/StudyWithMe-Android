@@ -4,7 +4,7 @@ import de.pse.kit.studywithme.model.data.GroupMember
 import de.pse.kit.studywithme.model.data.RemoteGroup
 import de.pse.kit.studywithme.model.data.SessionFrequency
 import de.pse.kit.studywithme.model.data.SessionType
-import de.pse.kit.studywithme.model.network.GroupService.Companion.client
+import de.pse.kit.studywithme.model.network.GroupService
 import io.ktor.client.engine.mock.*
 import io.ktor.http.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -48,7 +48,7 @@ class GroupServiceTest {
     @Test
     fun getGroupsTest() = runBlocking {
         val mockEngine = successMockEngine(Json.encodeToString(mockGroups))
-        val apiClient = client(mockEngine)
+        val apiClient = GroupService.getInstance(Pair(mockEngine) { "" })
 
         val apiGroups = apiClient.getGroups("test")
 
@@ -59,7 +59,7 @@ class GroupServiceTest {
     @Test
     fun getJoinedGroupsTest() = runBlocking {
         val mockEngine = successMockEngine(Json.encodeToString(mockGroups))
-        val apiClient = client(mockEngine)
+        val apiClient = GroupService.getInstance(Pair(mockEngine) { "" })
 
         val apiGroups = apiClient.getJoinedGroups(0)
 
@@ -70,7 +70,7 @@ class GroupServiceTest {
     @Test
     fun getGroupSuggestionsTest() = runBlocking {
         val mockEngine = successMockEngine(Json.encodeToString(mockGroups))
-        val apiClient = client(mockEngine)
+        val apiClient = GroupService.getInstance(Pair(mockEngine) { "" })
 
         val apiGroup = apiClient.getGroupSuggestions(0)
 
@@ -82,7 +82,7 @@ class GroupServiceTest {
     fun getGroupTest() = runBlocking {
         val mockGroup = mockGroupData[0]
         val mockEngine = successMockEngine(Json.encodeToString(mockGroup))
-        val apiClient = client(mockEngine)
+        val apiClient = GroupService.getInstance(Pair(mockEngine) { "" })
 
         val apiGroup = apiClient.getGroup(0)
 
@@ -94,7 +94,7 @@ class GroupServiceTest {
     fun getGroupWithTooMuchDataTest() = runBlocking {
         val mockGroup = mockGroupData[0]
         val mockEngine = successMockEngine("""{"groupID":0,"name":"test","description":"test","lectureID":1,"sessionFrequency":"ONCE","sessionType":"HYBRID","lectureChapter":1,"exercise":1, "hidden":true}""")
-        val apiClient = client(mockEngine)
+        val apiClient = GroupService.getInstance(Pair(mockEngine) { "" })
 
         val apiGroup = apiClient.getGroup(0)
 
@@ -105,7 +105,7 @@ class GroupServiceTest {
     @Test
     fun getGroupMembersTest() = runBlocking {
         val mockEngine = successMockEngine(Json.encodeToString(mockGroupMembers[0]))
-        val apiClient = client(mockEngine)
+        val apiClient = GroupService.getInstance(Pair(mockEngine) { "" })
 
         val apiGroupMembers = apiClient.getGroupMembers(0)
 
@@ -127,7 +127,7 @@ class GroupServiceTest {
         )
 
         val mockEngine = successMockEngine(Json.encodeToString(newGroup))
-        val apiClient = client(mockEngine)
+        val apiClient = GroupService.getInstance(Pair(mockEngine) { "" })
 
         val apiGroup = apiClient.newGroup(newGroup, 0)
 
@@ -149,7 +149,7 @@ class GroupServiceTest {
         )
 
         val mockEngine = successMockEngine(Json.encodeToString(editedGroup))
-        val apiClient = client(mockEngine)
+        val apiClient = GroupService.getInstance(Pair(mockEngine) { "" })
 
         val apiGroup = apiClient.editGroup(editedGroup.groupID, editedGroup)
 
@@ -160,7 +160,7 @@ class GroupServiceTest {
     @Test
     fun removeGroup() = runBlocking {
         val mockEngine = successMockEngine()
-        val apiClient = client(mockEngine)
+        val apiClient = GroupService.getInstance(Pair(mockEngine) { "" })
 
         val result = apiClient.removeGroup(0)
 
