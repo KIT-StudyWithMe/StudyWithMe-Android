@@ -1,5 +1,7 @@
 package de.pse.kit.studywithme.model.network
 
+import android.util.Log
+import com.google.firebase.auth.GetTokenResult
 import de.pse.kit.studywithme.SingletonHolder
 import de.pse.kit.studywithme.model.data.Institution
 import de.pse.kit.studywithme.model.data.Major
@@ -95,7 +97,7 @@ interface UserService {
     suspend fun newMajor(major: Major): Major?
 
     companion object :
-        SingletonHolder<UserServiceImpl, Pair<HttpClientEngine, suspend () -> String?>>(
+        SingletonHolder<UserServiceImpl, Pair<HttpClientEngine, suspend (Boolean) -> String>>(
             {
                 val engine = it.first
                 val token = it.second
@@ -105,12 +107,24 @@ interface UserService {
                         val json = kotlinx.serialization.json.Json { ignoreUnknownKeys = true }
                         serializer = KotlinxSerializer(json)
                     }
+
                     install(Auth) {
+                        var tokenInfo: String
+
                         bearer {
                             loadTokens {
+                                tokenInfo = token(false)
                                 BearerTokens(
-                                    accessToken = token() ?: "",
-                                    refreshToken = token() ?: ""
+                                    accessToken = tokenInfo,
+                                    refreshToken = tokenInfo
+                                )
+                            }
+                            refreshTokens {
+                                tokenInfo = token(true)
+
+                                BearerTokens(
+                                    accessToken = tokenInfo,
+                                    refreshToken = tokenInfo
                                 )
                             }
                         }

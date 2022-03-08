@@ -8,6 +8,7 @@ import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.features.*
 import io.ktor.client.request.*
+import io.ktor.client.request.forms.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 
@@ -60,7 +61,6 @@ class UserServiceImpl(private var client: HttpClient) : UserService {
             val users: List<UserLight> = client.get(HttpRoutes.USERS) {
                 parameter("FUID", fbid)
             }
-            println("test: "+ users)
             return users.last()
         } catch (e: RedirectResponseException) {
             println("GetUserByFUID Redirect Error: ${e.response.status}")

@@ -9,6 +9,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Test
 
 class UserServiceTest {
+    /*
     private val service = UserService.instance
     private val userB = User(
         userID = -1,
@@ -115,4 +116,5 @@ class UserServiceTest {
             assert(deleted)
         }
     }
+    */
 }

@@ -24,8 +24,8 @@ import java.util.concurrent.atomic.AtomicBoolean
 class GroupRepository private constructor(context: Context) : GroupRepositoryInterface {
     private val groupDao = AppDatabase.getInstance(context).groupDao()
     private val auth = Authenticator
-    private val reportService = ReportService.getInstance(Pair(Android.create()) { auth.getToken() })
-    private val groupService = GroupService.getInstance(Pair(Android.create()) { auth.getToken() })
+    private val reportService = ReportService.getInstance(Pair(Android.create()) { auth.firebaseUID ?: "" })
+    private val groupService = GroupService.getInstance(Pair(Android.create()) { auth.firebaseUID ?: "" })
 
     override suspend fun getGroups(search: String): List<Group> = coroutineScope {
         if (auth.firebaseUID == null) {

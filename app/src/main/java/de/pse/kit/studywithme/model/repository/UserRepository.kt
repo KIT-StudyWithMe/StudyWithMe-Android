@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 class UserRepository private constructor(context: Context) : UserRepositoryInterface {
     private val userDao = AppDatabase.getInstance(context).userDao()
     private val auth = Authenticator
-    private val userService = UserService.getInstance(Pair(Android.create()) { auth.getToken() })
+    private val userService = UserService.getInstance(Pair(Android.create()) { auth.firebaseUID ?: "" })
 
     @ExperimentalCoroutinesApi
     override suspend fun isSignedIn(): Boolean {

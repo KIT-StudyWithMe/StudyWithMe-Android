@@ -95,7 +95,7 @@ interface ReportService {
     suspend fun unblockUser(uid: Int)
 
     companion object :
-        SingletonHolder<ReportServiceImpl, Pair<HttpClientEngine, suspend () -> String?>>(
+        SingletonHolder<ReportServiceImpl, Pair<HttpClientEngine, suspend (Boolean) -> String>>(
             {
                 val engine = it.first
                 val token = it.second
@@ -105,12 +105,24 @@ interface ReportService {
                         val json = kotlinx.serialization.json.Json { ignoreUnknownKeys = true }
                         serializer = KotlinxSerializer(json)
                     }
+
                     install(Auth) {
+                        var tokenInfo: String
+
                         bearer {
                             loadTokens {
+                                tokenInfo = token(false)
                                 BearerTokens(
-                                    accessToken = token() ?: "",
-                                    refreshToken = token() ?: ""
+                                    accessToken = tokenInfo,
+                                    refreshToken = tokenInfo
+                                )
+                            }
+                            refreshTokens {
+                                tokenInfo = token(true)
+
+                                BearerTokens(
+                                    accessToken = tokenInfo,
+                                    refreshToken = tokenInfo
                                 )
                             }
                         }

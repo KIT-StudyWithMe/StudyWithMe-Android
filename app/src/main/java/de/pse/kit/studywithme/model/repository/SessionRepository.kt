@@ -28,8 +28,8 @@ import java.util.concurrent.atomic.AtomicBoolean
 class SessionRepository private constructor(context: Context) : SessionRepositoryInterface {
     private val sessionDao = AppDatabase.getInstance(context).sessionDao()
     private val auth = Authenticator
-    private val sessionService = SessionService.getInstance(Pair(Android.create()) { auth.getToken() })
-    private val reportService = ReportService.getInstance(Pair(Android.create()) { auth.getToken() })
+    private val sessionService = SessionService.getInstance(Pair(Android.create()) { auth.firebaseUID ?: "" })
+    private val reportService = ReportService.getInstance(Pair(Android.create()) { auth.firebaseUID ?: "" })
 
     @ExperimentalCoroutinesApi
     override suspend fun getSessions(groupID: Int): Flow<List<Session>> = channelFlow {

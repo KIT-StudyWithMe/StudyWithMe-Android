@@ -77,7 +77,7 @@ interface SessionService {
     suspend fun removeAttendee(userID: Int, sessionID: Int)
 
     companion object :
-        SingletonHolder<SessionServiceImpl, Pair<HttpClientEngine, suspend () -> String?>>(
+        SingletonHolder<SessionServiceImpl, Pair<HttpClientEngine, suspend (Boolean) -> String>>(
             {
                 val engine = it.first
                 val token = it.second
@@ -87,12 +87,24 @@ interface SessionService {
                         val json = kotlinx.serialization.json.Json { ignoreUnknownKeys = true }
                         serializer = KotlinxSerializer(json)
                     }
+
                     install(Auth) {
+                        var tokenInfo: String
+
                         bearer {
                             loadTokens {
+                                tokenInfo = token(false)
                                 BearerTokens(
-                                    accessToken = token() ?: "",
-                                    refreshToken = token() ?: ""
+                                    accessToken = tokenInfo,
+                                    refreshToken = tokenInfo
+                                )
+                            }
+                            refreshTokens {
+                                tokenInfo = token(true)
+
+                                BearerTokens(
+                                    accessToken = tokenInfo,
+                                    refreshToken = tokenInfo
                                 )
                             }
                         }

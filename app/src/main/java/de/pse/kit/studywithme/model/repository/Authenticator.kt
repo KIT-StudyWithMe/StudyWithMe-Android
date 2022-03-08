@@ -1,12 +1,16 @@
 package de.pse.kit.studywithme.model.repository
 
 import android.util.Log
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.GetTokenResult
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import de.pse.kit.studywithme.model.data.User
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withTimeout
+
 
 /**
  * Object required for the authentification of a user
@@ -21,13 +25,20 @@ object Authenticator {
         get() = firebaseUser?.uid
     var user: User? = null
 
-    suspend fun getToken(): String? {
-        return try {
-            val result = firebaseUser?.getIdToken(true)?.await()
-            result?.token
+
+    suspend fun getToken(refresh: Boolean): String? {
+        try {
+            Log.d("TOKEN","refresh: $refresh")
+            return withTimeout(2000) {
+                val result = firebaseUser?.getIdToken(refresh) ?: return@withTimeout null
+                Log.d("TOKEN","user: ${firebaseUser}, result: $result")
+                val t = result.await().token
+                Log.d("TOKEN", "token: $t")
+                t
+            }
         } catch (e: Exception) {
             Log.w(TAG, "getIdToken:failure", e)
-            null
+            return null
         }
     }
 
