@@ -90,6 +90,7 @@ fun NonJoinedGroupDetailsView(viewModel: NonJoinedGroupDetailsViewModel) {
                         it.name
                     },
                     groupMember = listOf(),
+                    groupMemberCount = group?.memberCount,
                     description = group?.description ?: "",
                     selectedChips = listOf(
                         group?.sessionFrequency?.name?.lowercase()

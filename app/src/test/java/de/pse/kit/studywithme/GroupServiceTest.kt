@@ -32,7 +32,8 @@ class GroupServiceTest {
                 sessionFrequency = SessionFrequency.ONCE,
                 sessionType = SessionType.HYBRID,
                 lectureChapter = 1,
-                exercise = 1
+                exercise = 1,
+                memberCount = 2
             )
         )
 
@@ -123,7 +124,8 @@ class GroupServiceTest {
             sessionFrequency = SessionFrequency.WEEKLY,
             sessionType = SessionType.PRESENCE,
             lectureChapter = 1,
-            exercise = 2
+            exercise = 2,
+            memberCount = 1
         )
 
         val mockEngine = successMockEngine(Json.encodeToString(newGroup))
@@ -145,7 +147,8 @@ class GroupServiceTest {
             sessionFrequency = SessionFrequency.WEEKLY,
             sessionType = SessionType.PRESENCE,
             lectureChapter = 1,
-            exercise = 2
+            exercise = 2,
+            memberCount = 2
         )
 
         val mockEngine = successMockEngine(Json.encodeToString(editedGroup))

@@ -35,6 +35,7 @@ class FakeGroupRepository() : GroupRepositoryInterface {
             sessionType = SessionType.ONLINE,
             lectureChapter = 1,
             exercise = 1,
+            memberCount = 1
         ),
         Group(
             groupID = 2,
@@ -54,6 +55,7 @@ class FakeGroupRepository() : GroupRepositoryInterface {
             sessionType = SessionType.ONLINE,
             lectureChapter = 1,
             exercise = 1,
+            memberCount = 2
         ),
         Group(
             groupID = 0,
@@ -73,6 +75,7 @@ class FakeGroupRepository() : GroupRepositoryInterface {
             sessionType = SessionType.HYBRID,
             lectureChapter = 8,
             exercise = 8,
+            memberCount = 2
         )
     )
 

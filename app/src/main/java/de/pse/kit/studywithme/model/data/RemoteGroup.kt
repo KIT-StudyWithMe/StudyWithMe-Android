@@ -55,6 +55,9 @@ data class RemoteGroup(
     @ColumnInfo(name = "exercise")
     val exercise: Int,
 
+    @SerialName(value = "memberCount")
+    @ColumnInfo(name = "member_count")
+    val memberCount: Int?
 ) {
     /**
      * Companion
@@ -82,6 +85,7 @@ data class RemoteGroup(
                 sessionType = remoteGroup.sessionType,
                 lectureChapter = remoteGroup.lectureChapter,
                 exercise = remoteGroup.exercise,
+                memberCount = remoteGroup.memberCount ?: 0
             )
         }
 
@@ -101,6 +105,7 @@ data class RemoteGroup(
                 sessionType = group.sessionType,
                 lectureChapter = group.lectureChapter,
                 exercise = group.exercise,
+                memberCount = null
             )
         }
     }
