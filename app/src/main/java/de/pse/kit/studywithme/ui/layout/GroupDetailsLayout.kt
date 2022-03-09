@@ -13,6 +13,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
@@ -83,7 +85,8 @@ fun GroupDetailsLayout(
                 )
                 FormText(icon = Icons.Filled.LocationOn, text = place, maxLines = 2)
                 FormText(icon = Icons.Filled.Timer, text = time, maxLines = 2)
-                FormText(icon = Icons.Rounded.Group, text = "Es nehmen $sessionParticipantsCount teil", maxLines = 2)
+                FormText(icon = Icons.Rounded.Group, text = "Es nehmen $sessionParticipantsCount teil", maxLines = 2,
+                )
             }
 
             Text(text = "Weitere Informationen", modifier = Modifier.padding(top = 12.dp))
