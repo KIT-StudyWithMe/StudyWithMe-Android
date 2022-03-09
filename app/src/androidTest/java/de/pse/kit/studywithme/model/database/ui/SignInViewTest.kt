@@ -53,6 +53,7 @@ class SignInViewTest {
         val buttonPw = composeTestRule.onNode(hasTestTag("Passwort"))
         val buttonLogin = composeTestRule.onNode(hasTestTag("Anmelden"))
 
+        //LogIn of a non-existing and existing User
         buttonEmail.performClick().performTextInput("hort2@lichter.de")
         buttonPw.performClick().performTextInput("passworthorst98")
         buttonLogin.performClick()
@@ -61,6 +62,7 @@ class SignInViewTest {
         buttonPw.performClick().performTextClearance()
         buttonPw.performClick().performTextInput("Mind6Zeichen")
         buttonLogin.performClick()
+        composeTestRule.onNodeWithContentDescription("JoinedGroupsView").assertExists()
     }
 
     /**
@@ -83,9 +85,12 @@ class SignInViewTest {
         val buttonPwForget = composeTestRule.onNode(hasTestTag("Passwort vergessen"))
         val buttonEmail = composeTestRule.onNode(hasTestTag("Email-Adresse"))
 
+        //Forgot Pw Button is being pressed
         buttonPwForget.performClick()
-        buttonEmail.performClick().performTextInput("hort2@lichter.de")
+        buttonEmail.performClick().performTextInput("dieter.bohlen@dsds.de")
         buttonPwForget.performClick()
+        composeTestRule.onNodeWithText("Eine Email zum zurücksetzen wurde gesendet").assertExists()
+        composeTestRule.onNodeWithContentDescription("SignInView").assertExists()
     }
 
     /**
@@ -113,13 +118,16 @@ class SignInViewTest {
         val buttonPw = composeTestRule.onNode(hasTestTag("PwSignUp"))
         val buttonRegister = composeTestRule.onNode(hasTestTag("SignUp"))
 
+        //Registers new User
         buttonSignUp.performClick()
+        composeTestRule.onNodeWithContentDescription("SignUpView")
         buttonEmail.performClick().performTextInput("hort2@lichter.de")
         buttonUser.performClick().performTextInput("Horst")
         buttonCollege.performClick().performTextInput("KIT")
         buttonLecture.performClick().performTextInput("Info")
         buttonPw.performClick().performTextInput("Mind6Zeichen")
         buttonRegister.performClick()
+        composeTestRule.onNodeWithContentDescription("SearchGroupsView").assertExists()
 
     }
 
