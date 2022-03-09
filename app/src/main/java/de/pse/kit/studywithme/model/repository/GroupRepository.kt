@@ -185,7 +185,7 @@ class GroupRepository private constructor(
 
         val editedGroup = RemoteGroup.toRemoteGroup(group)
         val remoteGroup = groupService.editGroup(group.groupID, editedGroup)
-        if (remoteGroup == editedGroup) {
+        if (remoteGroup != null) {
             groupDao.editGroup(editedGroup)
             return true
         } else {
