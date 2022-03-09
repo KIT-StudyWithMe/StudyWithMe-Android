@@ -164,6 +164,7 @@ class EditGroupViewModel(
             sessionType = sessionTypeToSave,
             lectureChapter = lectureChapterInt,
             exercise = groupExerciseInt,
+            memberCount = group!!.memberCount
         )
         viewModelScope.launch {
             val groupSaved = groupRepo.editGroup(group)

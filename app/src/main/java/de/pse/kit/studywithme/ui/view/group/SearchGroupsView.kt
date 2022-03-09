@@ -48,11 +48,17 @@ fun SearchGroupsView(viewModel: SearchGroupsViewModel) {
             },
             containerColor = MaterialTheme.colorScheme.surface
         ) {
-            Column(modifier = Modifier
-                .padding(horizontal = 20.dp)
-                .padding(top = 6.dp)
-                .padding(it)) {
-                Button(onClick = { viewModel.newGroup() }, text = "Neue Gruppe")
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
+                    .padding(top = 6.dp)
+                    .padding(it)
+            ) {
+                Button(
+                    modifier = Modifier.semantics { contentDescription = "NewGroupButton" },
+                    onClick = { viewModel.newGroup() },
+                    text = "Neue Gruppe"
+                )
 
                 LazyColumn(
                     modifier = Modifier.padding(top = 6.dp),

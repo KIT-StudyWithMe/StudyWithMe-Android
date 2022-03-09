@@ -86,6 +86,7 @@ class NewGroupViewModel(navController: NavController, private val groupRepo: Gro
             sessionType = sessionTypeToSave,
             lectureChapter = lectureChapterInt,
             exercise = groupExerciseInt,
+            memberCount = 1
         )
         viewModelScope.launch {
             val saved = groupRepo.newGroup(group)

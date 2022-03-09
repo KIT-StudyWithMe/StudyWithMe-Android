@@ -134,7 +134,7 @@ class ProfileViewTest {
                         context = context,
                         userDao = userDao,
                         userService = UserService.getInstance(Pair(mockEngine) { "" }),
-                        auth = FakeAuthenticator
+                        auth = FakeAuthenticator()
                     )
                 )
             )
@@ -159,10 +159,13 @@ class ProfileViewTest {
      * UI-Test /FA40/
      *
      */
+    @ExperimentalCoroutinesApi
     @ExperimentalMaterial3Api
     @ExperimentalMaterialApi
     @Test
     fun editProfile() {
+        val auth = FakeAuthenticator()
+
         composeTestRule.setContent {
             MainView(
                 userRepo = UserRepository.getInstance(
@@ -170,7 +173,7 @@ class ProfileViewTest {
                         context = context,
                         userDao = userDao,
                         userService = UserService.getInstance(Pair(mockEngine) { "" }),
-                        auth = FakeAuthenticator
+                        auth = auth
                     )
                 ),
                 groupRepo = GroupRepository.getInstance(
@@ -178,7 +181,7 @@ class ProfileViewTest {
                         context = context,
                         groupDao = groupDao,
                         groupService = GroupService.getInstance(Pair(mockEngine) { "" }),
-                        auth = FakeAuthenticator
+                        auth = auth
                     )
                 ),
                 sessionRepo = SessionRepository.getInstance(
@@ -186,7 +189,7 @@ class ProfileViewTest {
                         context = context,
                         sessionDao = sessionDao,
                         sessionService = SessionService.getInstance(Pair(mockEngine) { "" }),
-                        auth = FakeAuthenticator
+                        auth = auth
                     )
                 )
             )

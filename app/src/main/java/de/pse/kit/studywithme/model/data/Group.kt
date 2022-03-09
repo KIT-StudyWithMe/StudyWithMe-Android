@@ -36,4 +36,5 @@ data class Group (
 
     val exercise: Int,
 
+    val memberCount: Int
 )

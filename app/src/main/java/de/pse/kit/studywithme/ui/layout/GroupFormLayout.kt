@@ -11,6 +11,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.pse.kit.myapplication.ui.theme.*
@@ -72,16 +74,19 @@ fun GroupFormLayout(
         Column {
             Text(modifier = Modifier.padding(top = 12.dp), text = "Gruppeninformationen")
             FormTextField(
+                modifier = Modifier.semantics { contentDescription = "GroupNameField" },
                 label = "Gruppenname",
                 text = groupName,
                 onChange = groupNameChange
             )
             FormTextField(
+                modifier = Modifier.semantics { contentDescription = "LectureNameField" },
                 label = "Vorlesung",
                 text = lecture,
                 onChange = lectureChange
             )
             FormTextField(
+                modifier = Modifier.semantics { contentDescription = "DescriptionField" },
                 label = "Beschreibung",
                 text = description,
                 onChange = descriptionChange
@@ -103,6 +108,7 @@ fun GroupFormLayout(
             )
             Text(modifier = Modifier.padding(top = 12.dp), text = "Lernfortschritt")
             FormTextField(
+                modifier = Modifier.semantics { contentDescription = "ChapterNrField" },
                 label = "Vorlesung: Kapitelnr.",
                 text = chapterNumber,
                 onChange = {
@@ -127,6 +133,7 @@ fun GroupFormLayout(
 
 
             FormTextField(
+                modifier = Modifier.semantics { contentDescription = "ExerciseNrField" },
                 label = "Übungsblatt Nr.",
                 text = exerciseSheetNumber,
                 onChange = {

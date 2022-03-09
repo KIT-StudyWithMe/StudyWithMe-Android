@@ -16,7 +16,7 @@ import de.pse.kit.studywithme.model.database.TypeConverters as TypeConverters_
  */
 @Database(
     entities = [Session::class, RemoteGroup::class, User::class, SessionAttendee::class, GroupMember::class, Lecture::class, Major::class],
-    version = 2
+    version = 4
 )
 @TypeConverters(TypeConverters_::class)
 abstract class AppDatabase : RoomDatabase() {
