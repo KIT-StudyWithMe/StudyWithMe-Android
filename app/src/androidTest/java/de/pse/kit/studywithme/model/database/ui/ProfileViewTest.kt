@@ -208,7 +208,9 @@ class ProfileViewTest {
 
         myProfileTab.assertExists()
         myProfileTab.performClick()
+        composeTestRule.onNodeWithContentDescription("ProfileView").assertExists()
         editProfile.performClick()
+        composeTestRule.onNodeWithContentDescription("EditProfileView").assertExists()
         editCollege.performClick().performTextClearance()
         editCollege.performClick().performTextInput("KIT")
         editMajor.performClick().performTextClearance()
@@ -218,7 +220,56 @@ class ProfileViewTest {
         editContact.performClick().performTextClearance()
         editContact.performClick().performTextInput("maxMustermann@mustermail.com")
         saveProfile.performClick()
+        composeTestRule.onNodeWithContentDescription("ProfileView").assertExists()
+    }
+
+    /**
+     * UI-Test /FA50/
+     *
+     */
+    @Test
+    fun logout() {
+        val auth = FakeAuthenticator()
+
+        composeTestRule.setContent {
+            MainView(
+                userRepo = UserRepository.getInstance(
+                    UserRepoConstructor(
+                        context = context,
+                        userDao = userDao,
+                        userService = UserService.getInstance(Pair(mockEngine) { "" }),
+                        auth = auth
+                    )
+                ),
+                groupRepo = GroupRepository.getInstance(
+                    GroupRepoConstructor(
+                        context = context,
+                        groupDao = groupDao,
+                        groupService = GroupService.getInstance(Pair(mockEngine) { "" }),
+                        auth = auth
+                    )
+                ),
+                sessionRepo = SessionRepository.getInstance(
+                    SessionRepoConstructor(
+                        context = context,
+                        sessionDao = sessionDao,
+                        sessionService = SessionService.getInstance(Pair(mockEngine) { "" }),
+                        auth = auth
+                    )
+                )
+            )
+        }
+
+        val logout = composeTestRule.onNode(hasTestTag("Abmelden"))
+        val myProfileTab = composeTestRule.onNodeWithContentDescription("ProfileTab")
+
+        myProfileTab.assertExists()
+        myProfileTab.performClick()
+        composeTestRule.onNodeWithContentDescription("ProfileView").assertExists()
+        logout.performClick()
+        composeTestRule.onNodeWithContentDescription("SignInView").assertExists()
 
     }
+
 }
 
