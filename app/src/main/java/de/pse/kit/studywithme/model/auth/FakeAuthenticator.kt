@@ -2,11 +2,19 @@ package de.pse.kit.studywithme.model.auth
 
 import de.pse.kit.studywithme.model.data.User
 
-object FakeAuthenticator: AuthenticatorInterface {
-    override val firebaseUID: String
-        get() = "dfg46thrge7fnd"
-    override var user: User? = null
-    private var signedInUser = "user@mail.com"
+class FakeAuthenticator: AuthenticatorInterface {
+    override val firebaseUID: String?
+        get() = if (user?.firebaseUID == "") null else user?.firebaseUID
+    override var user: User? = User(
+        userID = 0,
+        name = "max.mustermann",
+        contact = "max.mustermann@mustermail.com",
+        college = "Karlsruher Institut für Technologie",
+        collegeID = 0,
+        major = "Informatik B.Sc.",
+        majorID = 0,
+        firebaseUID = "dfg46thrge7fnd"
+    )
     private var signedUpUsers = mutableMapOf("user@mail.com" to "password")
 
     override suspend fun getToken(refresh: Boolean): String? {
@@ -15,12 +23,34 @@ object FakeAuthenticator: AuthenticatorInterface {
 
     override suspend fun signUp(email: String, password: String): Boolean {
         signedUpUsers[email] = password
-        signedInUser = email
+        user = User(
+            userID = 0,
+            name = "max.mustermann",
+            contact = email,
+            college = "Karlsruher Institut für Technologie",
+            collegeID = 0,
+            major = "Informatik B.Sc.",
+            majorID = 0,
+            firebaseUID = "dfg46thrge7fnd"
+        )
         return true
     }
 
     override suspend fun signIn(email: String, password: String): Boolean {
-        return signedInUser == email && signedUpUsers[email] == password
+        if (signedUpUsers[email] == password) {
+            user = User(
+                userID = 0,
+                name = "max.mustermann",
+                contact = email,
+                college = "Karlsruher Institut für Technologie",
+                collegeID = 0,
+                major = "Informatik B.Sc.",
+                majorID = 0,
+                firebaseUID = "dfg46thrge7fnd"
+            )
+            return true
+        }
+        return false
     }
 
     override suspend fun resetPassword(email: String): Boolean {
@@ -28,12 +58,22 @@ object FakeAuthenticator: AuthenticatorInterface {
     }
 
     override fun signOut() {
-        signedInUser = ""
+        user = User(
+            userID = 0,
+            name = "max.mustermann",
+            contact = "",
+            college = "Karlsruher Institut für Technologie",
+            collegeID = 0,
+            major = "Informatik B.Sc.",
+            majorID = 0,
+            firebaseUID = ""
+        )
     }
 
     override suspend fun deleteFirebaseUser(password: String): Boolean {
-        if (signedUpUsers[signedInUser] == password) {
-            signedUpUsers.remove(signedInUser)
+        if (signedUpUsers[user?.contact] == password) {
+            signOut()
+            signedUpUsers.remove(user?.contact)
             return true
         }
         return false
