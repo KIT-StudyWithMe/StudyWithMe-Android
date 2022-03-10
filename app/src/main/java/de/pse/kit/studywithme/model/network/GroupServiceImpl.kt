@@ -19,8 +19,6 @@ class GroupServiceImpl(private var client: HttpClient): GroupService {
         return try {
             client.get(HttpRoutes.GROUPS) {
                 parameter("text", search)
-                parameter("lecture", search)
-                parameter("name", search)
             }
         } catch (e: RedirectResponseException) {
             println("GetGroups Redirect Error: ${e.response.status}")

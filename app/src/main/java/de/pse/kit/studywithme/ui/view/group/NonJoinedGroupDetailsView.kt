@@ -14,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
@@ -50,7 +51,9 @@ fun NonJoinedGroupDetailsView(viewModel: NonJoinedGroupDetailsViewModel) {
                     subtitle = group?.lecture?.lectureName ?: "",
                     navClick = { viewModel.navBack() },
                     actions = {
-                        IconButton(onClick = { viewModel.openReportDialog.value = true }) {
+                        IconButton(
+                            modifier = Modifier.testTag("Melden"),
+                            onClick = { viewModel.openReportDialog.value = true }) {
                             Icon(
                                 Icons.Rounded.Flag,
                                 contentDescription = "Knopf um die Gruppe zu melden."

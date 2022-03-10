@@ -18,6 +18,7 @@ import de.pse.kit.myapplication.ui.theme.MyApplicationTheme
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 
 /**
@@ -41,7 +42,7 @@ fun Search(
     MyApplicationTheme {
         TextField(
             value = input,
-            modifier = modifier.fillMaxWidth(),
+            modifier = modifier.fillMaxWidth().testTag("Suche Gruppen"),
             onValueChange = {
                 input = it
                 onChange(it)
