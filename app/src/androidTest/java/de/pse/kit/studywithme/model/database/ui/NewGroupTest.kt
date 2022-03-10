@@ -14,10 +14,7 @@ import de.pse.kit.studywithme.model.database.AppDatabase
 import de.pse.kit.studywithme.model.database.GroupDao
 import de.pse.kit.studywithme.model.database.SessionDao
 import de.pse.kit.studywithme.model.database.UserDao
-import de.pse.kit.studywithme.model.network.GroupService
-import de.pse.kit.studywithme.model.network.HttpRoutes
-import de.pse.kit.studywithme.model.network.SessionService
-import de.pse.kit.studywithme.model.network.UserService
+import de.pse.kit.studywithme.model.network.*
 import de.pse.kit.studywithme.model.repository.*
 import de.pse.kit.studywithme.ui.view.navigation.MainView
 import io.ktor.client.engine.mock.*
@@ -32,16 +29,16 @@ import org.junit.Rule
 import org.junit.Test
 
 class NewGroupTest {
-
     private lateinit var context: Context
     private lateinit var userDao: UserDao
     private lateinit var groupDao: GroupDao
     private lateinit var sessionDao: SessionDao
+    private lateinit var groupRepo: GroupRepository
+    private lateinit var userRepo: UserRepository
+    private lateinit var sessionRepo: SessionRepository
     private lateinit var db: AppDatabase
     private lateinit var auth: FakeAuthenticator
-
     private lateinit var mockEngine: MockEngine
-
     private lateinit var mockDatabase: MutableList<RemoteGroup>
 
     @get:Rule
@@ -51,11 +48,9 @@ class NewGroupTest {
     fun lateinit() {
         runBlocking {
             mockDatabase = mutableListOf()
-
             auth = FakeAuthenticator()
             mockEngine = MockEngine {
                 Log.d("MOCK ENGINE", "${it.method}: ${it.url}")
-                Log.d("MOCK ENGINE", "${HttpRoutes.USERS}?FUID=${auth.firebaseUID}")
                 when (it.method) {
                     HttpMethod.Post ->
                         when (it.url.toString()) {
@@ -180,6 +175,15 @@ class NewGroupTest {
             userDao = db.userDao()
             groupDao = db.groupDao()
             sessionDao = db.sessionDao()
+
+            val reportService = ReportService.newInstance(mockEngine) { "" }
+            val userService = UserService.newInstance(mockEngine) { "" }
+            val groupService = GroupService.newInstance(mockEngine) { "" }
+            val sessionService = SessionService.newInstance(mockEngine) { "" }
+
+            groupRepo = GroupRepository.newInstance(groupDao, auth, reportService, groupService)
+            userRepo = UserRepository.newInstance(userDao, userService, auth)
+            sessionRepo = SessionRepository.newInstance(sessionDao, auth, sessionService, reportService)
         }
     }
 
@@ -195,30 +199,9 @@ class NewGroupTest {
     fun createNewGroup() {
         composeTestRule.setContent {
             MainView(
-                userRepo = UserRepository.getInstance(
-                    UserRepoConstructor(
-                        context = context,
-                        userDao = userDao,
-                        userService = UserService.getInstance(Pair(mockEngine) { "" }),
-                        auth = auth
-                    )
-                ),
-                groupRepo = GroupRepository.getInstance(
-                    GroupRepoConstructor(
-                        context = context,
-                        groupDao = groupDao,
-                        groupService = GroupService.getInstance(Pair(mockEngine) { "" }),
-                        auth = auth
-                    )
-                ),
-                sessionRepo = SessionRepository.getInstance(
-                    SessionRepoConstructor(
-                        context = context,
-                        sessionDao = sessionDao,
-                        sessionService = SessionService.getInstance(Pair(mockEngine) { "" }),
-                        auth = auth
-                    )
-                )
+                userRepo = userRepo,
+                groupRepo = groupRepo,
+                sessionRepo = sessionRepo
             )
         }
         composeTestRule.onRoot().printToLog("MAIN VIEW")

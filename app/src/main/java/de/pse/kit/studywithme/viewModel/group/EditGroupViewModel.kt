@@ -167,6 +167,7 @@ class EditGroupViewModel(
             memberCount = group!!.memberCount
         )
         viewModelScope.launch {
+            Log.d("DD", "")
             val groupSaved = groupRepo.editGroup(group)
             if (groupSaved) {
                 navBack()

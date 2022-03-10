@@ -7,6 +7,7 @@ import de.pse.kit.studywithme.model.data.User
 import de.pse.kit.studywithme.model.network.ReportService
 import de.pse.kit.studywithme.model.network.ReportServiceImpl
 import de.pse.kit.studywithme.model.network.UserService
+import de.pse.kit.studywithme.model.repository.ReportRepository.Companion.newInstance
 import io.ktor.client.*
 import io.ktor.client.engine.android.*
 import io.ktor.client.features.json.*
@@ -19,7 +20,7 @@ import kotlinx.coroutines.runBlocking
  * @constructor Create empty Report repository
  */
 class ReportRepository private constructor(
-    private val reportService: ReportService = ReportService.getInstance(Pair(Android.create()) { "" })
+    private val reportService: ReportService
 ) {
 
     fun getReports(): List<Report> {
@@ -69,11 +70,9 @@ class ReportRepository private constructor(
     }
 
     companion object : SingletonHolder<ReportRepository, ReportService?>({
-        if (it != null) {
-            ReportRepository(it)
-        } else {
-            ReportRepository()
-        }
-    })
+        newInstance(it ?: ReportService.getInstance(Pair(Android.create()) { "" }))
+    }) {
+        fun newInstance(reportService: ReportService) = ReportRepository(reportService)
+    }
 }
 

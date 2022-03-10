@@ -10,8 +10,11 @@ import de.pse.kit.studywithme.model.data.SessionAttendee
 import de.pse.kit.studywithme.model.data.SessionField
 import de.pse.kit.studywithme.model.database.AppDatabase
 import de.pse.kit.studywithme.model.database.SessionDao
+import de.pse.kit.studywithme.model.database.UserDao
 import de.pse.kit.studywithme.model.network.ReportService
 import de.pse.kit.studywithme.model.network.SessionService
+import de.pse.kit.studywithme.model.network.UserService
+import de.pse.kit.studywithme.model.repository.SessionRepository.Companion.newInstance
 import io.ktor.client.engine.android.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.coroutineScope
@@ -172,13 +175,15 @@ class SessionRepository private constructor(
     }
 
     companion object : SingletonHolder<SessionRepository, SessionRepoConstructor>({
-        SessionRepository(
-            it.sessionDao,
-            it.auth,
-            it.sessionService,
-            it.reportService
-        )
-    })
+        newInstance(sessionDao = it.sessionDao, sessionService = it.sessionService, reportService = it.reportService, auth = it.auth)
+    }) {
+        fun newInstance(
+            sessionDao: SessionDao,
+            auth: AuthenticatorInterface,
+            sessionService: SessionService,
+            reportService: ReportService
+        ) = SessionRepository(sessionDao, auth, sessionService, reportService)
+    }
 }
 
 data class SessionRepoConstructor(
