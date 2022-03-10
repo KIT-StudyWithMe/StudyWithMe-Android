@@ -188,5 +188,4 @@ class SignUpViewTest {
 
         composeTestRule.onNodeWithContentDescription("SearchGroupsView").assertExists("Sign Up failed.")
     }
-
 }

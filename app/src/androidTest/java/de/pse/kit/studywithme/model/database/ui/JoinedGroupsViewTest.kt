@@ -89,7 +89,6 @@ class JoinedGroupsViewTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-
     @Before
     fun initLocalDatabase() {
         runBlocking {

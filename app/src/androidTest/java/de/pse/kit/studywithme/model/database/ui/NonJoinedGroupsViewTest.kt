@@ -197,8 +197,6 @@ class NonJoinedGroupsViewTest {
      */
     @Test
     fun reportGroup() {
-        val auth = FakeAuthenticator()
-
         composeTestRule.setContent {
             val viewmodel: NonJoinedGroupDetailsViewModel = viewModel(
                 factory = NonJoinedGroupDetailsViewModelFactory(
