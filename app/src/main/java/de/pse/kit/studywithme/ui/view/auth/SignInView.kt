@@ -58,7 +58,7 @@ fun SignInView(viewModel: SignInViewModel) {
                 if (viewModel.errorMessage.collectAsState().value != "") {
                     Text(
                         viewModel.errorMessage.collectAsState().value,
-                        modifier = Modifier.padding(bottom = 4.dp),
+                        modifier = Modifier.padding(bottom = 4.dp).semantics { contentDescription = "ErrorMessage" },
                         color = MaterialTheme.colorScheme.error
                     )
                 }

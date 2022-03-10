@@ -38,7 +38,6 @@ import org.junit.Test
 @ExperimentalMaterial3Api
 @ExperimentalMaterialApi
 class ProfileViewTest {
-
     private lateinit var context: Context
     private lateinit var userDao: UserDao
     private lateinit var groupDao: GroupDao
@@ -236,8 +235,7 @@ class ProfileViewTest {
 
             groupRepo = GroupRepository.newInstance(groupDao, auth, reportService, groupService)
             userRepo = UserRepository.newInstance(userDao, userService, auth)
-            sessionRepo =
-                SessionRepository.newInstance(sessionDao, auth, sessionService, reportService)
+            sessionRepo = SessionRepository.newInstance(sessionDao, auth, sessionService, reportService)
         }
     }
 
