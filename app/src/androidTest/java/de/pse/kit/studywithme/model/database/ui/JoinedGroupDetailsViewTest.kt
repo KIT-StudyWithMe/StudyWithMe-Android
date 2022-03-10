@@ -56,6 +56,7 @@ class JoinedGroupDetailsViewTest {
     /**
      * /FA200/
      */
+    @Ignore
     @Test
     fun confirmSessionParticipation(){
         composeTestRule.onNode(hasText ("Es nehmen 0 teil")).assertExists()
