@@ -12,6 +12,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
@@ -61,11 +63,11 @@ fun Sessionlayout(
                         state = ScrollState(0)
                     ),
             ) {
-                FormTextField(text = place, label = "Lernort", onChange = placeChange)
+                FormTextField(modifier = Modifier.semantics { contentDescription = "PlaceField" }, text = place, label = "Lernort", onChange = placeChange)
 
                 DatePicker(
                     context = LocalContext.current,
-                    modifier = Modifier.padding(top = 8.dp),
+                    modifier = Modifier.padding(top = 8.dp).semantics { contentDescription = "DatePicker" },
                     preselectedDate = date,
                     onChange = dateChange
                 )
@@ -78,7 +80,7 @@ fun Sessionlayout(
                 ) {
 
                     TimePicker(
-                        modifier = Modifier.weight(1.0f),
+                        modifier = Modifier.weight(1.0f).semantics { contentDescription = "TimePicker" },
                         context = LocalContext.current,
                         preselectedText = "Beginn",
                         preselectedTime = time,
@@ -86,7 +88,7 @@ fun Sessionlayout(
                     )
                 }
 
-                FormTextField(text = duration, onChange = {
+                FormTextField(modifier = Modifier.semantics { contentDescription = "DurationField" }, text = duration, onChange = {
                     try {
                         it.toInt()
                         durationError = ""

@@ -190,7 +190,7 @@ fun JoinedGroupDetailsView(viewModel: JoinedGroupDetailsViewModel) {
                     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                         if (viewModel.isAdmin.value) {
                             Button(
-                                modifier = Modifier.weight(1f),
+                                modifier = Modifier.weight(1f).semantics { contentDescription = "EditSessionButton" },
                                 text = "Lernsession bearbeiten",
                                 onClick = { viewModel.planSession() },
                                 primary = false

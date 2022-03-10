@@ -252,6 +252,16 @@ class JoinedGroupDetailsViewTest {
                                 )
                             }
 
+                            "${HttpRoutes.SESSIONS}0" -> {
+                                val outgoingPart = ByteReadChannel(it.body.toByteArray())
+                                Log.d("MOCK ENGINE", "outgoing partisipate: $outgoingPart")
+                                respond(
+                                    content = outgoingPart,
+                                    status = HttpStatusCode.OK,
+                                    headers = headersOf(HttpHeaders.ContentType, "application/json")
+                                )
+                            }
+
                             else -> {
                                 Log.d("MOCK", "respond undefined")
                                 respond(
@@ -276,7 +286,7 @@ class JoinedGroupDetailsViewTest {
             groupDao = db.groupDao()
             sessionDao = db.sessionDao()
             mockUsers.map { userDao.saveUser(it) }
-            mockRemoteGroup.filter { it.groupID == 0 }.map { groupDao.saveGroup(it) }
+            mockRemoteGroup.map { groupDao.saveGroup(it) }
 
             val reportService = ReportService.newInstance(mockEngine) { "" }
             val userService = UserService.newInstance(mockEngine) { "" }
@@ -337,5 +347,18 @@ class JoinedGroupDetailsViewTest {
         composeTestRule.onNode(hasContentDescription("LeaveGroupButton")).performClick()
     }
 
-
+    /**
+     * Test to edit existing session. (/FA190/)
+     *
+     *  Hier fehlt das editieren der Date und TimePicker
+     */
+    @Test
+    fun editSessionTest() {
+        composeTestRule.onNodeWithContentDescription("EditSessionButton").performClick()
+        composeTestRule.onNodeWithContentDescription("EditSessionView")
+            .assertExists("Navigation to edit session failed.")
+        composeTestRule.onNodeWithContentDescription("PlaceField").performTextInput("Hier")
+        composeTestRule.onNodeWithContentDescription("DurationField").performTextInput("1")
+        composeTestRule.onNodeWithContentDescription("SaveSessionButton").performClick()
+    }
 }
