@@ -68,7 +68,6 @@ fun SearchGroupsView(viewModel: SearchGroupsViewModel) {
                     items(viewModel.groups.value.size) {
                         val group = viewModel.groups.value.get(it)
                         SearchGroupResult(
-                            modifier = Modifier.semantics { "SearchGroupsViewResults" },
                             groupName = group.name,
                             lecture = group.lecture?.lectureName ?: "",
                             major = group.major?.name ?: "",
