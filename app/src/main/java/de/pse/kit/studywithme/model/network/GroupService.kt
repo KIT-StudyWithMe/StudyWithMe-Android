@@ -178,33 +178,38 @@ interface GroupService {
                 val engine = it.first
                 val token = it.second
 
-                GroupServiceImpl(client = HttpClient(engine) {
-                    install(JsonFeature) {
-                        val json = kotlinx.serialization.json.Json { ignoreUnknownKeys = true }
-                        serializer = KotlinxSerializer(json)
+                GroupService.newInstance(engine, token)
+            }) {
+        fun newInstance(
+            engine: HttpClientEngine,
+            token: suspend (Boolean) -> String
+        ) = GroupServiceImpl(client = HttpClient(engine) {
+            install(JsonFeature) {
+                val json = kotlinx.serialization.json.Json { ignoreUnknownKeys = true }
+                serializer = KotlinxSerializer(json)
+            }
+
+            install(Auth) {
+                var tokenInfo: String
+
+                bearer {
+                    loadTokens {
+                        tokenInfo = token(false)
+                        BearerTokens(
+                            accessToken = tokenInfo,
+                            refreshToken = tokenInfo
+                        )
                     }
+                    refreshTokens {
+                        tokenInfo = token(true)
 
-                    install(Auth) {
-                        var tokenInfo: String
-
-                        bearer {
-                            loadTokens {
-                                tokenInfo = token(false)
-                                BearerTokens(
-                                    accessToken = tokenInfo,
-                                    refreshToken = tokenInfo
-                                )
-                            }
-                            refreshTokens {
-                                tokenInfo = token(true)
-
-                                BearerTokens(
-                                    accessToken = tokenInfo,
-                                    refreshToken = tokenInfo
-                                )
-                            }
-                        }
+                        BearerTokens(
+                            accessToken = tokenInfo,
+                            refreshToken = tokenInfo
+                        )
                     }
-                })
-            })
+                }
+            }
+        })
+    }
 }

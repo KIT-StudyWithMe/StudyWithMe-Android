@@ -11,11 +11,13 @@ package de.pse.kit.studywithme
  */
 open class SingletonHolder<out T: Any, in A>(creator: (A) -> T) {
     private var creator: ((A) -> T)? = creator
+    @Volatile private var instanceParam: A? = null
     @Volatile private var instance: T? = null
 
     fun getInstance(arg: A): T {
         val i = instance
-        if (i != null) {
+        val p = instanceParam
+        if (i != null && p == arg) {
             return i
         }
 
@@ -26,6 +28,7 @@ open class SingletonHolder<out T: Any, in A>(creator: (A) -> T) {
             } else {
                 val created = creator!!(arg)
                 instance = created
+                instanceParam = arg
                 creator = null
                 created
             }

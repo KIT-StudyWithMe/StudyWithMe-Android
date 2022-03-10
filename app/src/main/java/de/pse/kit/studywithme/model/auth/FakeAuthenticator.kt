@@ -3,8 +3,7 @@ package de.pse.kit.studywithme.model.auth
 import de.pse.kit.studywithme.model.data.User
 
 class FakeAuthenticator: AuthenticatorInterface {
-    override val firebaseUID: String?
-        get() = if (user?.firebaseUID == "") null else user?.firebaseUID
+    override var firebaseUID: String? = "dfg46thrge7fnd"
     override var user: User? = User(
         userID = 0,
         name = "max.mustermann",
@@ -33,6 +32,7 @@ class FakeAuthenticator: AuthenticatorInterface {
             majorID = 0,
             firebaseUID = "dfg46thrge7fnd"
         )
+        firebaseUID = "dfg46thrge7fnd"
         return true
     }
 
@@ -48,6 +48,7 @@ class FakeAuthenticator: AuthenticatorInterface {
                 majorID = 0,
                 firebaseUID = "dfg46thrge7fnd"
             )
+            firebaseUID = "dfg46thrge7fnd"
             return true
         }
         return false
@@ -68,12 +69,14 @@ class FakeAuthenticator: AuthenticatorInterface {
             majorID = 0,
             firebaseUID = ""
         )
+        firebaseUID = null
     }
 
     override suspend fun deleteFirebaseUser(password: String): Boolean {
         if (signedUpUsers[user?.contact] == password) {
             signOut()
             signedUpUsers.remove(user?.contact)
+            firebaseUID = null
             return true
         }
         return false
