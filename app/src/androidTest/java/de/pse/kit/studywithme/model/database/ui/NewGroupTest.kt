@@ -51,7 +51,6 @@ class NewGroupTest {
             auth = FakeAuthenticator()
             mockEngine = MockEngine {
                 Log.d("MOCK ENGINE", "${it.method}: ${it.url}")
-                //Log.d("MOCK ENGINE", "${HttpRoutes.USERS}?FUID=${auth.firebaseUID}")
                 when (it.method) {
                     HttpMethod.Post ->
                         when (it.url.toString()) {

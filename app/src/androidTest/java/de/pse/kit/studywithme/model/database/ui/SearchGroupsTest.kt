@@ -18,10 +18,6 @@ import de.pse.kit.studywithme.model.database.SessionDao
 import de.pse.kit.studywithme.model.database.UserDao
 import de.pse.kit.studywithme.model.network.*
 import de.pse.kit.studywithme.model.repository.*
-import de.pse.kit.studywithme.ui.view.group.NonJoinedGroupDetailsView
-import de.pse.kit.studywithme.ui.view.navigation.MainView
-import de.pse.kit.studywithme.viewModel.group.NonJoinedGroupDetailsViewModel
-import de.pse.kit.studywithme.viewModel.group.NonJoinedGroupDetailsViewModelFactory
 import de.pse.kit.studywithme.ui.view.group.SearchGroupsView
 import de.pse.kit.studywithme.ui.view.navigation.MainView
 import de.pse.kit.studywithme.viewModel.group.SearchGroupsViewModel
@@ -39,36 +35,15 @@ import org.junit.Test
 
 @ExperimentalMaterial3Api
 @ExperimentalMaterialApi
-class NonJoinedGroupsViewTest {
+class SearchGroupsTest {
     private lateinit var context: Context
     private lateinit var userDao: UserDao
     private lateinit var groupDao: GroupDao
     private lateinit var sessionDao: SessionDao
     private lateinit var groupRepo: GroupRepository
-    private lateinit var userRepo: UserRepository
-    private lateinit var sessionRepo: SessionRepository
     private lateinit var db: AppDatabase
     private lateinit var auth: FakeAuthenticator
     private lateinit var mockEngine: MockEngine
-    private val mockUsers = listOf(
-        User(
-            userID = 0,
-            name = "max.mustermann",
-            contact = "max.mustermann@mustermail.com",
-            college = "Karlsruher Institut für Technologie",
-            collegeID = 0,
-            major = "Informatik B.Sc.",
-            majorID = 0,
-            firebaseUID = "dfg46thrge7fnd"
-        )
-    )
-    private val mockLightUsers = listOf(
-        UserLight(
-            userID = 0,
-            name = "max.mustermann"
-        )
-    )
-    private val signedInUser = mockUsers.filter { it.userID == 0 }[0]
     private val mockRemoteGroup = listOf(
         RemoteGroup(
             groupID = 0,
@@ -106,25 +81,6 @@ class NonJoinedGroupsViewTest {
                 Log.d("MOCK ENGINE", "${it.method}: ${it.url}")
                 if (it.method == HttpMethod.Get) {
                     when (it.url.toString()) {
-                        "${HttpRoutes.USERS}?FUID=dfg46thrge7fnd" -> {
-                            val responseUser = mockLightUsers.filter { it.userID.toInt() == 0 }
-                            Log.d("MOCK", "response user $responseUser")
-                            respond(
-                                content = Json.encodeToString(mockLightUsers.filter { it.userID.toInt() == 0 }),
-                                status = HttpStatusCode.OK,
-                                headers = headersOf(HttpHeaders.ContentType, "application/json")
-                            )
-                        }
-
-                        "${HttpRoutes.USERS}0/detail" -> {
-                            Log.d("MOCK", "response user $signedInUser")
-                            respond(
-                                content = Json.encodeToString(signedInUser),
-                                status = HttpStatusCode.OK,
-                                headers = headersOf(HttpHeaders.ContentType, "application/json")
-                            )
-                        }
-
                         "${HttpRoutes.GROUPS}?text=sadas" -> {
                             val groups = mockRemoteGroup.filter { it.name.startsWith("sadas") }
                             Log.d("MOCK", "response groups: $groups")
@@ -140,16 +96,6 @@ class NonJoinedGroupsViewTest {
                             Log.d("MOCK", "response groups: $groups")
                             respond(
                                 content = Json.encodeToString(groups),
-                                status = HttpStatusCode.OK,
-                                headers = headersOf(HttpHeaders.ContentType, "application/json")
-                            )
-                        }
-
-                        "${HttpRoutes.GROUPS}1" -> {
-                            val group = mockRemoteGroup.filter { it.groupID == 1 }[0]
-                            Log.d("MOCK", "response group: $group")
-                            respond(
-                                content = Json.encodeToString(group),
                                 status = HttpStatusCode.OK,
                                 headers = headersOf(HttpHeaders.ContentType, "application/json")
                             )
@@ -177,49 +123,37 @@ class NonJoinedGroupsViewTest {
             userDao = db.userDao()
             groupDao = db.groupDao()
             sessionDao = db.sessionDao()
-            mockUsers.map { userDao.saveUser(it) }
             mockRemoteGroup.filter { it.groupID == 0 }.map { groupDao.saveGroup(it) }
 
             val reportService = ReportService.newInstance(mockEngine) { "" }
-            val userService = UserService.newInstance(mockEngine) { "" }
             val groupService = GroupService.newInstance(mockEngine) { "" }
-            val sessionService = SessionService.newInstance(mockEngine) { "" }
 
             groupRepo = GroupRepository.newInstance(groupDao, auth, reportService, groupService)
-            userRepo = UserRepository.newInstance(userDao, userService, auth)
-            sessionRepo = SessionRepository.newInstance(sessionDao, auth, sessionService, reportService)
         }
     }
 
     /**
-     * /FA160/ UI-Test
+     * Test to search and list groups.
      *
      */
+    @ExperimentalCoroutinesApi
     @Test
-    fun reportGroup() {
-        val auth = FakeAuthenticator()
-
+    fun searchGroupsTest() {
         composeTestRule.setContent {
-            val viewmodel: NonJoinedGroupDetailsViewModel = viewModel(
-                factory = NonJoinedGroupDetailsViewModelFactory(
+            val viewModel: SearchGroupsViewModel = viewModel(
+                factory = SearchGroupsViewModelFactory(
                     navController = rememberNavController(),
-                    groupID = 1,
                     groupRepo = groupRepo
                 )
             )
-            NonJoinedGroupDetailsView(viewmodel)
+
+            SearchGroupsView(viewModel)
         }
+        composeTestRule.onRoot().printToLog("SEARCH GROUPS VIEW")
+        composeTestRule.onNodeWithContentDescription("SearchGroupsView").assertExists()
 
-        //For debugging
-        composeTestRule.onRoot().printToLog("NON_JOINED_GROUPS_VIEW")
-
-        val report = composeTestRule.onNode(hasTestTag("Melden"))
-        val reportGroupName = composeTestRule.onNode(hasTestTag("Gruppenname melden"))
-        val confirm = composeTestRule.onNode(hasTestTag("Bestätigen"))
-
-        report.performClick()
-        reportGroupName.performClick()
-        confirm.performClick()
-        composeTestRule.onNodeWithContentDescription("NonJoinedGroupDetailsView").assertExists()
+        composeTestRule.onNode(hasTestTag("Suche Gruppen")).performTextInput("sadas")
+        composeTestRule.onRoot().printToLog("SEARCH GROUPS VIEW")
+        composeTestRule.onNode(hasContentDescription("SearchGroupResult") and hasText("sadas")).assertExists()
     }
 }
