@@ -9,6 +9,7 @@ import de.pse.kit.studywithme.model.data.*
 import de.pse.kit.studywithme.model.database.AppDatabase
 import de.pse.kit.studywithme.model.database.GroupDao
 import de.pse.kit.studywithme.model.network.*
+import de.pse.kit.studywithme.model.repository.GroupRepository.Companion.newInstance
 
 import io.ktor.client.engine.android.*
 import kotlinx.coroutines.async
@@ -185,7 +186,7 @@ class GroupRepository private constructor(
 
         val editedGroup = RemoteGroup.toRemoteGroup(group)
         val remoteGroup = groupService.editGroup(group.groupID, editedGroup)
-        if (remoteGroup == editedGroup) {
+        if (remoteGroup != null) {
             groupDao.editGroup(editedGroup)
             return true
         } else {
@@ -410,13 +411,15 @@ class GroupRepository private constructor(
 
 
     companion object : SingletonHolder<GroupRepository, GroupRepoConstructor>({
-        GroupRepository(
-            it.groupDao,
-            it.auth,
-            it.reportService,
-            it.groupService
-        )
-    })
+        newInstance(it.groupDao, it.auth, it.reportService, it.groupService)
+    }) {
+        fun newInstance(
+            groupDao: GroupDao,
+            auth: AuthenticatorInterface,
+            reportService: ReportService,
+            groupService: GroupService
+        ) = GroupRepository(groupDao, auth, reportService, groupService)
+    }
 }
 
 data class GroupRepoConstructor(

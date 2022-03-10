@@ -1,5 +1,6 @@
 package de.pse.kit.studywithme.ui.view.navigation
 
+import android.util.Log
 import androidx.navigation.*
 import androidx.navigation.NavGraph.Companion.findStartDestination
 
@@ -139,6 +140,13 @@ sealed class NavGraph(val route: String, val arguments: List<NamedNavArgument>? 
 
         private fun navigateToTab(navController: NavController, route: String) {
             navController.navigate(route) {
+                val from = navController.currentDestination?.route
+                if ((from == SignIn.route && route != SignUp.route) || (from == SignUp.route && route != SignIn.route)) {
+                    navController.backQueue.clear()
+                } else if (from != SignUp.route && route == SignInForm.route){
+                    navController.backQueue.clear()
+                }
+
                 popUpTo(navController.graph.findStartDestination().id) {
                     saveState = true
                 }

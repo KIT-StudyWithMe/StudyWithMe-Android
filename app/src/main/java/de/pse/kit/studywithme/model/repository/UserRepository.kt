@@ -11,6 +11,7 @@ import de.pse.kit.studywithme.model.data.User
 import de.pse.kit.studywithme.model.database.AppDatabase
 import de.pse.kit.studywithme.model.database.UserDao
 import de.pse.kit.studywithme.model.network.UserService
+import de.pse.kit.studywithme.model.repository.UserRepository.Companion.newInstance
 import io.ktor.client.engine.android.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.coroutineScope
@@ -234,12 +235,22 @@ class UserRepository private constructor(
         }
     }
 
-    companion object : SingletonHolder<UserRepository, UserRepoConstructor>({ UserRepository(it.userDao, it.userService, it.auth) })
+    companion object : SingletonHolder<UserRepository, UserRepoConstructor>({
+        newInstance(userDao = it.userDao, userService = it.userService, auth = it.auth)
+    }) {
+        fun newInstance(
+            userDao: UserDao,
+            userService: UserService,
+            auth: AuthenticatorInterface
+        ): UserRepository = UserRepository(userDao, userService, auth)
+    }
 }
 
 data class UserRepoConstructor(
     val context: Context,
     val userDao: UserDao = AppDatabase.getInstance(context).userDao(),
-    val userService: UserService = UserService.getInstance(Pair(Android.create()) { Authenticator.firebaseUID ?: "" }),
+    val userService: UserService = UserService.getInstance(Pair(Android.create()) {
+        Authenticator.firebaseUID ?: ""
+    }),
     val auth: AuthenticatorInterface = Authenticator
 )
