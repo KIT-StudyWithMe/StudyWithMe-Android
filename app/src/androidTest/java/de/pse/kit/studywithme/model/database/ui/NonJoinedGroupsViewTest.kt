@@ -18,6 +18,10 @@ import de.pse.kit.studywithme.model.database.SessionDao
 import de.pse.kit.studywithme.model.database.UserDao
 import de.pse.kit.studywithme.model.network.*
 import de.pse.kit.studywithme.model.repository.*
+import de.pse.kit.studywithme.ui.view.group.NonJoinedGroupDetailsView
+import de.pse.kit.studywithme.ui.view.navigation.MainView
+import de.pse.kit.studywithme.viewModel.group.NonJoinedGroupDetailsViewModel
+import de.pse.kit.studywithme.viewModel.group.NonJoinedGroupDetailsViewModelFactory
 import de.pse.kit.studywithme.ui.view.group.SearchGroupsView
 import de.pse.kit.studywithme.ui.view.navigation.MainView
 import de.pse.kit.studywithme.viewModel.group.SearchGroupsViewModel
@@ -104,7 +108,7 @@ class NonJoinedGroupsViewTest {
                     when (it.url.toString()) {
                         "${HttpRoutes.USERS}?FUID=dfg46thrge7fnd" -> {
                             val responseUser = mockLightUsers.filter { it.userID.toInt() == 0 }
-                                Log.d("MOCK", "response user $responseUser")
+                            Log.d("MOCK", "response user $responseUser")
                             respond(
                                 content = Json.encodeToString(mockLightUsers.filter { it.userID.toInt() == 0 }),
                                 status = HttpStatusCode.OK,
@@ -136,6 +140,16 @@ class NonJoinedGroupsViewTest {
                             Log.d("MOCK", "response groups: $groups")
                             respond(
                                 content = Json.encodeToString(groups),
+                                status = HttpStatusCode.OK,
+                                headers = headersOf(HttpHeaders.ContentType, "application/json")
+                            )
+                        }
+
+                        "${HttpRoutes.GROUPS}1" -> {
+                            val group = mockRemoteGroup.filter { it.groupID == 1 }[0]
+                            Log.d("MOCK", "response group: $group")
+                            respond(
+                                content = Json.encodeToString(group),
                                 status = HttpStatusCode.OK,
                                 headers = headersOf(HttpHeaders.ContentType, "application/json")
                             )
@@ -175,5 +189,37 @@ class NonJoinedGroupsViewTest {
             userRepo = UserRepository.newInstance(userDao, userService, auth)
             sessionRepo = SessionRepository.newInstance(sessionDao, auth, sessionService, reportService)
         }
+    }
+
+    /**
+     * /FA160/ UI-Test
+     *
+     */
+    @Test
+    fun reportGroup() {
+        val auth = FakeAuthenticator()
+
+        composeTestRule.setContent {
+            val viewmodel: NonJoinedGroupDetailsViewModel = viewModel(
+                factory = NonJoinedGroupDetailsViewModelFactory(
+                    navController = rememberNavController(),
+                    groupID = 1,
+                    groupRepo = groupRepo
+                )
+            )
+            NonJoinedGroupDetailsView(viewmodel)
+        }
+
+        //For debugging
+        composeTestRule.onRoot().printToLog("NON_JOINED_GROUPS_VIEW")
+
+        val report = composeTestRule.onNode(hasTestTag("Melden"))
+        val reportGroupName = composeTestRule.onNode(hasTestTag("Gruppenname melden"))
+        val confirm = composeTestRule.onNode(hasTestTag("Bestätigen"))
+
+        report.performClick()
+        reportGroupName.performClick()
+        confirm.performClick()
+        composeTestRule.onNodeWithContentDescription("NonJoinedGroupDetailsView").assertExists()
     }
 }
