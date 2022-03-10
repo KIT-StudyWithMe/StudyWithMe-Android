@@ -43,12 +43,21 @@ fun TopBar(
             },
             title = {
                 Column {
-                    Text(title.take(26), fontSize = MaterialTheme.typography.titleLarge.fontSize, fontWeight = FontWeight.SemiBold)
+                    Text(
+                        title.take(26), fontSize = MaterialTheme.typography.titleLarge.fontSize, fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.semantics {
+                            contentDescription = "TopBarTitle"
+                        })
                     if (subtitle != null) {
-                        Text(subtitle, fontSize = MaterialTheme.typography.titleSmall.fontSize)
+                        Text(subtitle,
+                            modifier = Modifier.semantics {
+                                contentDescription = "TopBarSubTitle"
+                            },
+                            fontSize = MaterialTheme.typography.titleSmall.fontSize)
                     }
                 }
-            },
+            }
+            ,
             navigationIcon = {
                 if (isTab == false) {
                     IconButton(onClick = navClick) {

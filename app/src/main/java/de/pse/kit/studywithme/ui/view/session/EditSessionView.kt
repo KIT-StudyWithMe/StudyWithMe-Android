@@ -9,6 +9,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
@@ -33,13 +35,14 @@ fun EditSessionView(viewModel: EditSessionViewModel) {
 
     MyApplicationTheme3 {
         Scaffold(
-                containerColor = MaterialTheme.colorScheme.surface,
+            modifier = Modifier.semantics { contentDescription = "EditSessionView" },
+            containerColor = MaterialTheme.colorScheme.surface,
             topBar = {
                 TopBar(
                     title = "Session bearbeiten",
                     subtitle = group?.name ?: "",
                     actions = {
-                        IconButton(onClick = { viewModel.saveSession() }) {
+                        IconButton(modifier = Modifier.semantics { contentDescription = "SaveSessionButton" }, onClick = { viewModel.saveSession() }) {
                             Icon(
                                 Icons.Rounded.Save,
                                 contentDescription = "Knopf um die Nutzerdaten zu editieren."

@@ -1,7 +1,6 @@
 package de.pse.kit.studywithme.model.repository
 
-import android.os.Build
-import androidx.annotation.RequiresApi
+
 import de.pse.kit.studywithme.model.data.Session
 import de.pse.kit.studywithme.model.data.SessionAttendee
 import de.pse.kit.studywithme.model.data.SessionField
@@ -16,10 +15,9 @@ import java.util.*
  * @constructor Create empty Fake session repository
  */
 class FakeSessionRepository() : SessionRepositoryInterface {
-
     var session = Session(
         sessionID = 0,
-        groupID = 0,
+        groupID = 1,
         location = "Bibliothek",
         date = Date(),
         duration = 2
@@ -28,6 +26,12 @@ class FakeSessionRepository() : SessionRepositoryInterface {
         sessionAttendeeID = 0,
         sessionID = 0,
         userID = 0,
+        participates = true
+    )
+    var secondSessionAttendee = SessionAttendee(
+        sessionAttendeeID = 1,
+        sessionID = 0,
+        userID = 1,
         participates = true
     )
 
@@ -56,7 +60,6 @@ class FakeSessionRepository() : SessionRepositoryInterface {
     }
 
     override suspend fun newAttendee(sessionID: Int): Boolean {
-
         return true
     }
 
@@ -67,6 +70,8 @@ class FakeSessionRepository() : SessionRepositoryInterface {
     override suspend fun getAttendees(sessionID: Int): Flow<List<SessionAttendee>> {
         return flow { emit(listOf(sessionAttendee)) }
     }
+
+
 
     override suspend fun reportSession(sessionID: Int, sessionfield: SessionField) {
         TODO("Not yet implemented")

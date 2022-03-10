@@ -30,7 +30,7 @@ import org.junit.Test
 
 @ExperimentalMaterial3Api
 @ExperimentalMaterialApi
-class SignInViewTest {
+class SignUpViewTest {
     private lateinit var context: Context
     private lateinit var userDao: UserDao
     private lateinit var groupDao: GroupDao
@@ -41,22 +41,6 @@ class SignInViewTest {
     private lateinit var db: AppDatabase
     private lateinit var auth: FakeAuthenticator
     private lateinit var mockEngine: MockEngine
-    private val mockUser = User(
-        userID = 0,
-        name = "max.mustermann",
-        contact = "max.mustermann@mustermail.com",
-        college = "Karlsruher Institut für Technologie",
-        collegeID = 0,
-        major = "Informatik B.Sc.",
-        majorID = 0,
-        firebaseUID = "dfg46thrge7fnd"
-    )
-    private val mockLightUsers = listOf(
-        UserLight(
-            userID = 0,
-            name = "max.mustermann"
-        )
-    )
 
     @get:Rule
     val composeTestRule = createComposeRule()
@@ -93,25 +77,6 @@ class SignInViewTest {
                         }
                     HttpMethod.Get ->
                         when (it.url.toString()) {
-                            "${HttpRoutes.USERS}?FUID=${auth.firebaseUID}" -> {
-                                Log.d("MOCK ENGINE", "respond user by fuid: $mockLightUsers")
-
-                                respond(
-                                    content = Json.encodeToString(mockLightUsers),
-                                    status = HttpStatusCode.OK,
-                                    headers = headersOf(HttpHeaders.ContentType, "application/json")
-                                )
-                            }
-
-                            "${HttpRoutes.USERS}0/detail" -> {
-                                Log.d("MOCK ENGINE", "respond user by id: $mockUser")
-                                respond(
-                                    content = Json.encodeToString(mockUser),
-                                    status = HttpStatusCode.OK,
-                                    headers = headersOf(HttpHeaders.ContentType, "application/json")
-                                )
-                            }
-
                             "${HttpRoutes.INSTITUTIONS}?name=KIT" -> {
                                 val institutions = listOf(Institution(0, "KIT"))
                                 Log.d(
@@ -177,7 +142,6 @@ class SignInViewTest {
             context = ApplicationProvider.getApplicationContext()
             db = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
             userDao = db.userDao()
-            userDao.saveUser(mockUser)
             groupDao = db.groupDao()
             sessionDao = db.sessionDao()
 
@@ -198,57 +162,30 @@ class SignInViewTest {
                     sessionRepo = sessionRepo
                 )
             }
-            composeTestRule.onRoot().printToLog("SIGN_IN_VIEW")
+            composeTestRule.onNode(hasTestTag("RegistrierenSignIn")).performClick()
+            composeTestRule.onNodeWithContentDescription("SignUpView")
         }
     }
 
-    @Test
-    fun displayErrorAfterSignInWithNonExistingUser() {
-        val buttonEmail = composeTestRule.onNode(hasTestTag("Email-Adresse"))
-        val buttonPw = composeTestRule.onNode(hasTestTag("Passwort"))
-        val buttonLogin = composeTestRule.onNode(hasTestTag("Anmelden"))
-
-        //LogIn of a non-existing and existing User
-        composeTestRule.onNodeWithContentDescription("ErrorMessage").assertDoesNotExist()
-        buttonEmail.performTextInput("hort2@lichter.de")
-        buttonPw.performTextInput("passworthorst98")
-        buttonLogin.performClick()
-        composeTestRule.onNodeWithContentDescription("ErrorMessage").assertExists()
-        buttonEmail.performTextClearance()
-    }
-
     /**
-     * UI-Test /FA20/
+     * UI-Test FA10
      *
      */
     @Test
-    fun signInWithExistingUser() {
-        val buttonEmail = composeTestRule.onNode(hasTestTag("Email-Adresse"))
-        val buttonPw = composeTestRule.onNode(hasTestTag("Passwort"))
-        val buttonLogin = composeTestRule.onNode(hasTestTag("Anmelden"))
+    fun signUp() {
+        composeTestRule.onNode(hasTestTag("Email-AdresseSignUp"))
+            .performTextInput("hort2@lichter.de")
+        composeTestRule.onNode(hasTestTag("NutzernameSignUp"))
+            .performTextInput("Horst")
+        composeTestRule.onNode(hasTestTag("UniSignUp"))
+            .performClick().performTextInput("KIT")
+        composeTestRule.onNode(hasTestTag("LectureSignUp"))
+            .performTextInput("Info")
+        composeTestRule.onNode(hasTestTag("PwSignUp"))
+            .performTextInput("Mind6Zeichen")
+        composeTestRule.onNode(hasTestTag("SignUp"))
+            .performClick()
 
-        buttonEmail.performClick().performTextInput("user@mail.com")
-        buttonPw.performClick().performTextClearance()
-        buttonPw.performClick().performTextInput("password")
-        buttonLogin.performClick()
-        composeTestRule.onNodeWithContentDescription("JoinedGroupsView")
-            .assertExists("Sign in failed.")
-    }
-
-    /**
-     * UI-Test FA30
-     *
-     */
-    @Test
-    fun forgotPw() {
-        val buttonPwForget = composeTestRule.onNode(hasTestTag("Passwort vergessen"))
-        val buttonEmail = composeTestRule.onNode(hasTestTag("Email-Adresse"))
-
-        //Forgot Pw Button is being pressed
-        buttonPwForget.performClick()
-        buttonEmail.performClick().performTextInput("dieter.bohlen@dsds.de")
-        buttonPwForget.performClick()
-        composeTestRule.onNodeWithText("Eine Email zum zurücksetzen wurde gesendet").assertExists()
-        composeTestRule.onNodeWithContentDescription("SignInView").assertExists()
+        composeTestRule.onNodeWithContentDescription("SearchGroupsView").assertExists("Sign Up failed.")
     }
 }

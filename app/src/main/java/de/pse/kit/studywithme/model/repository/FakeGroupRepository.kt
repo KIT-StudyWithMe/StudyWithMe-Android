@@ -234,6 +234,6 @@ class FakeGroupRepository() : GroupRepositoryInterface {
     }
 
     override suspend fun isGroupHidden(groupID: Int): Boolean {
-        TODO("Not yet implemented")
+        return false
     }
 }

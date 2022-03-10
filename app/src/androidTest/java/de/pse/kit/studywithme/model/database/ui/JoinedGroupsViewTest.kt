@@ -19,6 +19,13 @@ import de.pse.kit.studywithme.model.database.UserDao
 import de.pse.kit.studywithme.model.network.*
 import de.pse.kit.studywithme.model.repository.*
 import de.pse.kit.studywithme.ui.view.group.JoinedGroupDetailsView
+import de.pse.kit.studywithme.model.network.GroupService
+import de.pse.kit.studywithme.model.network.HttpRoutes
+import de.pse.kit.studywithme.model.network.ReportService
+import de.pse.kit.studywithme.model.repository.FakeGroupRepository
+import de.pse.kit.studywithme.model.repository.FakeSessionRepository
+import de.pse.kit.studywithme.model.repository.FakeUserRepository
+import de.pse.kit.studywithme.model.repository.GroupRepository
 import de.pse.kit.studywithme.ui.view.group.JoinedGroupsView
 import de.pse.kit.studywithme.ui.view.navigation.MainView
 import de.pse.kit.studywithme.viewModel.group.JoinedGroupDetailsViewModel
@@ -40,6 +47,42 @@ import org.junit.Test
 @ExperimentalMaterial3Api
 @ExperimentalMaterialApi
 class JoinedGroupsViewTest {
+    private val mockRemoteGroups = listOf(
+        RemoteGroup(
+            groupID = 0,
+            name = "gfg",
+            lectureID = 0,
+            description = "lol",
+            lectureChapter = 1,
+            exercise = 1,
+            memberCount = 2,
+            sessionFrequency = SessionFrequency.MONTHLY,
+            sessionType = SessionType.ONLINE
+        ),
+        RemoteGroup(
+            groupID = 1,
+            name = "sadas",
+            lectureID = 1,
+            description = "asdas",
+            lectureChapter = 1,
+            exercise = 1,
+            memberCount = 2,
+            sessionFrequency = SessionFrequency.MONTHLY,
+            sessionType = SessionType.ONLINE
+        )
+    )
+    private val mockLectures: List<Lecture> = listOf(
+        Lecture(
+            lectureID = 0,
+            lectureName = "Lineare Algebra",
+            majorID = 0
+        ),
+        Lecture(
+            lectureID = 1,
+            lectureName = "Programmieren",
+            majorID = 0
+        )
+    )
 
     private lateinit var context: Context
     private lateinit var userDao: UserDao
@@ -131,6 +174,15 @@ class JoinedGroupsViewTest {
                             respond(
                                 content = Json.encodeToString(signedInUser),
                                 status = HttpStatusCode.OK,
+                                headers = headersOf(HttpHeaders.ContentType, "application/json"))
+                        }
+
+                        "${HttpRoutes.USERS}0/groups" -> {
+                            val groups = mockRemoteGroups
+                            Log.d("MOCK", "response groups: $groups")
+                            respond(
+                                content = Json.encodeToString(groups),
+                                status = HttpStatusCode.OK,
                                 headers = headersOf(HttpHeaders.ContentType, "application/json")
                             )
                         }
@@ -140,6 +192,15 @@ class JoinedGroupsViewTest {
                             Log.d("MOCK", "response groups: $groups")
                             respond(
                                 content = Json.encodeToString(groups),
+                                status = HttpStatusCode.OK,
+                                headers = headersOf(HttpHeaders.ContentType, "application/json"))
+                        }
+
+                        "${HttpRoutes.MAJORS}0/lectures" -> {
+                            val lectures = mockLectures.filter { it.majorID == 0 }
+                            Log.d("MOCK", "response lectures: $lectures")
+                            respond(
+                                content = Json.encodeToString(lectures),
                                 status = HttpStatusCode.OK,
                                 headers = headersOf(HttpHeaders.ContentType, "application/json")
                             )
@@ -151,6 +212,15 @@ class JoinedGroupsViewTest {
                             respond(
                                 content = Json.encodeToString(groups),
                                 status = HttpStatusCode.OK,
+                                headers = headersOf(HttpHeaders.ContentType, "application/json"))
+                        }
+
+                        "${HttpRoutes.LECTURES}0" -> {
+                            val lecture = mockLectures.filter { it.lectureID == 0}[0]
+                            Log.d("MOCK", "response lecture: $lecture")
+                            respond(
+                                content = Json.encodeToString(lecture),
+                                status = HttpStatusCode.OK,
                                 headers = headersOf(HttpHeaders.ContentType, "application/json")
                             )
                         }
@@ -160,6 +230,15 @@ class JoinedGroupsViewTest {
                             Log.d("MOCK", "response group: $group")
                             respond(
                                 content = Json.encodeToString(group),
+                                status = HttpStatusCode.OK,
+                                headers = headersOf(HttpHeaders.ContentType, "application/json"))
+                        }
+
+                        "${HttpRoutes.LECTURES}1" -> {
+                            val lecture = mockLectures.filter { it.lectureID == 1}[0]
+                            Log.d("MOCK", "response lecture: $lecture")
+                            respond(
+                                content = Json.encodeToString(lecture),
                                 status = HttpStatusCode.OK,
                                 headers = headersOf(HttpHeaders.ContentType, "application/json")
                             )
@@ -171,6 +250,11 @@ class JoinedGroupsViewTest {
                             Log.d("MOCK", "user: $groupMember is admin")
                             respond(
                                 content = Json.encodeToString(groupMember),
+                        "${HttpRoutes.MAJORS}0/lectures/Lineare+Algebra" -> {
+                            val lectures = mockLectures.filter { it.majorID == 0 && it.lectureName.startsWith("Lineare Algebra") }
+                            Log.d("MOCK", "response lectures: $lectures")
+                            respond(
+                                content = Json.encodeToString(lectures),
                                 status = HttpStatusCode.OK,
                                 headers = headersOf(HttpHeaders.ContentType, "application/json")
                             )
@@ -210,6 +294,9 @@ class JoinedGroupsViewTest {
             groupRepo = GroupRepository.newInstance(groupDao, auth, reportService, groupService)
             userRepo = UserRepository.newInstance(userDao, userService, auth)
             sessionRepo = SessionRepository.newInstance(sessionDao, auth, sessionService, reportService)
+            mockRemoteGroups.map { groupDao.saveGroup(it) }
+
+            groupRepo = GroupRepository.newInstance(groupDao, auth, reportService, groupService)
         }
     }
 
@@ -244,25 +331,26 @@ class JoinedGroupsViewTest {
             val viewModel: JoinedGroupsViewModel = viewModel(
                 factory = JoinedGroupsViewModelFactory(
                     rememberNavController(),
-                    FakeGroupRepository()
+                    groupRepo
                 )
             )
 
             JoinedGroupsView(viewModel)
         }
         // For debugging
-        composeTestRule.onRoot().printToLog("JOINED_GROUPS_VIEW")
+        composeTestRule.onRoot().printToLog("JOINED GROUPS VIEW")
 
         composeTestRule.onAllNodes(hasContentDescription("SearchGroupResult") and hasText("Programmieren"))[0].assertExists()
 
-        composeTestRule.onNode(hasContentDescription("Chip") and hasText("Lineare Algebra II"))
+        composeTestRule.onNode(hasContentDescription("Chip") and hasText("Lineare Algebra"))
             .assertExists()
 
-        composeTestRule.onNode(hasContentDescription("Chip") and hasText("Lineare Algebra II"))
+        composeTestRule.onNode(hasContentDescription("Chip") and hasText("Lineare Algebra"))
             .performClick()
 
         composeTestRule.onNode(hasContentDescription("SearchGroupResult") and hasText("Programmieren"))
             .assertDoesNotExist()
+        composeTestRule.onAllNodes(hasContentDescription("SearchGroupResult") and hasText("Lineare Algebra"))[0].assertExists()
     }
 
     /**

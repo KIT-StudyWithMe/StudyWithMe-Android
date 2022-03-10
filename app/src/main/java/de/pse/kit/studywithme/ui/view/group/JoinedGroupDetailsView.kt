@@ -1,6 +1,7 @@
 package de.pse.kit.studywithme.ui.view.group
 
 
+import android.util.Log
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,6 +23,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import de.pse.kit.studywithme.model.data.GroupMember
@@ -50,7 +52,9 @@ fun JoinedGroupDetailsView(viewModel: JoinedGroupDetailsViewModel) {
         val groupRequests by viewModel.requests
 
         Scaffold(
-            modifier = Modifier.semantics { "JoinedGroupDetailsView" },
+            modifier = Modifier.semantics {
+                contentDescription = "JoinedGroupDetailsView"
+            },
             topBar = {
                 TopBar(
                     title = group?.name ?: "",
@@ -64,7 +68,8 @@ fun JoinedGroupDetailsView(viewModel: JoinedGroupDetailsViewModel) {
                             )
                         }
                         if (viewModel.isAdmin.value) {
-                            IconButton(onClick = { viewModel.editGroup() }) {
+                            IconButton(onClick = { viewModel.editGroup() },
+                            modifier = Modifier.semantics {contentDescription = "Knopf um die Gruppe zu editieren" }) {
                                 Icon(
                                     Icons.Rounded.Edit,
                                     contentDescription = "Knopf um die Gruppe zu editieren."
@@ -186,16 +191,20 @@ fun JoinedGroupDetailsView(viewModel: JoinedGroupDetailsViewModel) {
                     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                         if (viewModel.isAdmin.value) {
                             Button(
-                                modifier = Modifier.weight(1f),
+                                modifier = Modifier.weight(1f).semantics { contentDescription = "EditSessionButton" },
                                 text = "Lernsession bearbeiten",
                                 onClick = { viewModel.planSession() },
                                 primary = false
                             )
                         }
 
-                        Button(modifier = Modifier.weight(1f),
+                        Button(modifier = Modifier
+                            .weight(1f)
+                            .semantics {
+                                contentDescription = "Participate-Button"
+                            },
                             text = "Teilnehmen",
-                            onClick = { viewModel.participate() }
+                            onClick = {viewModel.participate() }
                         )
 
                     }
@@ -206,7 +215,8 @@ fun JoinedGroupDetailsView(viewModel: JoinedGroupDetailsViewModel) {
                     onClick = {
                         viewModel.leaveGroup()
                     },
-                    emphasize = true
+                    emphasize = true,
+                    modifier = Modifier.semantics { contentDescription = "LeaveGroupButton" }
                 )
 
             }
