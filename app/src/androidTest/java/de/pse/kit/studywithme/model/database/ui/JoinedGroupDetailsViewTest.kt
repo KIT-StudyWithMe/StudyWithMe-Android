@@ -63,9 +63,7 @@ class JoinedGroupDetailsViewTest {
         composeTestRule.onNode(hasContentDescription("Participate-Button") and hasText("Teilnehmen")).performClick()
     }
 
-    /**
-     * /FA 170/
-     */
+
     @Test
     fun leaveGroup(){
         composeTestRule.onNode(hasContentDescription("LeaveGroupButton")).assertExists()
