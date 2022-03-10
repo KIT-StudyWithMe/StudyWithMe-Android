@@ -6,6 +6,8 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.rememberNavController
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import de.pse.kit.studywithme.model.auth.FakeAuthenticator
@@ -14,12 +16,12 @@ import de.pse.kit.studywithme.model.database.AppDatabase
 import de.pse.kit.studywithme.model.database.GroupDao
 import de.pse.kit.studywithme.model.database.SessionDao
 import de.pse.kit.studywithme.model.database.UserDao
-import de.pse.kit.studywithme.model.network.GroupService
-import de.pse.kit.studywithme.model.network.HttpRoutes
-import de.pse.kit.studywithme.model.network.SessionService
-import de.pse.kit.studywithme.model.network.UserService
+import de.pse.kit.studywithme.model.network.*
 import de.pse.kit.studywithme.model.repository.*
+import de.pse.kit.studywithme.ui.view.group.NonJoinedGroupDetailsView
 import de.pse.kit.studywithme.ui.view.navigation.MainView
+import de.pse.kit.studywithme.viewModel.group.NonJoinedGroupDetailsViewModel
+import de.pse.kit.studywithme.viewModel.group.NonJoinedGroupDetailsViewModelFactory
 import io.ktor.client.engine.mock.*
 import io.ktor.http.*
 import kotlinx.coroutines.runBlocking
@@ -38,6 +40,10 @@ class NonJoinedGroupsViewTest {
     lateinit var groupDao: GroupDao
     lateinit var sessionDao: SessionDao
     lateinit var db: AppDatabase
+    private lateinit var auth: FakeAuthenticator
+    private lateinit var groupRepo: GroupRepository
+    private lateinit var userRepo: UserRepository
+    private lateinit var sessionRepo: SessionRepository
 
     private val mockUsers = listOf(
         User(
@@ -77,22 +83,6 @@ class NonJoinedGroupsViewTest {
         )
     )
 
-    private val mockGroup = listOf(
-        Group(
-            groupID = 0,
-            name = "gfg",
-            lectureID = 0,
-            lecture = null,
-            major = null,
-            description = "lol",
-            lectureChapter = 1,
-            exercise = 1,
-            memberCount = 2,
-            sessionFrequency = SessionFrequency.MONTHLY,
-            sessionType = SessionType.ONLINE
-        )
-    )
-
     private val mockLightUsers = listOf(
         UserLight(
             userID = 0,
@@ -113,6 +103,17 @@ class NonJoinedGroupsViewTest {
             sessionDao = db.sessionDao()
             mockUsers.map { userDao.saveUser(it) }
             mockRemoteGroup.filter { it.groupID == 0 }.map { groupDao.saveGroup(it) }
+
+            auth = FakeAuthenticator()
+
+            val reportService = ReportService.newInstance(mockEngine) { "" }
+            val userService = UserService.newInstance(mockEngine) { "" }
+            val groupService = GroupService.newInstance(mockEngine) { "" }
+            val sessionService = SessionService.newInstance(mockEngine) { "" }
+
+            groupRepo = GroupRepository.newInstance(groupDao, auth, reportService, groupService)
+            userRepo = UserRepository.newInstance(userDao, userService, auth)
+            sessionRepo = SessionRepository.newInstance(sessionDao, auth, sessionService, reportService)
         }
     }
 
@@ -139,10 +140,10 @@ class NonJoinedGroupsViewTest {
                     )
                 }
 
-                "${HttpRoutes.GROUPS}?text=sadas" -> {
+                "${HttpRoutes.GROUPS}1" -> {
                     Log.d("MOCK", "respond c")
                     respond(
-                        content = Json.encodeToString(mockRemoteGroup.filter { it.groupID == 1 }),
+                        content = Json.encodeToString(mockRemoteGroup.filter { it.groupID == 1 }[0]),
                         status = HttpStatusCode.OK,
                         headers = headersOf(HttpHeaders.ContentType, "application/json")
                     )
@@ -167,51 +168,35 @@ class NonJoinedGroupsViewTest {
         }
     }
 
-    @Ignore
+    /**
+     * /FA160/ UI-Test
+     *
+     */
     @Test
-    fun report() {
+    fun reportGroup() {
         val auth = FakeAuthenticator()
 
         composeTestRule.setContent {
-            MainView(
-                userRepo = UserRepository.getInstance(
-                    UserRepoConstructor(
-                        context = context,
-                        userDao = userDao,
-                        userService = UserService.getInstance(Pair(mockEngine) { "" }),
-                        auth = auth
-                    )
-                ),
-                groupRepo = GroupRepository.getInstance(
-                    GroupRepoConstructor(
-                        context = context,
-                        groupDao = groupDao,
-                        groupService = GroupService.getInstance(Pair(mockEngine) { "" }),
-                        auth = auth
-                    )
-                ),
-                sessionRepo = SessionRepository.getInstance(
-                    SessionRepoConstructor(
-                        context = context,
-                        sessionDao = sessionDao,
-                        sessionService = SessionService.getInstance(Pair(mockEngine) { "" }),
-                        auth = auth
-                    )
+            val viewmodel: NonJoinedGroupDetailsViewModel = viewModel(
+                factory = NonJoinedGroupDetailsViewModelFactory(
+                    navController = rememberNavController(),
+                    groupID = 1,
+                    groupRepo = groupRepo
                 )
             )
+            NonJoinedGroupDetailsView(viewmodel)
         }
 
         //For debugging
         composeTestRule.onRoot().printToLog("NON_JOINED_GROUPS_VIEW")
 
         val report = composeTestRule.onNode(hasTestTag("Melden"))
-        val search = composeTestRule.onNode(hasTestTag("Suche Gruppen"))
-        val searchGroupsTab = composeTestRule.onNodeWithContentDescription("SearchGroupsTab")
+        val reportGroupName = composeTestRule.onNode(hasTestTag("Gruppenname melden"))
+        val confirm = composeTestRule.onNode(hasTestTag("Bestätigen"))
 
-        searchGroupsTab.performClick()
-        composeTestRule.onNodeWithContentDescription("SearchGroupsView").assertExists()
-        search.performClick().performTextInput("sadas")
-        composeTestRule.onRoot().printToLog("NON_JOINED_GROUPS_VIEW")
-        composeTestRule.onAllNodes(hasContentDescription("SearchGroupResult") and hasText("sadas"))[0].performClick()
+        report.performClick()
+        reportGroupName.performClick()
+        confirm.performClick()
+        composeTestRule.onNodeWithContentDescription("NonJoinedGroupDetailsView").assertExists()
     }
 }

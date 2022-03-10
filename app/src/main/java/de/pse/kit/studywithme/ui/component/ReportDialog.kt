@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -51,15 +52,16 @@ fun GroupReportDialog(
                 text = {
                     Column {
                         Text("Gruppe:")
-                        TextButton(onClick = {
-                            if (nameButtonStyle.value == FontWeight.Normal) {
-                                nameButtonStyle.value = FontWeight.Bold
-                                groupReports.add(GroupField.NAME)
-                            } else {
-                                nameButtonStyle.value = FontWeight.Normal
-                                groupReports.remove(GroupField.NAME)
-                            }
-                        }) {
+                        TextButton(modifier = Modifier.testTag("Gruppenname melden"),
+                            onClick = {
+                                if (nameButtonStyle.value == FontWeight.Normal) {
+                                    nameButtonStyle.value = FontWeight.Bold
+                                    groupReports.add(GroupField.NAME)
+                                } else {
+                                    nameButtonStyle.value = FontWeight.Normal
+                                    groupReports.remove(GroupField.NAME)
+                                }
+                            }) {
                             Text(
                                 text = "Der Gruppenname ist anstößig.",
                                 fontWeight = nameButtonStyle.value,
@@ -118,6 +120,7 @@ fun GroupReportDialog(
                 },
                 confirmButton = {
                     TextButton(
+                        modifier = Modifier.testTag("Bestätigen"),
                         onClick = {
                             onConfirm()
                             groupReports.clear()
@@ -162,7 +165,12 @@ fun ReportDialogPreview() {
     val mySet: MutableSet<GroupField> = mutableSetOf()
 
     Scaffold {
-        GroupReportDialog(openDialog, withSession = false, groupReports = mySet, sessionReports = mutableSetOf(),  { println(mySet)})
+        GroupReportDialog(
+            openDialog,
+            withSession = false,
+            groupReports = mySet,
+            sessionReports = mutableSetOf(),
+            { println(mySet) })
         Button(onClick = { openDialog.value = true }, text = "test")
     }
 }
