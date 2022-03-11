@@ -27,6 +27,7 @@ import kotlinx.serialization.json.Json
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.lang.Thread.sleep
 
 @ExperimentalMaterial3Api
 @ExperimentalMaterialApi
@@ -209,10 +210,14 @@ class SignInViewTest {
 
         //LogIn of a non-existing and existing User
         composeTestRule.onNodeWithContentDescription("ErrorMessage").assertDoesNotExist()
+        buttonEmail.performScrollTo()
         buttonEmail.performTextInput("hort2@lichter.de")
+        buttonPw.performScrollTo()
         buttonPw.performTextInput("passworthorst98")
+        buttonLogin.performScrollTo()
         buttonLogin.performClick()
         composeTestRule.onNodeWithContentDescription("ErrorMessage").assertExists()
+        buttonEmail.performScrollTo()
         buttonEmail.performTextClearance()
     }
 
@@ -226,10 +231,14 @@ class SignInViewTest {
         val buttonPw = composeTestRule.onNode(hasTestTag("Passwort"))
         val buttonLogin = composeTestRule.onNode(hasTestTag("Anmelden"))
 
+        buttonEmail.performScrollTo()
         buttonEmail.performClick().performTextInput("user@mail.com")
+        buttonPw.performScrollTo()
         buttonPw.performClick().performTextClearance()
         buttonPw.performClick().performTextInput("password")
+        buttonLogin.performScrollTo()
         buttonLogin.performClick()
+        sleep(1000)
         composeTestRule.onNodeWithContentDescription("JoinedGroupsView")
             .assertExists("Sign in failed.")
     }
@@ -244,8 +253,11 @@ class SignInViewTest {
         val buttonEmail = composeTestRule.onNode(hasTestTag("Email-Adresse"))
 
         //Forgot Pw Button is being pressed
+        buttonPwForget.performScrollTo()
         buttonPwForget.performClick()
+        buttonEmail.performScrollTo()
         buttonEmail.performClick().performTextInput("dieter.bohlen@dsds.de")
+        buttonPwForget.performScrollTo()
         buttonPwForget.performClick()
         composeTestRule.onNodeWithText("Eine Email zum zurücksetzen wurde gesendet").assertExists()
         composeTestRule.onNodeWithContentDescription("SignInView").assertExists()

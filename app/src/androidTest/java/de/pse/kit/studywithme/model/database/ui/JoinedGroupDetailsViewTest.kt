@@ -33,6 +33,7 @@ import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.jupiter.api.BeforeAll
+import java.lang.Thread.sleep
 import java.util.*
 
 @ExperimentalCoroutinesApi
@@ -371,6 +372,8 @@ class JoinedGroupDetailsViewTest {
         composeTestRule.onNode(hasContentDescription("Participate-Button") and hasText("Teilnehmen"))
             .assertExists()
         composeTestRule.onNode(hasContentDescription("Participate-Button") and hasText("Teilnehmen"))
+            .performScrollTo()
+        composeTestRule.onNode(hasContentDescription("Participate-Button") and hasText("Teilnehmen"))
             .performClick()
     }
 
@@ -378,6 +381,7 @@ class JoinedGroupDetailsViewTest {
     @Test
     fun leaveGroup() {
         composeTestRule.onNode(hasContentDescription("LeaveGroupButton")).assertExists()
+        composeTestRule.onNode(hasContentDescription("LeaveGroupButton")).performScrollTo()
         composeTestRule.onNode(hasContentDescription("LeaveGroupButton")).performClick()
     }
 

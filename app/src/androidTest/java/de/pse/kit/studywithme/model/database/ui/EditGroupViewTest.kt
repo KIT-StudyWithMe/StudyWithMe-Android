@@ -348,6 +348,7 @@ class EditGroupViewTest {
 
         saveButton.assertExists()
         saveButton.performClick()
+        sleep(1000)
         composeTestRule.onNode(hasContentDescription("JoinedGroupDetailsView")).assertExists("Navigation to JoinedGroupDetailsView failed")
         composeTestRule.onNode(hasContentDescription("TopBarTitle") and hasText("NewGroupName")).assertExists("Save failed")
 

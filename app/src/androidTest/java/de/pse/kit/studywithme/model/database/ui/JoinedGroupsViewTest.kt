@@ -42,6 +42,7 @@ import org.junit.Before
 import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
+import java.lang.Thread.sleep
 
 @ExperimentalCoroutinesApi
 @ExperimentalMaterial3Api
@@ -377,12 +378,13 @@ class JoinedGroupsViewTest {
         }
         // For debugging
         composeTestRule.onRoot().printToLog("JOINED GROUPS VIEW")
-
-        composeTestRule.onAllNodes(hasContentDescription("SearchGroupResult") and hasText("Programmieren"))[0].assertExists()
+        sleep(1000)
+        composeTestRule.onNode(hasContentDescription("SearchGroupResult") and hasText("Programmieren")).assertExists()
 
         composeTestRule.onNode(hasContentDescription("Chip") and hasText("Lineare Algebra"))
             .assertExists()
-
+        composeTestRule.onNode(hasContentDescription("Chip") and hasText("Lineare Algebra"))
+            .performScrollTo()
         composeTestRule.onNode(hasContentDescription("Chip") and hasText("Lineare Algebra"))
             .performClick()
 
@@ -413,7 +415,6 @@ class JoinedGroupsViewTest {
         val reportAdmin = composeTestRule.onNode(hasTestTag("Admin klicken"))
         val reportUserName = composeTestRule.onNode(hasTestTag("Nutzername melden"))
         val confirm = composeTestRule.onNode(hasTestTag("Bestätigen"))
-
         reportAdmin.performClick()
         reportUserName.performClick()
         confirm.performClick()
