@@ -5,6 +5,7 @@ import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import de.pse.kit.studywithme.GeneratedExclusion
 import de.pse.kit.studywithme.model.data.User
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withTimeout
@@ -14,6 +15,7 @@ import kotlinx.coroutines.withTimeout
  *
  * @constructor Create empty Authenticator
  */
+@GeneratedExclusion
 object Authenticator: AuthenticatorInterface {
     private val auth = Firebase.auth
     private var firebaseUser: FirebaseUser? = auth.currentUser

@@ -1,7 +1,9 @@
 package de.pse.kit.studywithme.model.auth
 
+import de.pse.kit.studywithme.GeneratedExclusion
 import de.pse.kit.studywithme.model.data.User
 
+@GeneratedExclusion
 interface AuthenticatorInterface {
 
     val TAG: String

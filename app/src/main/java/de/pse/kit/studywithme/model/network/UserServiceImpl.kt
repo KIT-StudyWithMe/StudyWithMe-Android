@@ -19,19 +19,6 @@ import io.ktor.http.*
  * @constructor Create empty User service impl
  */
 class UserServiceImpl(private var client: HttpClient) : UserService {
-
-    override suspend fun getUsers(): List<User>? {
-        return try {
-            client.get(HttpRoutes.USERS)
-        } catch (e: ResponseException) {
-            println("GetUsers Error: ${e.response.status}")
-            null
-        } catch (e: Exception) {
-            println("GetUsers Error: ${e.message}")
-            null
-        }
-    }
-
     override suspend fun getUser(id: Int): User? {
         return try {
             client.get(HttpRoutes.USERS + id + "/detail")

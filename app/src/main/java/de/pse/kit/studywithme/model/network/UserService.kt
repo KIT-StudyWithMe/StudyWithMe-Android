@@ -1,7 +1,5 @@
 package de.pse.kit.studywithme.model.network
 
-import android.util.Log
-import com.google.firebase.auth.GetTokenResult
 import de.pse.kit.studywithme.SingletonHolder
 import de.pse.kit.studywithme.model.data.Institution
 import de.pse.kit.studywithme.model.data.Major
@@ -15,13 +13,6 @@ import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 
 interface UserService {
-
-    /**
-     * Returns a list of users
-     *
-     * @return list of user object
-     */
-    suspend fun getUsers(): List<User>?
 
     /**
      * Returns the user with the ID id
