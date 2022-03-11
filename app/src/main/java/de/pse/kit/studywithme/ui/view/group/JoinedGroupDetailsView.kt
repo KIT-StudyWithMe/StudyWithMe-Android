@@ -185,6 +185,7 @@ fun JoinedGroupDetailsView(viewModel: JoinedGroupDetailsViewModel) {
                 )
                 if (sessions.isEmpty() && viewModel.isAdmin.value) {
                     Button(
+                        modifier = Modifier.semantics { contentDescription = "NewSessionButton" },
                         text = "Nächste Lernsesison planen",
                         onClick = { viewModel.planSession() })
                 } else if (sessions.isNotEmpty()) {
