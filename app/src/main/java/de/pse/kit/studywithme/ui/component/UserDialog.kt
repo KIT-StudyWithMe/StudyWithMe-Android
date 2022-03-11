@@ -11,6 +11,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -60,7 +61,7 @@ fun AdminDialog(
                             modifier = Modifier.padding(top = 12.dp),
                             fontWeight = FontWeight.Bold
                         )
-                        TextButton(onClick = {
+                        TextButton(modifier = Modifier.testTag("Nutzername melden"), onClick = {
                             if (nameButtonStyle.value == FontWeight.Normal) {
                                 nameButtonStyle.value = FontWeight.Bold
                                 reportFields.add(UserField.NAME)
@@ -77,15 +78,16 @@ fun AdminDialog(
                         }
 
                         if (contact != null) {
-                            TextButton(onClick = {
-                                if (contactButtonStyle.value == FontWeight.Normal) {
-                                    contactButtonStyle.value = FontWeight.Bold
-                                    reportFields.add(UserField.CONTACT)
-                                } else {
-                                    contactButtonStyle.value = FontWeight.Normal
-                                    reportFields.remove(UserField.CONTACT)
-                                }
-                            }) {
+                            TextButton(
+                                onClick = {
+                                    if (contactButtonStyle.value == FontWeight.Normal) {
+                                        contactButtonStyle.value = FontWeight.Bold
+                                        reportFields.add(UserField.CONTACT)
+                                    } else {
+                                        contactButtonStyle.value = FontWeight.Normal
+                                        reportFields.remove(UserField.CONTACT)
+                                    }
+                                }) {
                                 Text(
                                     "Die Kontaktinformationen sind anstößig.",
                                     fontWeight = contactButtonStyle.value,
@@ -97,6 +99,7 @@ fun AdminDialog(
                 },
                 confirmButton = {
                     TextButton(
+                        modifier = Modifier.testTag("Bestätigen"),
                         onClick = {
                             if (reportFields.isNotEmpty()) report(reportFields)
                             reportFields.clear()
@@ -179,7 +182,7 @@ fun MemberDialog(
                                 )
                             }
                             */
-                             
+
                             TextButton(onClick = {
                                 if (removeMemberButtonStyle.value == FontWeight.Normal) {
                                     removeMemberButtonStyle.value = FontWeight.Bold
