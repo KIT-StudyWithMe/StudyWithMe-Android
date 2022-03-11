@@ -235,8 +235,11 @@ class NonJoinedGroupsViewTest {
     }
 
     /**
-     * /FA160/ UI-Test
-     *
+     * /FA160/
+     * Before: user is in NonJoinedGroupDetailsView of an existing group where he is not a member
+     * Test: user presses the report button, user presses the button to report the name,
+     * user presses the confirm button
+     * After: user is in NonJoinedGroupDetailsView
      */
     @Test
     fun reportGroup() {
@@ -265,9 +268,10 @@ class NonJoinedGroupsViewTest {
     }
 
     /**
-     * Test to request a group membership.
-     * (/FA110/)
-     *
+     * /FA110/
+     * Before: user is in NonJoinedGroupDetailsView of an existing group where he is not a member
+     * Test: the user presses the button to request a membership
+     * After: the button to request a membership disappeared
      */
     @Test
     fun requestGroupMembership() {
@@ -288,8 +292,10 @@ class NonJoinedGroupsViewTest {
     }
 
     /**
-     * /FA100/ UI-Test
-     *
+     * /FA100/
+     * Before: user is in NonJoinedGroupDetailsView of an existing group where he is not a member
+     * with admin "Peter"
+     * After: the information of the group is shown
      */
     @Test
     fun checkNonJoinedGroupDetails() {

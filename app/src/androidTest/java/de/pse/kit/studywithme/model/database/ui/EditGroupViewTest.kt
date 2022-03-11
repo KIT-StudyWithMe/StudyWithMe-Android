@@ -318,22 +318,35 @@ class EditGroupViewTest {
                 sessionRepo = sessionRepo
             )
         }
+        //navigate from JoinedGroupsView(MainView) to EditGroupView of "Test Gruppe"
         composeTestRule.onRoot().printToLog("MY GROUPS VIEW")
-        composeTestRule.onNode(hasContentDescription("SearchGroupResult") and hasText("Test Gruppe")).assertExists()
-        composeTestRule.onNode(hasContentDescription("SearchGroupResult") and hasText("Test Gruppe")).performScrollTo()
-        composeTestRule.onNode(hasContentDescription("SearchGroupResult") and hasText("Test Gruppe")).performClick()
-        composeTestRule.onRoot().printToLog("GROUP DETAILS VIEW")
-        composeTestRule.onNode(hasContentDescription("JoinedGroupDetailsView")).assertExists()
-        composeTestRule.onNode(hasContentDescription("Knopf um die Gruppe zu editieren")).assertExists()
-        composeTestRule.onNode(hasText("Test Gruppe")).assertExists()
+        composeTestRule.onNode(hasContentDescription("SearchGroupResult") and hasText("Test Gruppe"))
+            .assertExists()
+        composeTestRule.onNode(hasContentDescription("SearchGroupResult") and hasText("Test Gruppe"))
+            .performScrollTo()
+        composeTestRule.onNode(hasContentDescription("SearchGroupResult") and hasText("Test Gruppe"))
+            .performClick()
+        sleep(1000)
 
-        composeTestRule.onNode(hasContentDescription("Knopf um die Gruppe zu editieren")).performClick()
-        composeTestRule.onNode(hasContentDescription("EditGroupView")).assertExists("Navigation zu EditGroupView fehlgeschlagen")
+        composeTestRule.onNode(hasContentDescription("JoinedGroupDetailsView"))
+            .assertExists()
+        composeTestRule.onNode(hasContentDescription("Knopf um die Gruppe zu editieren"))
+            .assertExists()
+        composeTestRule.onNode(hasText("Test Gruppe"))
+            .assertExists()
+        composeTestRule.onNode(hasContentDescription("Knopf um die Gruppe zu editieren"))
+            .performClick()
+
+        composeTestRule.onNode(hasContentDescription("EditGroupView"))
+            .assertExists("Navigation zu EditGroupView fehlgeschlagen")
         composeTestRule.onRoot().printToLog("EDIT GROUP VIEW")
     }
 
     /**
-     * /FA130/
+     * /FA 130/ test to change group information
+     * Before: user is on EditGroupView of an existing group where he is admin
+     * Test: user puts new input in field for group name and presses the save button
+     * After: user is on JoinedGroupDetailsView and new name of group is shown
      */
     @Test
     fun changeGroupInformation() {
@@ -353,7 +366,10 @@ class EditGroupViewTest {
 
     }
     /**
-     * /FA 150/
+     * /FA 150/ test to hide a group as admin
+     * Before: user is on EditGroupView of an existing group where he is admin, hide button showing 'Für andere ausblenden'
+     * Test: user presses the button to hide the group
+     * After: user stays on EditGroupView with the hide button showing 'Für andere einblenden'
      */
     @Test
     fun hideGroup() {
@@ -365,10 +381,14 @@ class EditGroupViewTest {
         hideButton.performClick()
         composeTestRule.onNode(hasTestTag("HideButton") and hasText("Für andere ausblenden")).assertDoesNotExist()
         composeTestRule.onNode(hasTestTag("HideButton") and hasText("Für andere einblenden")).assertExists()
+        composeTestRule.onNode(hasContentDescription("EditGroupView")).assertExists()
     }
 
     /**
-     * /FA 170/
+     * /FA 170/ test to delete a group as admin
+     * Before: user is on EditGroupView of an existing group where he is admin
+     * Test: user presses the button to delete the group
+     * After: user is on JoinedGroupsView
      */
     @Test
     fun deleteGroup() {

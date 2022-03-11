@@ -188,9 +188,12 @@ class NewGroupTest {
     }
 
     /**
-     * Test to create a new group with group-name, lecture, description, frequency of meetings,
-     * type of meeting and a learning progress. (/FA80/)
-     *
+     * /FA80/ test to create a new group
+     * Before: user is on JoinedGroupsView(MainView)
+     * Test: user navigates to SearchGroupsView via SearchGroupsTab in navigation bar,
+     * user performs input to create a new group with group-name, lecture, description, frequency of meetings,
+     * type of meeting and a learning progress.
+     * After: user is on SearchGroupsView
      */
     @ExperimentalCoroutinesApi
     @ExperimentalMaterial3Api

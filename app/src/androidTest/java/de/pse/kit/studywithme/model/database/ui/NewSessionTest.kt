@@ -279,6 +279,7 @@ class NewSessionTest {
                 )
             }
             composeTestRule.onRoot().printToLog("TUR")
+            //navigate to new session view of group "gfg"
             composeTestRule.onNode(hasContentDescription("SearchGroupResult") and hasText("gfg"))
                 .performClick()
             composeTestRule.onNodeWithContentDescription("NewSessionButton").performClick()
@@ -288,13 +289,16 @@ class NewSessionTest {
     }
 
     /**
-     * Test to create a new session. (/FA180/)
-     *
+     * /FA180/ test to create a new session
+     * Before: user is in NewSessionView of group "gfg"
+     * Test: user performs input in place field and duration field, then presses the save button
+     * After: user is now in JoinedGroupDetailsView
      */
     @Test
     fun newSessionTest() {
         composeTestRule.onNodeWithContentDescription("PlaceField").performTextInput("Hier")
         composeTestRule.onNodeWithContentDescription("DurationField").performTextInput("1")
         composeTestRule.onNodeWithContentDescription("SaveSessionButton").performClick()
+        composeTestRule.onNodeWithContentDescription("JoinedGroupDetailsView").assertExists()
     }
 }
