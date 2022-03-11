@@ -331,8 +331,8 @@ class EditGroupViewTest {
         composeTestRule.onNode(hasContentDescription("Knopf um die Gruppe zu editieren")).performClick()
         composeTestRule.onNode(hasContentDescription("EditGroupView")).assertExists("Navigation zu EditGroupView fehlgeschlagen")
         composeTestRule.onRoot().printToLog("EDIT GROUP VIEW")
-
     }
+
     /**
      * /FA130/
      */

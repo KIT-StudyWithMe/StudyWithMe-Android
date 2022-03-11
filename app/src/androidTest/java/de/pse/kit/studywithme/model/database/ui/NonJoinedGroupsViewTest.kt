@@ -93,6 +93,14 @@ class NonJoinedGroupsViewTest {
             sessionType = SessionType.ONLINE
         )
     )
+    private val mockMembers = listOf(
+        GroupMember(
+            groupID = 1,
+            userID = 1,
+            isAdmin = true,
+            name = "Peter"
+        )
+    )
 
     @get:Rule
     val composeTestRule = createComposeRule()
@@ -120,6 +128,7 @@ class NonJoinedGroupsViewTest {
                             "${HttpRoutes.USERS}0/detail" -> {
                                 Log.d("MOCK", "response user $signedInUser")
                                 respond(
+
                                     content = Json.encodeToString(signedInUser),
                                     status = HttpStatusCode.OK,
                                     headers = headersOf(HttpHeaders.ContentType, "application/json")
@@ -156,6 +165,16 @@ class NonJoinedGroupsViewTest {
                                 )
                             }
 
+                            "${HttpRoutes.GROUPS}1/users" -> {
+                                val members = mockMembers.filter { it.groupID == 1 }
+                                Log.d("MOCK", "response members: $members")
+                                respond(
+                                    content = Json.encodeToString(members),
+                                    status = HttpStatusCode.OK,
+                                    headers = headersOf(HttpHeaders.ContentType, "application/json")
+                                )
+                            }
+
                             else -> {
                                 Log.d("MOCK", "respond undefined")
                                 respond(
@@ -169,7 +188,15 @@ class NonJoinedGroupsViewTest {
                     HttpMethod.Put -> {
                         when (it.url.toString()) {
                             "${HttpRoutes.GROUPS}1/join/0" -> {
-                                Log.d("MOCK", "respond undefined")
+                                Log.d("MOCK", "respond join")
+                                respond(
+                                    content = "",
+                                    status = HttpStatusCode.OK,
+                                    headers = headersOf(HttpHeaders.ContentType, "application/json")
+                                )
+                            }
+                            "${HttpRoutes.GROUPS}1/report/0" -> {
+                                Log.d("MOCK", "respond report")
                                 respond(
                                     content = "",
                                     status = HttpStatusCode.OK,
@@ -271,7 +298,6 @@ class NonJoinedGroupsViewTest {
      * /FA100/ UI-Test
      *
      */
-    @Ignore
     @Test
     fun checkNonJoinedGroupDetails() {
         lateinit var vm: NonJoinedGroupDetailsViewModel
@@ -279,19 +305,18 @@ class NonJoinedGroupsViewTest {
             vm = viewModel(
                 factory = NonJoinedGroupDetailsViewModelFactory(
                     navController = rememberNavController(),
-                    groupID = 0,
+                    groupID = 1,
                     groupRepo = groupRepo
                 )
             )
             NonJoinedGroupDetailsView(vm)
         }
 
-        val admin = composeTestRule.onNode(hasTestTag("Admin klicken"))
+        val admin = composeTestRule.onNode(hasText("Peter") and hasTestTag("Admin klicken"))
         val groupDescription = composeTestRule.onNode(hasTestTag("Gruppenbeschreibung"))
         val chips = composeTestRule.onNode(hasTestTag("Chips"))
         val lecture = composeTestRule.onNode(hasTestTag("Vorlesung"))
         val exercise = composeTestRule.onNode(hasTestTag("Übungsblatt"))
-        val joinRequest = composeTestRule.onNode(hasTestTag("Beitrittsanfrage"))
         val groupMembers = composeTestRule.onNode(hasTestTag("Gruppenmitglieder"))
 
         composeTestRule.onNodeWithContentDescription("NonJoinedGroupDetailsView").assertExists()
@@ -301,7 +326,5 @@ class NonJoinedGroupsViewTest {
         chips.assertExists()
         lecture.assertExists()
         exercise.assertExists()
-        joinRequest.assertExists()
-
     }
 }
