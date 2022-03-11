@@ -175,14 +175,9 @@ class SessionRepository private constructor(
     }
 
     companion object : SingletonHolder<SessionRepository, SessionRepoConstructor>({
-        newInstance(sessionDao = it.sessionDao, sessionService = it.sessionService, reportService = it.reportService, auth = it.auth)
+        newInstance(it)
     }) {
-        fun newInstance(
-            sessionDao: SessionDao,
-            auth: AuthenticatorInterface,
-            sessionService: SessionService,
-            reportService: ReportService
-        ) = SessionRepository(sessionDao, auth, sessionService, reportService)
+        fun newInstance(it: SessionRepoConstructor) = SessionRepository(it.sessionDao, it.auth, it.sessionService, it.reportService)
     }
 }
 
