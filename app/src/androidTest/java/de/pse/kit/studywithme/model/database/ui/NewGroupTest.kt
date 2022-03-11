@@ -27,6 +27,7 @@ import kotlinx.serialization.json.Json
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.lang.Thread.sleep
 
 class NewGroupTest {
     private lateinit var context: Context
@@ -221,7 +222,9 @@ class NewGroupTest {
         composeTestRule.onNodeWithContentDescription("DescriptionField").performTextInput("Das ist unsere Testgruppe")
         composeTestRule.onNode(hasText("Einmalig")and hasContentDescription("Chip")).performClick()
         composeTestRule.onNode(hasText("Präsenz")and hasContentDescription("Chip")).performClick()
+        composeTestRule.onNodeWithContentDescription("ChapterNrField").performScrollTo()
         composeTestRule.onNodeWithContentDescription("ChapterNrField").performTextInput("1")
+        composeTestRule.onNodeWithContentDescription("ExerciseNrField").performScrollTo()
         composeTestRule.onNodeWithContentDescription("ExerciseNrField").performTextInput("1")
         composeTestRule.onNodeWithContentDescription("SaveGroupButton").performClick()
 

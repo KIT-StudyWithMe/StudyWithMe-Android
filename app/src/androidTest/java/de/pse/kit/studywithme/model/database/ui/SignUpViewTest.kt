@@ -27,6 +27,7 @@ import kotlinx.serialization.json.Json
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.lang.Thread.sleep
 
 @ExperimentalMaterial3Api
 @ExperimentalMaterialApi
@@ -162,8 +163,10 @@ class SignUpViewTest {
                     sessionRepo = sessionRepo
                 )
             }
+            composeTestRule.onNode(hasTestTag("RegistrierenSignIn")).performScrollTo()
             composeTestRule.onNode(hasTestTag("RegistrierenSignIn")).performClick()
-            composeTestRule.onNodeWithContentDescription("SignUpView")
+            sleep(1000)
+            composeTestRule.onNodeWithContentDescription("SignUpView").assertExists()
         }
     }
 
@@ -173,19 +176,34 @@ class SignUpViewTest {
      */
     @Test
     fun signUp() {
+        composeTestRule.onRoot().printToLog("SIGN UP VIEW")
+        composeTestRule.onNode(hasTestTag("Email-AdresseSignUp"))
+            .assertExists()
+        composeTestRule.onNode(hasTestTag("Email-AdresseSignUp"))
+            .performScrollTo()
         composeTestRule.onNode(hasTestTag("Email-AdresseSignUp"))
             .performTextInput("hort2@lichter.de")
         composeTestRule.onNode(hasTestTag("NutzernameSignUp"))
+            .performScrollTo()
+        composeTestRule.onNode(hasTestTag("NutzernameSignUp"))
             .performTextInput("Horst")
+        composeTestRule.onNode(hasTestTag("UniSignUp"))
+            .performScrollTo()
         composeTestRule.onNode(hasTestTag("UniSignUp"))
             .performClick().performTextInput("KIT")
         composeTestRule.onNode(hasTestTag("LectureSignUp"))
+            .performScrollTo()
+        composeTestRule.onNode(hasTestTag("LectureSignUp"))
             .performTextInput("Info")
+        composeTestRule.onNode(hasTestTag("PwSignUp"))
+            .performScrollTo()
         composeTestRule.onNode(hasTestTag("PwSignUp"))
             .performTextInput("Mind6Zeichen")
         composeTestRule.onNode(hasTestTag("SignUp"))
+            .performScrollTo()
+        composeTestRule.onNode(hasTestTag("SignUp"))
             .performClick()
-
+        sleep(1000)
         composeTestRule.onNodeWithContentDescription("SearchGroupsView").assertExists("Sign Up failed.")
     }
 }

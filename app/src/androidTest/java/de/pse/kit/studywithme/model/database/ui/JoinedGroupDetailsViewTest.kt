@@ -33,6 +33,7 @@ import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.jupiter.api.BeforeAll
+import java.lang.Thread.sleep
 import java.util.*
 
 @ExperimentalCoroutinesApi
@@ -337,6 +338,8 @@ class JoinedGroupDetailsViewTest {
         composeTestRule.onNode(hasContentDescription("Participate-Button") and hasText("Teilnehmen"))
             .assertExists()
         composeTestRule.onNode(hasContentDescription("Participate-Button") and hasText("Teilnehmen"))
+            .performScrollTo()
+        composeTestRule.onNode(hasContentDescription("Participate-Button") and hasText("Teilnehmen"))
             .performClick()
     }
 
@@ -344,6 +347,7 @@ class JoinedGroupDetailsViewTest {
     @Test
     fun leaveGroup() {
         composeTestRule.onNode(hasContentDescription("LeaveGroupButton")).assertExists()
+        composeTestRule.onNode(hasContentDescription("LeaveGroupButton")).performScrollTo()
         composeTestRule.onNode(hasContentDescription("LeaveGroupButton")).performClick()
     }
 
@@ -354,10 +358,16 @@ class JoinedGroupDetailsViewTest {
      */
     @Test
     fun editSessionTest() {
+        composeTestRule.onNodeWithContentDescription("EditSessionButton").assertExists()
+        composeTestRule.onNodeWithContentDescription("EditSessionButton").performScrollTo()
         composeTestRule.onNodeWithContentDescription("EditSessionButton").performClick()
-        composeTestRule.onNodeWithContentDescription("EditSessionView")
+        composeTestRule.onNodeWithContentDescription("EditSessionView").assertExists()
             .assertExists("Navigation to edit session failed.")
+        composeTestRule.onNodeWithContentDescription("PlaceField").assertExists()
+        composeTestRule.onNodeWithContentDescription("PlaceField").performScrollTo()
         composeTestRule.onNodeWithContentDescription("PlaceField").performTextInput("Hier")
+        composeTestRule.onNodeWithContentDescription("DurationField").assertExists()
+        composeTestRule.onNodeWithContentDescription("DurationField").performScrollTo()
         composeTestRule.onNodeWithContentDescription("DurationField").performTextInput("1")
         composeTestRule.onNodeWithContentDescription("SaveSessionButton").performClick()
     }

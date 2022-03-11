@@ -42,6 +42,7 @@ import org.junit.Before
 import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
+import java.lang.Thread.sleep
 
 @ExperimentalCoroutinesApi
 @ExperimentalMaterial3Api
@@ -244,23 +245,6 @@ class JoinedGroupsViewTest {
                             )
                         }
 
-                        /**
-                        "${HttpRoutes.GROUPS}0/users/0/membership" -> {
-                            val groupMember = mockGroupMember.filter { it.groupID == 0 }
-                            Log.d("MOCK", "user: $groupMember is admin")
-                            respond(
-                                content = Json.encodeToString(groupMember),
-                        "${HttpRoutes.MAJORS}0/lectures/Lineare+Algebra" -> {
-                            val lectures = mockLectures.filter { it.majorID == 0 && it.lectureName.startsWith("Lineare Algebra") }
-                            Log.d("MOCK", "response lectures: $lectures")
-                            respond(
-                                content = Json.encodeToString(lectures),
-                                status = HttpStatusCode.OK,
-                                headers = headersOf(HttpHeaders.ContentType, "application/json")
-                            )
-                        }
-                        */
-
                         else -> {
                             Log.d("MOCK", "respond undefined")
                             respond(
@@ -339,12 +323,13 @@ class JoinedGroupsViewTest {
         }
         // For debugging
         composeTestRule.onRoot().printToLog("JOINED GROUPS VIEW")
-
-        composeTestRule.onAllNodes(hasContentDescription("SearchGroupResult") and hasText("Programmieren"))[0].assertExists()
+        sleep(1000)
+        composeTestRule.onNode(hasContentDescription("SearchGroupResult") and hasText("Programmieren")).assertExists()
 
         composeTestRule.onNode(hasContentDescription("Chip") and hasText("Lineare Algebra"))
             .assertExists()
-
+        composeTestRule.onNode(hasContentDescription("Chip") and hasText("Lineare Algebra"))
+            .performScrollTo()
         composeTestRule.onNode(hasContentDescription("Chip") and hasText("Lineare Algebra"))
             .performClick()
 
@@ -357,7 +342,6 @@ class JoinedGroupsViewTest {
      * FA70 UI-Test
      *
      */
-    @Ignore
     @Test
     fun reportUser() {
         composeTestRule.setContent {
@@ -376,7 +360,6 @@ class JoinedGroupsViewTest {
         val reportAdmin = composeTestRule.onNode(hasTestTag("Admin klicken"))
         val reportUserName = composeTestRule.onNode(hasTestTag("Nutzername melden"))
         val confirm = composeTestRule.onNode(hasTestTag("Bestätigen"))
-
         reportAdmin.performClick()
         reportUserName.performClick()
         confirm.performClick()

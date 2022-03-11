@@ -32,6 +32,7 @@ import org.junit.Before
 import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
+import java.lang.Thread.sleep
 
 @ExperimentalMaterial3Api
 @ExperimentalMaterialApi
@@ -154,6 +155,7 @@ class SearchGroupsTest {
 
         composeTestRule.onNode(hasTestTag("Suche Gruppen")).performTextInput("sadas")
         composeTestRule.onRoot().printToLog("SEARCH GROUPS VIEW")
+        sleep(1000)
         composeTestRule.onNode(hasContentDescription("SearchGroupResult") and hasText("sadas")).assertExists()
     }
 }
