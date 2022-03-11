@@ -19,21 +19,11 @@ import de.pse.kit.studywithme.model.database.UserDao
 import de.pse.kit.studywithme.model.network.*
 import de.pse.kit.studywithme.model.repository.*
 import de.pse.kit.studywithme.ui.view.group.JoinedGroupDetailsView
-import de.pse.kit.studywithme.model.network.GroupService
-import de.pse.kit.studywithme.model.network.HttpRoutes
-import de.pse.kit.studywithme.model.network.ReportService
-import de.pse.kit.studywithme.model.repository.FakeGroupRepository
-import de.pse.kit.studywithme.model.repository.FakeSessionRepository
-import de.pse.kit.studywithme.model.repository.FakeUserRepository
-import de.pse.kit.studywithme.model.repository.GroupRepository
 import de.pse.kit.studywithme.ui.view.group.JoinedGroupsView
 import de.pse.kit.studywithme.ui.view.navigation.MainView
-import de.pse.kit.studywithme.viewModel.group.JoinedGroupDetailsViewModel
-import de.pse.kit.studywithme.viewModel.group.JoinedGroupDetailsViewModelFactory
-import de.pse.kit.studywithme.viewModel.group.JoinedGroupsViewModel
-import de.pse.kit.studywithme.viewModel.group.JoinedGroupsViewModelFactory
 import io.ktor.client.engine.mock.*
 import io.ktor.http.*
+import io.ktor.utils.io.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.encodeToString
@@ -42,49 +32,13 @@ import org.junit.Before
 import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
-import java.lang.Thread.sleep
+import org.junit.jupiter.api.BeforeAll
+import java.util.*
 
 @ExperimentalCoroutinesApi
 @ExperimentalMaterial3Api
 @ExperimentalMaterialApi
-class JoinedGroupsViewTest {
-    private val mockRemoteGroups = listOf(
-        RemoteGroup(
-            groupID = 0,
-            name = "gfg",
-            lectureID = 0,
-            description = "lol",
-            lectureChapter = 1,
-            exercise = 1,
-            memberCount = 2,
-            sessionFrequency = SessionFrequency.MONTHLY,
-            sessionType = SessionType.ONLINE
-        ),
-        RemoteGroup(
-            groupID = 1,
-            name = "sadas",
-            lectureID = 1,
-            description = "asdas",
-            lectureChapter = 1,
-            exercise = 1,
-            memberCount = 2,
-            sessionFrequency = SessionFrequency.MONTHLY,
-            sessionType = SessionType.ONLINE
-        )
-    )
-    private val mockLectures: List<Lecture> = listOf(
-        Lecture(
-            lectureID = 0,
-            lectureName = "Lineare Algebra",
-            majorID = 0
-        ),
-        Lecture(
-            lectureID = 1,
-            lectureName = "Programmieren",
-            majorID = 0
-        )
-    )
-
+class NewSessionTest {
     private lateinit var context: Context
     private lateinit var userDao: UserDao
     private lateinit var groupDao: GroupDao
@@ -114,6 +68,28 @@ class JoinedGroupsViewTest {
         )
     )
     private val signedInUser = mockUsers.filter { it.userID == 0 }[0]
+    private val mockSessions = emptyList<Session>()
+    private val mockGroupMembers = listOf(
+        GroupMember(
+            groupID = 0,
+            userID = 0,
+            name = "max.mustermann",
+            isAdmin = true
+        )
+    )
+    private val mockLectures: List<Lecture> = listOf(
+        Lecture(
+            lectureID = 0,
+            lectureName = "Lineare Algebra",
+            majorID = 0
+        )
+    )
+    private val mockMajors: List<Major> = listOf(
+        Major(
+            majorID = 0,
+            name = "Informatik"
+        )
+    )
     private val mockRemoteGroup = listOf(
         RemoteGroup(
             groupID = 0,
@@ -122,29 +98,9 @@ class JoinedGroupsViewTest {
             description = "lol",
             lectureChapter = 1,
             exercise = 1,
-            memberCount = 2,
+            memberCount = 1,
             sessionFrequency = SessionFrequency.MONTHLY,
             sessionType = SessionType.ONLINE
-        ),
-        RemoteGroup(
-            groupID = 1,
-            name = "sadas",
-            lectureID = 0,
-            description = "asdas",
-            lectureChapter = 1,
-            exercise = 1,
-            memberCount = 2,
-            sessionFrequency = SessionFrequency.MONTHLY,
-            sessionType = SessionType.ONLINE
-        )
-    )
-
-    private val mockGroupMember = listOf(
-        GroupMember(
-            groupID = 0,
-            userID = 0,
-            name = "max.mustermann",
-            isAdmin = true
         )
     )
 
@@ -159,7 +115,7 @@ class JoinedGroupsViewTest {
             mockEngine = MockEngine {
                 Log.d("MOCK ENGINE", "${it.method}: ${it.url}")
                 when (it.method) {
-                    HttpMethod.Get -> {
+                    HttpMethod.Get ->
                         when (it.url.toString()) {
                             "${HttpRoutes.USERS}?FUID=dfg46thrge7fnd" -> {
                                 val responseUser = mockLightUsers.filter { it.userID.toInt() == 0 }
@@ -181,7 +137,7 @@ class JoinedGroupsViewTest {
                             }
 
                             "${HttpRoutes.USERS}0/groups" -> {
-                                val groups = mockRemoteGroups
+                                val groups = mockRemoteGroup.filter { it.groupID == 0 }
                                 Log.d("MOCK", "response groups: $groups")
                                 respond(
                                     content = Json.encodeToString(groups),
@@ -190,21 +146,31 @@ class JoinedGroupsViewTest {
                                 )
                             }
 
-                            "${HttpRoutes.GROUPS}?text=sadas" -> {
-                                val groups = mockRemoteGroup.filter { it.name.startsWith("sadas") }
-                                Log.d("MOCK", "response groups: $groups")
+                            "${HttpRoutes.GROUPS}0" -> {
+                                val group = mockRemoteGroup.filter { it.groupID == 0 }[0]
+                                Log.d("MOCK", "response group: $group")
                                 respond(
-                                    content = Json.encodeToString(groups),
+                                    content = Json.encodeToString(group),
                                     status = HttpStatusCode.OK,
                                     headers = headersOf(HttpHeaders.ContentType, "application/json")
                                 )
                             }
 
-                            "${HttpRoutes.MAJORS}0/lectures" -> {
-                                val lectures = mockLectures.filter { it.majorID == 0 }
-                                Log.d("MOCK", "response lectures: $lectures")
+                            "${HttpRoutes.GROUPS}0/users" -> {
+                                val members = mockGroupMembers.filter { it.groupID == 0 }
+                                Log.d("MOCK", "response members: $members")
                                 respond(
-                                    content = Json.encodeToString(lectures),
+                                    content = Json.encodeToString(members),
+                                    status = HttpStatusCode.OK,
+                                    headers = headersOf(HttpHeaders.ContentType, "application/json")
+                                )
+                            }
+
+                            "${HttpRoutes.GROUPS}0/sessions" -> {
+                                val sessions = mockSessions.filter { it.groupID == 0 }
+                                Log.d("MOCK", "response sessions: $sessions")
+                                respond(
+                                    content = Json.encodeToString(sessions),
                                     status = HttpStatusCode.OK,
                                     headers = headersOf(HttpHeaders.ContentType, "application/json")
                                 )
@@ -220,48 +186,24 @@ class JoinedGroupsViewTest {
                                 )
                             }
 
-                            "${HttpRoutes.GROUPS}1" -> {
-                                val group = mockRemoteGroup.filter { it.groupID == 1 }[0]
-                                Log.d("MOCK", "response group: $group")
+                            "${HttpRoutes.MAJORS}0" -> {
+                                val major = mockMajors.filter { it.majorID == 0L }[0]
+                                Log.d("MOCK", "response major: $major")
                                 respond(
-                                    content = Json.encodeToString(group),
+                                    content = Json.encodeToString(major),
                                     status = HttpStatusCode.OK,
                                     headers = headersOf(HttpHeaders.ContentType, "application/json")
                                 )
                             }
 
-                            "${HttpRoutes.LECTURES}1" -> {
-                                val lecture = mockLectures.filter { it.lectureID == 1 }[0]
-                                Log.d("MOCK", "response lecture: $lecture")
+                            "${HttpRoutes.GROUPS}0/requests" -> {
+                                Log.d("MOCK", "response requests: []")
                                 respond(
-                                    content = Json.encodeToString(lecture),
+                                    content = Json.encodeToString(emptyList<UserLight>()),
                                     status = HttpStatusCode.OK,
                                     headers = headersOf(HttpHeaders.ContentType, "application/json")
                                 )
                             }
-
-                            "${HttpRoutes.GROUPS}0/users" -> {
-                                val groupMember = mockGroupMember.filter { it.groupID == 0 }
-                                Log.d("MOCK", "respond members: $groupMember")
-                                respond(
-                                    content = Json.encodeToString(groupMember),
-                                    status = HttpStatusCode.OK,
-                                    headers = headersOf(HttpHeaders.ContentType, "application/json")
-                                )
-                            }
-
-                            "${HttpRoutes.MAJORS}0/lectures/Lineare+Algebra" -> {
-                                val lectures = mockLectures.filter {
-                                    it.majorID == 0 && it.lectureName.startsWith("Lineare Algebra")
-                                }
-                                Log.d("MOCK", "response lectures: $lectures")
-                                respond(
-                                    content = Json.encodeToString(lectures),
-                                    status = HttpStatusCode.OK,
-                                    headers = headersOf(HttpHeaders.ContentType, "application/json")
-                                )
-                            }
-
 
                             else -> {
                                 Log.d("MOCK", "respond undefined")
@@ -272,17 +214,18 @@ class JoinedGroupsViewTest {
                                 )
                             }
                         }
-                    }
-                    HttpMethod.Put -> {
+                    HttpMethod.Post ->
                         when (it.url.toString()) {
-                            "${HttpRoutes.USERS}0/report/0" -> {
-                                Log.d("MOCK", "respond report")
+                            "${HttpRoutes.GROUPS}0/sessions" -> {
+                                val outgoingPart = ByteReadChannel(it.body.toByteArray())
+                                Log.d("MOCK ENGINE", "outgoing session: $outgoingPart")
                                 respond(
-                                    content = "",
+                                    content = outgoingPart,
                                     status = HttpStatusCode.OK,
                                     headers = headersOf(HttpHeaders.ContentType, "application/json")
                                 )
                             }
+
                             else -> {
                                 Log.d("MOCK", "respond undefined")
                                 respond(
@@ -292,7 +235,6 @@ class JoinedGroupsViewTest {
                                 )
                             }
                         }
-                    }
                     else -> {
                         Log.d("MOCK", "respond undefined")
                         respond(
@@ -308,7 +250,7 @@ class JoinedGroupsViewTest {
             groupDao = db.groupDao()
             sessionDao = db.sessionDao()
             mockUsers.map { userDao.saveUser(it) }
-            mockRemoteGroup.filter { it.groupID == 0 }.map { groupDao.saveGroup(it) }
+            mockRemoteGroup.map { groupDao.saveGroup(it) }
 
             val reportService = ReportService.newInstance(mockEngine) { "" }
             val userService = UserService.newInstance(mockEngine) { "" }
@@ -335,89 +277,31 @@ class JoinedGroupsViewTest {
                     reportService
                 )
             )
-            mockRemoteGroups.map { groupDao.saveGroup(it) }
-        }
-    }
 
-    @Test
-    fun navigateToSearchGroupViewAndBackTest() {
-        composeTestRule.setContent {
-            MainView(
-                userRepo = FakeUserRepository(true),
-                groupRepo = FakeGroupRepository(),
-                sessionRepo = FakeSessionRepository()
-            )
-        }
-        // For debugging
-        composeTestRule.onRoot().printToLog("NAVIGATION_VIEW")
-
-        val searchGroupsTab = composeTestRule.onNodeWithContentDescription("SearchGroupsTab")
-        searchGroupsTab.assertExists()
-        searchGroupsTab.performClick()
-
-        composeTestRule.onNodeWithContentDescription("SearchGroupsView").assertExists()
-
-        val myGroupsTab = composeTestRule.onNodeWithContentDescription("MyGroupsTab")
-        myGroupsTab.assertExists()
-        myGroupsTab.performClick()
-
-        composeTestRule.onNodeWithContentDescription("JoinedGroupsView").assertExists()
-    }
-
-    @Test
-    fun filterJoinedGroupsTest() {
-        composeTestRule.setContent {
-            val viewModel: JoinedGroupsViewModel = viewModel(
-                factory = JoinedGroupsViewModelFactory(
-                    rememberNavController(),
-                    groupRepo
+            composeTestRule.setContent {
+                MainView(
+                    userRepo = userRepo,
+                    groupRepo = groupRepo,
+                    sessionRepo = sessionRepo
                 )
-            )
-
-            JoinedGroupsView(viewModel)
+            }
+            composeTestRule.onRoot().printToLog("TUR")
+            composeTestRule.onNode(hasContentDescription("SearchGroupResult") and hasText("gfg"))
+                .performClick()
+            composeTestRule.onNodeWithContentDescription("NewSessionButton").performClick()
+            composeTestRule.onNodeWithContentDescription("NewSessionView")
+                .assertExists("Navigation to new session failed.")
         }
-        // For debugging
-        composeTestRule.onRoot().printToLog("JOINED GROUPS VIEW")
-        sleep(1000)
-        composeTestRule.onNode(hasContentDescription("SearchGroupResult") and hasText("Programmieren")).assertExists()
-
-        composeTestRule.onNode(hasContentDescription("Chip") and hasText("Lineare Algebra"))
-            .assertExists()
-        composeTestRule.onNode(hasContentDescription("Chip") and hasText("Lineare Algebra"))
-            .performScrollTo()
-        composeTestRule.onNode(hasContentDescription("Chip") and hasText("Lineare Algebra"))
-            .performClick()
-
-        composeTestRule.onNode(hasContentDescription("SearchGroupResult") and hasText("Programmieren"))
-            .assertDoesNotExist()
-        composeTestRule.onAllNodes(hasContentDescription("SearchGroupResult") and hasText("Lineare Algebra"))[0].assertExists()
     }
 
     /**
-     * FA70 UI-Test
+     * Test to create a new session. (/FA180/)
      *
      */
     @Test
-    fun reportUser() {
-        composeTestRule.setContent {
-            val viewModel: JoinedGroupDetailsViewModel = viewModel(
-                factory = JoinedGroupDetailsViewModelFactory(
-                    rememberNavController(),
-                    groupID = 0,
-                    groupRepo,
-                    sessionRepo
-                )
-            )
-
-            JoinedGroupDetailsView(viewModel)
-        }
-
-        val reportAdmin = composeTestRule.onNode(hasTestTag("Admin klicken"))
-        val reportUserName = composeTestRule.onNode(hasTestTag("Nutzername melden"))
-        val confirm = composeTestRule.onNode(hasTestTag("Bestätigen"))
-        reportAdmin.performClick()
-        reportUserName.performClick()
-        confirm.performClick()
-        composeTestRule.onNodeWithContentDescription("JoinedGroupDetailsView").assertExists()
+    fun newSessionTest() {
+        composeTestRule.onNodeWithContentDescription("PlaceField").performTextInput("Hier")
+        composeTestRule.onNodeWithContentDescription("DurationField").performTextInput("1")
+        composeTestRule.onNodeWithContentDescription("SaveSessionButton").performClick()
     }
 }

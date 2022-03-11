@@ -411,14 +411,9 @@ class GroupRepository private constructor(
 
 
     companion object : SingletonHolder<GroupRepository, GroupRepoConstructor>({
-        newInstance(it.groupDao, it.auth, it.reportService, it.groupService)
+        newInstance(it)
     }) {
-        fun newInstance(
-            groupDao: GroupDao,
-            auth: AuthenticatorInterface,
-            reportService: ReportService,
-            groupService: GroupService
-        ) = GroupRepository(groupDao, auth, reportService, groupService)
+        fun newInstance(it: GroupRepoConstructor) = GroupRepository(it.groupDao, it.auth, it.reportService, it.groupService)
     }
 }
 

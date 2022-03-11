@@ -14,9 +14,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
+import de.pse.kit.studywithme.GeneratedExclusion
 import de.pse.kit.studywithme.ui.component.*
 
 /**
@@ -62,29 +65,47 @@ fun GroupDetailsLayout(
         Column {
             Text(text = "Gruppeninformationen", modifier = Modifier.padding(top = 12.dp))
             for (element in groupAdmin) {
-                FormText(modifier = Modifier.testTag("Admin klicken").clickable {
-                    adminClick(element)
-                }, icon = Icons.Filled.Person, text = element)
+                FormText(modifier = Modifier
+                    .testTag("Admin klicken")
+                    .clickable {
+                        adminClick(element)
+                    }, icon = Icons.Filled.Person, text = element)
             }
             for (element in groupMember) {
-                FormText(modifier = Modifier.clickable {
-                    memberClick(element)
-                }, icon = Icons.Outlined.Person, text = element)
+                FormText(
+                    modifier = Modifier
+                        .clickable {
+                            memberClick(element)
+                        }
+                        .semantics { contentDescription = "GroupMemberText" },
+                    icon = Icons.Outlined.Person,
+                    text = element
+                )
             }
             for (element in groupRequests) {
-                FormText(modifier = Modifier.clickable {
-                    requestClick(element)
-                }, icon = Icons.Outlined.PersonAddAlt, text = "Beitrittsanfrage: $element")
+                FormText(
+                    modifier = Modifier.testTag("Beitrittsanfrage").clickable {
+                        requestClick(element)
+                    },
+                    icon = Icons.Outlined.PersonAddAlt,
+                    text = "Beitrittsanfrage: $element"
+                )
             }
 
             if (groupMemberCount != null) {
                 FormText(
+                    modifier = Modifier.testTag("Gruppenmitglieder"),
                     icon = Icons.Outlined.Groups,
                     text = "${groupMemberCount - groupAdmin.count()} ${if (groupMemberCount - groupAdmin.count() != 1) "weitere Gruppenmitglieder" else "weiteres Gruppenmitglied"}"
                 )
             }
 
-            FormText(icon = Icons.Filled.Info, text = description, maxLines = 3)
+            FormText(
+                icon = Icons.Filled.Info,
+                text = description,
+                maxLines = 3,
+                modifier = Modifier.testTag("Gruppenbeschreibung")
+            )
 
             if (place != null && time != null) {
                 Text(
@@ -101,14 +122,21 @@ fun GroupDetailsLayout(
             }
 
             Text(text = "Weitere Informationen", modifier = Modifier.padding(top = 12.dp))
-            ChipDisplayRow(modifier = Modifier.padding(start = 12.dp), selectedChips)
+            ChipDisplayRow(
+                modifier = Modifier
+                    .padding(start = 12.dp)
+                    .testTag("Chips"),
+                selectedChips
+            )
 
             Text(text = "Lernfortschritt", modifier = Modifier.padding(top = 12.dp))
             FormText(
+                modifier = Modifier.testTag("Vorlesung"),
                 icon = if (chapterNumber != null) Icons.Outlined.CheckBoxOutlineBlank else Icons.Outlined.IndeterminateCheckBox,
                 text = "Vorlesung: Kapitel Nr. " + (chapterNumber ?: "")
             )
             FormText(
+                modifier = Modifier.testTag("Übungsblatt"),
                 icon = if (exerciseSheetNumber != null) Icons.Outlined.CheckBoxOutlineBlank else Icons.Outlined.IndeterminateCheckBox,
                 text = "Übungsblatt Nr. " + (exerciseSheetNumber ?: "")
             )
@@ -116,6 +144,7 @@ fun GroupDetailsLayout(
     }
 }
 
+@GeneratedExclusion
 @ExperimentalMaterialApi
 @ExperimentalMaterial3Api
 @Composable
@@ -151,6 +180,7 @@ fun GroupDetailsLayoutPreview() {
     }
 }
 
+@GeneratedExclusion
 @ExperimentalMaterialApi
 @ExperimentalMaterial3Api
 @Composable

@@ -236,13 +236,9 @@ class UserRepository private constructor(
     }
 
     companion object : SingletonHolder<UserRepository, UserRepoConstructor>({
-        newInstance(userDao = it.userDao, userService = it.userService, auth = it.auth)
+        newInstance(it)
     }) {
-        fun newInstance(
-            userDao: UserDao,
-            userService: UserService,
-            auth: AuthenticatorInterface
-        ): UserRepository = UserRepository(userDao, userService, auth)
+        fun newInstance(it: UserRepoConstructor): UserRepository = UserRepository(it.userDao, it.userService, it.auth)
     }
 }
 

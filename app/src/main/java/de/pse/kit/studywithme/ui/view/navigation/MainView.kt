@@ -16,6 +16,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
+import de.pse.kit.studywithme.GeneratedExclusion
 import de.pse.kit.studywithme.model.data.User
 import de.pse.kit.studywithme.model.repository.*
 import de.pse.kit.studywithme.ui.component.NavigationBar
@@ -309,6 +310,7 @@ fun NavGraphBuilder.profileGraph(navController: NavController, userRepo: UserRep
     }
 }
 
+@GeneratedExclusion
 @ExperimentalCoroutinesApi
 @ExperimentalMaterialApi
 @ExperimentalMaterial3Api

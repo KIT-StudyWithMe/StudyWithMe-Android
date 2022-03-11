@@ -35,12 +35,8 @@ class ReportServiceImpl(private val client: HttpClient): ReportService {
                 contentType(ContentType.Application.Json)
                 body = groupField
             }
-        } catch (e: RedirectResponseException) {
-            println("ReportGroup Redirect Error: ${e.response.status.description}")
-        } catch (e: ClientRequestException) {
-            println("ReportGroup Request Error: ${e.response.status.description}")
-        } catch (e: ServerResponseException) {
-            println("ReportGroup Response Error: ${e.response.status.description}")
+        } catch (e: ResponseException) {
+            println("ReportGroup Error: ${e.response.status}")
         } catch (e: Exception) {
             println("ReportGroup Error: ${e.message}")
         }
@@ -52,12 +48,8 @@ class ReportServiceImpl(private val client: HttpClient): ReportService {
                 contentType(ContentType.Application.Json)
                 body = userField
             }
-        } catch (e: RedirectResponseException) {
-            println("ReportUser Redirect Error: ${e.response.status.description}")
-        } catch (e: ClientRequestException) {
-            println("ReportUser Request Error: ${e.response.status.description}")
-        } catch (e: ServerResponseException) {
-            println("ReportUser Response Error: ${e.response.status.description}")
+        } catch (e: ResponseException) {
+            println("ReportUser Error: ${e.response.status}")
         } catch (e: Exception) {
             println("ReportUser Error: ${e.message}")
         }
@@ -69,12 +61,8 @@ class ReportServiceImpl(private val client: HttpClient): ReportService {
                 contentType(ContentType.Application.Json)
                 body = sessionField
             }
-        } catch (e: RedirectResponseException) {
-            println("ReportSession Redirect Error: ${e.response.status.description}")
-        } catch (e: ClientRequestException) {
-            println("ReportSession Request Error: ${e.response.status.description}")
-        } catch (e: ServerResponseException) {
-            println("ReportSession Response Error: ${e.response.status.description}")
+        } catch (e: ResponseException) {
+            println("ReportSession Error: ${e.response.status}")
         } catch (e: Exception) {
             println("ReportSession Error: ${e.message}")
         }

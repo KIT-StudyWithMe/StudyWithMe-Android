@@ -16,6 +16,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.pse.kit.myapplication.ui.theme.*
+import de.pse.kit.studywithme.GeneratedExclusion
 import de.pse.kit.studywithme.ui.component.*
 import java.lang.NumberFormatException
 
@@ -159,6 +160,7 @@ fun GroupFormLayout(
     }
 }
 
+@GeneratedExclusion
 @ExperimentalMaterial3Api
 @Composable
 @Preview
@@ -191,6 +193,7 @@ fun NewGroupFormPreview() {
     }
 }
 
+@GeneratedExclusion
 @ExperimentalMaterial3Api
 @Composable
 @Preview

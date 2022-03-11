@@ -93,6 +93,14 @@ class NonJoinedGroupsViewTest {
             sessionType = SessionType.ONLINE
         )
     )
+    private val mockMembers = listOf(
+        GroupMember(
+            groupID = 1,
+            userID = 1,
+            isAdmin = true,
+            name = "Peter"
+        )
+    )
 
     @get:Rule
     val composeTestRule = createComposeRule()
@@ -104,73 +112,115 @@ class NonJoinedGroupsViewTest {
             auth = FakeAuthenticator()
             mockEngine = MockEngine {
                 Log.d("MOCK ENGINE", "${it.method}: ${it.url}")
-                if (it.method == HttpMethod.Get) {
-                    when (it.url.toString()) {
-                        "${HttpRoutes.USERS}?FUID=dfg46thrge7fnd" -> {
-                            val responseUser = mockLightUsers.filter { it.userID.toInt() == 0 }
-                            Log.d("MOCK", "response user $responseUser")
-                            respond(
-                                content = Json.encodeToString(mockLightUsers.filter { it.userID.toInt() == 0 }),
-                                status = HttpStatusCode.OK,
-                                headers = headersOf(HttpHeaders.ContentType, "application/json")
-                            )
-                        }
+                when (it.method) {
+                    HttpMethod.Get -> {
+                        when (it.url.toString()) {
+                            "${HttpRoutes.USERS}?FUID=dfg46thrge7fnd" -> {
+                                val responseUser = mockLightUsers.filter { it.userID.toInt() == 0 }
+                                Log.d("MOCK", "response user $responseUser")
+                                respond(
+                                    content = Json.encodeToString(mockLightUsers.filter { it.userID.toInt() == 0 }),
+                                    status = HttpStatusCode.OK,
+                                    headers = headersOf(HttpHeaders.ContentType, "application/json")
+                                )
+                            }
 
-                        "${HttpRoutes.USERS}0/detail" -> {
-                            Log.d("MOCK", "response user $signedInUser")
-                            respond(
-                                content = Json.encodeToString(signedInUser),
-                                status = HttpStatusCode.OK,
-                                headers = headersOf(HttpHeaders.ContentType, "application/json")
-                            )
-                        }
+                            "${HttpRoutes.USERS}0/detail" -> {
+                                Log.d("MOCK", "response user $signedInUser")
+                                respond(
 
-                        "${HttpRoutes.GROUPS}?text=sadas" -> {
-                            val groups = mockRemoteGroup.filter { it.name.startsWith("sadas") }
-                            Log.d("MOCK", "response groups: $groups")
-                            respond(
-                                content = Json.encodeToString(groups),
-                                status = HttpStatusCode.OK,
-                                headers = headersOf(HttpHeaders.ContentType, "application/json")
-                            )
-                        }
+                                    content = Json.encodeToString(signedInUser),
+                                    status = HttpStatusCode.OK,
+                                    headers = headersOf(HttpHeaders.ContentType, "application/json")
+                                )
+                            }
 
-                        "${HttpRoutes.USERS}0/groups" -> {
-                            val groups = mockRemoteGroup.filter { it.groupID == 0 }
-                            Log.d("MOCK", "response groups: $groups")
-                            respond(
-                                content = Json.encodeToString(groups),
-                                status = HttpStatusCode.OK,
-                                headers = headersOf(HttpHeaders.ContentType, "application/json")
-                            )
-                        }
+                            "${HttpRoutes.GROUPS}?text=sadas" -> {
+                                val groups = mockRemoteGroup.filter { it.name.startsWith("sadas") }
+                                Log.d("MOCK", "response groups: $groups")
+                                respond(
+                                    content = Json.encodeToString(groups),
+                                    status = HttpStatusCode.OK,
+                                    headers = headersOf(HttpHeaders.ContentType, "application/json")
+                                )
+                            }
 
-                        "${HttpRoutes.GROUPS}1" -> {
-                            val group = mockRemoteGroup.filter { it.groupID == 1 }[0]
-                            Log.d("MOCK", "response group: $group")
-                            respond(
-                                content = Json.encodeToString(group),
-                                status = HttpStatusCode.OK,
-                                headers = headersOf(HttpHeaders.ContentType, "application/json")
-                            )
-                        }
+                            "${HttpRoutes.USERS}0/groups" -> {
+                                val groups = mockRemoteGroup.filter { it.groupID == 0 }
+                                Log.d("MOCK", "response groups: $groups")
+                                respond(
+                                    content = Json.encodeToString(groups),
+                                    status = HttpStatusCode.OK,
+                                    headers = headersOf(HttpHeaders.ContentType, "application/json")
+                                )
+                            }
 
-                        else -> {
-                            Log.d("MOCK", "respond undefined")
-                            respond(
-                                content = "",
-                                status = HttpStatusCode.OK,
-                                headers = headersOf(HttpHeaders.ContentType, "application/json")
-                            )
+                            "${HttpRoutes.GROUPS}1" -> {
+                                val group = mockRemoteGroup.filter { it.groupID == 1 }[0]
+                                Log.d("MOCK", "response group: $group")
+                                respond(
+                                    content = Json.encodeToString(group),
+                                    status = HttpStatusCode.OK,
+                                    headers = headersOf(HttpHeaders.ContentType, "application/json")
+                                )
+                            }
+
+                            "${HttpRoutes.GROUPS}1/users" -> {
+                                val members = mockMembers.filter { it.groupID == 1 }
+                                Log.d("MOCK", "response members: $members")
+                                respond(
+                                    content = Json.encodeToString(members),
+                                    status = HttpStatusCode.OK,
+                                    headers = headersOf(HttpHeaders.ContentType, "application/json")
+                                )
+                            }
+
+                            else -> {
+                                Log.d("MOCK", "respond undefined")
+                                respond(
+                                    content = "",
+                                    status = HttpStatusCode.OK,
+                                    headers = headersOf(HttpHeaders.ContentType, "application/json")
+                                )
+                            }
                         }
                     }
-                } else {
-                    Log.d("MOCK", "respond undefined")
-                    respond(
-                        content = "",
-                        status = HttpStatusCode.OK,
-                        headers = headersOf(HttpHeaders.ContentType, "application/json")
-                    )
+                    HttpMethod.Put -> {
+                        when (it.url.toString()) {
+                            "${HttpRoutes.GROUPS}1/join/0" -> {
+                                Log.d("MOCK", "respond join")
+                                respond(
+                                    content = "",
+                                    status = HttpStatusCode.OK,
+                                    headers = headersOf(HttpHeaders.ContentType, "application/json")
+                                )
+                            }
+                            "${HttpRoutes.GROUPS}1/report/0" -> {
+                                Log.d("MOCK", "respond report")
+                                respond(
+                                    content = "",
+                                    status = HttpStatusCode.OK,
+                                    headers = headersOf(HttpHeaders.ContentType, "application/json")
+                                )
+                            }
+                            else -> {
+                                Log.d("MOCK", "respond undefined")
+                                respond(
+                                    content = "",
+                                    status = HttpStatusCode.OK,
+                                    headers = headersOf(HttpHeaders.ContentType, "application/json")
+                                )
+                            }
+                        }
+                    }
+                    else -> {
+                        Log.d("MOCK", "respond undefined")
+                        respond(
+                            content = "",
+                            status = HttpStatusCode.OK,
+                            headers = headersOf(HttpHeaders.ContentType, "application/json")
+                        )
+                    }
                 }
             }
             db = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
@@ -185,9 +235,9 @@ class NonJoinedGroupsViewTest {
             val groupService = GroupService.newInstance(mockEngine) { "" }
             val sessionService = SessionService.newInstance(mockEngine) { "" }
 
-            groupRepo = GroupRepository.newInstance(groupDao, auth, reportService, groupService)
-            userRepo = UserRepository.newInstance(userDao, userService, auth)
-            sessionRepo = SessionRepository.newInstance(sessionDao, auth, sessionService, reportService)
+            groupRepo = GroupRepository.newInstance(GroupRepoConstructor(context, groupDao, auth, reportService, groupService))
+            userRepo = UserRepository.newInstance(UserRepoConstructor(context, userDao, userService, auth))
+            sessionRepo = SessionRepository.newInstance(SessionRepoConstructor(context, sessionDao, auth, sessionService, reportService))
         }
     }
 
@@ -219,5 +269,62 @@ class NonJoinedGroupsViewTest {
         reportGroupName.performClick()
         confirm.performClick()
         composeTestRule.onNodeWithContentDescription("NonJoinedGroupDetailsView").assertExists()
+    }
+
+    /**
+     * Test to request a group membership.
+     * (/FA110/)
+     *
+     */
+    @Test
+    fun requestGroupMembership() {
+        lateinit var vm: NonJoinedGroupDetailsViewModel
+        composeTestRule.setContent {
+            vm = viewModel(
+                factory = NonJoinedGroupDetailsViewModelFactory(
+                    navController = rememberNavController(),
+                    groupID = 1,
+                    groupRepo = groupRepo
+                )
+            )
+            NonJoinedGroupDetailsView(vm)
+        }
+        composeTestRule.onNodeWithContentDescription("RequestMembershipButton").performClick()
+        composeTestRule.waitUntil { vm.alreadyRequested.value }
+        composeTestRule.onNodeWithContentDescription("RequestMembershipButton").assertDoesNotExist()
+    }
+
+    /**
+     * /FA100/ UI-Test
+     *
+     */
+    @Test
+    fun checkNonJoinedGroupDetails() {
+        lateinit var vm: NonJoinedGroupDetailsViewModel
+        composeTestRule.setContent {
+            vm = viewModel(
+                factory = NonJoinedGroupDetailsViewModelFactory(
+                    navController = rememberNavController(),
+                    groupID = 1,
+                    groupRepo = groupRepo
+                )
+            )
+            NonJoinedGroupDetailsView(vm)
+        }
+
+        val admin = composeTestRule.onNode(hasText("Peter") and hasTestTag("Admin klicken"))
+        val groupDescription = composeTestRule.onNode(hasTestTag("Gruppenbeschreibung"))
+        val chips = composeTestRule.onNode(hasTestTag("Chips"))
+        val lecture = composeTestRule.onNode(hasTestTag("Vorlesung"))
+        val exercise = composeTestRule.onNode(hasTestTag("Übungsblatt"))
+        val groupMembers = composeTestRule.onNode(hasTestTag("Gruppenmitglieder"))
+
+        composeTestRule.onNodeWithContentDescription("NonJoinedGroupDetailsView").assertExists()
+        admin.assertExists()
+        groupMembers.assertExists()
+        groupDescription.assertExists()
+        chips.assertExists()
+        lecture.assertExists()
+        exercise.assertExists()
     }
 }

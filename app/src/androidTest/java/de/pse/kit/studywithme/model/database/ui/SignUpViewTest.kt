@@ -151,10 +151,9 @@ class SignUpViewTest {
             val groupService = GroupService.newInstance(mockEngine) { "" }
             val sessionService = SessionService.newInstance(mockEngine) { "" }
 
-            groupRepo = GroupRepository.newInstance(groupDao, auth, reportService, groupService)
-            userRepo = UserRepository.newInstance(userDao, userService, auth)
-            sessionRepo =
-                SessionRepository.newInstance(sessionDao, auth, sessionService, reportService)
+            groupRepo = GroupRepository.newInstance(GroupRepoConstructor(context, groupDao, auth, reportService, groupService))
+            userRepo = UserRepository.newInstance(UserRepoConstructor(context, userDao, userService, auth))
+            sessionRepo = SessionRepository.newInstance(SessionRepoConstructor(context, sessionDao, auth, sessionService, reportService))
 
             composeTestRule.setContent {
                 MainView(

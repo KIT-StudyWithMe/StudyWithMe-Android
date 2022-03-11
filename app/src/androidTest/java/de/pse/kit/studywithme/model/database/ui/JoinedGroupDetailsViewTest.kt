@@ -84,6 +84,12 @@ class JoinedGroupDetailsViewTest {
             userID = 0,
             name = "max.mustermann",
             isAdmin = true
+        ),
+        GroupMember(
+            groupID = 0,
+            userID = 1,
+            name = "max anders",
+            isAdmin = false
         )
     )
     private val mockLectures: List<Lecture> = listOf(
@@ -238,12 +244,14 @@ class JoinedGroupDetailsViewTest {
                     HttpMethod.Put ->
                         when (it.url.toString()) {
                             "${HttpRoutes.SESSIONS}0/participate/0" -> {
-                                mockSessionAttendees.add(SessionAttendee(
-                                    sessionAttendeeID = 0,
-                                    sessionID = 0,
-                                    participates = true,
-                                    userID = 0
-                                ))
+                                mockSessionAttendees.add(
+                                    SessionAttendee(
+                                        sessionAttendeeID = 0,
+                                        sessionID = 0,
+                                        participates = true,
+                                        userID = 0
+                                    )
+                                )
                                 val outgoingPart = ByteReadChannel(it.body.toByteArray())
                                 Log.d("MOCK ENGINE", "outgoing partisipate: $outgoingPart")
                                 respond(
@@ -253,11 +261,21 @@ class JoinedGroupDetailsViewTest {
                                 )
                             }
 
-                            "${HttpRoutes.SESSIONS}0" -> {
-                                val outgoingPart = ByteReadChannel(it.body.toByteArray())
-                                Log.d("MOCK ENGINE", "outgoing partisipate: $outgoingPart")
+                            else -> {
+                                Log.d("MOCK", "respond undefined")
                                 respond(
-                                    content = outgoingPart,
+                                    content = "",
+                                    status = HttpStatusCode.OK,
+                                    headers = headersOf(HttpHeaders.ContentType, "application/json")
+                                )
+                            }
+                        }
+                    HttpMethod.Delete ->
+                        when (it.url.toString()) {
+                            "${HttpRoutes.GROUPS}0/users/1" -> {
+                                Log.d("MOCK", "respond deletion")
+                                respond(
+                                    content = "",
                                     status = HttpStatusCode.OK,
                                     headers = headersOf(HttpHeaders.ContentType, "application/json")
                                 )
@@ -294,10 +312,26 @@ class JoinedGroupDetailsViewTest {
             val groupService = GroupService.newInstance(mockEngine) { "" }
             val sessionService = SessionService.newInstance(mockEngine) { "" }
 
-            groupRepo = GroupRepository.newInstance(groupDao, auth, reportService, groupService)
-            userRepo = UserRepository.newInstance(userDao, userService, auth)
-            sessionRepo =
-                SessionRepository.newInstance(sessionDao, auth, sessionService, reportService)
+            groupRepo = GroupRepository.newInstance(
+                GroupRepoConstructor(
+                    context,
+                    groupDao,
+                    auth,
+                    reportService,
+                    groupService
+                )
+            )
+            userRepo =
+                UserRepository.newInstance(UserRepoConstructor(context, userDao, userService, auth))
+            sessionRepo = SessionRepository.newInstance(
+                SessionRepoConstructor(
+                    context,
+                    sessionDao,
+                    auth,
+                    sessionService,
+                    reportService
+                )
+            )
 
             composeTestRule.setContent {
                 MainView(
@@ -352,23 +386,14 @@ class JoinedGroupDetailsViewTest {
     }
 
     /**
-     * Test to edit existing session. (/FA190/)
+     * Test to remove other group members as admin. (/FA140/)
      *
-     *  Hier fehlt das editieren der Date und TimePicker
      */
     @Test
-    fun editSessionTest() {
-        composeTestRule.onNodeWithContentDescription("EditSessionButton").assertExists()
-        composeTestRule.onNodeWithContentDescription("EditSessionButton").performScrollTo()
-        composeTestRule.onNodeWithContentDescription("EditSessionButton").performClick()
-        composeTestRule.onNodeWithContentDescription("EditSessionView").assertExists()
-            .assertExists("Navigation to edit session failed.")
-        composeTestRule.onNodeWithContentDescription("PlaceField").assertExists()
-        composeTestRule.onNodeWithContentDescription("PlaceField").performScrollTo()
-        composeTestRule.onNodeWithContentDescription("PlaceField").performTextInput("Hier")
-        composeTestRule.onNodeWithContentDescription("DurationField").assertExists()
-        composeTestRule.onNodeWithContentDescription("DurationField").performScrollTo()
-        composeTestRule.onNodeWithContentDescription("DurationField").performTextInput("1")
-        composeTestRule.onNodeWithContentDescription("SaveSessionButton").performClick()
+    fun removeGroupMemberTest() {
+        composeTestRule.onNode(hasContentDescription("GroupMemberText") and hasText("max anders")).assertExists()
+        composeTestRule.onNode(hasContentDescription("GroupMemberText") and hasText("max anders")).performClick()
+        composeTestRule.onNodeWithContentDescription("RemoveMemberButton").performClick()
+        composeTestRule.onNodeWithContentDescription("ConfirmButton").performClick()
     }
 }

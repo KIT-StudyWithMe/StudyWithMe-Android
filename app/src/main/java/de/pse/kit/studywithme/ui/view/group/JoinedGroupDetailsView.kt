@@ -26,6 +26,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import de.pse.kit.studywithme.GeneratedExclusion
 import de.pse.kit.studywithme.model.data.GroupMember
 import de.pse.kit.studywithme.model.repository.FakeGroupRepository
 import de.pse.kit.studywithme.model.repository.FakeSessionRepository
@@ -185,6 +186,7 @@ fun JoinedGroupDetailsView(viewModel: JoinedGroupDetailsViewModel) {
                 )
                 if (sessions.isEmpty() && viewModel.isAdmin.value) {
                     Button(
+                        modifier = Modifier.semantics { contentDescription = "NewSessionButton" },
                         text = "Nächste Lernsesison planen",
                         onClick = { viewModel.planSession() })
                 } else if (sessions.isNotEmpty()) {
@@ -224,6 +226,7 @@ fun JoinedGroupDetailsView(viewModel: JoinedGroupDetailsViewModel) {
     }
 }
 
+@GeneratedExclusion
 @ExperimentalCoroutinesApi
 @ExperimentalMaterialApi
 @ExperimentalMaterial3Api
@@ -240,6 +243,7 @@ fun JoinedGroupDetailsPreview() {
     )
 }
 
+@GeneratedExclusion
 @ExperimentalCoroutinesApi
 @ExperimentalMaterialApi
 @ExperimentalMaterial3Api

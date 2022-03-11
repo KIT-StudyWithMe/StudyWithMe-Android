@@ -129,12 +129,13 @@ class SearchGroupsTest {
             val reportService = ReportService.newInstance(mockEngine) { "" }
             val groupService = GroupService.newInstance(mockEngine) { "" }
 
-            groupRepo = GroupRepository.newInstance(groupDao, auth, reportService, groupService)
+            groupRepo = GroupRepository.newInstance(GroupRepoConstructor(context, groupDao, auth, reportService, groupService))
         }
     }
 
     /**
      * Test to search and list groups.
+     * (/FA90/)
      *
      */
     @ExperimentalCoroutinesApi
