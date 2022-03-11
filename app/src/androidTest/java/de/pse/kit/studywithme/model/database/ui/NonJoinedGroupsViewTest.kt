@@ -104,73 +104,96 @@ class NonJoinedGroupsViewTest {
             auth = FakeAuthenticator()
             mockEngine = MockEngine {
                 Log.d("MOCK ENGINE", "${it.method}: ${it.url}")
-                if (it.method == HttpMethod.Get) {
-                    when (it.url.toString()) {
-                        "${HttpRoutes.USERS}?FUID=dfg46thrge7fnd" -> {
-                            val responseUser = mockLightUsers.filter { it.userID.toInt() == 0 }
-                            Log.d("MOCK", "response user $responseUser")
-                            respond(
-                                content = Json.encodeToString(mockLightUsers.filter { it.userID.toInt() == 0 }),
-                                status = HttpStatusCode.OK,
-                                headers = headersOf(HttpHeaders.ContentType, "application/json")
-                            )
-                        }
+                when (it.method) {
+                    HttpMethod.Get -> {
+                        when (it.url.toString()) {
+                            "${HttpRoutes.USERS}?FUID=dfg46thrge7fnd" -> {
+                                val responseUser = mockLightUsers.filter { it.userID.toInt() == 0 }
+                                Log.d("MOCK", "response user $responseUser")
+                                respond(
+                                    content = Json.encodeToString(mockLightUsers.filter { it.userID.toInt() == 0 }),
+                                    status = HttpStatusCode.OK,
+                                    headers = headersOf(HttpHeaders.ContentType, "application/json")
+                                )
+                            }
 
-                        "${HttpRoutes.USERS}0/detail" -> {
-                            Log.d("MOCK", "response user $signedInUser")
-                            respond(
-                                content = Json.encodeToString(signedInUser),
-                                status = HttpStatusCode.OK,
-                                headers = headersOf(HttpHeaders.ContentType, "application/json")
-                            )
-                        }
+                            "${HttpRoutes.USERS}0/detail" -> {
+                                Log.d("MOCK", "response user $signedInUser")
+                                respond(
+                                    content = Json.encodeToString(signedInUser),
+                                    status = HttpStatusCode.OK,
+                                    headers = headersOf(HttpHeaders.ContentType, "application/json")
+                                )
+                            }
 
-                        "${HttpRoutes.GROUPS}?text=sadas" -> {
-                            val groups = mockRemoteGroup.filter { it.name.startsWith("sadas") }
-                            Log.d("MOCK", "response groups: $groups")
-                            respond(
-                                content = Json.encodeToString(groups),
-                                status = HttpStatusCode.OK,
-                                headers = headersOf(HttpHeaders.ContentType, "application/json")
-                            )
-                        }
+                            "${HttpRoutes.GROUPS}?text=sadas" -> {
+                                val groups = mockRemoteGroup.filter { it.name.startsWith("sadas") }
+                                Log.d("MOCK", "response groups: $groups")
+                                respond(
+                                    content = Json.encodeToString(groups),
+                                    status = HttpStatusCode.OK,
+                                    headers = headersOf(HttpHeaders.ContentType, "application/json")
+                                )
+                            }
 
-                        "${HttpRoutes.USERS}0/groups" -> {
-                            val groups = mockRemoteGroup.filter { it.groupID == 0 }
-                            Log.d("MOCK", "response groups: $groups")
-                            respond(
-                                content = Json.encodeToString(groups),
-                                status = HttpStatusCode.OK,
-                                headers = headersOf(HttpHeaders.ContentType, "application/json")
-                            )
-                        }
+                            "${HttpRoutes.USERS}0/groups" -> {
+                                val groups = mockRemoteGroup.filter { it.groupID == 0 }
+                                Log.d("MOCK", "response groups: $groups")
+                                respond(
+                                    content = Json.encodeToString(groups),
+                                    status = HttpStatusCode.OK,
+                                    headers = headersOf(HttpHeaders.ContentType, "application/json")
+                                )
+                            }
 
-                        "${HttpRoutes.GROUPS}1" -> {
-                            val group = mockRemoteGroup.filter { it.groupID == 1 }[0]
-                            Log.d("MOCK", "response group: $group")
-                            respond(
-                                content = Json.encodeToString(group),
-                                status = HttpStatusCode.OK,
-                                headers = headersOf(HttpHeaders.ContentType, "application/json")
-                            )
-                        }
+                            "${HttpRoutes.GROUPS}1" -> {
+                                val group = mockRemoteGroup.filter { it.groupID == 1 }[0]
+                                Log.d("MOCK", "response group: $group")
+                                respond(
+                                    content = Json.encodeToString(group),
+                                    status = HttpStatusCode.OK,
+                                    headers = headersOf(HttpHeaders.ContentType, "application/json")
+                                )
+                            }
 
-                        else -> {
-                            Log.d("MOCK", "respond undefined")
-                            respond(
-                                content = "",
-                                status = HttpStatusCode.OK,
-                                headers = headersOf(HttpHeaders.ContentType, "application/json")
-                            )
+                            else -> {
+                                Log.d("MOCK", "respond undefined")
+                                respond(
+                                    content = "",
+                                    status = HttpStatusCode.OK,
+                                    headers = headersOf(HttpHeaders.ContentType, "application/json")
+                                )
+                            }
                         }
                     }
-                } else {
-                    Log.d("MOCK", "respond undefined")
-                    respond(
-                        content = "",
-                        status = HttpStatusCode.OK,
-                        headers = headersOf(HttpHeaders.ContentType, "application/json")
-                    )
+                    HttpMethod.Put -> {
+                        when (it.url.toString()) {
+                            "${HttpRoutes.GROUPS}1/join/0" -> {
+                                Log.d("MOCK", "respond undefined")
+                                respond(
+                                    content = "",
+                                    status = HttpStatusCode.OK,
+                                    headers = headersOf(HttpHeaders.ContentType, "application/json")
+                                )
+                            }
+                            else -> {
+                                Log.d("MOCK", "respond undefined")
+                                respond(
+                                    content = "",
+                                    status = HttpStatusCode.OK,
+                                    headers = headersOf(HttpHeaders.ContentType, "application/json")
+                                )
+                            }
+                        }
+                    }
+                    else -> {
+                        Log.d("MOCK", "respond undefined")
+                        respond(
+                            content = "",
+                            status = HttpStatusCode.OK,
+                            headers = headersOf(HttpHeaders.ContentType, "application/json")
+                        )
+                    }
                 }
             }
             db = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
@@ -219,5 +242,28 @@ class NonJoinedGroupsViewTest {
         reportGroupName.performClick()
         confirm.performClick()
         composeTestRule.onNodeWithContentDescription("NonJoinedGroupDetailsView").assertExists()
+    }
+
+    /**
+     * Test to request a group membership.
+     * (/FA110/)
+     *
+     */
+    @Test
+    fun requestGroupMembership() {
+        lateinit var vm: NonJoinedGroupDetailsViewModel
+        composeTestRule.setContent {
+            vm = viewModel(
+                factory = NonJoinedGroupDetailsViewModelFactory(
+                    navController = rememberNavController(),
+                    groupID = 1,
+                    groupRepo = groupRepo
+                )
+            )
+            NonJoinedGroupDetailsView(vm)
+        }
+        composeTestRule.onNodeWithContentDescription("RequestMembershipButton").performClick()
+        composeTestRule.waitUntil { vm.alreadyRequested.value }
+        composeTestRule.onNodeWithContentDescription("RequestMembershipButton").assertDoesNotExist()
     }
 }

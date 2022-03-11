@@ -108,7 +108,7 @@ fun NonJoinedGroupDetailsView(viewModel: NonJoinedGroupDetailsViewModel) {
                     exerciseSheetNumber = group?.exercise
                 )
                 if (!viewModel.alreadyRequested.value) {
-                    Button(text = "Beitrittsanfrage senden", onClick = { viewModel.joinRequest() })
+                    Button(modifier = Modifier.semantics { contentDescription = "RequestMembershipButton" }, text = "Beitrittsanfrage senden", onClick = { viewModel.joinRequest() })
                 }
             }
         }
