@@ -64,10 +64,10 @@ class EditProfileViewTest {
                     when (it.url.toString()) {
                         "${HttpRoutes.USERS}?FUID=${auth.firebaseUID}" -> {
                             Log.d("MOCK ENGINE", "respond user by fuid: ${auth.user}")
-                            val user = UserLight(
+                            val user = listOf(UserLight(
                                 userID = auth.user!!.userID.toLong(),
                                 name = auth.user!!.name
-                            )
+                            ))
 
                             respond(
                                 content = Json.encodeToString(user),

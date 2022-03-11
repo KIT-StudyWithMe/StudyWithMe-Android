@@ -34,205 +34,187 @@ import org.junit.Test
 @ExperimentalMaterial3Api
 @ExperimentalMaterialApi
 class ProfileViewTest {
-    private lateinit var context: Context
-    private lateinit var userDao: UserDao
-    private lateinit var groupDao: GroupDao
-    private lateinit var sessionDao: SessionDao
-    private lateinit var groupRepo: GroupRepository
-    private lateinit var userRepo: UserRepository
-    private lateinit var sessionRepo: SessionRepository
-    private lateinit var db: AppDatabase
     private lateinit var auth: FakeAuthenticator
-    private lateinit var mockEngine: MockEngine
-    private val mockDatabase: List<RemoteGroup> = emptyList()
-    private val mockUser = User(
-        userID = 0,
-        name = "max.mustermann",
-        contact = "max.mustermann@mustermail.com",
-        college = "Karlsruher Institut für Technologie",
-        collegeID = 0,
-        major = "Informatik B.Sc.",
-        majorID = 0,
-        firebaseUID = "dfg46thrge7fnd"
-    )
-    private val mockLightUsers = listOf(
-        UserLight(
-            userID = 0,
-            name = "max.mustermann"
-        )
-    )
 
     @get:Rule
     val composeTestRule = createComposeRule()
 
+    @ExperimentalCoroutinesApi
     @Before
-    fun lateinit() {
-        runBlocking {
-            auth = FakeAuthenticator()
-            mockEngine = MockEngine {
-                Log.d("MOCK ENGINE", "${it.method}: ${it.url}")
-                //Log.d("MOCK ENGINE", "${HttpRoutes.USERS}?FUID=${auth.firebaseUID}")
-                when (it.method) {
-                    HttpMethod.Post ->
-                        when (it.url.toString()) {
-                            "${HttpRoutes.GROUPS}${auth.user?.userID}" -> {
-                                val outgoingGroup = ByteReadChannel(it.body.toByteArray())
-                                Log.d("MOCK ENGINE", "outgoing group: $outgoingGroup")
+    fun lateInit(): Unit = runBlocking {
+        auth = FakeAuthenticator()
 
-                                respond(
-                                    content = outgoingGroup,
-                                    status = HttpStatusCode.OK,
-                                    headers = headersOf(HttpHeaders.ContentType, "application/json")
-                                )
-                            }
+        val context: Context = ApplicationProvider.getApplicationContext()
+        val db = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
+        val userDao = db.userDao()
+        val groupDao = db.groupDao()
+        val sessionDao = db.sessionDao()
+        userDao.saveUser(auth.user!!)
 
-                            "${HttpRoutes.MAJORS}${auth.user?.majorID}/lectures" -> {
-                                val outgoingLecture = ByteReadChannel(it.body.toByteArray())
-                                Log.d("MOCK ENGINE", "outgoing lecture: $outgoingLecture")
+        val mockEngine = MockEngine {
+            Log.d("MOCK ENGINE", "${it.method}: ${it.url}")
+            when (it.method) {
+                HttpMethod.Post ->
+                    when (it.url.toString()) {
+                        "${HttpRoutes.GROUPS}${auth.user?.userID}" -> {
+                            val outgoingGroup = ByteReadChannel(it.body.toByteArray())
+                            Log.d("MOCK ENGINE", "outgoing group: $outgoingGroup")
 
-                                respond(
-                                    content = outgoingLecture,
-                                    status = HttpStatusCode.OK,
-                                    headers = headersOf(HttpHeaders.ContentType, "application/json")
-                                )
-                            }
-
-                            else -> {
-                                respond(
-                                    content = "",
-                                    status = HttpStatusCode.BadRequest,
-                                    headers = headersOf(HttpHeaders.ContentType, "application/json")
-                                )
-                            }
-                        }
-                    HttpMethod.Get ->
-                        when (it.url.toString()) {
-                            "${HttpRoutes.MAJORS}${auth.user?.majorID}/lectures?name=Lineare+Algebra" -> {
-                                val lecture = Lecture(
-                                    lectureID = 0,
-                                    lectureName = "Lineare Algebra",
-                                    majorID = auth.user!!.userID
-                                )
-                                Log.d("MOCK ENGINE", "Respond Lecture: $lecture")
-                                respond(
-                                    content = Json.encodeToString(listOf(lecture)),
-                                    status = HttpStatusCode.OK,
-                                    headers = headersOf(HttpHeaders.ContentType, "application/json")
-                                )
-                            }
-
-                            "${HttpRoutes.MAJORS}${auth.user?.majorID}/lectures?name=Algorithmen" -> {
-                                Log.d("MOCK ENGINE", "Respond no lectures")
-                                respond(
-                                    content = Json.encodeToString(emptyList<Lecture>()),
-                                    status = HttpStatusCode.OK,
-                                    headers = headersOf(HttpHeaders.ContentType, "application/json")
-                                )
-                            }
-
-                            "${HttpRoutes.USERS}?FUID=${auth.firebaseUID}" -> {
-                                Log.d("MOCK ENGINE", "respond user by fuid: $mockLightUsers")
-
-                                respond(
-                                    content = Json.encodeToString(mockLightUsers),
-                                    status = HttpStatusCode.OK,
-                                    headers = headersOf(HttpHeaders.ContentType, "application/json")
-                                )
-                            }
-
-                            "${HttpRoutes.USERS}0/detail" -> {
-                                Log.d("MOCK ENGINE", "respond user by id: $mockUser")
-                                respond(
-                                    content = Json.encodeToString(mockUser),
-                                    status = HttpStatusCode.OK,
-                                    headers = headersOf(HttpHeaders.ContentType, "application/json")
-                                )
-                            }
-
-                            "${HttpRoutes.USERS}0/groups" -> {
-                                Log.d("MOCK ENGINE", "respond groups by uid: ${mockDatabase}")
-                                respond(
-                                    content = Json.encodeToString(mockDatabase),
-                                    status = HttpStatusCode.OK,
-                                    headers = headersOf(HttpHeaders.ContentType, "application/json")
-                                )
-                            }
-
-                            "${HttpRoutes.INSTITUTIONS}?name=KIT" -> {
-                                val institutions = listOf(Institution(0, "KIT"))
-                                Log.d("MOCK ENGINE", "respond institutions by name KIT: ${institutions}")
-                                respond(
-                                    content = Json.encodeToString(institutions),
-                                    status = HttpStatusCode.OK,
-                                    headers = headersOf(HttpHeaders.ContentType, "application/json")
-                                )
-                            }
-
-                            "${HttpRoutes.MAJORS}?name=Info" -> {
-                                val majors = listOf(Major(0, "Info"))
-                                Log.d("MOCK ENGINE", "respond institutions by name KIT: ${majors}")
-                                respond(
-                                    content = Json.encodeToString(majors),
-                                    status = HttpStatusCode.OK,
-                                    headers = headersOf(HttpHeaders.ContentType, "application/json")
-                                )
-                            }
-
-                            else -> {
-                                respond(
-                                    content = "",
-                                    status = HttpStatusCode.BadRequest,
-                                    headers = headersOf(HttpHeaders.ContentType, "application/json")
-                                )
-                            }
-                        }
-                    HttpMethod.Put ->
-                        when (it.url.toString()) {
-                            "${HttpRoutes.USERS}0/detail" -> {
-                                val outgoingUser = ByteReadChannel(it.body.toByteArray())
-                                Log.d("MOCK ENGINE", "outgoing user: $outgoingUser")
-
-                                respond(
-                                    content = outgoingUser,
-                                    status = HttpStatusCode.OK,
-                                    headers = headersOf(HttpHeaders.ContentType, "application/json")
-                                )
-                            }
-
-                            else -> {
-                                respond(
-                                    content = "",
-                                    status = HttpStatusCode.BadRequest,
-                                    headers = headersOf(HttpHeaders.ContentType, "application/json")
-                                )
-                            }
+                            respond(
+                                content = outgoingGroup,
+                                status = HttpStatusCode.OK,
+                                headers = headersOf(HttpHeaders.ContentType, "application/json")
+                            )
                         }
 
-                    else -> {
-                        respond(
-                            content = "",
-                            status = HttpStatusCode.BadRequest,
-                            headers = headersOf(HttpHeaders.ContentType, "application/json")
-                        )
+                        "${HttpRoutes.MAJORS}${auth.user?.majorID}/lectures" -> {
+                            val outgoingLecture = ByteReadChannel(it.body.toByteArray())
+                            Log.d("MOCK ENGINE", "outgoing lecture: $outgoingLecture")
+
+                            respond(
+                                content = outgoingLecture,
+                                status = HttpStatusCode.OK,
+                                headers = headersOf(HttpHeaders.ContentType, "application/json")
+                            )
+                        }
+
+                        else -> {
+                            respond(
+                                content = "",
+                                status = HttpStatusCode.BadRequest,
+                                headers = headersOf(HttpHeaders.ContentType, "application/json")
+                            )
+                        }
                     }
+                HttpMethod.Get ->
+                    when (it.url.toString()) {
+                        "${HttpRoutes.MAJORS}${auth.user?.majorID}/lectures?name=Lineare+Algebra" -> {
+                            val lecture = Lecture(
+                                lectureID = 0,
+                                lectureName = "Lineare Algebra",
+                                majorID = auth.user!!.userID
+                            )
+                            Log.d("MOCK ENGINE", "Respond Lecture: $lecture")
+                            respond(
+                                content = Json.encodeToString(listOf(lecture)),
+                                status = HttpStatusCode.OK,
+                                headers = headersOf(HttpHeaders.ContentType, "application/json")
+                            )
+                        }
+
+                        "${HttpRoutes.MAJORS}${auth.user?.majorID}/lectures?name=Algorithmen" -> {
+                            Log.d("MOCK ENGINE", "Respond no lectures")
+                            respond(
+                                content = Json.encodeToString(emptyList<Lecture>()),
+                                status = HttpStatusCode.OK,
+                                headers = headersOf(HttpHeaders.ContentType, "application/json")
+                            )
+                        }
+
+                        "${HttpRoutes.USERS}?FUID=${auth.firebaseUID}" -> {
+                            Log.d("MOCK ENGINE", "respond user by fuid: ${auth.user}")
+                            val user = listOf(UserLight(
+                                userID = auth.user!!.userID.toLong(),
+                                name = auth.user!!.name
+                            ))
+
+                            respond(
+                                content = Json.encodeToString(user),
+                                status = HttpStatusCode.OK,
+                                headers = headersOf(HttpHeaders.ContentType, "application/json")
+                            )
+                        }
+
+                        "${HttpRoutes.USERS}0/detail" -> {
+                            Log.d("MOCK ENGINE", "respond user by id: ${auth.user}")
+                            respond(
+                                content = Json.encodeToString(auth.user),
+                                status = HttpStatusCode.OK,
+                                headers = headersOf(HttpHeaders.ContentType, "application/json")
+                            )
+                        }
+
+                        "${HttpRoutes.USERS}0/groups" -> {
+                            Log.d("MOCK ENGINE", "respond groups by uid: []")
+                            respond(
+                                content = Json.encodeToString(emptyList<RemoteGroup>()),
+                                status = HttpStatusCode.OK,
+                                headers = headersOf(HttpHeaders.ContentType, "application/json")
+                            )
+                        }
+
+                        "${HttpRoutes.INSTITUTIONS}?name=KIT" -> {
+                            val institutions = listOf(Institution(0, "KIT"))
+                            Log.d(
+                                "MOCK ENGINE",
+                                "respond institutions by name KIT: ${institutions}"
+                            )
+                            respond(
+                                content = Json.encodeToString(institutions),
+                                status = HttpStatusCode.OK,
+                                headers = headersOf(HttpHeaders.ContentType, "application/json")
+                            )
+                        }
+
+                        "${HttpRoutes.MAJORS}?name=Info" -> {
+                            val majors = listOf(Major(0, "Info"))
+                            Log.d("MOCK ENGINE", "respond institutions by name KIT: ${majors}")
+                            respond(
+                                content = Json.encodeToString(majors),
+                                status = HttpStatusCode.OK,
+                                headers = headersOf(HttpHeaders.ContentType, "application/json")
+                            )
+                        }
+
+                        else -> {
+                            respond(
+                                content = "",
+                                status = HttpStatusCode.BadRequest,
+                                headers = headersOf(HttpHeaders.ContentType, "application/json")
+                            )
+                        }
+                    }
+                else -> {
+                    respond(
+                        content = "",
+                        status = HttpStatusCode.BadRequest,
+                        headers = headersOf(HttpHeaders.ContentType, "application/json")
+                    )
                 }
             }
-            context = ApplicationProvider.getApplicationContext()
-            db = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
-            userDao = db.userDao()
-            userDao.saveUser(mockUser)
-            groupDao = db.groupDao()
-            sessionDao = db.sessionDao()
-
-            val reportService = ReportService.newInstance(mockEngine) { "" }
-            val userService = UserService.newInstance(mockEngine) { "" }
-            val groupService = GroupService.newInstance(mockEngine) { "" }
-            val sessionService = SessionService.newInstance(mockEngine) { "" }
-
-            groupRepo = GroupRepository.newInstance(GroupRepoConstructor(context, groupDao, auth, reportService, groupService))
-            userRepo = UserRepository.newInstance(UserRepoConstructor(context, userDao, userService, auth))
-            sessionRepo = SessionRepository.newInstance(SessionRepoConstructor(context, sessionDao, auth, sessionService, reportService))
         }
+        val reportService = ReportService.newInstance(mockEngine) { "" }
+        val userService = UserService.newInstance(mockEngine) { "" }
+        val groupService = GroupService.newInstance(mockEngine) { "" }
+        val sessionService = SessionService.newInstance(mockEngine) { "" }
+
+        val groupRepo = GroupRepository.newInstance(
+            GroupRepoConstructor(
+                context,
+                groupDao,
+                auth,
+                reportService,
+                groupService
+            )
+        )
+        val userRepo =
+            UserRepository.newInstance(UserRepoConstructor(context, userDao, userService, auth))
+        val sessionRepo = SessionRepository.newInstance(
+            SessionRepoConstructor(
+                context,
+                sessionDao,
+                auth,
+                sessionService,
+                reportService
+            )
+        )
+
+        composeTestRule.setContent {
+            MainView(userRepo, groupRepo, sessionRepo)
+        }
+        composeTestRule.onNodeWithContentDescription("ProfileTab").performClick()
+        composeTestRule.onNodeWithContentDescription("ProfileView").assertExists()
+        composeTestRule.onRoot().printToLog("PROFILE VIEW")
     }
 
     /**
@@ -242,50 +224,24 @@ class ProfileViewTest {
      */
     @ExperimentalCoroutinesApi
     @Test
-    fun fetchAndDisplayProfileData() {
-        lateinit var viewModel: ProfileViewModel
-        composeTestRule.setContent {
-            viewModel = ProfileViewModel(
-                navController = rememberNavController(),
-                userRepo = userRepo
-            )
-            Log.d("TEST", "view")
-            ProfileView(viewModel)
-        }
-
-        composeTestRule.onNodeWithContentDescription("ProfileView").assertExists()
-        composeTestRule.onRoot().printToLog("PROFILE VIEW")
-
-        composeTestRule.onNodeWithText(mockUser.name).assertExists()
-        composeTestRule.onAllNodesWithText(mockUser.contact).assertCountEquals(2)
-        composeTestRule.onNodeWithText(mockUser.college!!).assertExists()
-        composeTestRule.onNodeWithText(mockUser.major!!).assertExists()
+    fun fetchAndDisplayProfileDataTest() {
+        composeTestRule.onNodeWithText(auth.user!!.name).assertExists()
+        composeTestRule.onAllNodesWithText(auth.user!!.contact).assertCountEquals(2)
+        composeTestRule.onNodeWithText(auth.user!!.college!!).assertExists()
+        composeTestRule.onNodeWithText(auth.user!!.major!!).assertExists()
     }
 
     /**
      * /FA50/ test to log out of the application
-     * Before: user is on JoinedGroupsView(MainView)
-     * Test: user presses the profile tab in the navigation bar,
-     * user is in the ProfileView now and presses the log out button
-     * After: user is in the SignInView
+     * Before: user is on the Profile View
+     * Test: user is on the ProfileView and presses the log out button
+     * After: user is on the SignInView
      */
     @ExperimentalCoroutinesApi
     @ExperimentalMaterial3Api
     @ExperimentalMaterialApi
     @Test
-    fun logout() {
-        composeTestRule.setContent {
-            MainView(
-                userRepo = userRepo,
-                groupRepo = groupRepo,
-                sessionRepo = sessionRepo
-            )
-        }
-        val myProfileTab = composeTestRule.onNodeWithContentDescription("ProfileTab")
-        myProfileTab.assertExists()
-        myProfileTab.performClick()
-        composeTestRule.onNodeWithContentDescription("ProfileView").assertExists()
-
+    fun logoutTest() {
         val logout = composeTestRule.onNode(hasTestTag("Abmelden"))
         logout.performClick()
 
