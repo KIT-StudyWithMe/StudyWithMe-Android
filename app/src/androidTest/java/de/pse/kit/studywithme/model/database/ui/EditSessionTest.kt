@@ -33,6 +33,7 @@ import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.jupiter.api.BeforeAll
+import java.lang.Thread.sleep
 import java.util.*
 
 @ExperimentalCoroutinesApi
@@ -304,8 +305,13 @@ class EditSessionTest {
             }
             composeTestRule.onRoot().printToLog("TUR")
             composeTestRule.onNode(hasContentDescription("SearchGroupResult") and hasText("gfg"))
+                .performScrollTo()
+            composeTestRule.onNode(hasContentDescription("SearchGroupResult") and hasText("gfg"))
                 .performClick()
+            composeTestRule.onNodeWithContentDescription("EditSessionButton")
+                .performScrollTo()
             composeTestRule.onNodeWithContentDescription("EditSessionButton").performClick()
+            sleep(1000)
             composeTestRule.onNodeWithContentDescription("EditSessionView")
                 .assertExists("Navigation to edit session failed.")
         }
@@ -317,7 +323,11 @@ class EditSessionTest {
      */
     @Test
     fun editSessionTest() {
+        composeTestRule.onNodeWithContentDescription("PlaceField").assertExists()
+        composeTestRule.onNodeWithContentDescription("PlaceField").performScrollTo()
         composeTestRule.onNodeWithContentDescription("PlaceField").performTextInput("Hier")
+        composeTestRule.onNodeWithContentDescription("DurationField").assertExists()
+        composeTestRule.onNodeWithContentDescription("DurationField").performScrollTo()
         composeTestRule.onNodeWithContentDescription("DurationField").performTextInput("1")
         composeTestRule.onNodeWithContentDescription("SaveSessionButton").performClick()
     }
