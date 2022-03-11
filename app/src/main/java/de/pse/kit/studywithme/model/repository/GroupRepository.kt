@@ -99,21 +99,26 @@ class GroupRepository private constructor(
 
     }.filterNotNull()
 
-    override suspend fun getGroupSuggestions(): List<Group> {
+    override suspend fun getGroupSuggestions(): List<Group> = coroutineScope {
         if (!auth.signedIn) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
 
-        val remoteGroups = groupService.getGroupSuggestions(auth.user!!.userID)
-            ?: return emptyList()
+        val remoteGroups = async { groupService.getGroupSuggestions(auth.user!!.userID) }
+        val remoteJoinedGroups = async { groupService.getJoinedGroups(auth.user!!.userID) }
 
-        return remoteGroups.map {
+        val filteredGroups = remoteGroups.await()?.filter {
+            remoteJoinedGroups.await()?.map {
+                it.groupID
+            }?.contains(it.groupID) == false
+        }?.map {
             val lecture = groupService.getLecture(it.lectureID)
             val major = if (lecture != null) groupService.getMajor(lecture.majorID) else null
-            val group = RemoteGroup.toGroup(it, lecture = lecture, major = major)
-            return@map group
+            return@map RemoteGroup.toGroup(it, lecture = lecture, major = major)
         }
+
+        return@coroutineScope filteredGroups ?: emptyList()
     }
 
     override suspend fun getGroup(groupID: Int): Flow<Group> = channelFlow {
