@@ -35,7 +35,7 @@ class UserRepository private constructor(
 
     @ExperimentalCoroutinesApi
     override suspend fun isSignedIn(): Boolean {
-        if (!auth.signedIn) {
+        if (auth.firebaseUID == null) {
             Log.d(auth.TAG, AuthException().message)
             return false
         }
@@ -51,7 +51,7 @@ class UserRepository private constructor(
 
     @ExperimentalCoroutinesApi
     override suspend fun getSignedInUser(): Flow<User> = channelFlow {
-        if (!auth.signedIn) {
+        if (auth.firebaseUID == null) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
