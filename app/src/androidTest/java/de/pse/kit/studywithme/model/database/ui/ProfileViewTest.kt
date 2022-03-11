@@ -26,12 +26,8 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.junit.Before
-import de.pse.kit.studywithme.model.repository.FakeGroupRepository
-import de.pse.kit.studywithme.model.repository.FakeSessionRepository
-import de.pse.kit.studywithme.model.repository.FakeUserRepository
 import de.pse.kit.studywithme.ui.view.navigation.MainView
 import io.ktor.utils.io.*
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 

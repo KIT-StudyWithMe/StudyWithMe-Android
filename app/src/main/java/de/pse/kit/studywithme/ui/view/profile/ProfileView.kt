@@ -55,7 +55,7 @@ fun ProfileView(viewModel: ProfileViewModel) {
                     actions = {
                         IconButton(
                             modifier = Modifier.semantics {
-                                contentDescription = "EditGroupButton"
+                                contentDescription = "EditProfileButton"
                             },onClick = { viewModel.navToEditProfile() }) {
                             Icon(
                                 Icons.Rounded.Edit,

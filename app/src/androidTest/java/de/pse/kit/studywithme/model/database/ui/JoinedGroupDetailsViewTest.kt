@@ -6,8 +6,6 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.rememberNavController
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import de.pse.kit.studywithme.model.auth.FakeAuthenticator
@@ -18,8 +16,6 @@ import de.pse.kit.studywithme.model.database.SessionDao
 import de.pse.kit.studywithme.model.database.UserDao
 import de.pse.kit.studywithme.model.network.*
 import de.pse.kit.studywithme.model.repository.*
-import de.pse.kit.studywithme.ui.view.group.JoinedGroupDetailsView
-import de.pse.kit.studywithme.ui.view.group.JoinedGroupsView
 import de.pse.kit.studywithme.ui.view.navigation.MainView
 import io.ktor.client.engine.mock.*
 import io.ktor.http.*
@@ -29,11 +25,8 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
-import org.junit.jupiter.api.BeforeAll
-import java.lang.Thread.sleep
 import java.util.*
 
 @ExperimentalCoroutinesApi
