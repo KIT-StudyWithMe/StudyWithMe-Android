@@ -19,21 +19,14 @@ import de.pse.kit.studywithme.model.database.UserDao
 import de.pse.kit.studywithme.model.network.*
 import de.pse.kit.studywithme.model.repository.*
 import de.pse.kit.studywithme.ui.view.group.NonJoinedGroupDetailsView
-import de.pse.kit.studywithme.ui.view.navigation.MainView
 import de.pse.kit.studywithme.viewModel.group.NonJoinedGroupDetailsViewModel
 import de.pse.kit.studywithme.viewModel.group.NonJoinedGroupDetailsViewModelFactory
-import de.pse.kit.studywithme.ui.view.group.SearchGroupsView
-import de.pse.kit.studywithme.ui.view.navigation.MainView
-import de.pse.kit.studywithme.viewModel.group.SearchGroupsViewModel
-import de.pse.kit.studywithme.viewModel.group.SearchGroupsViewModelFactory
 import io.ktor.client.engine.mock.*
 import io.ktor.http.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 

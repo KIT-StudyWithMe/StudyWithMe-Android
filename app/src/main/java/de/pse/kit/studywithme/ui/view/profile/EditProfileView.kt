@@ -91,6 +91,7 @@ fun EditProfileView(viewModel: EditProfileViewModel) {
                                 fontWeight = FontWeight.Bold
                             )
                             TextField(
+                                modifier = Modifier.semantics { contentDescription = "PasswordField" },
                                 label = "Passwort",
                                 onChange = { password = it },
                                 type = TextFieldType.PASSWORD
@@ -99,6 +100,7 @@ fun EditProfileView(viewModel: EditProfileViewModel) {
                     },
                     confirmButton = {
                         TextButton(
+                            modifier = Modifier.semantics { contentDescription = "ConfirmButton" },
                             onClick = {
                                 viewModel.deleteAccount(password)
                                 password = ""
@@ -159,7 +161,7 @@ fun EditProfileView(viewModel: EditProfileViewModel) {
                     label = "Erreichbar unter"
                 )
                 Button(
-                    modifier = Modifier.padding(top = 12.dp),
+                    modifier = Modifier.padding(top = 12.dp).semantics { contentDescription = "DeleteAccountButton" },
                     text = "Account löschen",
                     onClick = { openDialog = true },
                     emphasize = true

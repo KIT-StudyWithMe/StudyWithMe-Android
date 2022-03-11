@@ -27,7 +27,6 @@ import kotlinx.serialization.json.Json
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.lang.Thread.sleep
 
 class NewGroupTest {
     private lateinit var context: Context
