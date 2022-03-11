@@ -266,4 +266,42 @@ class NonJoinedGroupsViewTest {
         composeTestRule.waitUntil { vm.alreadyRequested.value }
         composeTestRule.onNodeWithContentDescription("RequestMembershipButton").assertDoesNotExist()
     }
+
+    /**
+     * /FA100/ UI-Test
+     *
+     */
+    @Ignore
+    @Test
+    fun checkNonJoinedGroupDetails() {
+        lateinit var vm: NonJoinedGroupDetailsViewModel
+        composeTestRule.setContent {
+            vm = viewModel(
+                factory = NonJoinedGroupDetailsViewModelFactory(
+                    navController = rememberNavController(),
+                    groupID = 0,
+                    groupRepo = groupRepo
+                )
+            )
+            NonJoinedGroupDetailsView(vm)
+        }
+
+        val admin = composeTestRule.onNode(hasTestTag("Admin klicken"))
+        val groupDescription = composeTestRule.onNode(hasTestTag("Gruppenbeschreibung"))
+        val chips = composeTestRule.onNode(hasTestTag("Chips"))
+        val lecture = composeTestRule.onNode(hasTestTag("Vorlesung"))
+        val exercise = composeTestRule.onNode(hasTestTag("Übungsblatt"))
+        val joinRequest = composeTestRule.onNode(hasTestTag("Beitrittsanfrage"))
+        val groupMembers = composeTestRule.onNode(hasTestTag("Gruppenmitglieder"))
+
+        composeTestRule.onNodeWithContentDescription("NonJoinedGroupDetailsView").assertExists()
+        admin.assertExists()
+        groupMembers.assertExists()
+        groupDescription.assertExists()
+        chips.assertExists()
+        lecture.assertExists()
+        exercise.assertExists()
+        joinRequest.assertExists()
+
+    }
 }
