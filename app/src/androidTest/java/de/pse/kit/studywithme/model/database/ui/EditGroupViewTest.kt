@@ -325,10 +325,10 @@ class EditGroupViewTest {
         composeTestRule.onNode(hasContentDescription("SearchGroupResult") and hasText("Test Gruppe")).performClick()
         composeTestRule.onRoot().printToLog("GROUP DETAILS VIEW")
         composeTestRule.onNode(hasContentDescription("JoinedGroupDetailsView")).assertExists()
-        composeTestRule.onNode(hasContentDescription("EditButton")).assertExists()
+        composeTestRule.onNode(hasContentDescription("Knopf um die Gruppe zu editieren")).assertExists()
         composeTestRule.onNode(hasText("Test Gruppe")).assertExists()
 
-        composeTestRule.onNode(hasContentDescription("EditButton")).performClick()
+        composeTestRule.onNode(hasContentDescription("Knopf um die Gruppe zu editieren")).performClick()
         composeTestRule.onNode(hasContentDescription("EditGroupView")).assertExists("Navigation zu EditGroupView fehlgeschlagen")
         composeTestRule.onRoot().printToLog("EDIT GROUP VIEW")
 
