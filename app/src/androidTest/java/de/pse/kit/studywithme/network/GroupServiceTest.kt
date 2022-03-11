@@ -1,4 +1,4 @@
-package de.pse.kit.studywithme
+package de.pse.kit.studywithme.network
 
 import de.pse.kit.studywithme.model.data.GroupMember
 import de.pse.kit.studywithme.model.data.RemoteGroup
