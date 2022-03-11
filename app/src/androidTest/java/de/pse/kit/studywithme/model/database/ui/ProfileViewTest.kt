@@ -263,56 +263,6 @@ class ProfileViewTest {
     }
 
     /**
-     * /FA40/ test to edit the own profile of a user
-     * Before: user is on JoinedGroupsView (MainView)
-     * Test: user presses the profile tab in the navigation bar, user gets on ProfileView,
-     * user clicks on the button to edit the profile, user gets on EditProfileVIew,
-     * user performs the input in the text fields and presses the safe button
-     * After: user is on ProfileView
-     */
-    @ExperimentalCoroutinesApi
-    @ExperimentalMaterial3Api
-    @ExperimentalMaterialApi
-    @Test
-    fun editProfile() {
-        composeTestRule.setContent {
-            MainView(
-                userRepo = userRepo,
-                groupRepo = groupRepo,
-                sessionRepo = sessionRepo
-            )
-        }
-
-        //For debugging
-        composeTestRule.onRoot().printToLog("PROFILE_VIEW")
-
-        val editProfile = composeTestRule.onNodeWithContentDescription("EditGroupButton")
-        val editCollege = composeTestRule.onNode(hasTestTag("Uni"))
-        val editMajor = composeTestRule.onNode(hasTestTag("Studiengang"))
-        val editUsername = composeTestRule.onNode(hasTestTag("Nutzername"))
-        val editContact = composeTestRule.onNode(hasTestTag("Kontaktinfo"))
-        val myProfileTab = composeTestRule.onNodeWithContentDescription("ProfileTab")
-        val saveProfile = composeTestRule.onNode(hasTestTag("Speichern"))
-
-        myProfileTab.assertExists()
-        myProfileTab.performClick()
-        composeTestRule.onNodeWithContentDescription("ProfileView").assertExists()
-        editProfile.performClick()
-        composeTestRule.onNodeWithContentDescription("EditProfileView").assertExists()
-        editCollege.performClick().performTextClearance()
-        editCollege.performClick().performTextInput("KIT")
-        editMajor.performClick().performTextClearance()
-        editMajor.performClick().performTextInput("Info")
-        editUsername.performClick().performTextClearance()
-        editUsername.performClick().performTextInput("maxMustermann")
-        editContact.performClick().performTextClearance()
-        editContact.performClick().performTextInput("maxMustermann@mustermail.com")
-        saveProfile.performClick()
-        composeTestRule.onRoot().printToLog("PROFILE_VIEW")
-        composeTestRule.onNodeWithContentDescription("ProfileView").assertExists()
-    }
-
-    /**
      * /FA50/ test to log out of the application
      * Before: user is on JoinedGroupsView(MainView)
      * Test: user presses the profile tab in the navigation bar,
