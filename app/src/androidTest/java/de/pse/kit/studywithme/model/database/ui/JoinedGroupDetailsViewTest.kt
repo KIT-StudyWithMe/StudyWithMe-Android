@@ -21,6 +21,8 @@ import de.pse.kit.studywithme.model.repository.*
 import de.pse.kit.studywithme.ui.view.group.JoinedGroupDetailsView
 import de.pse.kit.studywithme.ui.view.group.JoinedGroupsView
 import de.pse.kit.studywithme.ui.view.navigation.MainView
+import de.pse.kit.studywithme.viewModel.group.JoinedGroupDetailsViewModel
+import de.pse.kit.studywithme.viewModel.group.JoinedGroupDetailsViewModelFactory
 import io.ktor.client.engine.mock.*
 import io.ktor.http.*
 import io.ktor.utils.io.*
@@ -340,7 +342,7 @@ class JoinedGroupDetailsViewTest {
                     sessionRepo = sessionRepo
                 )
             }
-            composeTestRule.onRoot().printToLog("TUR")
+            //navigate from JoinedGroupsView(MainView) to JoinedGroupDetailsView of group 'gfg'
             composeTestRule.onNode(hasContentDescription("SearchGroupResult") and hasText("gfg"))
                 .performClick()
         }
@@ -348,6 +350,10 @@ class JoinedGroupDetailsViewTest {
 
     /**
      * /FA120/
+     * Before: user is on JoinedGroupDetailsView of group with
+     * name "gfg", lecture "Lineare Algebra", admin "max.mustermann" , location "Hier",
+     * sessionFrequency "Monthly", sessionType "Online", chapterNumber "1", exerciseNumber "1"
+     * After: all information is shown correctly
      */
     @Test
     fun showDetailedGroupInformation() {
@@ -355,20 +361,28 @@ class JoinedGroupDetailsViewTest {
             .assertExists()
         composeTestRule.onNode(hasContentDescription("TopBarSubTitle") and hasText("Lineare Algebra"))
             .assertExists()
-        composeTestRule.onNode(hasText("max.mustermann")).assertExists()
-        composeTestRule.onNode(hasText("Hier")).assertExists()
-        composeTestRule.onNode(hasContentDescription("Chip") and hasText("Monthly")).assertExists()
-        composeTestRule.onNode(hasContentDescription("Chip") and hasText("Online")).assertExists()
-        composeTestRule.onNode(hasText("Vorlesung: Kapitel Nr. 1")).assertExists()
-        composeTestRule.onNode(hasText("Übungsblatt Nr. 1")).assertExists()
+        composeTestRule.onNode(hasText("max.mustermann"))
+            .assertExists()
+        composeTestRule.onNode(hasText("Hier"))
+            .assertExists()
+        composeTestRule.onNode(hasContentDescription("Chip") and hasText("Monthly"))
+            .assertExists()
+        composeTestRule.onNode(hasContentDescription("Chip") and hasText("Online"))
+            .assertExists()
+        composeTestRule.onNode(hasText("Vorlesung: Kapitel Nr. 1"))
+            .assertExists()
+        composeTestRule.onNode(hasText("Übungsblatt Nr. 1"))
+            .assertExists()
     }
 
     /**
      * /FA200/
+     * Before: user is on JoinedGroupDetailsView of group 'gfg' with an existing session
+     * Test: user presses the participate button
+     * After: user is on JoinedGroupDetailsView
      */
     @Test
     fun confirmSessionParticipation() {
-        composeTestRule.onNode(hasText("Es nehmen 0 teil")).assertExists()
         composeTestRule.onNode(hasContentDescription("Participate-Button") and hasText("Teilnehmen"))
             .assertExists()
         composeTestRule.onNode(hasContentDescription("Participate-Button") and hasText("Teilnehmen"))
@@ -377,23 +391,41 @@ class JoinedGroupDetailsViewTest {
             .performClick()
     }
 
-
+    /**
+     * test to leave a group
+     * Before: user is on JoinedGroupDetailsView of group 'gfg'
+     * Test: user presses the button to leave the group
+     * After: user is on JoinedGroupsView
+     */
     @Test
     fun leaveGroup() {
-        composeTestRule.onNode(hasContentDescription("LeaveGroupButton")).assertExists()
-        composeTestRule.onNode(hasContentDescription("LeaveGroupButton")).performScrollTo()
-        composeTestRule.onNode(hasContentDescription("LeaveGroupButton")).performClick()
+        composeTestRule.onNode(hasContentDescription("LeaveGroupButton"))
+            .assertExists()
+        composeTestRule.onNode(hasContentDescription("LeaveGroupButton"))
+            .performScrollTo()
+        composeTestRule.onNode(hasContentDescription("LeaveGroupButton"))
+            .performClick()
+        composeTestRule.onNodeWithContentDescription("JoinedGroupsView").assertExists()
     }
 
     /**
-     * Test to remove other group members as admin. (/FA140/)
-     *
+     * /FA140/ test to remove a group member
+     * Before: user is on JoinedGroupDetailsView of group 'gfg' where he is admin, with other member "max anders"
+     * Test: user presses the button on member "max anders" and then presses the remove member button and the confirm button
+     * After: user is on JoinedGroupDetailsView
      */
     @Test
     fun removeGroupMemberTest() {
-        composeTestRule.onNode(hasContentDescription("GroupMemberText") and hasText("max anders")).assertExists()
-        composeTestRule.onNode(hasContentDescription("GroupMemberText") and hasText("max anders")).performClick()
-        composeTestRule.onNodeWithContentDescription("RemoveMemberButton").performClick()
-        composeTestRule.onNodeWithContentDescription("ConfirmButton").performClick()
+        composeTestRule.onNode(hasContentDescription("GroupMemberText") and hasText("max anders"))
+            .assertExists()
+        composeTestRule.onNode(hasContentDescription("GroupMemberText") and hasText("max anders"))
+            .performClick()
+        composeTestRule.onNodeWithContentDescription("RemoveMemberButton")
+            .performClick()
+        composeTestRule.onNodeWithContentDescription("ConfirmButton")
+            .performClick()
+        composeTestRule.onNodeWithContentDescription("JoinedGroupDetailsView")
+            .assertExists()
     }
+
 }

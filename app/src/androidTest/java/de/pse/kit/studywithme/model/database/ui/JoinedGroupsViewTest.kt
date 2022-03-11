@@ -339,6 +339,13 @@ class JoinedGroupsViewTest {
         }
     }
 
+    /**
+     * test basic navigation via navigation bar
+     * Before: user is in JoinedGroupsView(MainView)
+     * Test: user presses the search groups tab in the navigation bar, gets on SearchGroupsView,
+     * then presses the my groups tab in the navigation bar
+     * After: user is back to JoinedGroupsView
+     */
     @Test
     fun navigateToSearchGroupViewAndBackTest() {
         composeTestRule.setContent {
@@ -356,7 +363,6 @@ class JoinedGroupsViewTest {
         searchGroupsTab.performClick()
 
         composeTestRule.onNodeWithContentDescription("SearchGroupsView").assertExists()
-
         val myGroupsTab = composeTestRule.onNodeWithContentDescription("MyGroupsTab")
         myGroupsTab.assertExists()
         myGroupsTab.performClick()
@@ -364,6 +370,12 @@ class JoinedGroupsViewTest {
         composeTestRule.onNodeWithContentDescription("JoinedGroupsView").assertExists()
     }
 
+    /**
+     * test to filter joined groups by lectures
+     * Before: user is member of groups with lectures "Lineare Algebra" and "Programmieren"
+     * Test: user is in JoinedGroupsView(MainView), he presses the chip "Lineare Algebra" to filter his groups by the lecture
+     * After: The group with lecture "Programmieren" is not shown anymore, the group with lecture "Lineare Algebra" is shown
+     */
     @Test
     fun filterJoinedGroupsTest() {
         composeTestRule.setContent {
@@ -378,8 +390,9 @@ class JoinedGroupsViewTest {
         }
         // For debugging
         composeTestRule.onRoot().printToLog("JOINED GROUPS VIEW")
-        sleep(1000)
-        composeTestRule.onNode(hasContentDescription("SearchGroupResult") and hasText("Programmieren")).assertExists()
+        sleep(10000)
+        composeTestRule.onNode(hasContentDescription("SearchGroupResult") and hasText("Programmieren"))
+            .assertExists()
 
         composeTestRule.onNode(hasContentDescription("Chip") and hasText("Lineare Algebra"))
             .assertExists()
@@ -390,12 +403,15 @@ class JoinedGroupsViewTest {
 
         composeTestRule.onNode(hasContentDescription("SearchGroupResult") and hasText("Programmieren"))
             .assertDoesNotExist()
-        composeTestRule.onAllNodes(hasContentDescription("SearchGroupResult") and hasText("Lineare Algebra"))[0].assertExists()
+        composeTestRule.onAllNodes(hasContentDescription("SearchGroupResult") and hasText("Lineare Algebra"))[0]
+            .assertExists()
     }
-
     /**
-     * FA70 UI-Test
-     *
+     * /FA70/ test to report a user of a group
+     * Before: user is member of a group with an admin
+     * test: user is on JoinedGroupDetailsView of a group, presses the buttons to report the admin,
+     * presses the button to report for the user name, presses the confirm button
+     * After: user is on JoinedGroupDetailsView
      */
     @Test
     fun reportUser() {
@@ -420,4 +436,5 @@ class JoinedGroupsViewTest {
         confirm.performClick()
         composeTestRule.onNodeWithContentDescription("JoinedGroupDetailsView").assertExists()
     }
+
 }

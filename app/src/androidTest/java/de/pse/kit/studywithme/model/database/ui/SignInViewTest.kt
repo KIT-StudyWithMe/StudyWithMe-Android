@@ -190,7 +190,7 @@ class SignInViewTest {
             groupRepo = GroupRepository.newInstance(GroupRepoConstructor(context, groupDao, auth, reportService, groupService))
             userRepo = UserRepository.newInstance(UserRepoConstructor(context, userDao, userService, auth))
             sessionRepo = SessionRepository.newInstance(SessionRepoConstructor(context, sessionDao, auth, sessionService, reportService))
-
+            // set SignInView(MainView)
             composeTestRule.setContent {
                 MainView(
                     userRepo = userRepo,
@@ -202,6 +202,12 @@ class SignInViewTest {
         }
     }
 
+    /**
+     * test to check if an error is displayed when trying to sign in with non existing email
+     * Before: user is not signed in and on the SignInView
+     * Test: user writes input in the text fields for e-mail and passwort which doesn't belong to an account
+     * After: error message is shown
+     */
     @Test
     fun displayErrorAfterSignInWithNonExistingUser() {
         val buttonEmail = composeTestRule.onNode(hasTestTag("Email-Adresse"))
@@ -217,13 +223,15 @@ class SignInViewTest {
         buttonLogin.performScrollTo()
         buttonLogin.performClick()
         composeTestRule.onNodeWithContentDescription("ErrorMessage").assertExists()
-        buttonEmail.performScrollTo()
-        buttonEmail.performTextClearance()
+
     }
 
     /**
-     * UI-Test /FA20/
-     *
+     * /FA20/ test to check if the sign in works with the data of an existing account
+     * Before: user is not signed in and on the SignInView,
+     * an acount with mail "user@mail.com" and password "password" exists
+     * Test: user writes "user@mail.com" in the mail text field and "password" in the password field
+     * After: user is now in the JoinedGroupsView
      */
     @Test
     fun signInWithExistingUser() {
@@ -244,8 +252,14 @@ class SignInViewTest {
     }
 
     /**
-     * UI-Test FA30
-     *
+     * /FA30/ test to check the functionality in case of a forgotten password
+     * Before: user is not signed in and on the SignInView,
+     * an account with mail "dieter.bohlen@dsds.de" exists
+     * Test: user presses the forget password button,
+     * user writes "dieter.bohlen@dsds.de" in the mail text field,
+     * user presses the forget password button
+     * After: an error message "Eine Email zum zurücksetzen wurde gesendet" is shown
+     * and the user is still in the sign in view
      */
     @Test
     fun forgotPw() {

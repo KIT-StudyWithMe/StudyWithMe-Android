@@ -303,6 +303,7 @@ class EditSessionTest {
                     sessionRepo = sessionRepo
                 )
             }
+            //navigate from JoinedGroupsView(MainView) to EditSessionView of group 'gfg' with an existing session
             composeTestRule.onRoot().printToLog("TUR")
             composeTestRule.onNode(hasContentDescription("SearchGroupResult") and hasText("gfg"))
                 .performScrollTo()
@@ -318,8 +319,10 @@ class EditSessionTest {
     }
 
     /**
-     * Test to edit existing session. (/FA190/)
-     *
+     * /FA190/ test to edit the session of a group
+     * Before: user is on EditSessionView of an existing session of a group
+     * Test: user changes location and duration in text fields
+     * After: user is on JoinedGroupDetailsView
      */
     @Test
     fun editSessionTest() {
@@ -330,5 +333,6 @@ class EditSessionTest {
         composeTestRule.onNodeWithContentDescription("DurationField").performScrollTo()
         composeTestRule.onNodeWithContentDescription("DurationField").performTextInput("1")
         composeTestRule.onNodeWithContentDescription("SaveSessionButton").performClick()
+        composeTestRule.onNodeWithContentDescription("JoinedGroupDetailsView").assertExists()
     }
 }

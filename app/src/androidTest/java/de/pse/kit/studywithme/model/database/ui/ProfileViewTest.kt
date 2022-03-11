@@ -239,6 +239,11 @@ class ProfileViewTest {
         }
     }
 
+    /**
+     * test to show the profile data of a user
+     * Before: user is on ProfileView
+     * After: user profile information is shown correctly
+     */
     @ExperimentalCoroutinesApi
     @Test
     fun fetchAndDisplayProfileData() {
@@ -262,8 +267,12 @@ class ProfileViewTest {
     }
 
     /**
-     * UI-Test /FA40/
-     *
+     * /FA40/ test to edit the own profile of a user
+     * Before: user is on JoinedGroupsView (MainView)
+     * Test: user presses the profile tab in the navigation bar, user gets on ProfileView,
+     * user clicks on the button to edit the profile, user gets on EditProfileVIew,
+     * user performs the input in the text fields and presses the safe button
+     * After: user is on ProfileView
      */
     @ExperimentalCoroutinesApi
     @ExperimentalMaterial3Api
@@ -308,8 +317,11 @@ class ProfileViewTest {
     }
 
     /**
-     * UI-Test /FA50/
-     *
+     * /FA50/ test to log out of the application
+     * Before: user is on JoinedGroupsView(MainView)
+     * Test: user presses the profile tab in the navigation bar,
+     * user is in the ProfileView now and presses the log out button
+     * After: user is in the SignInView
      */
     @ExperimentalCoroutinesApi
     @ExperimentalMaterial3Api

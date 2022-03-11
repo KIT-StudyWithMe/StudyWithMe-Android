@@ -154,7 +154,7 @@ class SignUpViewTest {
             groupRepo = GroupRepository.newInstance(GroupRepoConstructor(context, groupDao, auth, reportService, groupService))
             userRepo = UserRepository.newInstance(UserRepoConstructor(context, userDao, userService, auth))
             sessionRepo = SessionRepository.newInstance(SessionRepoConstructor(context, sessionDao, auth, sessionService, reportService))
-
+            //set SignInView
             composeTestRule.setContent {
                 MainView(
                     userRepo = userRepo,
@@ -162,6 +162,7 @@ class SignUpViewTest {
                     sessionRepo = sessionRepo
                 )
             }
+            //navigate to SignUpView
             composeTestRule.onNode(hasTestTag("RegistrierenSignIn")).performScrollTo()
             composeTestRule.onNode(hasTestTag("RegistrierenSignIn")).performClick()
             sleep(1000)
@@ -170,8 +171,10 @@ class SignUpViewTest {
     }
 
     /**
-     * UI-Test FA10
-     *
+     * /FA10/ test to check signing up
+     * Before: user is not signed in and on the SignUpView
+     * Test: user performs input in the text fields and presses the button to sign up
+     * After: user is now in the joined groups view
      */
     @Test
     fun signUp() {
