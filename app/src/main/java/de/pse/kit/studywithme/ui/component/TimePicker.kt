@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import de.pse.kit.myapplication.ui.theme.*
+import de.pse.kit.studywithme.GeneratedExclusion
 import java.time.LocalTime
 import java.util.*
 
@@ -97,6 +98,7 @@ fun TimePicker(
     }
 }
 
+@GeneratedExclusion
 @Preview
 @Composable
 fun TimePickerPreview() {
@@ -106,6 +108,7 @@ fun TimePickerPreview() {
     )
 }
 
+@GeneratedExclusion
 @Preview
 @Composable
 fun PreselectedTimePickerPreview() {

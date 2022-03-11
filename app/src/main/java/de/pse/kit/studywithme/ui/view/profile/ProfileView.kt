@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
+import de.pse.kit.studywithme.GeneratedExclusion
 import de.pse.kit.studywithme.model.repository.FakeUserRepository
 import de.pse.kit.studywithme.ui.component.FormText
 import de.pse.kit.studywithme.ui.component.NavigationBar
@@ -90,6 +91,7 @@ fun ProfileView(viewModel: ProfileViewModel) {
     }
 }
 
+@GeneratedExclusion
 @ExperimentalCoroutinesApi
 @ExperimentalMaterial3Api
 @ExperimentalMaterialApi

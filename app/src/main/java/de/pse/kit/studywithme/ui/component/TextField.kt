@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import de.pse.kit.studywithme.GeneratedExclusion
 
 /**
  * Enum class for the components type of a textfield
@@ -174,18 +175,21 @@ fun TextField(
     }
 }
 
+@GeneratedExclusion
 @Preview
 @Composable
 fun FormTextFieldPreview() {
     FormTextField(text = "", label = "Gruppenname")
 }
 
+@GeneratedExclusion
 @Preview
 @Composable
 fun TextFieldPreview() {
     TextField(text = "", label = "Nutzername")
 }
 
+@GeneratedExclusion
 @Preview
 @Composable
 fun PasswordTextFieldPreview() {

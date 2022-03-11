@@ -16,6 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
+import de.pse.kit.studywithme.GeneratedExclusion
 
 /**
  * Composable pattern used in the view
@@ -52,6 +53,7 @@ fun FormText(
     }
 }
 
+@GeneratedExclusion
 @ExperimentalMaterialApi
 @Preview
 @Composable
@@ -59,6 +61,7 @@ fun FormTextPreview() {
     FormText(icon = Icons.Filled.Person, text = "Jimmy G")
 }
 
+@GeneratedExclusion
 @ExperimentalMaterialApi
 @Preview
 @Composable

@@ -18,6 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
+import de.pse.kit.studywithme.GeneratedExclusion
 import de.pse.kit.studywithme.model.data.UserField
 
 /**
@@ -407,6 +408,7 @@ fun RequestDialog(
     }
 }
 
+@GeneratedExclusion
 @Preview
 @Composable
 fun AdminDialogPreview() {
@@ -417,6 +419,7 @@ fun AdminDialogPreview() {
     AdminDialog(openDialog, name, contact, { println(it) })
 }
 
+@GeneratedExclusion
 @Preview
 @Composable
 fun MemberSelfIsAdminDialogPreview() {
@@ -432,6 +435,7 @@ fun MemberSelfIsAdminDialogPreview() {
         { println("removed") })
 }
 
+@GeneratedExclusion
 @Preview
 @Composable
 fun MemberSelfIsNotAdminDialogPreview() {
@@ -447,6 +451,7 @@ fun MemberSelfIsNotAdminDialogPreview() {
         { println("removed") })
 }
 
+@GeneratedExclusion
 @Preview
 @Composable
 fun RequestDialogPreview() {

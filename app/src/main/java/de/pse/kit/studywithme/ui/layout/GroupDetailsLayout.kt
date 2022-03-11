@@ -19,6 +19,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
+import de.pse.kit.studywithme.GeneratedExclusion
 import de.pse.kit.studywithme.ui.component.*
 
 /**
@@ -143,6 +144,7 @@ fun GroupDetailsLayout(
     }
 }
 
+@GeneratedExclusion
 @ExperimentalMaterialApi
 @ExperimentalMaterial3Api
 @Composable
@@ -178,6 +180,7 @@ fun GroupDetailsLayoutPreview() {
     }
 }
 
+@GeneratedExclusion
 @ExperimentalMaterialApi
 @ExperimentalMaterial3Api
 @Composable

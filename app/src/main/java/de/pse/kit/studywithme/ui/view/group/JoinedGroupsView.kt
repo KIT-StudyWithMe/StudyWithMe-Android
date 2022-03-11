@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
+import de.pse.kit.studywithme.GeneratedExclusion
 import de.pse.kit.studywithme.model.repository.FakeGroupRepository
 import de.pse.kit.studywithme.ui.component.ChipSelectionRow
 import de.pse.kit.studywithme.ui.component.NavigationBar
@@ -86,6 +87,7 @@ fun JoinedGroupsView(viewModel: JoinedGroupsViewModel) {
     }
 }
 
+@GeneratedExclusion
 @ExperimentalMaterialApi
 @ExperimentalMaterial3Api
 @Preview

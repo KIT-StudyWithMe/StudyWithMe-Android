@@ -10,6 +10,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
+import de.pse.kit.studywithme.GeneratedExclusion
 import de.pse.kit.studywithme.model.data.GroupField
 import de.pse.kit.studywithme.model.data.Report
 import de.pse.kit.studywithme.model.data.SessionField
@@ -157,6 +158,7 @@ fun GroupReportDialog(
     }
 }
 
+@GeneratedExclusion
 @ExperimentalMaterial3Api
 @Preview
 @Composable

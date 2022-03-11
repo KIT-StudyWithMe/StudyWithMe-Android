@@ -14,6 +14,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
+import de.pse.kit.studywithme.GeneratedExclusion
 import de.pse.kit.studywithme.model.repository.FakeGroupRepository
 import de.pse.kit.studywithme.model.repository.FakeSessionRepository
 import de.pse.kit.studywithme.model.repository.SessionRepository
@@ -79,6 +80,7 @@ fun NewSessionView(viewModel: NewSessionViewModel) {
     }
 }
 
+@GeneratedExclusion
 @ExperimentalMaterial3Api
 @Preview
 @Composable
