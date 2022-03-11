@@ -38,7 +38,7 @@ import java.util.*
 @ExperimentalCoroutinesApi
 @ExperimentalMaterial3Api
 @ExperimentalMaterialApi
-class JoinedGroupDetailsViewTest {
+class EditSessionTest {
     private lateinit var context: Context
     private lateinit var userDao: UserDao
     private lateinit var groupDao: GroupDao
@@ -61,6 +61,13 @@ class JoinedGroupDetailsViewTest {
             firebaseUID = "dfg46thrge7fnd"
         )
     )
+    private val mockLightUsers = listOf(
+        UserLight(
+            userID = 0,
+            name = "max.mustermann"
+        )
+    )
+    private val signedInUser = mockUsers.filter { it.userID == 0 }[0]
     private val mockSessions = listOf(
         Session(
             sessionID = 0,
@@ -70,25 +77,12 @@ class JoinedGroupDetailsViewTest {
             duration = 1
         )
     )
-    private lateinit var mockSessionAttendees: MutableList<SessionAttendee>
-    private val mockLightUsers = listOf(
-        UserLight(
-            userID = 0,
-            name = "max.mustermann"
-        )
-    )
     private val mockGroupMembers = listOf(
         GroupMember(
             groupID = 0,
             userID = 0,
             name = "max.mustermann",
             isAdmin = true
-        ),
-        GroupMember(
-            groupID = 0,
-            userID = 1,
-            name = "max anders",
-            isAdmin = false
         )
     )
     private val mockLectures: List<Lecture> = listOf(
@@ -104,7 +98,6 @@ class JoinedGroupDetailsViewTest {
             name = "Informatik"
         )
     )
-    private val signedInUser = mockUsers.filter { it.userID == 0 }[0]
     private val mockRemoteGroup = listOf(
         RemoteGroup(
             groupID = 0,
@@ -125,7 +118,6 @@ class JoinedGroupDetailsViewTest {
     @Before
     fun initLocalDatabase() {
         runBlocking {
-            mockSessionAttendees = mutableListOf()
             context = ApplicationProvider.getApplicationContext()
             auth = FakeAuthenticator()
             mockEngine = MockEngine {
@@ -191,12 +183,11 @@ class JoinedGroupDetailsViewTest {
                                     headers = headersOf(HttpHeaders.ContentType, "application/json")
                                 )
                             }
-
-                            "${HttpRoutes.SESSIONS}0/attendee" -> {
-                                val attendees = mockSessionAttendees.filter { it.sessionID == 0 }
-                                Log.d("MOCK", "response group: $attendees")
+                            "${HttpRoutes.SESSIONS}0" -> {
+                                val session = mockSessions.filter { it.groupID == 0 }[0]
+                                Log.d("MOCK", "response session: $session")
                                 respond(
-                                    content = Json.encodeToString(attendees),
+                                    content = Json.encodeToString(session),
                                     status = HttpStatusCode.OK,
                                     headers = headersOf(HttpHeaders.ContentType, "application/json")
                                 )
@@ -242,39 +233,11 @@ class JoinedGroupDetailsViewTest {
                         }
                     HttpMethod.Put ->
                         when (it.url.toString()) {
-                            "${HttpRoutes.SESSIONS}0/participate/0" -> {
-                                mockSessionAttendees.add(
-                                    SessionAttendee(
-                                        sessionAttendeeID = 0,
-                                        sessionID = 0,
-                                        participates = true,
-                                        userID = 0
-                                    )
-                                )
+                            "${HttpRoutes.SESSIONS}0" -> {
                                 val outgoingPart = ByteReadChannel(it.body.toByteArray())
-                                Log.d("MOCK ENGINE", "outgoing partisipate: $outgoingPart")
+                                Log.d("MOCK ENGINE", "outgoing session: $outgoingPart")
                                 respond(
                                     content = outgoingPart,
-                                    status = HttpStatusCode.OK,
-                                    headers = headersOf(HttpHeaders.ContentType, "application/json")
-                                )
-                            }
-
-                            else -> {
-                                Log.d("MOCK", "respond undefined")
-                                respond(
-                                    content = "",
-                                    status = HttpStatusCode.OK,
-                                    headers = headersOf(HttpHeaders.ContentType, "application/json")
-                                )
-                            }
-                        }
-                    HttpMethod.Delete ->
-                        when (it.url.toString()) {
-                            "${HttpRoutes.GROUPS}0/users/1" -> {
-                                Log.d("MOCK", "respond deletion")
-                                respond(
-                                    content = "",
                                     status = HttpStatusCode.OK,
                                     headers = headersOf(HttpHeaders.ContentType, "application/json")
                                 )
@@ -342,54 +305,20 @@ class JoinedGroupDetailsViewTest {
             composeTestRule.onRoot().printToLog("TUR")
             composeTestRule.onNode(hasContentDescription("SearchGroupResult") and hasText("gfg"))
                 .performClick()
+            composeTestRule.onNodeWithContentDescription("EditSessionButton").performClick()
+            composeTestRule.onNodeWithContentDescription("EditSessionView")
+                .assertExists("Navigation to edit session failed.")
         }
     }
 
     /**
-     * /FA120/
-     */
-    @Test
-    fun showDetailedGroupInformation() {
-        composeTestRule.onNode(hasContentDescription("TopBarTitle") and hasText("gfg"))
-            .assertExists()
-        composeTestRule.onNode(hasContentDescription("TopBarSubTitle") and hasText("Lineare Algebra"))
-            .assertExists()
-        composeTestRule.onNode(hasText("max.mustermann")).assertExists()
-        composeTestRule.onNode(hasText("Hier")).assertExists()
-        composeTestRule.onNode(hasContentDescription("Chip") and hasText("Monthly")).assertExists()
-        composeTestRule.onNode(hasContentDescription("Chip") and hasText("Online")).assertExists()
-        composeTestRule.onNode(hasText("Vorlesung: Kapitel Nr. 1")).assertExists()
-        composeTestRule.onNode(hasText("Übungsblatt Nr. 1")).assertExists()
-    }
-
-    /**
-     * /FA200/
-     */
-    @Test
-    fun confirmSessionParticipation() {
-        composeTestRule.onNode(hasText("Es nehmen 0 teil")).assertExists()
-        composeTestRule.onNode(hasContentDescription("Participate-Button") and hasText("Teilnehmen"))
-            .assertExists()
-        composeTestRule.onNode(hasContentDescription("Participate-Button") and hasText("Teilnehmen"))
-            .performClick()
-    }
-
-
-    @Test
-    fun leaveGroup() {
-        composeTestRule.onNode(hasContentDescription("LeaveGroupButton")).assertExists()
-        composeTestRule.onNode(hasContentDescription("LeaveGroupButton")).performClick()
-    }
-
-    /**
-     * Test to remove other group members as admin. (/FA140/)
+     * Test to edit existing session. (/FA190/)
      *
      */
     @Test
-    fun removeGroupMemberTest() {
-        composeTestRule.onNode(hasContentDescription("GroupMemberText") and hasText("max anders")).assertExists()
-        composeTestRule.onNode(hasContentDescription("GroupMemberText") and hasText("max anders")).performClick()
-        composeTestRule.onNodeWithContentDescription("RemoveMemberButton").performClick()
-        composeTestRule.onNodeWithContentDescription("ConfirmButton").performClick()
+    fun editSessionTest() {
+        composeTestRule.onNodeWithContentDescription("PlaceField").performTextInput("Hier")
+        composeTestRule.onNodeWithContentDescription("DurationField").performTextInput("1")
+        composeTestRule.onNodeWithContentDescription("SaveSessionButton").performClick()
     }
 }
