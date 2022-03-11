@@ -231,7 +231,7 @@ class NewGroupTest {
         composeTestRule.onNodeWithContentDescription("ExerciseNrField").performTextInput("1")
         composeTestRule.onNodeWithContentDescription("SaveGroupButton").performClick()
 
-        composeTestRule.onRoot().printToLog("SEARCH GROUPS VIEW")
-        composeTestRule.onNodeWithContentDescription("SearchGroupsView").assertExists("Group Creation failed")
+        composeTestRule.onRoot().printToLog("JOINED GROUPS VIEW")
+        composeTestRule.onNodeWithContentDescription("JoinedGroupsView").assertExists("Group Creation failed")
     }
 }

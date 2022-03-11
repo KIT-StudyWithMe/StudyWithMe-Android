@@ -3,6 +3,7 @@ package de.pse.kit.studywithme.model.repository
 import android.content.Context
 import android.util.Log
 import de.pse.kit.studywithme.SingletonHolder
+import de.pse.kit.studywithme.model.auth.AuthException
 import de.pse.kit.studywithme.model.auth.Authenticator
 import de.pse.kit.studywithme.model.auth.AuthenticatorInterface
 import de.pse.kit.studywithme.model.data.Institution
@@ -35,11 +36,16 @@ class UserRepository private constructor(
     @ExperimentalCoroutinesApi
     override suspend fun isSignedIn(): Boolean {
         if (auth.firebaseUID == null) {
-            Log.d(auth.TAG, "no user is signed in")
+            Log.d(auth.TAG, AuthException().message)
             return false
         }
         Log.d(auth.TAG, "user is signed in")
-        getSignedInUser().collect()
+        try {
+            getSignedInUser().collect()
+        } catch (e: AuthException) {
+            Log.w(auth.TAG, e.message)
+            return false
+        }
         return true
     }
 
@@ -56,7 +62,7 @@ class UserRepository private constructor(
             val remoteUserLight = userService.getUser(auth.firebaseUID!!)
             if (remoteUserLight != null) {
                 val remoteUser = userService.getUser(remoteUserLight.userID.toInt())
-                auth.user = remoteUser ?: auth.user
+                auth.user = remoteUser ?: throw AuthException()
             }
 
             send(auth.user)
@@ -71,8 +77,16 @@ class UserRepository private constructor(
         }
     }.filterNotNull()
 
+    override suspend fun getUserSignInMail(): String? {
+        if (!auth.signedIn) {
+            // TODO: Explicit exception class
+            throw Exception("Authentication Error: No local user signed in.")
+        }
+        return auth.signInMail
+    }
+
     override suspend fun editSignedInUser(user: User): Boolean {
-        if (auth.firebaseUID == null) {
+        if (!auth.signedIn) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
@@ -165,14 +179,9 @@ class UserRepository private constructor(
     }
 
     override suspend fun signOut(): Boolean {
-        if (auth.firebaseUID == null) {
-            // TODO: Explicit exception class
-            throw Exception("Authentication Error: No local user signed in.")
-        }
-
         //TODO: Maye delete all local data
         auth.signOut()
-        if (auth.firebaseUID == null) {
+        if (!auth.signedIn) {
             return true
         }
         return false
@@ -180,7 +189,7 @@ class UserRepository private constructor(
 
     @ExperimentalCoroutinesApi
     override suspend fun deleteAccount(password: String): Boolean = coroutineScope {
-        if (auth.firebaseUID == null) {
+        if (!auth.signedIn) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }

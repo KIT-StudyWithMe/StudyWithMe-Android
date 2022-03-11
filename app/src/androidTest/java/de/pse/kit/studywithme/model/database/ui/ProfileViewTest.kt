@@ -261,7 +261,7 @@ class ProfileViewTest {
         composeTestRule.onRoot().printToLog("PROFILE VIEW")
 
         composeTestRule.onNodeWithText(mockUser.name).assertExists()
-        composeTestRule.onNodeWithText(mockUser.contact).assertExists()
+        composeTestRule.onAllNodesWithText(mockUser.contact).assertCountEquals(2)
         composeTestRule.onNodeWithText(mockUser.college!!).assertExists()
         composeTestRule.onNodeWithText(mockUser.major!!).assertExists()
     }

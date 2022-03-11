@@ -29,11 +29,16 @@ class SearchGroupsViewModel(navController: NavController, val groupRepo: GroupRe
     var search: Job? = null
 
     init {
-        //groups.value = groupRepo.getGroupSuggestions()
+        viewModelScope.launch {
+            groups.value = groupRepo.getGroupSuggestions()
+        }
     }
 
     fun refreshGroups() {
-        groups.value = emptyList()
+        viewModelScope.launch {
+            groups.value = emptyList()
+            groups.value = groupRepo.getGroupSuggestions()
+        }
     }
 
     /**

@@ -33,7 +33,7 @@ class GroupRepository private constructor(
 ) : GroupRepositoryInterface {
 
     override suspend fun getGroups(search: String): List<Group> = coroutineScope {
-        if (auth.firebaseUID == null) {
+        if (!auth.signedIn) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
@@ -60,7 +60,7 @@ class GroupRepository private constructor(
     }
 
     override suspend fun getJoinedGroups(): Flow<List<Group>> = channelFlow {
-        if (auth.firebaseUID == null) {
+        if (!auth.signedIn) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
@@ -99,25 +99,30 @@ class GroupRepository private constructor(
 
     }.filterNotNull()
 
-    override suspend fun getGroupSuggestions(): List<Group> {
-        if (auth.firebaseUID == null) {
+    override suspend fun getGroupSuggestions(): List<Group> = coroutineScope {
+        if (!auth.signedIn) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
 
-        val remoteGroups = groupService.getGroupSuggestions(auth.user!!.userID)
-            ?: return emptyList()
+        val remoteGroups = async { groupService.getGroupSuggestions(auth.user!!.userID) }
+        val remoteJoinedGroups = async { groupService.getJoinedGroups(auth.user!!.userID) }
 
-        return remoteGroups.map {
+        val filteredGroups = remoteGroups.await()?.filter {
+            remoteJoinedGroups.await()?.map {
+                it.groupID
+            }?.contains(it.groupID) == false
+        }?.map {
             val lecture = groupService.getLecture(it.lectureID)
             val major = if (lecture != null) groupService.getMajor(lecture.majorID) else null
-            val group = RemoteGroup.toGroup(it, lecture = lecture, major = major)
-            return@map group
+            return@map RemoteGroup.toGroup(it, lecture = lecture, major = major)
         }
+
+        return@coroutineScope filteredGroups ?: emptyList()
     }
 
     override suspend fun getGroup(groupID: Int): Flow<Group> = channelFlow {
-        if (auth.firebaseUID == null) {
+        if (!auth.signedIn) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
@@ -149,7 +154,7 @@ class GroupRepository private constructor(
     }
 
     override suspend fun newGroup(group: Group): Boolean {
-        if (auth.firebaseUID == null) {
+        if (!auth.signedIn) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
@@ -172,7 +177,7 @@ class GroupRepository private constructor(
     }
 
     override suspend fun editGroup(group: Group): Boolean {
-        if (auth.firebaseUID == null) {
+        if (!auth.signedIn) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
@@ -195,7 +200,7 @@ class GroupRepository private constructor(
     }
 
     override suspend fun exitGroup(groupID: Int, uid: Int): Unit = coroutineScope {
-        if (auth.firebaseUID == null) {
+        if (!auth.signedIn) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
@@ -209,7 +214,7 @@ class GroupRepository private constructor(
     }
 
     override suspend fun deleteGroup(group: Group): Boolean = coroutineScope {
-        if (auth.firebaseUID == null) {
+        if (!auth.signedIn) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
@@ -220,7 +225,7 @@ class GroupRepository private constructor(
     }
 
     override suspend fun hideGroup(groupID: Int): Boolean {
-        if (auth.firebaseUID == null) {
+        if (!auth.signedIn) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
@@ -228,7 +233,7 @@ class GroupRepository private constructor(
     }
 
     override suspend fun newMember(groupID: Int, uid: Int): Boolean {
-        if (auth.firebaseUID == null) {
+        if (!auth.signedIn) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
@@ -243,7 +248,7 @@ class GroupRepository private constructor(
     }
 
     override suspend fun declineMember(groupID: Int, uid: Int): Boolean {
-        if (auth.firebaseUID == null) {
+        if (!auth.signedIn) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
@@ -251,7 +256,7 @@ class GroupRepository private constructor(
     }
 
     override suspend fun joinRequest(groupID: Int): Boolean {
-        if (auth.firebaseUID == null) {
+        if (!auth.signedIn) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
@@ -259,7 +264,7 @@ class GroupRepository private constructor(
     }
 
     override suspend fun getJoinRequests(groupID: Int): List<UserLight> {
-        if (auth.firebaseUID == null) {
+        if (!auth.signedIn) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
@@ -267,7 +272,7 @@ class GroupRepository private constructor(
     }
 
     override suspend fun removeMember(groupID: Int, uid: Int): Unit = coroutineScope {
-        if (auth.firebaseUID == null) {
+        if (!auth.signedIn) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
@@ -280,7 +285,7 @@ class GroupRepository private constructor(
     }
 
     override suspend fun leaveGroup(groupID: Int) {
-        if (auth.firebaseUID == null) {
+        if (!auth.signedIn) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
@@ -289,7 +294,7 @@ class GroupRepository private constructor(
     }
 
     override suspend fun getGroupMembers(groupID: Int): Flow<List<GroupMember>> = channelFlow {
-        if (auth.firebaseUID == null) {
+        if (!auth.signedIn) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
@@ -309,7 +314,7 @@ class GroupRepository private constructor(
     }.filterNotNull()
 
     override suspend fun getGroupAdmins(groupID: Int): Flow<List<GroupMember>> = channelFlow {
-        if (auth.firebaseUID == null) {
+        if (!auth.signedIn) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
@@ -333,7 +338,7 @@ class GroupRepository private constructor(
     }.filterNotNull()
 
     override suspend fun isSignedInUserAdmin(groupID: Int): Flow<Boolean> = flow {
-        if (auth.firebaseUID == null) {
+        if (!auth.signedIn) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
@@ -346,7 +351,7 @@ class GroupRepository private constructor(
     }
 
     override suspend fun hasSignedInUserJoinRequested(groupID: Int): Boolean {
-        if (auth.firebaseUID == null) {
+        if (!auth.signedIn) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
@@ -361,7 +366,7 @@ class GroupRepository private constructor(
 
 
     override suspend fun getLectures(prefix: String): Flow<List<Lecture>> = flow {
-        if (auth.firebaseUID == null) {
+        if (!auth.signedIn) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
@@ -394,7 +399,7 @@ class GroupRepository private constructor(
     }
 
     override suspend fun reportGroup(groupID: Int, groupField: GroupField): Unit {
-        if (auth.firebaseUID == null) {
+        if (!auth.signedIn) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
@@ -402,7 +407,7 @@ class GroupRepository private constructor(
     }
 
     override suspend fun reportUser(userID: Int, userField: UserField): Unit {
-        if (auth.firebaseUID == null) {
+        if (!auth.signedIn) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }

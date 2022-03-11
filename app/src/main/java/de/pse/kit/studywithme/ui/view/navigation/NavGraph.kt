@@ -141,14 +141,19 @@ sealed class NavGraph(val route: String, val arguments: List<NamedNavArgument>? 
         private fun navigateToTab(navController: NavController, route: String) {
             navController.navigate(route) {
                 val from = navController.currentDestination?.route
+                Log.d("NAV", "from: $from, route: $route")
                 if ((from == SignIn.route && route != SignUp.route) || (from == SignUp.route && route != SignIn.route)) {
                     navController.backQueue.clear()
                 } else if (from != SignUp.route && route == SignInForm.route){
                     navController.backQueue.clear()
-                }
-
-                popUpTo(navController.graph.findStartDestination().id) {
-                    saveState = true
+                } else if (from == NewGroup.route && route == JoinedGroupsTab.route) {
+                    popUpTo(SearchGroupsTab.route) {
+                        inclusive = false
+                    }
+                } else {
+                    popUpTo(navController.graph.findStartDestination().id) {
+                        saveState = true
+                    }
                 }
 
                 launchSingleTop = true

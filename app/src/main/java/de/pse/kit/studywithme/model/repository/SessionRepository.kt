@@ -40,7 +40,7 @@ class SessionRepository private constructor(
 
     @ExperimentalCoroutinesApi
     override suspend fun getSessions(groupID: Int): Flow<List<Session>> = channelFlow {
-        if (auth.firebaseUID == null) {
+        if (!auth.signedIn) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
@@ -60,7 +60,7 @@ class SessionRepository private constructor(
     }.filterNotNull()
 
     override suspend fun getSession(sessionID: Int): Flow<Session> = channelFlow {
-        if (auth.firebaseUID == null) {
+        if (!auth.signedIn) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
@@ -80,7 +80,7 @@ class SessionRepository private constructor(
     }.filterNotNull()
 
     override suspend fun newSession(session: Session): Boolean {
-        if (auth.firebaseUID == null) {
+        if (!auth.signedIn) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
@@ -95,7 +95,7 @@ class SessionRepository private constructor(
     }
 
     override suspend fun editSession(session: Session): Boolean {
-        if (auth.firebaseUID == null) {
+        if (!auth.signedIn) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
@@ -110,7 +110,7 @@ class SessionRepository private constructor(
     }
 
     override suspend fun removeSession(session: Session): Unit = coroutineScope {
-        if (auth.firebaseUID == null) {
+        if (!auth.signedIn) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
@@ -124,7 +124,7 @@ class SessionRepository private constructor(
     }
 
     override suspend fun newAttendee(sessionID: Int): Boolean {
-        if (auth.firebaseUID == null) {
+        if (!auth.signedIn) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
@@ -139,7 +139,7 @@ class SessionRepository private constructor(
     }
 
     override suspend fun removeAttendee(sessionID: Int) {
-        if (auth.firebaseUID == null) {
+        if (!auth.signedIn) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
@@ -147,7 +147,7 @@ class SessionRepository private constructor(
     }
 
     override suspend fun getAttendees(sessionID: Int): Flow<List<SessionAttendee>> = channelFlow {
-        if (auth.firebaseUID == null) {
+        if (!auth.signedIn) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }
@@ -167,7 +167,7 @@ class SessionRepository private constructor(
     }.filterNotNull()
 
     override suspend fun reportSession(sessionID: Int, sessionfield: SessionField) {
-        if (auth.firebaseUID == null) {
+        if (!auth.signedIn) {
             // TODO: Explicit exception class
             throw Exception("Authentication Error: No local user signed in.")
         }

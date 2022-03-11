@@ -8,6 +8,8 @@ interface AuthenticatorInterface {
         get() = "AUTH"
     val firebaseUID: String?
     var user: User?
+    val signedIn: Boolean
+    val signInMail: String?
 
     suspend fun getToken(refresh: Boolean): String?
 
