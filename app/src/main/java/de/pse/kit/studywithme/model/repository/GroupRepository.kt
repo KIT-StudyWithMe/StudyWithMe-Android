@@ -343,10 +343,8 @@ class GroupRepository private constructor(
             throw Exception("Authentication Error: No local user signed in.")
         }
         getGroupAdmins(groupID).collect {
-            val admin = it.map {
-                it.groupID
-            }.contains(groupID)
-            emit(admin)
+            val isAdmin = it.map { it.userID }.contains(auth.user?.userID)
+            emit(isAdmin)
         }
     }
 
