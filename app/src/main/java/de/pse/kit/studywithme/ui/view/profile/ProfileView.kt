@@ -85,7 +85,7 @@ fun ProfileView(viewModel: ProfileViewModel) {
                 FormText(text = viewModel.signInMail, icon = Icons.Rounded.Email)
 
                 Text("Öffentliche Informationen", modifier = Modifier.padding(top = 12.dp))
-                FormText(text = viewModel.contact, icon = Icons.Outlined.AlternateEmail)
+                FormText(modifier = Modifier.semantics { contentDescription = "contactText" }, text = viewModel.contact, icon = Icons.Outlined.AlternateEmail)
 
                 Button(modifier = Modifier.testTag("Abmelden"), text = "Abmelden", onClick = { viewModel.signOut() }, emphasize = true)
             }
