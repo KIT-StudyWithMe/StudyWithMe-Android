@@ -1,7 +1,9 @@
 package de.pse.kit.studywithme.model.auth
 
+import de.pse.kit.studywithme.GeneratedExclusion
 import de.pse.kit.studywithme.model.data.User
 
+@GeneratedExclusion
 class FakeAuthenticator: AuthenticatorInterface {
     override var firebaseUID: String? = "dfg46thrge7fnd"
     override var user: User? = User(
@@ -14,7 +16,7 @@ class FakeAuthenticator: AuthenticatorInterface {
         majorID = 0,
         firebaseUID = "dfg46thrge7fnd"
     )
-    private var signedUpUsers = mutableMapOf("user@mail.com" to "password")
+    private var signedUpUsers = mutableMapOf("max.mustermann@mustermail.com" to "password", "user@mail.com" to "password")
 
     override suspend fun getToken(refresh: Boolean): String? {
         TODO("Not yet implemented")

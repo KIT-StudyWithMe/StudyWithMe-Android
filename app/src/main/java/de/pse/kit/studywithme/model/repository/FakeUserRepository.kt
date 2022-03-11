@@ -1,5 +1,6 @@
 package de.pse.kit.studywithme.model.repository
 
+import de.pse.kit.studywithme.GeneratedExclusion
 import de.pse.kit.studywithme.model.data.Institution
 import de.pse.kit.studywithme.model.data.Major
 import de.pse.kit.studywithme.model.data.User
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.flow
  * @property signedIn
  * @constructor Create empty Fake user repository
  */
+@GeneratedExclusion
 class FakeUserRepository(var signedIn: Boolean) : UserRepositoryInterface {
 
     var user = User(

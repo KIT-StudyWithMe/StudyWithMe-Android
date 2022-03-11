@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.ui.platform.LocalContext
 import androidx.room.Room
+import de.pse.kit.studywithme.GeneratedExclusion
 import de.pse.kit.studywithme.model.data.*
 import de.pse.kit.studywithme.model.database.AppDatabase
 import kotlinx.coroutines.flow.Flow
@@ -15,6 +16,7 @@ import kotlin.streams.toList
  *
  * @constructor Create empty Fake group repository
  */
+@GeneratedExclusion
 class FakeGroupRepository() : GroupRepositoryInterface {
     private var groups = mutableListOf(
         Group(

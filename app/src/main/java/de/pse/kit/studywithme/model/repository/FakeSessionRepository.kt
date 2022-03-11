@@ -1,6 +1,7 @@
 package de.pse.kit.studywithme.model.repository
 
 
+import de.pse.kit.studywithme.GeneratedExclusion
 import de.pse.kit.studywithme.model.data.Session
 import de.pse.kit.studywithme.model.data.SessionAttendee
 import de.pse.kit.studywithme.model.data.SessionField
@@ -14,6 +15,7 @@ import java.util.*
  *
  * @constructor Create empty Fake session repository
  */
+@GeneratedExclusion
 class FakeSessionRepository() : SessionRepositoryInterface {
     var session = Session(
         sessionID = 0,
