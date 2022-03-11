@@ -38,6 +38,10 @@ class FakeUserRepository(var signedIn: Boolean) : UserRepositoryInterface {
         }
     }
 
+    override suspend fun getUserSignInMail(): String? {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun editSignedInUser(user: User): Boolean {
         this.user = user
         return true

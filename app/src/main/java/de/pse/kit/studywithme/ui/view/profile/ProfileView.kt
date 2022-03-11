@@ -9,6 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AlternateEmail
 import androidx.compose.material.icons.outlined.School
 import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material.icons.rounded.MenuBook
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -78,11 +79,12 @@ fun ProfileView(viewModel: ProfileViewModel) {
                         state = ScrollState(0)
                     ),
             ) {
-                Text("Persönliche Informationen", modifier = Modifier.padding(top = 12.dp))
+                Text("Private Informationen", modifier = Modifier.padding(top = 12.dp))
                 FormText(text = viewModel.college, icon = Icons.Outlined.School)
                 FormText(text = viewModel.major, icon = Icons.Rounded.MenuBook)
+                FormText(text = viewModel.signInMail, icon = Icons.Rounded.Email)
 
-                Text("Kontaktinformationen", modifier = Modifier.padding(top = 12.dp))
+                Text("Öffentliche Informationen", modifier = Modifier.padding(top = 12.dp))
                 FormText(text = viewModel.contact, icon = Icons.Outlined.AlternateEmail)
 
                 Button(modifier = Modifier.testTag("Abmelden"), text = "Abmelden", onClick = { viewModel.signOut() }, emphasize = true)

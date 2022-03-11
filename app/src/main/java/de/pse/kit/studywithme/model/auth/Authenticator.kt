@@ -22,6 +22,8 @@ object Authenticator: AuthenticatorInterface {
     override var user: User? = null
     override val signedIn: Boolean
         get() = user != null && firebaseUID != null
+    override val signInMail: String?
+        get() = firebaseUser?.email
 
     override suspend fun getToken(refresh: Boolean): String? {
         try {

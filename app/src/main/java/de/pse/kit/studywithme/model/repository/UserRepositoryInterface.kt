@@ -25,6 +25,13 @@ interface UserRepositoryInterface {
     suspend fun getSignedInUser(): Flow<User>
 
     /**
+     * Returns the mail address the signIn user signs up with
+     *
+     * @return mail as string
+     */
+    suspend fun getUserSignInMail(): String?
+
+    /**
      * Edits the signed in user and retruns true if successful
      *
      * @param user

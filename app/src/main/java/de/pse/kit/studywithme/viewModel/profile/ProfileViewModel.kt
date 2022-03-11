@@ -36,6 +36,7 @@ class ProfileViewModel(navController: NavController, val userRepo: UserRepositor
     var contact by mutableStateOf("")
     var college by mutableStateOf("")
     var major by mutableStateOf("")
+    var signInMail by mutableStateOf("")
 
     init {
         refreshUser()
@@ -59,6 +60,9 @@ class ProfileViewModel(navController: NavController, val userRepo: UserRepositor
                 userRepo.signOut()
                 NavGraph.navigateToSignIn(navController)
             }
+        }
+        viewModelScope.launch {
+            signInMail = userRepo.getUserSignInMail() ?: ""
         }
     }
 

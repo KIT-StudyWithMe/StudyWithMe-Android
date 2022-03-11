@@ -19,6 +19,9 @@ class FakeAuthenticator: AuthenticatorInterface {
     private var signedUpUsers = mutableMapOf("max.mustermann@mustermail.com" to "password", "user@mail.com" to "password")
     override val signedIn: Boolean
         get() = user != null && firebaseUID != null
+    override val signInMail: String?
+        get() = user?.contact
+
 
     override suspend fun getToken(refresh: Boolean): String? {
         TODO("Not yet implemented")
