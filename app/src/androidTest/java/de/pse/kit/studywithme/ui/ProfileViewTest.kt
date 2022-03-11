@@ -1,4 +1,4 @@
-package de.pse.kit.studywithme.model.database.ui
+package de.pse.kit.studywithme.ui
 
 import android.content.Context
 import android.util.Log
