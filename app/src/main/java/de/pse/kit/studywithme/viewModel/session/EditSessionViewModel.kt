@@ -46,7 +46,7 @@ class EditSessionViewModel(
     val duration: MutableStateFlow<String> = MutableStateFlow("")
 
     init {
-        viewModelScope.launch {
+        runBlocking {
             sessionRepo.getSession(sessionID).collect {
                 session = it
                 place.value = it.location
