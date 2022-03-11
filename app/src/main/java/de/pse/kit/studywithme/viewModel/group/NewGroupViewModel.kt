@@ -91,7 +91,7 @@ class NewGroupViewModel(navController: NavController, private val groupRepo: Gro
         viewModelScope.launch {
             val saved = groupRepo.newGroup(group)
             if (saved) {
-                navBack()
+                NavGraph.navigateToJoinedGroups(navController)
             }
         }
     }
