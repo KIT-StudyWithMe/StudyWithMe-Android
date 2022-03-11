@@ -78,10 +78,6 @@ class UserRepository private constructor(
     }.filterNotNull()
 
     override suspend fun getUserSignInMail(): String? {
-        if (!auth.signedIn) {
-            // TODO: Explicit exception class
-            throw Exception("Authentication Error: No local user signed in.")
-        }
         return auth.signInMail
     }
 

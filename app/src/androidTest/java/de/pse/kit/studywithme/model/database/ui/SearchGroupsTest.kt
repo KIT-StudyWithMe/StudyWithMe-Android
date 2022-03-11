@@ -135,9 +135,9 @@ class SearchGroupsTest {
 
     /**
      * /FA90/ Test to search and list groups.
-     * Before: user is in the SearchGroupsViewModel, a group exists with the name "sadas"
+     * Before: user is in the SearchGroupsView, a group exists with the name "sadas"
      * Test: user writes "sadas" into the search bar
-     * After: the group with the name "sadas" is shown
+     * After: the group with the name "sadas" is shown in the view
      */
     @ExperimentalCoroutinesApi
     @Test
