@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.em
 import androidx.navigation.compose.rememberNavController
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
 import de.pse.kit.myapplication.ui.theme.fraunces
+import de.pse.kit.studywithme.GeneratedExclusion
 import de.pse.kit.studywithme.model.repository.FakeUserRepository
 import de.pse.kit.studywithme.ui.component.Button
 import de.pse.kit.studywithme.ui.component.TextField
@@ -113,6 +114,7 @@ fun SignInView(viewModel: SignInViewModel) {
     }
 }
 
+@GeneratedExclusion
 @ExperimentalMaterial3Api
 @Preview
 @Composable

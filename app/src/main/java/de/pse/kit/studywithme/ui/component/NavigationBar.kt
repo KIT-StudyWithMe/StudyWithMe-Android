@@ -13,6 +13,7 @@ import androidx.compose.material3.NavigationBar as NavigationBar_
 import androidx.compose.ui.tooling.preview.Preview
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
 import androidx.compose.ui.text.font.FontWeight
+import de.pse.kit.studywithme.GeneratedExclusion
 
 
 /**
@@ -108,7 +109,7 @@ fun NavigationBar(
     }
 }
 
-
+@GeneratedExclusion
 @Preview
 @Composable
 fun NavigationBarPreview() {

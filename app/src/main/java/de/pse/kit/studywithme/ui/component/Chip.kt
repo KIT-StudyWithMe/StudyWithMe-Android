@@ -14,6 +14,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
+import de.pse.kit.studywithme.GeneratedExclusion
 
 /**
  * Composable pattern used in the view
@@ -116,18 +117,21 @@ fun Chip(
     }
 }
 
+@GeneratedExclusion
 @Composable
 @Preview
 fun ChipPreview() {
     Chip(text = "Einmalig", chosen = true)
 }
 
+@GeneratedExclusion
 @Preview
 @Composable
 fun ChipSelectionRowPreview() {
     ChipSelectionRow(chipNames = listOf("Präsenz", "Online", "Hybrid"), onChange = {})
 }
 
+@GeneratedExclusion
 @Preview
 @Composable
 fun ChipSelection2RowPreview() {
@@ -137,6 +141,7 @@ fun ChipSelection2RowPreview() {
         onChange = {})
 }
 
+@GeneratedExclusion
 @Preview
 @Composable
 fun ChipDisplayRowPreview() {

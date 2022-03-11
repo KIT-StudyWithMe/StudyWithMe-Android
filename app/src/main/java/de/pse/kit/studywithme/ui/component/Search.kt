@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
+import de.pse.kit.studywithme.GeneratedExclusion
 
 /**
  * Composable pattern used in the view
@@ -84,6 +85,7 @@ fun Search(
     }
 }
 
+@GeneratedExclusion
 @Preview
 @Composable
 fun SearchPreview() {

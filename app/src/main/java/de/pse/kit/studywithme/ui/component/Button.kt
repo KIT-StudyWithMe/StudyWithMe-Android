@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
+import de.pse.kit.studywithme.GeneratedExclusion
 
 /**
  * Composable pattern used in the view
@@ -69,24 +70,28 @@ fun Button(
     }
 }
 
+@GeneratedExclusion
 @Composable
 @Preview
 fun PrimaryButtonPreview() {
     Button(onClick = {}, text = "Anmelden")
 }
 
+@GeneratedExclusion
 @Composable
 @Preview
 fun SecondaryButtonPreview() {
     Button(onClick = {}, text = "Passwort vergessen", primary = false)
 }
 
+@GeneratedExclusion
 @Composable
 @Preview
 fun EmphasizeButtonPreview() {
     Button(onClick = {}, text = "Gruppe löschen", emphasize = true)
 }
 
+@GeneratedExclusion
 @Composable
 @Preview
 fun ButtonRowPreview() {

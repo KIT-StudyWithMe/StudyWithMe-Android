@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import de.pse.kit.myapplication.ui.theme.Black100
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
 import de.pse.kit.myapplication.ui.theme.White200
+import de.pse.kit.studywithme.GeneratedExclusion
 import java.util.*
 
 /**
@@ -95,13 +96,14 @@ fun DatePicker(
     }
 }
 
-
+@GeneratedExclusion
 @Preview
 @Composable
 fun DatePickerPreview() {
     DatePicker(modifier = Modifier, context = LocalContext.current)
 }
 
+@GeneratedExclusion
 @Preview
 @Composable
 fun PreselectedDatePickerPreview() {

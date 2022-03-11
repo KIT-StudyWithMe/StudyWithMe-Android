@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme
 import de.pse.kit.myapplication.ui.theme.MyApplicationTheme3
+import de.pse.kit.studywithme.GeneratedExclusion
 
 /**
  * Composable pattern used in the view
@@ -115,6 +116,7 @@ fun SearchGroupResult(
     }
 }
 
+@GeneratedExclusion
 @ExperimentalMaterialApi
 @Preview
 @Composable
@@ -122,6 +124,7 @@ fun SearchGroupResultPreview() {
     SearchGroupResult(groupName = "Gruppe 2", lecture = "Rechnerorganisation", major = "Inf")
 }
 
+@GeneratedExclusion
 @ExperimentalMaterialApi
 @Preview
 @Composable

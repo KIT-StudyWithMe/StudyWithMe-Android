@@ -26,6 +26,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import de.pse.kit.studywithme.GeneratedExclusion
 import de.pse.kit.studywithme.model.data.GroupMember
 import de.pse.kit.studywithme.model.repository.FakeGroupRepository
 import de.pse.kit.studywithme.model.repository.FakeSessionRepository
@@ -225,6 +226,7 @@ fun JoinedGroupDetailsView(viewModel: JoinedGroupDetailsViewModel) {
     }
 }
 
+@GeneratedExclusion
 @ExperimentalCoroutinesApi
 @ExperimentalMaterialApi
 @ExperimentalMaterial3Api
@@ -241,6 +243,7 @@ fun JoinedGroupDetailsPreview() {
     )
 }
 
+@GeneratedExclusion
 @ExperimentalCoroutinesApi
 @ExperimentalMaterialApi
 @ExperimentalMaterial3Api
