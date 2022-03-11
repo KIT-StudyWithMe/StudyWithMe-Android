@@ -1,8 +1,10 @@
 package de.pse.kit.studywithme.viewModel.profile
 
+import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import de.pse.kit.studywithme.model.auth.AuthException
 import de.pse.kit.studywithme.model.data.User
 import de.pse.kit.studywithme.model.repository.UserRepositoryInterface
 import de.pse.kit.studywithme.ui.view.navigation.NavGraph
@@ -35,12 +37,18 @@ class EditProfileViewModel(navController: NavController, val userRepo: UserRepos
 
     init {
         viewModelScope.launch {
-            userRepo.getSignedInUser().collect {
-                user = it
-                username.value = it.name
-                contact.value = it.contact
-                college.value = it.college ?: ""
-                major.value = it.major ?: ""
+            try {
+                userRepo.getSignedInUser().collect {
+                    user = it
+                    username.value = it.name
+                    contact.value = it.contact
+                    college.value = it.college ?: ""
+                    major.value = it.major ?: ""
+                }
+            } catch (e: AuthException) {
+                Log.w("AUTH", e.message)
+                userRepo.signOut()
+                NavGraph.navigateToSignIn(navController)
             }
         }
     }

@@ -8,6 +8,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import de.pse.kit.studywithme.model.auth.AuthException
 import de.pse.kit.studywithme.model.repository.UserRepository
 import de.pse.kit.studywithme.model.repository.UserRepositoryInterface
 import de.pse.kit.studywithme.ui.view.navigation.NavGraph
@@ -53,7 +54,10 @@ class ProfileViewModel(navController: NavController, val userRepo: UserRepositor
                     college = it.college ?: ""
                     major = it.major ?: ""
                 }
-            } catch (e: Exception) {
+            } catch (e: AuthException) {
+                Log.w("AUTH", e.message)
+                userRepo.signOut()
+                NavGraph.navigateToSignIn(navController)
             }
         }
     }

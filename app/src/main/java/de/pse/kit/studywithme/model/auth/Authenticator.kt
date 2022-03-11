@@ -20,6 +20,8 @@ object Authenticator: AuthenticatorInterface {
     override val firebaseUID: String?
         get() = firebaseUser?.uid
     override var user: User? = null
+    override val signedIn: Boolean
+        get() = user != null && firebaseUID != null
 
     override suspend fun getToken(refresh: Boolean): String? {
         try {
@@ -77,6 +79,7 @@ object Authenticator: AuthenticatorInterface {
     override fun signOut() {
         auth.signOut()
         firebaseUser = null
+        user = null
     }
 
     override suspend fun deleteFirebaseUser(password: String): Boolean {
