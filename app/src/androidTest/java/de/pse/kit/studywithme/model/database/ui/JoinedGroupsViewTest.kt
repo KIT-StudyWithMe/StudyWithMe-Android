@@ -206,15 +206,6 @@ class JoinedGroupsViewTest {
                             )
                         }
 
-                        "${HttpRoutes.USERS}0/groups" -> {
-                            val groups = mockRemoteGroup.filter { it.groupID == 0 }
-                            Log.d("MOCK", "response groups: $groups")
-                            respond(
-                                content = Json.encodeToString(groups),
-                                status = HttpStatusCode.OK,
-                                headers = headersOf(HttpHeaders.ContentType, "application/json"))
-                        }
-
                         "${HttpRoutes.LECTURES}0" -> {
                             val lecture = mockLectures.filter { it.lectureID == 0}[0]
                             Log.d("MOCK", "response lecture: $lecture")
