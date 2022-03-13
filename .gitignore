@@ -82,3 +82,6 @@ app/schemas/de.pse.kit.studywithme.model.database.AppDatabase/1.json
 app/release
 signing.properties
 signing.keystore
+
+#custom
+manual-build-artifacts
