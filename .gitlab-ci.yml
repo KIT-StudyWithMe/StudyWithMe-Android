@@ -86,53 +86,35 @@ variables:
 #      - app/build/outputs/
 
 stages:
-  - build
-  - docu
-  - test
+  - generate
   - publish
 
 assembleRelease:
     extends: .before_script_template
-    stage: build
+    stage: generate
     script:
         - ./gradlew assembleRelease
     artifacts:
         paths:
             - app/build/outputs/apk/release/*.apk
-    cache:
-      key: "$CI_COMMIT_REF_NAME"
-      policy: push
-      paths:
-        - build
-        - .gradle
-        - app/build
-        - app/.gradle
 
 # Run all tests, if any fails, interrupt the pipeline(fail it)
 test:
     interruptible: true
-    stage: test
+    stage: generate
     script:
       #- ./gradlew -Pci --console=plain createDebugCoverageReport --debug
         - sh printCoverage.sh
 
 documentation:
     extends: .before_script_template
-    stage: docu
+    stage: generate
     script:
       - ./gradlew dokkaHtml
     artifacts:
       paths:
         - app/build/dokka/*
       expire_in: 1 week
-    cache:
-      key: "$CI_COMMIT_REF_NAME"
-      policy: pull
-      paths:
-        - build
-        - .gradle
-        - app/build
-        - app/.gradle
     only:
       - main
 
