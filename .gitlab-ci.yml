@@ -88,6 +88,7 @@ stages:
   - build
   - docu
   - test
+  - publish
 
 assembleRelease:
     stage: build
@@ -96,15 +97,16 @@ assembleRelease:
     artifacts:
         paths:
             - app/build/outputs/apk/release/*.apk
-#    only:
-#      - main
+    only:
+      - main
 
 # Run all tests, if any fails, interrupt the pipeline(fail it)
-debugTests:
+test:
     interruptible: true
     stage: test
     script:
-        - ./gradlew -Pci --console=plain createDebugCoverageReport --debug
+      #- ./gradlew -Pci --console=plain createDebugCoverageReport --debug
+        - sh printCoverage.sh
 
 documentation:
   stage: docu
@@ -114,5 +116,43 @@ documentation:
     paths:
       - app/build/dokka/*
     expire_in: 1 week
+  only:
+    - main
+
+pages:
+  stage: publish
+  dependencies:
+    - test
+    - documentation
+  script:
+    - apk update && apk upgrade
+    - apk add unzip
+    - mkdir public
+    - mkdir public/clientdoku
+    - mkdir public/clienttests
+    - mkdir public/clientcoverage
+    - mkdir public/clientapk
+    - mv app/build/dokka/html/* public/clientdoku
+    - unzip app/manual-build-artifacts.zip
+    - ls
+    - ls app/
+    - mv app/manual-build-artifacts/reports/androidTests/connected/* public/clienttests
+    - mv app/manual-build-artifacts/reports/coverage/androidTests/debug/ public/client/coverage
+    - mv app/build/outputs/apk/release/*.apk public/clientapk
+  artifacts:
+    paths:
+      - public
+    expire_in: 1 week
+  only:
+    - main
+
+pipelineTrigger:
+  stage: publish
+  needs:
+    - pages
+  script:
+    - apk update && apk upgrade
+    - apk add curl
+    - "curl -X POST --fail -F token=${PIPELINE_TRIGGER_TOKEN} -F ref=main https://gitlab.com/api/v4/projects/34245076/trigger/pipeline"
   only:
     - main
