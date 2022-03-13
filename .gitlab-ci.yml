@@ -94,9 +94,17 @@ assembleRelease:
     stage: generate
     script:
         - ./gradlew assembleRelease
+        - mkdir apk/
+        - mv app/build/outputs/apk/release/app-release.apk apk/
     artifacts:
         paths:
-            - app/build/outputs/apk/release/*.apk
+            - apk/*
+    cache:
+      key: "$CI_COMMIT_REF_NAME"
+      policy: push
+      paths:
+        - build
+        - .gradle
     only:
         - main
 
@@ -114,6 +122,8 @@ test:
 documentation:
     extends: .before_script_template
     stage: generate
+    needs:
+      - assembleRelease
     script:
       - ./gradlew dokkaHtml
       - mkdir dokka
@@ -122,6 +132,12 @@ documentation:
       paths:
         - dokka/
       expire_in: 1 week
+    cache:
+      key: "$CI_COMMIT_REF_NAME"
+      policy: pull
+      paths:
+        - build
+        - .gradle
     only:
       - main
 
@@ -140,11 +156,7 @@ pages:
     - unzip app/manual-build-artifacts.zip
     - mv app/manual-build-artifacts/reports/androidTests/connected/* public/clienttests
     - mv app/manual-build-artifacts/reports/coverage/androidTest/debug/ public/clientcoverage
-    - ls app/build/
-    - ls app/build/outputs/
-    - ls app/build/outputs/apk/
-    - ls app/build/outputs/apk/release
-    - mv app/build/outputs/apk/release/app-release.apk public/clientapk/studywithme.apk
+    - mv apk/app-release.apk public/clientapk/studywithme.apk
   artifacts:
     paths:
       - public
