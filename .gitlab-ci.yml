@@ -97,6 +97,8 @@ assembleRelease:
     artifacts:
         paths:
             - app/build/outputs/apk/release/*.apk
+    only:
+        - main
 
 # Run all tests, if any fails, interrupt the pipeline(fail it)
 test:
@@ -104,7 +106,10 @@ test:
     stage: generate
     script:
       #- ./gradlew -Pci --console=plain createDebugCoverageReport --debug
+        - unzip app/manual-build-artifacts.zip
         - sh printCoverage.sh
+    only:
+      - main
 
 documentation:
     extends: .before_script_template
@@ -142,8 +147,8 @@ pages:
     paths:
       - public
     expire_in: 1 week
-      #  only:
-      #- main
+  only:
+    - main
 
 pipelineTrigger:
   stage: publish
