@@ -96,15 +96,15 @@ assembleRelease:
     artifacts:
         paths:
             - app/build/outputs/apk/release/*.apk
-    only:
-      - main
+#    only:
+#      - main
 
 # Run all tests, if any fails, interrupt the pipeline(fail it)
 debugTests:
     interruptible: true
     stage: test
     script:
-        - ./gradlew -Pci --console=plain :app:testDebugUnitTest
+        - ./gradlew -Pci --console=plain createDebugCoverageReport --debug
 
 documentation:
   stage: docu
