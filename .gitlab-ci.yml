@@ -93,12 +93,18 @@ stages:
 assembleRelease:
     stage: build
     script:
-        - ./gradlew assembleRelease
+        - gradle assembleRelease
     artifacts:
         paths:
             - app/build/outputs/apk/release/*.apk
-    only:
-      - main
+    cache:
+    key: "$CI_COMMIT_REF_NAME"
+    policy: push
+    paths:
+      - build
+      - .gradle
+      - app/build
+      - app/.gradle
 
 # Run all tests, if any fails, interrupt the pipeline(fail it)
 test:
@@ -116,6 +122,14 @@ documentation:
     paths:
       - app/build/dokka/*
     expire_in: 1 week
+  cache:
+    key: "$CI_COMMIT_REF_NAME"
+    policy: pull
+    paths:
+      - build
+      - .gradle
+      - app/build
+      - app/.gradle
   only:
     - main
 
