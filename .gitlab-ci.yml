@@ -116,9 +116,11 @@ documentation:
     stage: generate
     script:
       - ./gradlew dokkaHtml
+      - mkdir dokka
+      - mv app/build/dokka/* dokka
     artifacts:
       paths:
-        - app/build/dokka/*
+        - dokka/
       expire_in: 1 week
     only:
       - main
@@ -134,7 +136,7 @@ pages:
     - mkdir public/clienttests
     - mkdir public/clientcoverage
     - mkdir public/clientapk
-    - mv app/build/dokka/html/* public/clientdoku
+    - mv dokka/html/* public/clientdoku
     - unzip app/manual-build-artifacts.zip
     - mv app/manual-build-artifacts/reports/androidTests/connected/* public/clienttests
     - mv app/manual-build-artifacts/reports/coverage/androidTest/debug/ public/clientcoverage
