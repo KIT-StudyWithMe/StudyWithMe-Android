@@ -27,7 +27,8 @@ variables:
     ANDROID_SDK_TOOLS: "6514223"
 
 # Packages installation before running script
-before_script:
+.before_script_template:
+  before_script:
     - apt-get --quiet update --yes
     - apt-get --quiet install --yes wget tar unzip lib32stdc++6 lib32z1
 
@@ -91,20 +92,21 @@ stages:
   - publish
 
 assembleRelease:
+    extends: .before_script_template
     stage: build
     script:
-        - gradle assembleRelease
+        - ./gradlew assembleRelease
     artifacts:
         paths:
             - app/build/outputs/apk/release/*.apk
     cache:
-    key: "$CI_COMMIT_REF_NAME"
-    policy: push
-    paths:
-      - build
-      - .gradle
-      - app/build
-      - app/.gradle
+      key: "$CI_COMMIT_REF_NAME"
+      policy: push
+      paths:
+        - build
+        - .gradle
+        - app/build
+        - app/.gradle
 
 # Run all tests, if any fails, interrupt the pipeline(fail it)
 test:
@@ -115,23 +117,24 @@ test:
         - sh printCoverage.sh
 
 documentation:
-  stage: docu
-  script:
-    - ./gradlew dokkaHtml
-  artifacts:
-    paths:
-      - app/build/dokka/*
-    expire_in: 1 week
-  cache:
-    key: "$CI_COMMIT_REF_NAME"
-    policy: pull
-    paths:
-      - build
-      - .gradle
-      - app/build
-      - app/.gradle
-  only:
-    - main
+    extends: .before_script_template
+    stage: docu
+    script:
+      - ./gradlew dokkaHtml
+    artifacts:
+      paths:
+        - app/build/dokka/*
+      expire_in: 1 week
+    cache:
+      key: "$CI_COMMIT_REF_NAME"
+      policy: pull
+      paths:
+        - build
+        - .gradle
+        - app/build
+        - app/.gradle
+    only:
+      - main
 
 pages:
   stage: publish
@@ -147,7 +150,7 @@ pages:
     - mv app/build/dokka/html/* public/clientdoku
     - unzip app/manual-build-artifacts.zip
     - mv app/manual-build-artifacts/reports/androidTests/connected/* public/clienttests
-    - mv app/manual-build-artifacts/reports/coverage/androidTest/debug/ public/client/coverage
+    - mv app/manual-build-artifacts/reports/coverage/androidTest/debug/ public/clientcoverage
     - mv app/build/outputs/apk/release/app-release.apk public/clientapk/studywithme.apk
   artifacts:
     paths:
