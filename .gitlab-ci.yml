@@ -95,7 +95,7 @@ assembleRelease:
     script:
         - ./gradlew assembleRelease
         - mkdir apk/
-        - mv app/build/outputs/apk/release/app-release.apk apk/
+        - cp app/build/outputs/apk/release/app-release.apk apk/
     artifacts:
         paths:
             - apk/app-release.apk
@@ -132,7 +132,7 @@ documentation:
     script:
       - ./gradlew dokkaHtml
       - mkdir dokka
-      - mv app/build/dokka/* dokka
+      - cp -r app/build/dokka/* dokka
     artifacts:
       paths:
         - dokka/
@@ -165,13 +165,9 @@ pages:
     - mkdir public/clientapk
     - mv dokka/html/* public/clientdoku
     - unzip app/manual-build-artifacts.zip
-    - mv app/manual-build-artifacts/reports/androidTests/connected/* public/clienttests
-    - mv app/manual-build-artifacts/reports/coverage/androidTest/debug/ public/clientcoverage
-    - ls app/build/
-    - ls app/build/outputs/
-    - ls app/build/outputs/apk/
-    - ls app/build/outputs/apk/release/
-    - mv app/build/outputs/apk/release/app-release.apk public/clientapk/studywithme.apk
+    - cp -r app/manual-build-artifacts/reports/androidTests/connected/* public/clienttests
+    - cp -r app/manual-build-artifacts/reports/coverage/androidTest/debug/ public/clientcoverage
+    - cp -r app/build/outputs/apk/release/app-release.apk public/clientapk/studywithme.apk
   artifacts:
     paths:
       - public
