@@ -170,14 +170,14 @@ pages:
     paths:
       - public
     expire_in: 1 week
-    cache:
-      key: "$CI_COMMIT_REF_NAME"
-      policy: pull
-      paths:
-        - build
-        - .gradle
-        - app/build
-        - app/.gradle
+  cache:
+    key: "$CI_COMMIT_REF_NAME"
+    policy: pull
+    paths:
+      - build
+      - .gradle
+      - app/build
+      - app/.gradle
   only:
     - main
 
