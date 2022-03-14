@@ -139,7 +139,7 @@ pages:
     - mv dokka/html/* public/clientdoku
     - unzip app/manual-build-artifacts.zip
     - cp -r app/manual-build-artifacts/reports/androidTests/connected/* public/clienttests
-    - cp -r app/manual-build-artifacts/reports/coverage/androidTest/debug/ public/clientcoverage
+    - cp -r app/manual-build-artifacts/reports/coverage/androidTest/debug/* public/clientcoverage
     - cp -r apk/app-release.apk public/clientapk/studywithme.apk
   artifacts:
     paths:
