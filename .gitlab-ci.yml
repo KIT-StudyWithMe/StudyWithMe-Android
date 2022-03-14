@@ -90,25 +90,21 @@ stages:
   - publish
 
 assembleRelease:
-    extends: .before_script_template
-    stage: generate
-    script:
-        - ./gradlew assembleRelease
-        - mkdir apk/
-        - cp app/build/outputs/apk/release/app-release.apk apk/
-    artifacts:
-        paths:
-            - apk/app-release.apk
-    cache:
-      key: "$CI_COMMIT_REF_NAME"
-      policy: push
-      paths:
-        - build
-        - .gradle
-        - app/build
-        - app/.gradle
-    only:
-        - main
+  extends: .before_script_template
+  stage: generate
+  script:
+    - ./gradlew assembleRelease
+    - mkdir apk/
+    - cp app/build/outputs/apk/release/app-release.apk apk/
+    - ./gradlew dokkaHtml
+    - mkdir dokka
+    - cp -r app/build/dokka/* dokka
+  artifacts:
+    paths:
+      - apk/app-release.apk
+      - dokka/
+  only:
+    - main
 
 # Run all tests, if any fails, interrupt the pipeline(fail it)
 test:
@@ -124,37 +120,12 @@ test:
   only:
     - main
 
-documentation:
-    extends: .before_script_template
-    stage: generate
-    needs:
-      - assembleRelease
-    script:
-      - ./gradlew dokkaHtml
-      - mkdir dokka
-      - cp -r app/build/dokka/* dokka
-    artifacts:
-      paths:
-        - dokka/
-      expire_in: 1 week
-    cache:
-      key: "$CI_COMMIT_REF_NAME"
-      policy: pull
-      paths:
-        - build
-        - .gradle
-        - app/build
-        - app/.gradle
-    only:
-      - main
-
 pages:
   image: alpine
   stage: publish
   dependencies:
     - assembleRelease
     - test
-    - documentation
   script:
     - apk update
     - apk add unzip
