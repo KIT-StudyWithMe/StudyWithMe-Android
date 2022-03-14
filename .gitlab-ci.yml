@@ -112,14 +112,17 @@ assembleRelease:
 
 # Run all tests, if any fails, interrupt the pipeline(fail it)
 test:
-    interruptible: true
-    stage: generate
-    script:
-      #- ./gradlew -Pci --console=plain createDebugCoverageReport --debug
-        - unzip app/manual-build-artifacts.zip
-        - sh printCoverage.sh
-    only:
-      - main
+  image: alpine
+  interruptible: true
+  stage: generate
+  script:
+    #- ./gradlew -Pci --console=plain createDebugCoverageReport --debug
+    - apk update
+    - apk add unzip
+    - unzip app/manual-build-artifacts.zip
+    - sh printCoverage.sh
+  only:
+    - main
 
 documentation:
     extends: .before_script_template
@@ -146,11 +149,15 @@ documentation:
       - main
 
 pages:
+  image: alpine
   stage: publish
   dependencies:
+    - assembleRelease
     - test
     - documentation
   script:
+    - apk update
+    - apk add unzip
     - mkdir public
     - mkdir public/clientdoku
     - mkdir public/clienttests
@@ -182,10 +189,13 @@ pages:
     - main
 
 pipelineTrigger:
+  image: alpine
   stage: publish
   needs:
     - pages
   script:
+    - apk update
+    - apk add curl
     - "curl -X POST --fail -F token=${PIPELINE_TRIGGER_TOKEN} -F ref=main https://gitlab.com/api/v4/projects/34245076/trigger/pipeline"
   only:
     - main
