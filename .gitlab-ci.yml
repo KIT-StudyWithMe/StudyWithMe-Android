@@ -93,10 +93,9 @@ assembleRelease:
   extends: .before_script_template
   stage: generate
   script:
-    - ./gradlew assembleRelease
+    - ./gradlew assembleRelease dokkaHtml
     - mkdir apk/
     - cp app/build/outputs/apk/release/app-release.apk apk/
-    - ./gradlew dokkaHtml
     - mkdir dokka
     - cp -r app/build/dokka/* dokka
   artifacts:
@@ -138,19 +137,11 @@ pages:
     - unzip app/manual-build-artifacts.zip
     - cp -r app/manual-build-artifacts/reports/androidTests/connected/* public/clienttests
     - cp -r app/manual-build-artifacts/reports/coverage/androidTest/debug/ public/clientcoverage
-    - cp -r app/build/outputs/apk/release/app-release.apk public/clientapk/studywithme.apk
+    - cp -r apk/app-release.apk public/clientapk/studywithme.apk
   artifacts:
     paths:
       - public
     expire_in: 1 week
-  cache:
-    key: "$CI_COMMIT_REF_NAME"
-    policy: pull
-    paths:
-      - build
-      - .gradle
-      - app/build
-      - app/.gradle
   only:
     - main
 
