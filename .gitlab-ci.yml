@@ -92,6 +92,9 @@ stages:
 assembleRelease:
   extends: .before_script_template
   stage: generate
+  variables:
+    DOCKER_PRIVILEGED: "true"
+    DOCKER_DRIVER: "overlay"
   script:
     - ./gradlew assembleRelease dokkaHtml
     - mkdir apk/
